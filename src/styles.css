@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.custom-snackbar-otp {
+  background-color: #4CAF50 !important;
+  /* vert succès */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 8px;
+  margin-top: 100px !important;
+  /* :coche_blanche: décale vers le bas */
+}

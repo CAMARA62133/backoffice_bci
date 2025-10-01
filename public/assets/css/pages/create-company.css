@@ -1,0 +1,591 @@
+/* =================================
+   FORMULAIRE MULTI-ÉTAPES
+   ================================= */
+
+.step-content {
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.step-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cartes des étapes */
+
+.card {
+  border: none;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-base);
+  margin-bottom: 2rem;
+}
+
+.card:hover {
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 1.5rem;
+}
+
+.card-header h5 {
+  color: var(--bs-dark);
+  margin: 0;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+/* =================================
+   CHAMPS DE FORMULAIRE
+   ================================= */
+
+.form-label.required::after {
+  content: ' *';
+  color: var(--bs-danger);
+  font-weight: bold;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem rgba(52, 52, 115, 0.25);
+}
+
+.form-control.is-valid {
+  border-color: var(--bs-success);
+}
+
+.form-control.is-invalid {
+  border-color: var(--bs-danger);
+}
+
+.form-text {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* =================================
+   GESTION DES CONTACTS
+   ================================= */
+
+.contact-item {
+  background-color: #fff;
+  border: 2px solid #e9ecef !important;
+  transition: var(--transition-base);
+  position: relative;
+}
+
+.contact-item:hover {
+  border-color: var(--bs-primary-light) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.contact-item.primary {
+  border-color: var(--bs-primary) !important;
+  background-color: rgba(52, 52, 115, 0.02);
+}
+
+.contact-remove-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--bs-danger);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition-fast);
+}
+
+.contact-item:hover .contact-remove-btn {
+  opacity: 1;
+}
+
+.contact-remove-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.1);
+}
+
+/* =================================
+   UPLOAD DE DOCUMENTS
+   ================================= */
+
+.document-upload-card {
+  border: 2px solid #e9ecef;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  background-color: #fff;
+  transition: var(--transition-base);
+  height: 100%;
+}
+
+.document-upload-card:hover {
+  border-color: var(--bs-primary-light);
+  box-shadow: var(--bs-shadow-sm);
+}
+
+.document-header {
+  margin-bottom: 1rem;
+}
+
+.upload-zone {
+  border: 2px dashed #dee2e6;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  transition: var(--transition-base);
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fafafa;
+}
+
+.upload-zone:hover {
+  border-color: var(--bs-primary);
+  background-color: rgba(52, 52, 115, 0.02);
+}
+
+.upload-zone.dragover {
+  border-color: var(--bs-primary);
+  background-color: rgba(52, 52, 115, 0.05);
+  transform: scale(1.02);
+}
+
+.upload-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  transition: var(--transition-fast);
+}
+
+.upload-label:hover {
+  color: var(--bs-primary);
+}
+
+.upload-preview {
+  text-align: left;
+}
+
+.upload-preview .preview-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e9ecef;
+}
+
+.upload-preview .preview-item i {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+  color: var(--bs-primary);
+}
+
+.upload-preview .preview-info {
+  flex-grow: 1;
+}
+
+.upload-preview .preview-name {
+  font-weight: 500;
+  color: var(--bs-dark);
+}
+
+.upload-preview .preview-size {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.upload-preview .preview-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.upload-preview .btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* États upload */
+
+.upload-zone.uploading {
+  border-color: var(--bs-info);
+  background-color: rgba(23, 162, 184, 0.05);
+}
+
+.upload-zone.success {
+  border-color: var(--bs-success);
+  background-color: rgba(40, 167, 69, 0.05);
+}
+
+.upload-zone.error {
+  border-color: var(--bs-danger);
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+/* =================================
+   MODULES ET SERVICES
+   ================================= */
+
+.module-card {
+  border: 2px solid #e9ecef;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  background-color: #fff;
+  transition: var(--transition-base);
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.module-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--bs-primary), var(--bs-primary-light));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.module-card:hover {
+  border-color: var(--bs-primary);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.module-card:hover::before {
+  transform: scaleX(1);
+}
+
+.module-card.selected {
+  border-color: var(--bs-primary);
+  background-color: rgba(52, 52, 115, 0.02);
+}
+
+.module-card.selected::before {
+  transform: scaleX(1);
+}
+
+.module-card-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.module-card-header .form-check {
+  flex-grow: 1;
+}
+
+.module-card-header .form-check-label {
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.module-card-header .badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.module-card-body {
+  margin-top: 1rem;
+}
+
+.module-card-body ul {
+  margin-bottom: 0;
+}
+
+.module-card-body li {
+  padding: 0.25rem 0;
+}
+
+/* Switch personnalisé */
+
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(52, 52, 115, 0.25);
+}
+
+/* Résumé modules sélectionnés */
+
+.selected-modules-summary {
+  background-color: rgba(52, 52, 115, 0.02);
+  border: 1px solid rgba(52, 52, 115, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.selected-modules-summary .badge {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  margin: 0.25rem;
+}
+
+/* =================================
+   DOCUMENTS SUMMARY
+   ================================= */
+
+.documents-summary {
+  background-color: rgba(40, 167, 69, 0.05);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.document-summary-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(40, 167, 69, 0.1);
+}
+
+.document-summary-item:last-child {
+  border-bottom: none;
+}
+
+.document-summary-item i {
+  color: var(--bs-success);
+  margin-right: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.document-summary-item .document-name {
+  font-weight: 500;
+  flex-grow: 1;
+}
+
+.document-summary-item .document-status {
+  font-size: 0.875rem;
+}
+
+/* =================================
+   NAVIGATION ÉTAPES
+   ================================= */
+
+.step-navigation {
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+  border-top: 1px solid #dee2e6;
+  z-index: 100;
+}
+
+.step-info {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+#prevBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#nextBtn.btn-success {
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
+}
+
+#nextBtn.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+/* =================================
+   MODALES
+   ================================= */
+
+.modal-xl {
+  max-width: 1200px;
+}
+
+.modal-content {
+  border: none;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+}
+
+.modal-footer {
+  border-top: 1px solid #eee;
+  background-color: #f8f9fa;
+}
+
+/* Contenu prévisualisation */
+
+.preview-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border: 1px solid #e9ecef;
+  border-radius: 0.5rem;
+  background-color: #fff;
+}
+
+.preview-section h6 {
+  color: var(--bs-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.preview-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.preview-item:last-child {
+  border-bottom: none;
+}
+
+.preview-label {
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.preview-value {
+  color: var(--bs-dark);
+  text-align: right;
+  max-width: 60%;
+  word-wrap: break-word;
+}
+
+/* =================================
+   ALERTES ET NOTIFICATIONS
+   ================================= */
+
+.alert {
+  border: none;
+  border-radius: 0.5rem;
+  border-left: 4px solid;
+}
+
+.alert-info {
+  background-color: rgba(23, 162, 184, 0.1);
+  border-left-color: var(--bs-info);
+  color: #0c5460;
+}
+
+.alert-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-left-color: var(--bs-warning);
+  color: #856404;
+}
+
+.alert-success {
+  background-color: rgba(40, 167, 69, 0.1);
+  border-left-color: var(--bs-success);
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-left-color: var(--bs-danger);
+  color: #721c24;
+}
+
+/* Notifications toast */
+
+.toast {
+  min-width: 300px;
+  box-shadow: var(--shadow);
+}
+
+.toast-header {
+  background-color: var(--bs-primary);
+  color: white;
+}
+
+/* =================================
+   BADGES ET STATUTS
+   ================================= */
+
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 0.35rem 0.6rem;
+}
+
+.badge.bg-danger {
+  background-color: var(--bs-danger) !important;
+}
+
+.badge.bg-warning {
+  background-color: var(--bs-warning) !important;
+  color: var(--bs-dark) !important;
+}
+
+.badge.bg-success {
+  background-color: var(--bs-success) !important;
+}
+
+.badge.bg-info {
+  background-color: var(--bs-info) !important;
+}
+
+/* =================================
+   INDICATEURS DE SAUVEGARDE
+   ================================= */
+
+#autoSaveIndicator {
+  animation: fadeInOut 2s ease-in-out;
+}
+
+#savingIndicator {
+  animation: pulse 1s infinite;
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+

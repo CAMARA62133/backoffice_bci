@@ -1,0 +1,1018 @@
+<!-- Start: Page -->
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form class="mb-4 mb-lg-0 row gx-3 gy-2 filter-bar">
+                            <div class="col-md-3 me-auto mb-4 mb-lg-0 row gy-2">
+                                <select class="form-select form-select filter-select">
+                                    <option value>Aujourd'hui</option>
+                                    <option value>Cette semaine</option>
+                                    <option value>Ce mois</option>
+                                    <option value>Personnalisé</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 me-auto mb-4 mb-lg-0 row gx-3 gy-2">
+                                <select class="form-select form-select filter-select">
+                                    <option value>Toutes les entreprises</option>
+                                    <option value>Orange Guinée</option>
+                                    <option value>SOGEA SATOM</option>
+                                    <option value>CBM</option>
+                                    <option value>UMS Guinea</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 me-auto mb-4 mb-lg-0 row gx-3 gy-2">
+                                <select class="form-select form-select filter-select">
+                                    <option value>Tous les segments</option>
+                                    <option value>Grandes entreprises</option>
+                                    <option value>PME</option>
+                                    <option value>Startups</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 me-auto mb-4 mb-lg-0 row gx-3 gy-2">
+                                <button class="btn btn-primary ms-auto">
+                                    <i class="me-2 bi bi-arrow-clockwise"></i>
+                                    Actualiser
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-xl-4">
+                <div
+                    class="card card-h-100"
+                    style="background: url(&quot;assets/img/images-bci/bg-chart-BCI-Internet_Banking-3.jpg?h=60704d8652a4d6012af3cf7b9e758808&quot;) right / cover;"
+                >
+                    <div class="card-header text-light bg-transparent">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <h5 class="text-nowrap me-2 card-title chart-title">Volume des opérations</h5>
+                            <div
+                                class="btn-group btn-group-sm ms-auto page-title-right"
+                                role="group"
+                            >
+                                <button
+                                    class="btn btn-outline-secondary active"
+                                    type="button"
+                                >
+                                    24h
+                                </button>
+                                <button
+                                    class="btn btn-outline-secondary"
+                                    type="button"
+                                >
+                                    7j
+                                </button>
+                                <button
+                                    class="btn btn-outline-secondary"
+                                    type="button"
+                                >
+                                    30j
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="card-body text-light finance-chart-container"
+                        id="volumeChart"
+                    ></div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card bg-light card-h-100">
+                    <div class="card-header bg-transparent border-bottom border-white">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <h5 class="me-2 card-title chart-title">Actions rapides</h5>
+                        </div>
+                    </div>
+                    <div class="card-body finance-chart-container">
+                        <div class="row text-center justify-content-center">
+                            <div class="col-6 col-md-4 mb-4">
+                                <a
+                                    class="custom-icon-container"
+                                    href="#"
+                                    data-bs-target="#createTicketModal"
+                                    data-bs-toggle="modal"
+                                >
+                                    <i class="icon ion-chatboxes custom-icon-size"></i>
+                                    <p class="custom-icon-text">Créer ticket</p>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-4 mb-4">
+                                <a
+                                    class="custom-icon-container"
+                                    href="rapports-periodiques.html"
+                                >
+                                    <i class="icon ion-document-text custom-icon-size"></i>
+                                    <p class="custom-icon-text">Rapports Périodiques</p>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-4 mb-4">
+                                <a
+                                    class="custom-icon-container"
+                                    href="#"
+                                >
+                                    <i class="icon ion-ios-cloud-download custom-icon-size"></i>
+                                    <p class="custom-icon-text">Exporter transactions</p>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-4 mb-4">
+                                <a
+                                    class="custom-icon-container"
+                                    href="#"
+                                >
+                                    <i class="icon ion-checkmark-circled custom-icon-size"></i>
+                                    <p class="custom-icon-text">Opérations à valider</p>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-4 mb-4">
+                                <a
+                                    class="custom-icon-container"
+                                    href="#"
+                                >
+                                    <i class="icon ion-card custom-icon-size"></i>
+                                    <p class="custom-icon-text">Transactions sensibles</p>
+                                </a>
+                            </div>
+                            <div class="col-6 col-md-4 mb-4">
+                                <a
+                                    class="custom-icon-container"
+                                    href="entreprises-clientes/liste-entreprises.html"
+                                >
+                                    <i class="icon ion-ios-list custom-icon-size"></i>
+                                    <p class="custom-icon-text">Liste des entreprises</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card text-white bg-info card-h-100">
+                    <div class="card-header bg-transparent d-flex">
+                        <h4 class="flex-grow-1 mb-0 card-title chart-title">Cliché du travail pour aujourd'hui</h4>
+                    </div>
+                    <div class="card-body finance-chart-container">
+                        <div class="row">
+                            <div class="col-lg">
+                                <p class="font-size-13">A la date du 23 juin 2025</p>
+                            </div>
+                            <div class="col-lg-4">
+                                <h3 class="text-end text-white mb-1">
+                                    <span
+                                        class="counter-value"
+                                        data-target="90"
+                                    >
+                                        0
+                                    </span>
+                                    &nbsp;%
+                                </h3>
+                            </div>
+                        </div>
+                        <div
+                            class="pt-1 px-3"
+                            data-simplebar
+                            style="max-height: 266px;"
+                        >
+                            <ul class="list-unstyled mb-0 activity-wid">
+                                <li class="activity-list activity-border">
+                                    <div class="bg-transparent activity-icon avatar-md">
+                                        <span class="text-success bg-success-subtle avatar-title rounded-circle">
+                                            <i class="icon ion-checkmark bx font-size-24"></i>
+                                        </span>
+                                    </div>
+                                    <div class="timeline-list-item">
+                                        <div class="d-flex">
+                                            <div class="overflow-hidden flex-grow-1 me-4">
+                                                <h5 class="text-white mb-2 font-size-14">Traité</h5>
+                                                <h5 class="text-light mb-2 font-size-18">3</h5>
+                                                <div class="mb-0 progress animated-progess">
+                                                    <div
+                                                        class="bg-success progress-bar progress-bar-striped"
+                                                        role="progressbar"
+                                                        style="width:100%;"
+                                                        aria-valuenow="100"
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="100"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="btn text-muted font-size-24"
+                                                        aria-expanded="false"
+                                                        data-bs-toggle="dropdown"
+                                                        type="button"
+                                                        aria-haspopup="true"
+                                                    >
+                                                        <i class="icon ion-android-more-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a
+                                                            class="dropdown-item"
+                                                            href="#"
+                                                        >
+                                                            Voir
+                                    détails
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="activity-list activity-border">
+                                    <div class="bg-transparent activity-icon avatar-md">
+                                        <span class="text-warning bg-warning-subtle avatar-title rounded-circle">
+                                            <i class="icon ion-load-a bx font-size-24"></i>
+                                        </span>
+                                    </div>
+                                    <div class="timeline-list-item">
+                                        <div class="d-flex">
+                                            <div class="overflow-hidden flex-grow-1 me-4">
+                                                <h5 class="text-white mb-2 font-size-14">En cours</h5>
+                                                <h5 class="text-light mb-2 font-size-18">1</h5>
+                                                <div class="mb-0 progress animated-progess">
+                                                    <div
+                                                        class="bg-warning progress-bar progress-bar-striped"
+                                                        role="progressbar"
+                                                        style="width:50%;"
+                                                        aria-valuenow="50"
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="100"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="btn text-muted font-size-24"
+                                                        aria-expanded="false"
+                                                        data-bs-toggle="dropdown"
+                                                        type="button"
+                                                        aria-haspopup="true"
+                                                    >
+                                                        <i class="icon ion-android-more-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a
+                                                            class="dropdown-item"
+                                                            href="#"
+                                                        >
+                                                            Voir
+                                    détails
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="activity-list activity-border">
+                                    <div class="bg-transparent activity-icon avatar-md">
+                                        <span class="text-danger bg-danger-subtle avatar-title rounded-circle">
+                                            <i class="icon ion-close-circled bx font-size-24"></i>
+                                        </span>
+                                    </div>
+                                    <div class="timeline-list-item">
+                                        <div class="d-flex">
+                                            <div class="overflow-hidden flex-grow-1 me-4">
+                                                <h5 class="text-white mb-2 font-size-14">Rejeté</h5>
+                                                <h5 class="text-light mb-2 font-size-18">0</h5>
+                                                <div class="mb-0 progress animated-progess">
+                                                    <div
+                                                        class="bg-danger progress-bar progress-bar-striped"
+                                                        role="progressbar"
+                                                        style="width:100%;"
+                                                        aria-valuenow="100"
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="100"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                            <div class="text-end flex-shrink-0">
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="btn text-muted font-size-24"
+                                                        aria-expanded="false"
+                                                        data-bs-toggle="dropdown"
+                                                        type="button"
+                                                        aria-haspopup="true"
+                                                    >
+                                                        <i class="icon ion-android-more-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a
+                                                            class="dropdown-item"
+                                                            href="#"
+                                                        >
+                                                            Voir
+                                    détails
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="bounce animated kpi-container">
+                    <div class="kpi-card">
+                        <div class="kpi-card-header">
+                            <div>
+                                <div class="kpi-label">
+                                    <span>Volume total d'opérations</span>
+                                </div>
+                                <div class="kpi-value">
+                                    <span>1 245</span>
+                                </div>
+                                <div class="kpi-trend up">
+                                    <i class="bi bi-arrow-up-short"></i>
+                                    <span>+12.3% vs hier</span>
+                                </div>
+                            </div>
+                            <div class="kpi-icon blue">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1em"
+                                    height="1em"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    class="bi bi-graph-up"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"
+                                    >
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card-header">
+                            <div>
+                                <div class="kpi-label">
+                                    <span>Montants traités</span>
+                                </div>
+                                <div class="kpi-value">
+                                    <span>2,34 Mds GNF</span>
+                                </div>
+                                <div class="kpi-trend up">
+                                    <i class="bi bi-arrow-up-short"></i>
+                                    <span>+8.5% vs hier</span>
+                                </div>
+                            </div>
+                            <div class="kpi-icon green">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1em"
+                                    height="1em"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    class="bi bi-currency-dollar"
+                                >
+                                    <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card-header">
+                            <div>
+                                <div class="kpi-label">
+                                    <span>Opérations en attente</span>
+                                </div>
+                                <div class="kpi-value">
+                                    <span>5</span>
+                                </div>
+                                <div class="kpi-trend down">
+                                    <i class="bi bi-arrow-down-short"></i>
+                                    <span>-2 vs hier</span>
+                                </div>
+                            </div>
+                            <div class="kpi-icon yellow">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1em"
+                                    height="1em"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    class="bi bi-clock-history"
+                                >
+                                    <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483m.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535m-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"></path>
+                                    <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"></path>
+                                    <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card-header">
+                            <div>
+                                <div class="kpi-label">
+                                    <span>Tickets/Incidents</span>
+                                </div>
+                                <div class="kpi-value">
+                                    <span>12</span>
+                                </div>
+                                <div class="kpi-trend up">
+                                    <i class="bi bi-arrow-up-short"></i>
+                                    <span>+3 nouveaux</span>
+                                </div>
+                            </div>
+                            <div class="kpi-icon red">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1em"
+                                    height="1em"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    class="bi bi-exclamation-circle"
+                                >
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card-header">
+                            <div>
+                                <div class="kpi-label">
+                                    <span>Temps moyen de traitement</span>
+                                </div>
+                                <div class="kpi-value">
+                                    <span>15 min 40 s</span>
+                                </div>
+                                <div class="kpi-trend down">
+                                    <i class="bi bi-arrow-down-short"></i>
+                                    <span>-2 min vs objectif</span>
+                                </div>
+                            </div>
+                            <div class="kpi-icon blue">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1em"
+                                    height="1em"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    class="bi bi-speedometer2"
+                                >
+                                    <path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4M3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.389.389 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.389.389 0 0 0-.029-.518z"></path>
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10m8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3"
+                                    >
+                                    </path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-card-header">
+                            <div>
+                                <div class="kpi-label">
+                                    <span>SLA respecté</span>
+                                </div>
+                                <div class="kpi-value">
+                                    <span>96%</span>
+                                </div>
+                                <div class="kpi-trend up">
+                                    <i class="bi bi-arrow-up-short"></i>
+                                    <span>+2% vs objectif</span>
+                                </div>
+                            </div>
+                            <div class="kpi-icon green">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="1em"
+                                    height="1em"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    class="bi bi-check-circle"
+                                >
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05"></path>
+                                </svg>
+                                <i class="bi bi-check-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card card-h-100 finance-chart-container">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <h5 class="text-nowrap me-2 card-title chart-title">Répartition des incidents</h5>
+                            <div class="ms-auto">
+                                <select class="form-select-sm form-select">
+                                    <option
+                                        value="JUIN"
+                                        selected
+                                    >
+                                        Juin
+                                    </option>
+                                    <option value="MAI">Mai</option>
+                                    <option value="AVRIL">Avril</option>
+                                    <option value="MARS">Mars</option>
+                                    <option value="FEV">Février</option>
+                                    <option value="JAN">Janvier</option>
+                                    <option value="DEC">Décembre</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div
+                            id="incidentsChart"
+                            class="apex-charts finance-chart-container"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-h-100 finance-chart-container">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <h5 class="me-2 card-title chart-title">Heatmap horaire</h5>
+                                    <div class="ms-auto">
+                                        <select class="form-select-sm form-select">
+                                            <option
+                                                value="2024"
+                                                selected
+                                            >
+                                                2024
+                                            </option>
+                                            <option value="2023">2023</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2020">2020</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body finance-chart-container">
+                                <div
+                                    id="heatmapChart"
+                                    class="apex-charts finance-chart-container"
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-xl-6">
+                <div class="card card-h-100 finance-chart-container">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <h5 class="text-nowrap me-2 card-title chart-title">Alertes temps réel</h5>
+                            <div class="ms-auto">
+                                <select class="form-select-sm form-select">
+                                    <option
+                                        value="JUIN"
+                                        selected
+                                    >
+                                        Juin
+                                    </option>
+                                    <option value="MAI">Mai</option>
+                                    <option value="AVRIL">Avril</option>
+                                    <option value="MARS">Mars</option>
+                                    <option value="FEV">Février</option>
+                                    <option value="JAN">Janvier</option>
+                                    <option value="DEC">Décembre</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="border-0 p-0 bounce animated alerts-section">
+                            <div class="alert-item critical">
+                                <div class="alert-icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="1em"
+                                        height="1em"
+                                        fill="currentColor"
+                                        viewBox="0 0 16 16"
+                                        class="bi bi-exclamation-circle-fill"
+                                    >
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2"></path>
+                                    </svg>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">
+                                        <span>Incident critique</span>
+                                    </div>
+                                    <div class="alert-description">
+                                        <span>
+                                            Virement bloqué, Orange Guinée, 87 M GNF à 10:22
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="alert-actions">
+                                    <button
+                                        class="btn btn-outline-primary btn-sm btn-action btn-secondary-action"
+                                        type="button"
+                                    >
+                                        Voir
+                          dossier
+                                    </button>
+                                    <button
+                                        class="btn-action btn-danger-action"
+                                        data-bs-target="#unblockModal"
+                                        data-bs-toggle="modal"
+                                        type="button"
+                                    >
+                                        Lever blocage
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="alert-item warning">
+                                <div class="alert-icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="1em"
+                                        height="1em"
+                                        fill="currentColor"
+                                        viewBox="0 0 16 16"
+                                        class="bi bi-exclamation-triangle-fill"
+                                    >
+                                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"></path>
+                                    </svg>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">
+                                        <span>SLA dépassé</span>
+                                    </div>
+                                    <div class="alert-description">
+                                        <span>
+                                            Traitement KYC SOGEA SATOM dépassé, urgent
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="alert-actions">
+                                    <button class="btn-action btn-primary-action">Traiter</button>
+                                    <button class="btn-action btn-secondary-action">Assigner</button>
+                                </div>
+                            </div>
+                            <div class="alert-item success">
+                                <div class="alert-icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="1em"
+                                        height="1em"
+                                        fill="currentColor"
+                                        viewBox="0 0 16 16"
+                                        class="bi bi-check-circle-fill"
+                                    >
+                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
+                                    </svg>
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <div class="alert-title">
+                                        <span>Aucun incident majeur</span>
+                                    </div>
+                                    <div class="alert-description">
+                                        <span>
+                                            Aucun incident majeur détecté aujourd'hui
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card card-h-100 finance-chart-container">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center flex-wrap">
+                            <h5 class="text-nowrap me-2 card-title chart-title">Tickets/Incidents</h5>
+                            <div class="ms-auto">
+                                <button
+                                    class="btn btn-primary btn-sm"
+                                    type="button"
+                                    data-bs-target="#createTicketModal"
+                                    data-bs-toggle="modal"
+                                >
+                                    <i class="me-1 bi bi-plus-circle"></i>
+                                    Créer ticket
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="border-0 p-0 bounce animated data-table">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-nowrap text-muted">Ticket ID</th>
+                                            <th class="text-muted">Entreprise</th>
+                                            <th class="text-muted">Sujet</th>
+                                            <th class="text-muted">Priorité</th>
+                                            <th class="text-muted">Statut</th>
+                                            <th class="text-muted">Agent</th>
+                                            <th class="text-muted">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>TK-1215</strong>
+                                            </td>
+                                            <td>CBM</td>
+                                            <td>Blocage accès admin</td>
+                                            <td>
+                                                <span class="badge bg-danger">Urgent</span>
+                                            </td>
+                                            <td>
+                                                <span class="status-badge pending">Ouvert</span>
+                                            </td>
+                                            <td>Touré</td>
+                                            <td>
+                                                <button class="btn-action btn-primary-action">Traiter</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>TK-1220</strong>
+                                            </td>
+                                            <td>Orange</td>
+                                            <td>Virement rejeté</td>
+                                            <td>
+                                                <span class="badge bg-danger">Critique</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-nowrap status-badge pending">À traiter</span>
+                                            </td>
+                                            <td>Camara</td>
+                                            <td>
+                                                <button class="btn-action btn-secondary-action">Voir</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-h-100">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <h5 class="me-2 card-title chart-title">Opérations sensibles</h5>
+                                    <div class="ms-auto">
+                                        <button class="btn btn-outline-primary btn-sm">
+                                            <i class="me-1 bi bi-filter"></i>
+                                            Filtrer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-0 p-0 bounce animated data-table">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-muted">#</th>
+                                                    <th class="text-muted">Type</th>
+                                                    <th class="text-muted">Entreprise</th>
+                                                    <th class="text-muted">Montant</th>
+                                                    <th class="text-muted">Statut</th>
+                                                    <th class="text-muted">Heure</th>
+                                                    <th class="text-muted">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Virement</td>
+                                                    <td>Orange Guinée</td>
+                                                    <td>
+                                                        <strong>87 M GNF</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span class="status-badge blocked">Bloqué</span>
+                                                    </td>
+                                                    <td>10:22</td>
+                                                    <td>
+                                                        <div class="table-actions">
+                                                            <button
+                                                                class="btn btn-secondary btn-action btn-secondary-action"
+                                                                type="button"
+                                                            >
+                                                                Détails
+                                                            </button>
+                                                            <button
+                                                                class="btn btn-danger btn-action btn-danger-action"
+                                                                type="button"
+                                                                data-bs-target="#unblockModal"
+                                                                data-bs-toggle="modal"
+                                                            >
+                                                                Lever blocage
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>Bulk</td>
+                                                    <td>SOGEA SATOM</td>
+                                                    <td>
+                                                        <strong>125 M GNF</strong>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-nowrap status-badge pending">À valider</span>
+                                                    </td>
+                                                    <td>08:55</td>
+                                                    <td>
+                                                        <div class="table-actions">
+                                                            <button
+                                                                class="btn btn-primary btn-action btn-primary-action"
+                                                                type="button"
+                                                            >
+                                                                Valider
+                                                            </button>
+                                                            <button
+                                                                class="btn btn-secondary btn-action btn-secondary-action"
+                                                                type="button"
+                                                            >
+                                                                Logs
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-h-100 finance-chart-container">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <h5 class="me-2 card-title chart-title">Top entreprises</h5>
+                                    <div class="ms-auto">
+                                        <button class="btn btn-outline-primary btn-sm">
+                                            <i class="me-1 bi bi-filter"></i>
+                                            Filtrer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-0 p-0 bounce animated data-table">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-muted">#</th>
+                                                    <th class="text-muted">Entreprise</th>
+                                                    <th class="text-muted">Opérations</th>
+                                                    <th class="text-muted">Volume</th>
+                                                    <th class="text-muted">Incidents</th>
+                                                    <th class="text-muted">CSAT</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>
+                                                        <strong>Orange Guinée</strong>
+                                                    </td>
+                                                    <td>340</td>
+                                                    <td>1,1 Mds</td>
+                                                    <td>
+                                                        <span class="badge bg-danger">2</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-success">4.9</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>
+                                                        <strong>SOGEA SATOM</strong>
+                                                    </td>
+                                                    <td>280</td>
+                                                    <td>430 M</td>
+                                                    <td>
+                                                        <span class="badge bg-warning">1</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-success">4.7</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-h-100 finance-chart-container">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <h5 class="me-2 card-title chart-title">Top agents support</h5>
+                                    <div class="ms-auto">
+                                        <button class="btn btn-outline-primary btn-sm">
+                                            <i class="me-1 bi bi-filter"></i>
+                                            Filtrer
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="border-0 p-0 bounce animated data-table">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-muted">#</th>
+                                                    <th class="text-muted">Agent</th>
+                                                    <th class="text-muted">Tickets</th>
+                                                    <th class="text-muted">Temps moy.</th>
+                                                    <th class="text-muted">Note</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>
+                                                        <strong>Touré</strong>
+                                                    </td>
+                                                    <td>34</td>
+                                                    <td>11 min</td>
+                                                    <td>
+                                                        <span class="badge bg-success">4.8/5</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>
+                                                        <strong>Camara</strong>
+                                                    </td>
+                                                    <td>28</td>
+                                                    <td>13 min</td>
+                                                    <td>
+                                                        <span class="badge bg-success">4.6/5</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End: Page -->
+
+
+
+<!-- End: Main -->

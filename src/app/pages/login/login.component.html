@@ -1,0 +1,187 @@
+<div class="auth-page">
+  <div class="container-fluid p-0">
+    <div class="row g-0">
+      <div class="col-md-5 col-lg-4 col-xxl-3 order-md-last order-xs-first">
+        <div class="d-flex p-4 p-sm-5 auth-full-page-content">
+          <div class="w-100">
+            <div class="d-flex h-100 flex-column">
+              <div class="text-center mb-2 mb-md-3">
+                <a class="d-block auth-logo" href="">
+                  <img
+                    class="img-fluid"
+                    src="assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking.svg?h=7e87f9d72e96197b57f9b69046cee031"
+                    alt
+                    height="100"
+                    width="100"
+                  />
+                </a>
+              </div>
+              <div class="my-auto auth-content">
+                <div class="text-center">
+                  <h5 class="mb-0">
+                    Connexion à
+                    <span class="fw-semibold ms-2">BCI Online</span>
+                  </h5>
+                </div>
+                <!-- Formulaire -->
+                <form
+                  class="mt-4 pt-2"
+                  [formGroup]="loginForm"
+                  (ngSubmit)="onSubmit()"
+                >
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input
+                      class="form-control form-control"
+                      type="text"
+                      placeholder="Entrez votre adresse email"
+                      formControlName="email"
+                    />
+                    <div
+                      *ngIf="
+                        loginForm.get('email')?.touched &&
+                        loginForm.get('email')?.invalid
+                      "
+                      class="text-danger mt-1"
+                    >
+                      <div *ngIf="loginForm.get('email')?.errors?.['required']">
+                        L'email est requis.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <div class="d-flex align-items-start">
+                      <div class="flex-grow-1">
+                        <label class="form-label">Mot de passe</label>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <div>
+                          <a class="text-muted" href="#">
+                            Mot de passe oublié?
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="input-group auth-pass-inputgroup">
+                      <input
+                        class="form-control form-control"
+                        type="password"
+                        aria-describedby="password-addon"
+                        aria-label="Password"
+                        placeholder="**********"
+                        formControlName="password"
+                      />
+                      <button
+                        class="btn btn-light shadow-none ms-0"
+                        type="button"
+                        id="password-addon"
+                      >
+                        <i class="mdi mdi-eye-outline"></i>
+                      </button>
+                      <div
+                        *ngIf="
+                          loginForm.get('email')?.touched &&
+                          loginForm.get('password')?.invalid
+                        "
+                        class="text-danger mt-1"
+                      >
+                        <div
+                          *ngIf="loginForm.get('password')?.errors?.['required']"
+                        >
+                          Le mot de passe est requis.
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      *ngIf="message"
+                      [ngClass]="{
+                        'text-success': success,
+                        'text-danger': !success
+                      }"
+                    >
+                      {{ message }}
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <button
+                      class="btn btn-primary w-100 waves-effect waves-light"
+                      role="button"
+                      [disabled]="loading"
+                      type="submit"
+                    >
+                      {{ loading ? "Connexion en cours..." : "se connexion" }}
+                    </button>
+                  </div>
+                </form>
+
+                <div class="text-center mt-5 pt-2">
+                  <div class="signin-other-title">
+                    <h5 class="text-muted mb-3 font-size-14 fw-medium">
+                      - Vous n'avez pas de compte ? -
+                    </h5>
+                  </div>
+                  <div class="mb-3">
+                    <a
+                      class="btn btn-outline-primary w-100 waves-effect waves-light"
+                      role="button"
+                      href="next/souscription.html"
+                    >
+                      Souscrire à BCI Online
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center mt-4 mt-md-5">
+                <p>
+                  <span>©&nbsp;</span>
+                  <script>
+                    document.write(new Date().getFullYear());
+                  </script>
+                  <span>&nbsp; BCI-Online.</span>
+                  <span class="ms-2">Powered</span>
+                  <i class="icon ion-heart text-danger mx-1"></i>
+                  <span>
+                    by&nbsp;
+                    <a href="#">MV1</a>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7 col-lg-8 col-xxl-9 order-xs-last">
+        <!-- Start: Login Background -->
+        <div class="d-flex p-4 pt-md-5 auth-bg">
+          <div class="bg-primary bg-overlay-2"></div>
+          <ul class="bg-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
+          <p>
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </p>
+        </div>
+        <!-- End: Login Background -->
+      </div>
+    </div>
+  </div>
+</div>
