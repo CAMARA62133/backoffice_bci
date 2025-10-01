@@ -7,13 +7,14 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environnements/environnement';
 import { AuthService } from '../../services/authService/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
+  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -21,8 +22,18 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
+
+  showNotification(message: string) {
+    this.snackBar.open(message, '', {
+      duration: 4000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: 'custom-snackbar-otp',
+    });
+  }
 
   // Formulaire de connexion
   loginForm!: FormGroup;
@@ -70,39 +81,18 @@ export class LoginComponent implements OnInit {
           next: (res) => {
             console.log('Connexion reussie :', res);
 
-            if (res.status === 422) {
+            // Si la réponse est un succès (200), on sauvegarde le token et on redirige
+            if (res?.status && res.status === 200) {
               this.loading = false;
-              // this.showNotification(res.message);
-              this.message =
-                res.message || 'Erreur lors de la réinitialisation.';
-              console.log(res.message);
-              console.log('Captcha invalide, réessayez');
-            } else if (res.status === 401) {
-              this.loading = false;
-              // this.showNotification(res.message);
-              this.message =
-                res.message || 'Erreur lors de la réinitialisation.';
-              // console.log("Captcha invalide, réessayez");
-              console.log('Mot de passe incorrect');
-            } else if (res.status === 403) {
-              this.loading = false;
-              this.success = false;
-              // this.showNotification(res.message);
-              this.message =
-                res.message || 'Erreur lors de la réinitialisation.';
-              // console.log("Captcha invalide, réessayez");
-              console.log('Mot de passe incorrect');
-            } else {
-              this.success = false;
-              this.loading = false;
-              // this.showNotification(res.message);
-              // this.message = res.message || 'Erreur lors de la réinitialisation.';
-              // console.log("Captcha invalide, réessayez");
+              this.success = true;
               this.authService.saveToken(res.token);
-              // console.log("Utilisateur :", res);
-              // Redirection après login réussi
               console.log('Login réussi, redirection vers la validation OTP');
-              this.router.navigate(['/valider-otp-login']); // adapte le chemin
+              this.router.navigate(['/valider-otp-login']);
+            } else {
+              this.loading = false;
+              this.success = false;
+              this.showNotification(res.message);
+              this.router.navigate(['/login']);
             }
           },
 
@@ -117,5 +107,11 @@ export class LoginComponent implements OnInit {
       this.success = false;
       return;
     }
+  }
+
+  passwordVisible = false; // false = masque, true = visible
+  // bascule visibilité
+  togglePasswordVisibility(): void {
+    this.passwordVisible = !this.passwordVisible;
   }
 }

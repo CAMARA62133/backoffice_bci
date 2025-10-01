@@ -111,7 +111,7 @@
                       <button
                         class="btn btn-primary"
                         type="button"
-                        [disabled]="!isOtpComplete()"
+                        [disabled]="!isOtpComplete() || isLoading"
                         (click)="submitOtp()"
                       >
                         {{
@@ -130,6 +130,7 @@
                           <button
                             class="btn btn-primary"
                             type="button"
+                            [disabled]="isLoadingReEnvoi"
                             (click)="reEnvoiOtp()"
                           >
                             {{

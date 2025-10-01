@@ -30,7 +30,7 @@ export class AuthService {
     captcha_token: string
   ): Observable<any> {
     // captcha_token => a ajouter dans le body si recaptcha est activé
-    const body = { email, password, appName, captcha_token};
+    const body = { email, password, appName, captcha_token };
     console.log('Login body:', body);
     return this.http.post(`${this.baseUrl}/api/login`, body);
   }
@@ -44,7 +44,8 @@ export class AuthService {
    */
   requestResetPassword(
     email: string,
-    lienSite: string = 'http://localhost:4200',
+    // lienSite: string = 'http://localhost:4200',
+    lienSite: string = 'https://devbackoffice-bci.ecash-guinee.com',
     appName: string = 'Backoffice web site'
   ): Observable<any> {
     const body = { email, appName, lienSite };

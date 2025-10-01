@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from '../authService/auth.service';
 @Injectable({
@@ -14,12 +19,11 @@ export class AuthGuard implements CanActivate {
   ): Observable<boolean> | Promise<boolean> | boolean {
     // Vérifier si l'utilisateur est authentifié et si le token n'est pas expiré
     if (this.authService.isAuthenticated()) {
-      return true; // Accès autorisé
+      return true;
     } else {
-      // Redirige vers la page de login avec un paramètre de retour (facultatif)
-      this.authService.logout(); // Supprimer le token si expiré
-      this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-      return false; // Bloque l'accès
+      this.authService.logout();
+      this.router.navigate(['/login']);
+      return false;
     }
   }
 }
