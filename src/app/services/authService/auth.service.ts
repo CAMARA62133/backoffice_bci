@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
-import { environment } from '../../../environnements/environnement';
+import { Observable, catchError, tap, throwError } from 'rxjs';
+import { environment } from './../../../environnements/environnement';
 @Injectable({
   providedIn: 'root',
 })
@@ -12,8 +12,10 @@ export class AuthService {
   // URL de base de l'API
   private baseUrl = environment.apiUrl;
 
+  private appName = environment.apiUrl;
+
   // Injection de HttpClient pour les requêtes HTTP
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Connexion des utilisateurs
@@ -46,7 +48,7 @@ export class AuthService {
     email: string,
     // lienSite: string = 'http://localhost:4200',
     lienSite: string = 'https://devbackoffice-bci.ecash-guinee.com',
-    appName: string = 'Backoffice web site'
+    appName: string = this.appName
   ): Observable<any> {
     const body = { email, appName, lienSite };
     console.log('body:', body);
@@ -106,9 +108,9 @@ export class AuthService {
    * en supprimant le token et les infos utilisateur du localStorage
    */
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userInfo');
-    // localStorage.clear();
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('userInfo');
+    localStorage.clear();
   }
 
   /**
@@ -123,11 +125,11 @@ export class AuthService {
 
   /**
    * Modification des informations du profile utilisateur
-   * @param nom
-   * @param prenom
-   * @param email
-   * @param phoneNumber
-   * @param userId
+   * @param nom : le nom
+   * @param prenom : Le prenom
+   * @param email : l'adresse Email
+   * @param phoneNumber : le numero de telephone
+   * @param userId : l'ID de l'utilisateur
    * @returns
    */
   modifierProfile(
@@ -152,6 +154,95 @@ export class AuthService {
         params, // envoie en query string
       })
       .pipe(catchError(this.handleError));
+  }
+
+  /**
+   * Modification du mot de passe
+   * @param appName : le nom de l'application
+   * @param oldPassword : l'ancien mot de passe
+   * @param newPassword : le nouveau de mot de passe
+   * @param email : l'adresse email
+   * @returns
+   */
+  modifierPassword(
+    appName: string = this.appName,
+    oldPassword: string,
+    newPassword: string,
+    email: string,
+  ): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const params = new HttpParams()
+      .set('appName', appName)
+      .set('ancienPassword', oldPassword)
+      .set('Nouveaupassword', newPassword)
+      .set('email', email)
+    console.log("les parametres envoyes : ", params)
+
+    return this.http.post(`${this.baseUrl}/api/resetPasswordAfterLogin`, {}, { headers, params });
+  }
+
+  updatePassword(
+    ancienPassword: string,
+    Nouveaupassword: string,
+    email: string,
+    appName: string = this.appName
+  ): Observable<any> {
+    const token = localStorage.getItem('token'); // Récupérer le token JWT
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const params = new HttpParams()
+      .set('appName', appName)
+      .set('ancienPassword', ancienPassword)
+      .set('Nouveaupassword', Nouveaupassword)
+      .set('email', email);
+
+    return this.http.post(`${this.baseUrl}/api/resetPasswordAfterLogin`, {}, { headers, params });
+  }
+
+  /**
+   * Deconnexion de l'utilisateur
+   * @param appName : le nom de l'application
+   * @returns
+   */
+  deconnexion(appName: string = this.appName): Observable<any> {
+    console.log("API Deconnexion");
+    // Recuperer le token avant toutes suppressions
+    const token = this.getToken();
+    if (!token) {
+      return throwError(() => new Error('Token non trouvé. Veuillez vous connecter.'));
+    }
+
+    if (token) console.log("Le token est est la : ", this.getToken())
+
+    // Prépare les en-têtes d'authentification
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    })
+
+    // Prépare les paramètres de requête
+    const params = new HttpParams().set('appName', appName)
+    console.log("Parametres envoyer : ", params.toString());
+
+    // Appel API de déconnexion
+    return this.http.post(`${this.baseUrl}/api/logout`, {}, { headers, params }).pipe(
+      tap(() => {
+        localStorage.clear();
+        console.log("Dexonnexion reussi !")
+      }),
+      catchError((error) => {
+        console.error('Erreur lors de la déconnexion :', error);
+        return throwError(() => error)
+      })
+    );
   }
 
   /**

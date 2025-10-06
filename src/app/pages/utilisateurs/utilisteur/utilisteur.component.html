@@ -1,0 +1,87 @@
+<div class="page-content">
+  <div class="container-fluid">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="card">
+          <div class="container">
+            <!-- Header + Ajouter -->
+            <div class="header-actions">
+              <h2>Liste des utilisateurs</h2>
+              <button class="add-btn" (click)="ouvrirModal()">+ Ajouter un utilisateur</button>
+            </div>
+            <!-- Filtre -->
+            <div class="filter">
+              <input type="text" placeholder="Recherche email" [(ngModel)]="filterEmail" />
+              <select [(ngModel)]="filterRole">
+                <option value="">-- Tous les rôles --</option>
+                <option value="Comptable">Comptable</option>
+                <option value="Chef Comptable">Chef Comptable</option>
+                <option value="DAF">DAF</option>
+              </select>
+              <button class="filter-btn" (click)="filtrer()">Filtrer</button>
+            </div>
+            <!-- Tableau -->
+            <div class="user-table-container">
+              <table class="user-table">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let user of utilisateursFiltrees">
+                    <td>{{ user.nom }}</td>
+                    <td>{{ user.prenom }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" *ngIf="showModal">
+  <div class="modal-content">
+    <!-- <span class="close" (click)="fermerModal()">&times;</span>
+      <h3>Ajouter un utilisateur</h3> -->
+    <form (ngSubmit)="ajouterUtilisateur()">
+      <label>Nom :</label>
+      <input type="text" [(ngModel)]="nouveauUser.nom" name="nom" required />
+
+      <label>Prénom :</label>
+      <input type="text" [(ngModel)]="nouveauUser.prenom" name="prenom" required />
+
+      <label>Email :</label>
+      <input type="email" [(ngModel)]="nouveauUser.email" name="email" required />
+
+      <label>Telephone :</label>
+      <input type="telephone" [(ngModel)]="nouveauUser.telephone" name="telephone" required />
+
+      <label>Mot de passe :</label>
+      <input type="password" [(ngModel)]="nouveauUser.password" name="password" required />
+
+      <label>Rôle :</label>
+      <select [(ngModel)]="nouveauUser.role" name="role" required>
+        <option value="" disabled selected>-- Choisir un rôle --</option>
+        <option value="Comptable">Comptable</option>
+        <option value="Chef Comptable">Chef Comptable</option>
+        <option value="DAF">DAF</option>
+      </select>
+
+      <div class="modal-footer">
+        <button type="button" class="close-btn" (click)="fermerModal()">Fermer</button>
+        <button type="submit" class="save-btn" style="margin-top: 0px;">Enregistrer</button>
+      </div>
+
+    </form>
+  </div>
+</div>

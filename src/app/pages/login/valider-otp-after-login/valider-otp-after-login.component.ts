@@ -26,7 +26,7 @@ export class ValiderOtpAfterLoginComponent {
     private router: Router,
     private authService: AuthService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
   showNotification(message: string) {
     this.snackBar.open(message, '', {
       duration: 4000,
@@ -55,6 +55,8 @@ export class ValiderOtpAfterLoginComponent {
       next: (response) => {
         if (response.status === 200) {
           this.isLoadingReEnvoi = false;
+          this.otpValues = ['', '', '', ''];
+          
           // this.showModalSuccessEnvoiOtp = true;
           this.showNotification(response.message);
           // this.message = response.message;
@@ -67,6 +69,7 @@ export class ValiderOtpAfterLoginComponent {
       },
     });
   }
+
   submitOtp() {
     if (!this.isOtpComplete()) {
       this.errorMessage = 'Veuillez remplir tous les champs OTP.';
@@ -88,6 +91,8 @@ export class ValiderOtpAfterLoginComponent {
 
           // Ouvrir modal succès
           // this.showModalSuccess = true;
+        } else if (response.status === 401) {
+          this.showNotification(response.message);
         }
 
         // else if (response.status === 401) {

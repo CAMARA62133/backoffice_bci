@@ -6,40 +6,19 @@ import { LoadingPageComponent } from './pages/login/loading-page/loading-page.co
 import { LoginComponent } from './pages/login/login.component';
 import { ReinitialiserPasswordComponent } from './pages/login/reinitialiser-password/reinitialiser-password.component';
 import { ValiderOtpAfterLoginComponent } from './pages/login/valider-otp-after-login/valider-otp-after-login.component';
+import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos/modifier-mes-infos.component';
+import { UtilisteurComponent } from './pages/utilisateurs/utilisteur/utilisteur.component';
 import { AuthGuard } from './services/guard/auth-guard.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', title: 'BCI - Online | Connexion', component: LoginComponent },
 
-  {
-    path: 'login',
-    title: 'BCI - Online | Connexion',
-    component: LoginComponent,
-  },
+  { path: 'valider-otp-login', title: 'BCI - Online | Validation du code OTP', component: ValiderOtpAfterLoginComponent },
+  { path: 'reinitialiser-mot-de-passe', title: 'BCI - Online | Mot de passe oublié', component: ReinitialiserPasswordComponent },
 
-  {
-    path: 'valider-otp-login',
-    title: 'BCI - Online | Validation du code OTP',
-    component: ValiderOtpAfterLoginComponent,
-  },
-
-  {
-    path: 'reinitialiser-mot-de-passe',
-    title: 'BCI - Online | Mot de passe oublié',
-    component: ReinitialiserPasswordComponent,
-  },
-
-  {
-    path: 'reset',
-    title: 'BCI - Online | Réinitialisation du mot de passe',
-    component: LoadingPageComponent,
-  },
-
-  {
-    path: 'nouveau-mot-de-passe',
-    title: 'BCI - Online | Nouveau mot de passe',
-    component: FormNouveauPasswordComponent,
-  },
+  { path: 'reset', title: 'BCI - Online | Réinitialisation du mot de passe', component: LoadingPageComponent },
+  { path: 'nouveau-mot-de-passe', title: 'BCI - Online | Nouveau mot de passe', component: FormNouveauPasswordComponent },
 
   {
     path: '',
@@ -51,12 +30,20 @@ export const routes: Routes = [
         component: DashboardComponent,
         canActivate: [AuthGuard],
       },
+      {
+        path: 'utilisateurs',
+        title: 'BCI - Online | Listes des Utilisateurs',
+        component: UtilisteurComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'modifier-mon-profile',
+        title: 'BCI - Online | Modifier mon Profile',
+        component: ModifierMesInfosComponent,
+        canActivate: [AuthGuard]
+      }
     ],
   },
 
-  {
-    path: '**',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];

@@ -12,6 +12,7 @@ export class LoadingService {
 
   constructor(private http: HttpClient) {}
 
+  // Méthode pour vérifier le token
   verifierToken(
     token: string,
     appName: string = this.appName

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from '../../../environnements/environnement';
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,9 @@ import { environment } from '../../../environnements/environnement';
 export class OtpLoginServiceService {
   appName = environment.appName;
   private baseUrl = environment.apiUrl;
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
+
   private getToken(): string | null {
     return localStorage.getItem('token');
   }
@@ -23,6 +25,7 @@ export class OtpLoginServiceService {
       );
     }
 
+    // Les entetes des requettes
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -48,12 +51,16 @@ export class OtpLoginServiceService {
         () => new Error('Token non trouvé. Veuillez vous connecter.')
       );
     }
+
+    // Les entetes des requettes
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     });
+
     const body = { appName };
     console.log(body);
+
     return this.http
       .post<any>(`${this.baseUrl}/api/RenvoiOTP`, body, { headers })
       .pipe(

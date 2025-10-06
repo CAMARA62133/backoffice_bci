@@ -1,0 +1,147 @@
+<div class="page-content">
+  <div class="container-fluid">
+    <div class="row mt-3">
+
+      <div class="row m-sm-0">
+        <div class="col-lg-12 card-profile">
+          <div class="card card-block card-stretch card-height">
+            <div class="card-body">
+
+              <ul class="d-flex nav nav-pills mb-0 text-center" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link" [ngClass]="{'active': activeTab === 'profile1'}"
+                    (click)="setActiveTab('profile1')" role="tab" aria-selected="true">
+                    Modifier les informations personnelles
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" [ngClass]="{'active': activeTab === 'profile2'}"
+                    (click)="setActiveTab('profile2')" role="tab" aria-selected="false">
+                    Modifier le mot de passe
+                  </a>
+                </li>
+              </ul>
+
+              <div class="tab-content">
+
+                <div *ngIf="activeTab === 'profile1'" class="tab-pane fade show active">
+                  <div class="col-lg-12">
+                    <div class="content-wrapper">
+                      <h2>Modifier mes informations</h2>
+                      <form (ngSubmit)="modifierInfos()">
+                        <label>Nom :</label>
+                        <input type="text" [(ngModel)]="currentUserInfo.vcLastname" name="vcLastname"
+                          placeholder="Entrez votre nom" required />
+
+                        <label>Prénom :</label>
+                        <input type="text" [(ngModel)]="currentUserInfo.vcFirstname" name="vcFirstname"
+                          placeholder="Entrez votre prénom" required />
+
+                        <label>Email :</label>
+                        <input type="email" [(ngModel)]="currentUserInfo.email" name="email"
+                          placeholder="Entrez votre email" required />
+
+                        <label>Téléphone :</label>
+                        <input type="text" [(ngModel)]="currentUserInfo.vcPhoneNumber" name="vcPhoneNumber"
+                          placeholder="Entrez votre téléphone" />
+
+                        <button type="submit" class="btn save" [disabled]="isLoading">
+                          <span *ngIf="!isLoading">Mettre à jour</span>
+                          <span *ngIf="isLoading">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Mis a jours en cours...
+                          </span>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Changer le mot de passe -->
+                <div *ngIf="activeTab === 'profile2'" class="tab-pane fade show active">
+                  <div class="col-lg-12">
+                    <div class="content-wrapper">
+                      <h2>Changer mon mot de passe</h2>
+                      <form (ngSubmit)="changerMotDePasse()">
+                        <label>Ancien mot de passe :</label>
+                        <div class="input-group auth-pass-inputgroup">
+                          <input class="form-control" [type]="passwordVisibleOld ? 'text' : 'password'"
+                            [(ngModel)]="password.old" name="ancien" placeholder="Entrez l'ancien mot de passe"
+                            required />
+
+                          <button class="btn btn-light shadow-none ms-0" type="button"
+                            (click)="togglePasswordVisibility('old')" [attr.aria-pressed]="passwordVisibleOld"
+                            [title]="passwordVisibleOld ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
+                            <i [ngClass]="passwordVisibleOld ? 'mdi mdi-eye-off-outline' : 'mdi mdi-eye-outline'"></i>
+                          </button>
+                        </div>
+
+
+                        <label>Nouveau mot de passe :</label>
+                        <div class="input-group auth-pass-inputgroup">
+                          <input class="form-control" [type]="passwordVisibleNew ? 'text' : 'password'"
+                            [(ngModel)]="password.new" name="nouveau" placeholder="Entrez le nouveau mot de passe"
+                            required />
+
+                          <button class="btn btn-light shadow-none ms-0" type="button"
+                            (click)="togglePasswordVisibility('new')" [attr.aria-pressed]="passwordVisibleNew"
+                            [title]="passwordVisibleNew ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
+                            <i [ngClass]="passwordVisibleNew ? 'mdi mdi-eye-off-outline' : 'mdi mdi-eye-outline'"></i>
+                          </button>
+                        </div>
+
+
+                        <label>Confirmer mot de passe :</label>
+                        <div class="input-group auth-pass-inputgroup">
+                          <input class="form-control" [type]="passwordVisibleConfirm ? 'text' : 'password'"
+                            [(ngModel)]="password.confirm" name="confirmer" placeholder="Confirmez le mot de passe"
+                            required />
+
+                          <button class="btn btn-light shadow-none ms-0" type="button"
+                            (click)="togglePasswordVisibility('confirm')" [attr.aria-pressed]="passwordVisibleConfirm"
+                            [title]="passwordVisibleConfirm ? 'Masquer le mot de passe' : 'Afficher le mot de passe'">
+                            <i
+                              [ngClass]="passwordVisibleConfirm ? 'mdi mdi-eye-off-outline' : 'mdi mdi-eye-outline'"></i>
+                          </button>
+                        </div>
+
+
+                        <button type="submit" class="btn save" [disabled]="isLoading">
+                          <span *ngIf="!isLoading">Changer</span>
+                          <span *ngIf="isLoading">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Mise à jour en cours...
+                          </span>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade show" *ngIf="showSuccessModal"
+        style="display: block; background: rgba(0,0,0,0.4); z-index: 1050;">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+              <h5 class="modal-title">Succès</h5>
+              <button type="button" class="btn-close" (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+              <p>{{ modalMessage }}</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-success" (click)="closeModal()">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
