@@ -607,6 +607,7 @@
 
   <!-- Start: Main -->
   <div class="main-content">
+
     <router-outlet></router-outlet>
     <!-- End: Page -->
 
@@ -614,30 +615,15 @@
     <footer class="bg-light d-print-none mt-4 py-3 footer border-top">
       <div class="container-fluid">
         <div class="row">
+          <div class="col-sm-6"><small class="fw-semibold">
+              <script>document.write(new Date().getFullYear())</script><span> © Backoffice BCI-Online v1.0.0 |</span>
+            </small><span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span></div>
           <div class="col-sm-6">
-            <small class="fw-semibold">
-              <script>
-                document.write(new Date().getFullYear());
-              </script>
-              <span>© Backoffice BCI-Online v1.0.0 |</span>
-            </small>
-            <span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>
-          </div>
-          <div class="col-sm-6">
-            <div class="text-sm-end d-none d-sm-block">
-              <small class="text-muted me-2">
-                <a class="text-decoration-none me-2" href="#"> RGPD </a>
-                <a class="text-decoration-none me-2" href="#"> Conditions </a>
-                <a class="text-decoration-none me-2" href="#">
-                  Documentation
-                </a>
-                <a class="text-decoration-none" href="#"> Support </a>
-                <span class="ms-2">Powered by&nbsp;</span>
-                <a class="text-decoration-none" href="https://ecash-guinee.com" target="_blank">
-                  MV1
-                </a>
-              </small>
-            </div>
+            <div class="text-sm-end d-none d-sm-block"><small class="text-muted me-2"><a
+                  class="text-decoration-none me-2" href="#">RGPD</a><a class="text-decoration-none me-2"
+                  href="#">Conditions</a><a class="text-decoration-none me-2" href="#">Documentation</a><a
+                  class="text-decoration-none" href="#">Support</a><span class="ms-2">Powered by&nbsp;</span><a
+                  class="text-decoration-none" href="https://ecash-guinee.com" target="_blank">MV1</a></small></div>
           </div>
         </div>
       </div>
