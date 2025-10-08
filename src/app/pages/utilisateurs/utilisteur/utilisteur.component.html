@@ -1,87 +1,167 @@
 <div class="page-content">
-  <div class="container-fluid">
-    <div class="row mt-3">
-      <div class="col-12">
-        <div class="card">
-          <div class="container">
-            <!-- Header + Ajouter -->
-            <div class="header-actions">
-              <h2>Liste des utilisateurs</h2>
-              <button class="add-btn" (click)="ouvrirModal()">+ Ajouter un utilisateur</button>
-            </div>
-            <!-- Filtre -->
-            <div class="filter">
-              <input type="text" placeholder="Recherche email" [(ngModel)]="filterEmail" />
-              <select [(ngModel)]="filterRole">
-                <option value="">-- Tous les rôles --</option>
-                <option value="Comptable">Comptable</option>
-                <option value="Chef Comptable">Chef Comptable</option>
-                <option value="DAF">DAF</option>
-              </select>
-              <button class="filter-btn" (click)="filtrer()">Filtrer</button>
-            </div>
-            <!-- Tableau -->
-            <div class="user-table-container">
-              <table class="user-table">
-                <thead>
-                  <tr>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Rôle</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let user of utilisateursFiltrees">
-                    <td>{{ user.nom }}</td>
-                    <td>{{ user.prenom }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.role }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+  <div class="container-fluid py-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="text-primary mb-1 h4">
+              <i class="fas fa-building me-2"></i> Liste des Utilisateurs
+            </h1>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary" (click)="openModalAjout()">
+              <i class="fas fa-plus me-1"></i> Nouveau Utilisateur
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex align-items-center gap-3">
+        <span class="fw-semibold text-muted">
+          {{ utilisateurs.length }} utilisateur(s)
+        </span>
+        <div class="d-flex align-items-center gap-2">
+          <label class="form-label text-muted mb-0" for="pageSize">Afficher :</label>
+          <select class="form-select-sm form-select" id="pageSize" style="width:auto;"
+            (change)="onPageSizeChange($event)">
+            <option *ngFor="let opt of pageSizeOptions" [value]="opt" [selected]="opt === pageSize">
+              {{ opt }}
+            </option>
+          </select>
+          <span class="text-muted">par page</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm" id="tableView">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" id="entreprisesTable">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Rôle</th>
+                <th>Date Création</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of utilisateursPagines">
+                <td>{{ user.id }}</td>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.nom }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.telephone }}</td>
+                <td>{{ user.role }}</td>
+                <td>Mardi, 07/10/2025</td>
+                <td>
+                  <div class="d-flex gap-1">
+                    <button type="button" class="btn btn-outline-info btn-action btn-sm" title="Consulter">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-warning btn-action btn-sm" title="Modifier">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-success btn-action btn-sm" title="Réactiver">
+                      <i class="fas fa-undo"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav class="mt-4" aria-label="Pagination" *ngIf="totalPages > 1">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+          <span> Affichage de
+            {{ (currentPage - 1) * pageSize + 1 }}
+            à {{ Math.min(currentPage * pageSize, utilisateurs.length) }}
+            sur {{ utilisateurs.length }} utilisateurs
+          </span>
+        </div>
+        <ul class="pagination mb-0">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="changerPage(currentPage - 1)">Précédent</a>
+          </li>
+
+          <li class="page-item" *ngFor="let pageIdx of [].constructor(totalPages); let i = index"
+            [class.active]="currentPage === i + 1">
+            <a class="page-link" (click)="changerPage(i + 1)">{{ i + 1 }}</a>
+          </li>
+
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" (click)="changerPage(currentPage + 1)">Suivant</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal" *ngIf="showModal">
-  <div class="modal-content">
-    <!-- <span class="close" (click)="fermerModal()">&times;</span>
-      <h3>Ajouter un utilisateur</h3> -->
-    <form (ngSubmit)="ajouterUtilisateur()">
-      <label>Nom :</label>
-      <input type="text" [(ngModel)]="nouveauUser.nom" name="nom" required />
-
-      <label>Prénom :</label>
-      <input type="text" [(ngModel)]="nouveauUser.prenom" name="prenom" required />
-
-      <label>Email :</label>
-      <input type="email" [(ngModel)]="nouveauUser.email" name="email" required />
-
-      <label>Telephone :</label>
-      <input type="telephone" [(ngModel)]="nouveauUser.telephone" name="telephone" required />
-
-      <label>Mot de passe :</label>
-      <input type="password" [(ngModel)]="nouveauUser.password" name="password" required />
-
-      <label>Rôle :</label>
-      <select [(ngModel)]="nouveauUser.role" name="role" required>
-        <option value="" disabled selected>-- Choisir un rôle --</option>
-        <option value="Comptable">Comptable</option>
-        <option value="Chef Comptable">Chef Comptable</option>
-        <option value="DAF">DAF</option>
-      </select>
-
-      <div class="modal-footer">
-        <button type="button" class="close-btn" (click)="fermerModal()">Fermer</button>
-        <button type="submit" class="save-btn" style="margin-top: 0px;">Enregistrer</button>
+<!-- Modal d'ajout -->
+<div *ngIf="showModalAjoutUtilisateur" class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content shadow-lg rounded">
+      <div class="modal-header">
+        <h5 class="modal-title">Ajouter un utilisateur</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closeModalAjout()"></button>
       </div>
-
-    </form>
+      <div class="modal-body" #modalBody style="overflow-y: auto; max-height: 65vh;" tabindex="0"
+        (keydown)="onModalBodyKeydown($event)">
+        <form #formAjout="ngForm" (ngSubmit)="addUtilisateur(formAjout)">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="prenom" class="form-label">Prénom</label>
+              <input type="text" id="prenom" class="form-control" required [(ngModel)]="newUser.prenom" name="prenom">
+            </div>
+            <div class="col-md-6">
+              <label for="nom" class="form-label">Nom</label>
+              <input type="text" id="nom" class="form-control" required [(ngModel)]="newUser.nom" name="nom">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" id="email" class="form-control" required [(ngModel)]="newUser.email" name="email">
+            </div>
+            <div class="col-md-6">
+              <label for="telephone" class="form-label">Téléphone</label>
+              <input type="tel" id="telephone" class="form-control" required [(ngModel)]="newUser.telephone"
+                name="telephone">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="role" class="form-label">Rôle</label>
+              <select id="role" class="form-select" required [(ngModel)]="newUser.role" name="role">
+                <option value="" disabled selected>-- Sélectionner un rôle --</option>
+                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModalAjout()">
+          Annuler
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="formAjout.invalid"
+          (click)="addUtilisateur(formAjout)">
+          Enregistrer
+        </button>
+      </div>
+    </div>
   </div>
 </div>

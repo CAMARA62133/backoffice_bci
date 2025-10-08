@@ -8,11 +8,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/authService/auth.service';
 
 @Component({
   selector: 'app-reinitialiser-password',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './reinitialiser-password.component.html',
   styleUrl: './reinitialiser-password.component.css',
 })
