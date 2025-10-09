@@ -8,11 +8,11 @@ import { AuthService } from '../../../services/authService/auth.service';
   selector: 'app-modifier-mes-infos',
   imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './modifier-mes-infos.component.html',
-  styleUrl: './modifier-mes-infos.component.css'
+  styleUrl: './modifier-mes-infos.component.css',
 })
 export class ModifierMesInfosComponent {
   // Gestion de la tabulation
-  activeTab: string = "profile1";
+  activeTab: string = 'profile1';
   setActiveTab(tabId: string): void {
     this.activeTab = tabId;
   }
@@ -24,18 +24,17 @@ export class ModifierMesInfosComponent {
     email: '',
     vcPhoneNumber: '',
     id: 0,
-  }
+  };
 
   isLoading: boolean = false;
   showSuccessModal: boolean = false;
   showErrorModal: boolean = false;
   modalMessage: string = '';
 
-
   constructor(
     private authService: AuthService,
     private snackBar: MatSnackBar
-  ) { }
+  ) {}
 
   showNotification(message: string) {
     this.snackBar.open(message, '', {
@@ -63,10 +62,9 @@ export class ModifierMesInfosComponent {
   togglePasswordVisibility(field: 'old' | 'new' | 'confirm') {
     if (field === 'old') this.passwordVisibleOld = !this.passwordVisibleOld;
     if (field === 'new') this.passwordVisibleNew = !this.passwordVisibleNew;
-    if (field === 'confirm') this.passwordVisibleConfirm = !this.passwordVisibleConfirm;
+    if (field === 'confirm')
+      this.passwordVisibleConfirm = !this.passwordVisibleConfirm;
   }
-
-
 
   // A l'initialisation du composant
   ngOnInit(): void {
@@ -78,36 +76,39 @@ export class ModifierMesInfosComponent {
   modifierInfos() {
     this.isLoading = true;
 
-    this.authService.modifierProfile(
-      this.currentUserInfo.vcLastname,
-      this.currentUserInfo.vcFirstname,
-      this.currentUserInfo.email,
-      this.currentUserInfo.vcPhoneNumber,
-      Number(this.currentUserInfo.id),
-    ).subscribe({
-      next: (response: any) => {
-        this.isLoading = false;
-        this.authService.getUserInfo();
+    this.authService
+      .modifierProfile(
+        this.currentUserInfo.vcLastname,
+        this.currentUserInfo.vcFirstname,
+        this.currentUserInfo.email,
+        this.currentUserInfo.vcPhoneNumber,
+        Number(this.currentUserInfo.id)
+      )
+      .subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+          this.authService.getUserInfo();
 
-        if (response.status === 200) {
-          this.modalMessage = response.message || 'Profil mis à jour avec succès.';
-          this.showSuccessModal = true;
-          this.showErrorModal = false;
-        } else {
-          this.modalMessage = response.message || 'Échec de la mise à jour du profil.';
+          if (response.status === 200) {
+            this.modalMessage =
+              response.message || 'Profil mis à jour avec succès.';
+            this.showSuccessModal = true;
+            this.showErrorModal = false;
+          } else {
+            this.modalMessage =
+              response.message || 'Échec de la mise à jour du profil.';
+            this.showSuccessModal = false;
+            this.showErrorModal = true;
+          }
+        },
+        error: (error: any) => {
+          console.error(error);
+          this.isLoading = false;
+          this.modalMessage = 'Échec de la mise à jour du profil.';
           this.showSuccessModal = false;
           this.showErrorModal = true;
-        }
-
-      },
-      error: (error: any) => {
-        console.error(error);
-        this.isLoading = false;
-        this.modalMessage = 'Échec de la mise à jour du profil.';
-        this.showSuccessModal = false;
-        this.showErrorModal = true;
-      }
-    });
+        },
+      });
   }
 
   changerMotDePasse(): void {
@@ -126,36 +127,42 @@ export class ModifierMesInfosComponent {
     this.isLoading = true;
 
     // Appel du service
-    this.authService.updatePassword(
-      this.password.old,       // ✅ ancien mot de passe
-      this.password.new,       // ✅ nouveau mot de passe
-      this.currentUserInfo.email      // ✅ email de l'utilisateur
-    ).subscribe({
-      next: (response: any) => {
-        console.log('Réponse API :', response);
-        this.isLoading = false;
+    this.authService
+      .updatePassword(
+        this.password.old, // ✅ ancien mot de passe
+        this.password.new, // ✅ nouveau mot de passe
+        this.currentUserInfo.email // ✅ email de l'utilisateur
+      )
+      .subscribe({
+        next: (response: any) => {
+          console.log('Réponse API :', response);
+          this.isLoading = false;
 
-        if (response?.status === 200 || response?.success) {
-          this.modalMessage = response?.message || 'Mot de passe changé avec succès.';
-          this.showSuccessModal = true;
-          this.showErrorModal = false;
+          if (response?.status === 200 || response?.success) {
+            this.modalMessage =
+              response?.message || 'Mot de passe changé avec succès.';
+            this.showSuccessModal = true;
+            this.showErrorModal = false;
 
-          // Réinitialiser les champs du formulaire
-          this.password = { old: '', new: '', confirm: '' };
-        } else {
-          this.modalMessage = response?.message || 'Échec du changement de mot de passe.';
+            // Réinitialiser les champs du formulaire
+            this.password = { old: '', new: '', confirm: '' };
+          } else {
+            this.modalMessage =
+              response?.message || 'Échec du changement de mot de passe.';
+            this.showErrorModal = true;
+            this.showSuccessModal = false;
+          }
+        },
+        error: (error: any) => {
+          console.error('Erreur API :', error);
+          this.isLoading = false;
+          this.modalMessage =
+            error?.error?.message ||
+            'Erreur lors du changement de mot de passe.';
           this.showErrorModal = true;
           this.showSuccessModal = false;
-        }
-      },
-      error: (error: any) => {
-        console.error('Erreur API :', error);
-        this.isLoading = false;
-        this.modalMessage = error?.error?.message || 'Erreur lors du changement de mot de passe.';
-        this.showErrorModal = true;
-        this.showSuccessModal = false;
-      }
-    });
+        },
+      });
   }
 
   // Fermer les modales
@@ -166,6 +173,6 @@ export class ModifierMesInfosComponent {
   }
 
   btnClicked() {
-    console.log("Boutton clicker")
+    console.log('Boutton clicker');
   }
 }

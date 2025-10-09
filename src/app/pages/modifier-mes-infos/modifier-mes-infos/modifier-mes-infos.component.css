@@ -1,27 +1,26 @@
 /* =======================================
    STYLES GÉNÉRAUX DE VOTRE CARTE ET FORMULAIRE
    ======================================= */
-.card {
+/* .card {
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   padding: 0;
-  /* Suppression du padding ici car on le gère dans .tab-content */
   margin: 20px auto 60px auto;
   width: 95%;
   max-width: 1200px;
   box-sizing: border-box;
-}
+} */
 
 /* Adaptation pour les grands écrans */
-@media (min-height: 800px) {
+/* @media (min-height: 800px) {
   .card {
     margin-bottom: 100px;
   }
-}
+} */
 
 /* Les conteneurs de contenu à l'intérieur des onglets */
-.content-wrapper {
+/* .content-wrapper {
   padding: 0;
 }
 
@@ -30,10 +29,10 @@ label {
   margin-top: 10px;
   font-weight: 600;
   color: #444;
-}
+} */
 
 /* Inputs améliorés */
-input {
+/* input {
   width: 100%;
   padding: 12px 14px;
   margin-top: 5px;
@@ -43,23 +42,23 @@ input {
   outline: none;
   transition: all 0.3s ease;
   background-color: #f9f9f9;
-}
+} */
 
 /* Effet focus */
-input:focus {
+/* input:focus {
   border-color: #27ae60;
   box-shadow: 0 0 6px rgba(39, 174, 96, 0.4);
   background-color: #fff;
-}
+} */
 
 /* Placeholder stylé */
-input::placeholder {
+/* input::placeholder {
   color: #aaa;
   font-style: italic;
-}
+} */
 
 /* Bouton Save */
-.btn.save {
+/* .btn.save {
   margin-top: 15px;
   background: #27ae60;
   color: white;
@@ -74,7 +73,7 @@ input::placeholder {
 
 .btn.save:hover {
   background: #2ecc71;
-}
+} */
 
 
 /* =======================================
@@ -82,7 +81,7 @@ input::placeholder {
      ======================================= */
 
 /* Style de base des liens d'onglets (a) */
-.nav-pills .nav-item .nav-link {
+/* .nav-pills .nav-item .nav-link {
   color: #444;
   font-weight: 500;
   border-radius: 8px 8px 0 0;
@@ -91,31 +90,29 @@ input::placeholder {
   transition: all 0.3s ease;
   background-color: #f0f0f0;
   border: 1px solid transparent;
-}
+} */
 
 /* Style au survol (hover) */
-.nav-pills .nav-item .nav-link:hover {
+/* .nav-pills .nav-item .nav-link:hover {
   color: #27ae60;
   background-color: #e5e5e5;
-}
+} */
 
 /* Style du lien ACTIF */
-.nav-pills .nav-item .nav-link.active {
+/* .nav-pills .nav-item .nav-link.active {
   background-color: #fff;
   color: #27ae60;
   font-weight: 700;
   border-color: #ccc #ccc #fff;
-  /* Bordures grises, mais pas de bordure en bas */
   position: relative;
   z-index: 2;
-}
+} */
 
 /* Conteneur du contenu (pour aligner avec les onglets) */
-.tab-content {
+/* .tab-content {
   border: 1px solid #ccc;
   border-radius: 0 12px 12px 12px;
   padding: 20px;
   margin-top: -1px;
-  /* Pour masquer la bordure du bas de l'onglet actif */
   background-color: #fff;
-}
+} */
