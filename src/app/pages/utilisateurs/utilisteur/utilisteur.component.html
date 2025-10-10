@@ -9,8 +9,9 @@
             </h1>
           </div>
           <div class="d-flex gap-2">
-            <button class="btn btn-primary" (click)="openModalAjout()">
-              <i class="fas fa-plus me-1"></i> Nouveau Utilisateur
+            <button class="btn btn-primary" (click)="openCreateUserModal()">
+              <i class="fas fa-plus me-1"></i>
+              Créer un nouveau Utilisateur
             </button>
           </div>
         </div>
@@ -20,18 +21,31 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div class="d-flex align-items-center gap-3">
         <span class="fw-semibold text-muted">
-          {{ utilisateurs.length }} utilisateur(s)
+          <!-- {{ utilisateurs.length }} utilisateur(s) -->
+          20 utilisateur(s)
         </span>
-        <div class="d-flex align-items-center gap-2">
-          <label class="form-label text-muted mb-0" for="pageSize">Afficher :</label>
-          <select class="form-select-sm form-select" id="pageSize" style="width:auto;"
-            (change)="onPageSizeChange($event)">
-            <option *ngFor="let opt of pageSizeOptions" [value]="opt" [selected]="opt === pageSize">
+
+        <!-- <div class="d-flex align-items-center gap-2">
+          <label class="form-label text-muted mb-0" for="pageSize"
+            >Afficher :</label
+          >
+
+          <select
+            class="form-select-sm form-select"
+            id="pageSize"
+            style="width: auto"
+            (change)="onPageSizeChange($event)"
+          >
+            <option
+              *ngFor="let opt of pageSizeOptions"
+              [value]="opt"
+              [selected]="opt === pageSize"
+            >
               {{ opt }}
             </option>
           </select>
           <span class="text-muted">par page</span>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -52,7 +66,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let user of utilisateursPagines">
+              <tr *ngFor="let user of utilisateurs">
                 <td>{{ user.id }}</td>
                 <td>{{ user.prenom }}</td>
                 <td>{{ user.nom }}</td>
@@ -62,13 +76,25 @@
                 <td>Mardi, 07/10/2025</td>
                 <td>
                   <div class="d-flex gap-1">
-                    <button type="button" class="btn btn-outline-info btn-action btn-sm" title="Consulter">
+                    <button
+                      type="button"
+                      class="btn btn-outline-info btn-action btn-sm"
+                      title="Consulter"
+                    >
                       <i class="fas fa-eye"></i>
                     </button>
-                    <button type="button" class="btn btn-outline-warning btn-action btn-sm" title="Modifier">
+                    <button
+                      type="button"
+                      class="btn btn-outline-warning btn-action btn-sm"
+                      title="Modifier"
+                    >
                       <i class="fas fa-edit"></i>
                     </button>
-                    <button type="button" class="btn btn-outline-success btn-action btn-sm" title="Réactiver">
+                    <button
+                      type="button"
+                      class="btn btn-outline-success btn-action btn-sm"
+                      title="Réactiver"
+                    >
                       <i class="fas fa-undo"></i>
                     </button>
                   </div>
@@ -81,85 +107,412 @@
     </div>
 
     <!-- Pagination -->
-    <nav class="mt-4" aria-label="Pagination" *ngIf="totalPages > 1">
+    <!-- <nav class="mt-4" aria-label="Pagination" *ngIf="totalPages > 1">
       <div class="d-flex justify-content-between align-items-center">
         <div class="text-muted">
-          <span> Affichage de
+          <span>
+            Affichage de
             {{ (currentPage - 1) * pageSize + 1 }}
-            à {{ Math.min(currentPage * pageSize, utilisateurs.length) }}
-            sur {{ utilisateurs.length }} utilisateurs
+            à {{ Math.min(currentPage * pageSize, utilisateurs.length) }} sur
+            {{ utilisateurs.length }} utilisateurs
           </span>
         </div>
         <ul class="pagination mb-0">
           <li class="page-item" [class.disabled]="currentPage === 1">
-            <a class="page-link" (click)="changerPage(currentPage - 1)">Précédent</a>
+            <a class="page-link" (click)="changerPage(currentPage - 1)"
+              >Précédent</a
+            >
           </li>
 
-          <li class="page-item" *ngFor="let pageIdx of [].constructor(totalPages); let i = index"
-            [class.active]="currentPage === i + 1">
+          <li
+            class="page-item"
+            *ngFor="let pageIdx of [].constructor(totalPages); let i = index"
+            [class.active]="currentPage === i + 1"
+          >
             <a class="page-link" (click)="changerPage(i + 1)">{{ i + 1 }}</a>
           </li>
 
           <li class="page-item" [class.disabled]="currentPage === totalPages">
-            <a class="page-link" (click)="changerPage(currentPage + 1)">Suivant</a>
+            <a class="page-link" (click)="changerPage(currentPage + 1)"
+              >Suivant</a
+            >
           </li>
         </ul>
       </div>
-    </nav>
-
+    </nav> -->
   </div>
 </div>
 
 <!-- Modal d'ajout -->
-<div *ngIf="showModalAjoutUtilisateur" class="modal fade show d-block" tabindex="-1" role="dialog">
+<!-- <div
+  *ngIf="showModalAjoutUtilisateur"
+  class="modal fade show d-block"
+  tabindex="-1"
+  role="dialog"
+>
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content shadow-lg rounded">
       <div class="modal-header">
         <h5 class="modal-title">Ajouter un utilisateur</h5>
-        <button type="button" class="btn-close" aria-label="Close" (click)="closeModalAjout()"></button>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeModalAjout()"
+        ></button>
       </div>
-      <div class="modal-body" #modalBody style="overflow-y: auto; max-height: 65vh;" tabindex="0"
-        (keydown)="onModalBodyKeydown($event)">
+      <div
+        class="modal-body"
+        #modalBody
+        style="overflow-y: auto; max-height: 65vh"
+        tabindex="0"
+        (keydown)="onModalBodyKeydown($event)"
+      >
         <form #formAjout="ngForm" (ngSubmit)="addUtilisateur(formAjout)">
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="prenom" class="form-label">Prénom</label>
-              <input type="text" id="prenom" class="form-control" required [(ngModel)]="newUser.prenom" name="prenom">
+              <input
+                type="text"
+                id="prenom"
+                class="form-control"
+                required
+                [(ngModel)]="newUser.prenom"
+                name="prenom"
+              />
             </div>
             <div class="col-md-6">
               <label for="nom" class="form-label">Nom</label>
-              <input type="text" id="nom" class="form-control" required [(ngModel)]="newUser.nom" name="nom">
+              <input
+                type="text"
+                id="nom"
+                class="form-control"
+                required
+                [(ngModel)]="newUser.nom"
+                name="nom"
+              />
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="email" class="form-label">Email</label>
-              <input type="email" id="email" class="form-control" required [(ngModel)]="newUser.email" name="email">
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                required
+                [(ngModel)]="newUser.email"
+                name="email"
+              />
             </div>
             <div class="col-md-6">
               <label for="telephone" class="form-label">Téléphone</label>
-              <input type="tel" id="telephone" class="form-control" required [(ngModel)]="newUser.telephone"
-                name="telephone">
+              <input
+                type="tel"
+                id="telephone"
+                class="form-control"
+                required
+                [(ngModel)]="newUser.telephone"
+                name="telephone"
+              />
             </div>
           </div>
           <div class="row mb-3">
             <div class="col-md-12">
               <label for="role" class="form-label">Rôle</label>
-              <select id="role" class="form-select" required [(ngModel)]="newUser.role" name="role">
-                <option value="" disabled selected>-- Sélectionner un rôle --</option>
-                <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+              <select
+                id="role"
+                class="form-select"
+                required
+                [(ngModel)]="newUser.role"
+                name="role"
+              >
+                <option value="" disabled selected>
+                  -- Sélectionner un rôle --
+                </option>
+                <option *ngFor="let role of roles" [value]="role">
+                  {{ role }}
+                </option>
               </select>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModalAjout()">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeModalAjout()"
+        >
           Annuler
         </button>
-        <button type="submit" class="btn btn-primary" [disabled]="formAjout.invalid"
-          (click)="addUtilisateur(formAjout)">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="formAjout.invalid"
+          (click)="addUtilisateur(formAjout)"
+        >
           Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="modal fade" role="dialog" tabindex="-1" id="createUserModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Créer un nouveau utilisateur</h5>
+        <button
+          class="btn-close btn-close-dark"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div
+          *ngIf="userForm.invalid && userForm.touched"
+          class="alert alert-danger"
+        >
+          ⚠️ Veuillez corriger les erreurs avant de continuer.
+        </div>
+
+        <form [formGroup]="userForm" autocomplete="off">
+          <div class="row">
+            <h5 class="border-bottom border-1 mb-2">
+              Information de l'utilisateur
+            </h5>
+
+            <div class="col-md-12">
+              <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea
+                  class="form-control"
+                  required
+                  rows="3"
+                  name="description"
+                  formControlName="vcDescription"
+                ></textarea>
+              </div>
+              <!-- <div *ngIf="f.vcDescription.touched && f.vcDescription.invalid">
+                Prénom requis
+              </div> -->
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label class="form-label" for="role">Rôle</label>
+                <select
+                  class="form-select form-select"
+                  required
+                  id="role"
+                  formControlName="iRoleID"
+                >
+                  <option [ngValue]="null">Sélectionnez un rôle</option>
+                  <option value="user">Utilisateur standard</option>
+                  <option *ngFor="let r of roles" [value]="r.id">
+                    {{ r.libelle }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="firstname" class="form-label">Prénom</label>
+                <input
+                  type="text"
+                  id="firstname"
+                  class="form-control"
+                  required
+                  formControlName="vcFirstname"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="lastname" class="form-label">Nom</label>
+                <input
+                  type="text"
+                  id="lastname"
+                  class="form-control"
+                  required
+                  formControlName="vcLastname"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  required
+                  formControlName="vcEmail"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="telephone" class="form-label">Téléphone</label>
+                <input
+                  type="text"
+                  id="telephone"
+                  class="form-control"
+                  required
+                  formControlName="vcPhoneNumber"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  required
+                  formControlName="vcPassword"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="showBusinessInfo" formGroupName="business">
+            <h5 class="border-bottom border-1 mb-2">
+              Informations supplémentaires
+            </h5>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="nomOrganisation" class="form-label"
+                  >Nom Organisation</label
+                >
+                <input
+                  type="text"
+                  id="nomOrganisation"
+                  class="form-control"
+                  required
+                  formControlName="vcName"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="contact" class="form-label">Contact</label>
+                <input
+                  type="text"
+                  id="contact"
+                  class="form-control"
+                  required
+                  formControlName="vcContact"
+                />
+              </div>
+            </div>
+
+            <!-- <div class="col-md-4">
+              <div class="mb-3">
+                <label for="telephone" class="form-label">Téléphone</label>
+                <input
+                  type="text"
+                  id="telephone"
+                  class="form-control"
+                  required
+                  name="telephone"
+                />
+              </div>
+            </div> -->
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="city" class="form-label">Ville</label>
+                <input
+                  type="text"
+                  id="city"
+                  class="form-control"
+                  required
+                  formControlName="vcCity"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="country" class="form-label">Pays</label>
+                <input
+                  type="text"
+                  id="country"
+                  class="form-control"
+                  required
+                  formControlName="vcCountry"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="address" class="form-label">Adresse</label>
+                <input
+                  type="text"
+                  id="address"
+                  class="form-control"
+                  required
+                  formControlName="vcAddress"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="logoPath" class="form-label">Logo</label>
+                <input
+                  type="file"
+                  id="logoPath"
+                  class="form-control"
+                  required
+                  formControlName="vcLogoPath"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="businesseEmailDomain" class="form-label"
+                  >Domaine Business Email</label
+                >
+                <input
+                  type="text"
+                  id="businesseEmailDomain"
+                  class="form-control"
+                  required
+                  formControlName="vcBusinessEmailDomain"
+                />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <!-- data-bs-dismiss="modal" type="button" -->
+        <button class="btn btn-danger" (click)="resetForm()">Annuler</button>
+
+        <button class="btn btn-primary" type="button" (click)="onSubmit()">
+          <span *ngIf="!isLoading">Enregistrer</span>
+          <span *ngIf="isLoading">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            Enregistrement en cours...
+          </span>
         </button>
       </div>
     </div>

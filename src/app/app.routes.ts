@@ -7,18 +7,39 @@ import { LoginComponent } from './pages/login/login.component';
 import { ReinitialiserPasswordComponent } from './pages/login/reinitialiser-password/reinitialiser-password.component';
 import { ValiderOtpAfterLoginComponent } from './pages/login/valider-otp-after-login/valider-otp-after-login.component';
 import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos/modifier-mes-infos.component';
+import { AlertNotificationComponent } from './pages/notifications/alert-notification/alert-notification.component';
 import { UtilisteurComponent } from './pages/utilisateurs/utilisteur/utilisteur.component';
 import { AuthGuard } from './services/guard/auth-guard.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', title: 'BCI - Online | Connexion', component: LoginComponent },
+  {
+    path: 'login',
+    title: 'BCI - Online | Connexion',
+    component: LoginComponent,
+  },
 
-  { path: 'valider-otp-login', title: 'BCI - Online | Validation du code OTP', component: ValiderOtpAfterLoginComponent },
-  { path: 'reinitialiser-mot-de-passe', title: 'BCI - Online | Mot de passe oublié', component: ReinitialiserPasswordComponent },
+  {
+    path: 'valider-otp-login',
+    title: 'BCI - Online | Validation du code OTP',
+    component: ValiderOtpAfterLoginComponent,
+  },
+  {
+    path: 'reinitialiser-mot-de-passe',
+    title: 'BCI - Online | Mot de passe oublié',
+    component: ReinitialiserPasswordComponent,
+  },
 
-  { path: 'reset', title: 'BCI - Online | Réinitialisation du mot de passe', component: LoadingPageComponent },
-  { path: 'nouveau-mot-de-passe', title: 'BCI - Online | Nouveau mot de passe', component: FormNouveauPasswordComponent },
+  {
+    path: 'reset',
+    title: 'BCI - Online | Réinitialisation du mot de passe',
+    component: LoadingPageComponent,
+  },
+  {
+    path: 'nouveau-mot-de-passe',
+    title: 'BCI - Online | Nouveau mot de passe',
+    component: FormNouveauPasswordComponent,
+  },
 
   {
     path: '',
@@ -40,8 +61,14 @@ export const routes: Routes = [
         path: 'modifier-mon-profile',
         title: 'BCI - Online | Modifier mon Profile',
         component: ModifierMesInfosComponent,
-        canActivate: [AuthGuard]
-      }
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'configuration-notifications',
+        title: 'BCI - Online | Configuration Notifications',
+        component: AlertNotificationComponent,
+        canActivate: [AuthGuard],
+      },
     ],
   },
 

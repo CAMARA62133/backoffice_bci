@@ -29,9 +29,12 @@
             "styles": [
               "src/styles.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "src/assets/webcomponents/dist/alert_notification.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/webcomponents/dist/alerte-notification-components.umd.js"
+            ]
           },
           "configurations": {
             "production": {

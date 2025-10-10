@@ -1,0 +1,22 @@
+Creation d'une organisation
+==========================
+vcName
+vcContact
+vcPhoneNumber
+vcEmail
+vcCity
+vcCountry
+vcAddress
+vcLogoPath
+vcBusinessEmailDomain
+
+
+Creation d'un utilisateur
+==========================
+vcFristname
+vcLastname
+vcPhoneNumber
+vcDescription
+vcEmail
+iRoleID
+vcPassword
