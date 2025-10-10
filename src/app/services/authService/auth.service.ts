@@ -15,7 +15,7 @@ export class AuthService {
   private appName = environment.apiUrl;
 
   // Injection de HttpClient pour les requêtes HTTP
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Connexion des utilisateurs
@@ -168,22 +168,26 @@ export class AuthService {
     appName: string = this.appName,
     oldPassword: string,
     newPassword: string,
-    email: string,
+    email: string
   ): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     });
 
     const params = new HttpParams()
       .set('appName', appName)
       .set('ancienPassword', oldPassword)
       .set('Nouveaupassword', newPassword)
-      .set('email', email)
-    console.log("les parametres envoyes : ", params)
+      .set('email', email);
+    console.log('les parametres envoyes : ', params);
 
-    return this.http.post(`${this.baseUrl}/api/resetPasswordAfterLogin`, {}, { headers, params });
+    return this.http.post(
+      `${this.baseUrl}/api/resetPasswordAfterLogin`,
+      {},
+      { headers, params }
+    );
   }
 
   updatePassword(
@@ -194,8 +198,8 @@ export class AuthService {
   ): Observable<any> {
     const token = localStorage.getItem('token'); // Récupérer le token JWT
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     });
 
     const params = new HttpParams()
@@ -204,7 +208,13 @@ export class AuthService {
       .set('Nouveaupassword', Nouveaupassword)
       .set('email', email);
 
-    return this.http.post(`${this.baseUrl}/api/resetPasswordAfterLogin`, {}, { headers, params });
+    console.log('Parametre de modification password : ', { params });
+
+    return this.http.post(
+      `${this.baseUrl}/api/resetPasswordAfterLogin`,
+      {},
+      { headers, params }
+    );
   }
 
   /**
@@ -213,36 +223,40 @@ export class AuthService {
    * @returns
    */
   deconnexion(appName: string = this.appName): Observable<any> {
-    console.log("API Deconnexion");
+    console.log('API Deconnexion');
     // Recuperer le token avant toutes suppressions
     const token = this.getToken();
     if (!token) {
-      return throwError(() => new Error('Token non trouvé. Veuillez vous connecter.'));
+      return throwError(
+        () => new Error('Token non trouvé. Veuillez vous connecter.')
+      );
     }
 
-    if (token) console.log("Le token est est la : ", this.getToken())
+    if (token) console.log('Le token est est la : ', this.getToken());
 
     // Prépare les en-têtes d'authentification
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    })
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
 
     // Prépare les paramètres de requête
-    const params = new HttpParams().set('appName', appName)
-    console.log("Parametres envoyer : ", params.toString());
+    const params = new HttpParams().set('appName', appName);
+    console.log('Parametres envoyer : ', params.toString());
 
     // Appel API de déconnexion
-    return this.http.post(`${this.baseUrl}/api/logout`, {}, { headers, params }).pipe(
-      tap(() => {
-        localStorage.clear();
-        console.log("Dexonnexion reussi !")
-      }),
-      catchError((error) => {
-        console.error('Erreur lors de la déconnexion :', error);
-        return throwError(() => error)
-      })
-    );
+    return this.http
+      .post(`${this.baseUrl}/api/logout`, {}, { headers, params })
+      .pipe(
+        tap(() => {
+          localStorage.clear();
+          console.log('Dexonnexion reussi !');
+        }),
+        catchError((error) => {
+          console.error('Erreur lors de la déconnexion :', error);
+          return throwError(() => error);
+        })
+      );
   }
 
   /**

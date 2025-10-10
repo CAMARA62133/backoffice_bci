@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/authService/auth.service';
 import { OtpLoginServiceService } from '../../../services/otpLogin/otp-login.service';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,16 +26,9 @@ export class ValiderOtpAfterLoginComponent {
     private otpService: OtpLoginServiceService,
     private router: Router,
     private authService: AuthService,
-    private snackBar: MatSnackBar
-  ) { }
-  showNotification(message: string) {
-    this.snackBar.open(message, '', {
-      duration: 4000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: 'custom-snackbar-otp',
-    });
-  }
+    private toastr: ToastrService
+  ) {}
+
   moveToNext(event: any, index: number) {
     const input = event.target;
     const value = input.value;
@@ -44,10 +38,13 @@ export class ValiderOtpAfterLoginComponent {
       this.otpInputs.toArray()[index - 1].nativeElement.focus();
     }
   }
+
   isOtpComplete(): boolean {
     return this.otpValues.every((value) => value.trim() !== '');
   }
+
   isLoadingReEnvoi: boolean = false;
+
   // message = '';
   reEnvoiOtp() {
     this.isLoadingReEnvoi = true;
@@ -56,16 +53,19 @@ export class ValiderOtpAfterLoginComponent {
         if (response.status === 200) {
           this.isLoadingReEnvoi = false;
           this.otpValues = ['', '', '', ''];
-          
-          // this.showModalSuccessEnvoiOtp = true;
-          this.showNotification(response.message);
-          // this.message = response.message;
+
+          this.toastr.success(response.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         }
         console.log(response);
       },
       error: (err) => {
         this.isLoadingReEnvoi = false;
         console.log(err);
+        this.toastr.success(err, '', {
+          positionClass: 'toast-custom-center',
+        });
       },
     });
   }
@@ -84,32 +84,30 @@ export class ValiderOtpAfterLoginComponent {
         if (response.status === 200 && response.data) {
           // Sauvegarde dans AuthService et localStorage
           this.authService.setUserInfo(response.data);
-          // console.log("Utilisateur connecté:", response.data);
-          this.showNotification('Connexion reussi avec success...');
+          this.toastr.success('Connexion reussi avec success...', '', {
+            positionClass: 'toast-custom-center',
+          });
           this.router.navigate(['/dashboard']);
           console.log(response);
 
           // Ouvrir modal succès
           // this.showModalSuccess = true;
         } else if (response.status === 401) {
-          this.showNotification(response.message);
+          this.toastr.error(response.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         }
-
-        // else if (response.status === 401) {
-        //   this.showModalOTP_expire = true;
-        // }
       },
       error: (err) => {
         this.isLoading = false;
-        this.showModalError = true;
         console.log({ err });
+        this.toastr.error(err, '', {
+          positionClass: 'toast-custom-center',
+        });
       },
     });
   }
-  // closeModalSuccess() {
-  //   this.showModalSuccess = false;
-  //   this.router.navigate(['/dashboard']); // redirection après succès
-  // }
+
   closeModalOtpExpire() {
     this.showModalOTP_expire = false;
   }

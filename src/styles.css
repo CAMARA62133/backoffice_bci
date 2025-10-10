@@ -1,5 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import 'ngx-toastr/toastr';
+
 html,
 body {
   height: 100%;
@@ -17,4 +19,14 @@ body {
   text-align: center;
   border-radius: 8px;
   margin-top: 100px !important;
+}
+
+
+/* Style du toaster */
+.toast-custom-center {
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+  z-index: 9999;
 }

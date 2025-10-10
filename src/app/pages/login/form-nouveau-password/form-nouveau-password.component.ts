@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { FormNouveauPasswordService } from '../../../services/formNouveauPassword/form-nouveau-password.service';
 
 @Component({
@@ -27,7 +28,8 @@ export class FormNouveauPasswordComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private formNouveauPasswordService: FormNouveauPasswordService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -61,15 +63,21 @@ export class FormNouveauPasswordComponent implements OnInit {
           this.success = false;
           this.loading = false;
           this.message = res.message || 'Erreur lors de la réinitialisation.';
+          this.toastr.error(this.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         } else {
           this.success = true;
           this.loading = false;
 
           this.message =
             res.message || 'Mot de passe réinitialisé avec succès.';
+          this.toastr.success(this.message, '', {
+            positionClass: 'toast-custom-center',
+          });
 
           // ✅ Nettoyage du localStorage
-          localStorage.removeItem('resetEmail');
+          localStorage.removeItem('urlEmail');
           localStorage.removeItem('urlToken');
 
           // ✅ Redirection vers la page de connexion
@@ -81,6 +89,9 @@ export class FormNouveauPasswordComponent implements OnInit {
         this.success = false;
         this.message =
           err.error?.message || 'Erreur lors de la réinitialisation.';
+        this.toastr.error(this.message, '', {
+          positionClass: 'toast-custom-center',
+        });
         this.loading = false;
 
         console.log("Réponse en cas d'erreur serveur :", {

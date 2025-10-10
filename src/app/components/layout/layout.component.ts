@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/authService/auth.service';
-
 
 @Component({
   selector: 'app-layout',
@@ -14,18 +13,8 @@ export class LayoutComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
-
-  ) { }
-
-  showNotification(message: string) {
-    this.snackBar.open(message, '', {
-      duration: 4000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: 'custom-snackbar-otp',
-    });
-  }
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     // 1. Vérifie si l'utilisateur est connecté
@@ -61,18 +50,24 @@ export class LayoutComponent implements OnInit {
       next: (response) => {
         if (response.status === 200) {
           console.log('Déconnexion réussie :', response);
-          this.showNotification(response.message);
+          // this.showNotification(response.message);
+          this.toastr.success(response.message, '', {
+            positionClass: 'toast-custom-center',
+          });
           // Nettoyage déjà fait dans le service, redirection après succès
           this.router.navigate(['/login']);
         } else {
-          this.showNotification(response.message);
+          // this.showNotification(response.message);
+          this.toastr.error(response.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         }
       },
       error: (error) => {
         console.error('Erreur lors de la déconnexion :', error);
         // Même en cas d'erreur, on peut forcer la redirection vers la page de login
         // this.router.navigate(['/login']);
-      }
+      },
     });
   }
 }

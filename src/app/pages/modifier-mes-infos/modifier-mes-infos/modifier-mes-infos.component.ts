@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/authService/auth.service';
 
 @Component({
@@ -26,32 +26,20 @@ export class ModifierMesInfosComponent {
     id: 0,
   };
 
+  // Variables pour la gestion des messages et du chargement
   isLoading: boolean = false;
-  showSuccessModal: boolean = false;
-  showErrorModal: boolean = false;
   modalMessage: string = '';
+
+  message: any = '';
+  success: boolean = false;
 
   constructor(
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private toastr: ToastrService
   ) {}
-
-  showNotification(message: string) {
-    this.snackBar.open(message, '', {
-      duration: 4000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: 'custom-snackbar-otp',
-    });
-  }
 
   // formulaire de changement de password
   changePasswordForm!: FormGroup;
-
-  // Variables pour la gestion des messages et du chargement
-  message: any = '';
-  success: boolean = false;
-  loading: boolean = false;
 
   // Ajouter dans ton composant
   passwordVisibleOld = false;
@@ -90,23 +78,27 @@ export class ModifierMesInfosComponent {
           this.authService.getUserInfo();
 
           if (response.status === 200) {
+            this.success = true;
             this.modalMessage =
               response.message || 'Profil mis à jour avec succès.';
-            this.showSuccessModal = true;
-            this.showErrorModal = false;
+            this.toastr.success(this.modalMessage, '', {
+              positionClass: 'toast-custom-center',
+            });
           } else {
             this.modalMessage =
               response.message || 'Échec de la mise à jour du profil.';
-            this.showSuccessModal = false;
-            this.showErrorModal = true;
+            this.toastr.error(this.modalMessage, '', {
+              positionClass: 'toast-custom-center',
+            });
           }
         },
         error: (error: any) => {
           console.error(error);
           this.isLoading = false;
           this.modalMessage = 'Échec de la mise à jour du profil.';
-          this.showSuccessModal = false;
-          this.showErrorModal = true;
+          this.toastr.error(this.modalMessage, '', {
+            positionClass: 'toast-custom-center',
+          });
         },
       });
   }
@@ -115,7 +107,6 @@ export class ModifierMesInfosComponent {
     // Vérification de la correspondance des mots de passe
     if (this.password.new !== this.password.confirm) {
       this.modalMessage = 'Les mots de passe ne correspondent pas.';
-      this.showErrorModal = true;
       return;
     }
 
@@ -141,16 +132,18 @@ export class ModifierMesInfosComponent {
           if (response?.status === 200 || response?.success) {
             this.modalMessage =
               response?.message || 'Mot de passe changé avec succès.';
-            this.showSuccessModal = true;
-            this.showErrorModal = false;
+            this.toastr.success(this.modalMessage, '', {
+              positionClass: 'toast-custom-center',
+            });
 
             // Réinitialiser les champs du formulaire
             this.password = { old: '', new: '', confirm: '' };
           } else {
             this.modalMessage =
               response?.message || 'Échec du changement de mot de passe.';
-            this.showErrorModal = true;
-            this.showSuccessModal = false;
+            this.toastr.success(this.modalMessage, '', {
+              positionClass: 'toast-custom-center',
+            });
           }
         },
         error: (error: any) => {
@@ -159,16 +152,15 @@ export class ModifierMesInfosComponent {
           this.modalMessage =
             error?.error?.message ||
             'Erreur lors du changement de mot de passe.';
-          this.showErrorModal = true;
-          this.showSuccessModal = false;
+          this.toastr.success(this.modalMessage, '', {
+            positionClass: 'toast-custom-center',
+          });
         },
       });
   }
 
   // Fermer les modales
   closeModal() {
-    this.showSuccessModal = false;
-    this.showErrorModal = false;
     this.modalMessage = '';
   }
 

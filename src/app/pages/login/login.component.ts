@@ -7,8 +7,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../environnements/environnement';
 import { AuthService } from '../../services/authService/auth.service';
 
@@ -23,17 +23,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private snackBar: MatSnackBar
+    private toastr: ToastrService
   ) {}
-
-  showNotification(message: string) {
-    this.snackBar.open(message, '', {
-      duration: 4000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: 'custom-snackbar-otp',
-    });
-  }
 
   // Formulaire de connexion
   loginForm!: FormGroup;
@@ -91,17 +82,28 @@ export class LoginComponent implements OnInit {
             } else {
               this.loading = false;
               this.success = false;
-              this.showNotification(res.message);
+              this.toastr.error(res.message, '', {
+                positionClass: 'toast-custom-center',
+              });
               this.router.navigate(['/login']);
             }
           },
 
           error: (err) => {
             console.error('Erreur lors de la connexion :', err);
+            this.toastr.success('Erreur lors de la connexion', '', {
+              positionClass: 'toast-custom-center',
+            });
           },
         });
     } else {
-      alert('Formulaire invalide !! Veuillez remplir tous les champs.');
+      this.toastr.error(
+        'Formulaire invalide !! Veuillez remplir tous les champs.',
+        '',
+        {
+          positionClass: 'toast-custom-center',
+        }
+      );
       console.log('Formulaire invalide');
       this.message = 'Veuillez remplir tous les champs.';
       this.success = false;
