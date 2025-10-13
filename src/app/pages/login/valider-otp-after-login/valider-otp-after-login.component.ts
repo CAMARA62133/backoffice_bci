@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
@@ -13,15 +19,17 @@ import { OtpLoginServiceService } from '../../../services/otpLogin/otp-login.ser
   templateUrl: './valider-otp-after-login.component.html',
   styleUrls: ['./valider-otp-after-login.component.css'],
 })
-export class ValiderOtpAfterLoginComponent {
+export class ValiderOtpAfterLoginComponent implements AfterViewInit {
   @ViewChildren('otp0, otp1, otp2, otp3') otpInputs!: QueryList<ElementRef>;
   otpValues: string[] = ['', '', '', ''];
   isLoading = false;
   errorMessage = '';
+
   // Contrôle des modals
   showModalSuccess: boolean = false;
   showModalError: boolean = false;
   showModalOTP_expire: boolean = false;
+
   constructor(
     private otpService: OtpLoginServiceService,
     private router: Router,
@@ -37,10 +45,25 @@ export class ValiderOtpAfterLoginComponent {
     } else if (value.length === 0 && index > 0) {
       this.otpInputs.toArray()[index - 1].nativeElement.focus();
     }
+
+    // soumettre le formulaire si otp valide
+    if (this.isOtpComplete()) {
+      setTimeout(() => {
+        this.submitOtp();
+      }, 200);
+    }
   }
 
   isOtpComplete(): boolean {
     return this.otpValues.every((value) => value.trim() !== '');
+  }
+
+  ngAfterViewInit(): void {
+    if (this.otpInputs && this.otpInputs.first) {
+      setTimeout(() => {
+        this.otpInputs.first.nativeElement.focus();
+      }, 100);
+    }
   }
 
   isLoadingReEnvoi: boolean = false;
@@ -71,10 +94,13 @@ export class ValiderOtpAfterLoginComponent {
   }
 
   submitOtp() {
+    if (this.isLoading) return;
+
     if (!this.isOtpComplete()) {
       this.errorMessage = 'Veuillez remplir tous les champs OTP.';
       return;
     }
+
     const otp = this.otpValues.join('');
     this.isLoading = true;
     this.errorMessage = '';

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
+import { AlertesComponent } from './pages/alertes/alertes.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FormNouveauPasswordComponent } from './pages/login/form-nouveau-password/form-nouveau-password.component';
 import { LoadingPageComponent } from './pages/login/loading-page/loading-page.component';
@@ -7,7 +8,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { ReinitialiserPasswordComponent } from './pages/login/reinitialiser-password/reinitialiser-password.component';
 import { ValiderOtpAfterLoginComponent } from './pages/login/valider-otp-after-login/valider-otp-after-login.component';
 import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos/modifier-mes-infos.component';
-import { AlertNotificationComponent } from './pages/notifications/alert-notification/alert-notification.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { UtilisteurComponent } from './pages/utilisateurs/utilisteur/utilisteur.component';
 import { AuthGuard } from './services/guard/auth-guard.guard';
 
@@ -66,7 +67,13 @@ export const routes: Routes = [
       {
         path: 'configuration-notifications',
         title: 'BCI - Online | Configuration Notifications',
-        component: AlertNotificationComponent,
+        component: NotificationsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'configuration-alertes',
+        title: 'BCI - Online | Configuration Alertes',
+        component: AlertesComponent,
         canActivate: [AuthGuard],
       },
     ],
