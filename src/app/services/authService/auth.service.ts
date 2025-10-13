@@ -8,11 +8,10 @@ import { environment } from './../../../environnements/environnement';
 export class AuthService {
   // Stocke les informations de l'utilisateur
   private userInfo: any = null;
-
-  // URL de base de l'API
+  private userConfigInfo: any = null;
   private baseUrl = environment.apiUrl;
-
-  private appName = environment.apiUrl;
+  private appName = environment.appName;
+  private appVersion = environment.appVersion.vcVersion;
 
   // Injection de HttpClient pour les requêtes HTTP
   constructor(private http: HttpClient) {}
@@ -29,10 +28,11 @@ export class AuthService {
     email: string,
     password: string,
     appName: string,
-    captcha_token: string
+    captcha_token: string,
+    appVersion: string = this.appVersion
   ): Observable<any> {
     // captcha_token => a ajouter dans le body si recaptcha est activé
-    const body = { email, password, appName, captcha_token };
+    const body = { email, password, appName, captcha_token, appVersion };
     console.log('Login body:', body);
     return this.http.post(`${this.baseUrl}/api/login`, body);
   }
@@ -57,11 +57,15 @@ export class AuthService {
 
   /**
    * Ajouter les informations de l'utilisateur depuis la mémoire ou le localStorage
-   * @param userInfo
+   * @param userInfo les informations de l'utilisateur connecter
+   * @param userConfigInfo les informations de l'organisation de l'utilisateur connnecter
    */
-  setUserInfo(userInfo: any): void {
+  setUserInfo(userInfo: any, userConfigInfo: any): void {
     this.userInfo = userInfo;
+    this.userConfigInfo = userConfigInfo || null;
+
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    localStorage.setItem('userConfigInfo', JSON.stringify(userConfigInfo));
   }
 
   /**

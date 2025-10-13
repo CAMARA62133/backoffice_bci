@@ -63,6 +63,7 @@ export class LoginComponent implements OnInit {
         password,
         appName,
         captcha_token,
+        
       });
 
       // Appel du service d'authentification

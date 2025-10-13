@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/authService/auth.service';
 
@@ -26,7 +26,8 @@ export class ReinitialiserPasswordComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -37,18 +38,9 @@ export class ReinitialiserPasswordComponent {
     if (this.forgotPasswordForm.invalid) {
       return;
     }
+
     this.loading = true;
-
     const { email } = this.forgotPasswordForm.value;
-
-    // Enregistrer l'email dans le localStorage
-    // localStorage.setItem('urlEmail', email);
-
-    // console.log(
-    //   'Reset password infos : ',
-    //   email,
-    //   localStorage.getItem('urlEmail')
-    // );
 
     // Appel au service d'authentification pour réinitialiser le mot de passe
     this.authService.requestResetPassword(email).subscribe({
@@ -63,6 +55,9 @@ export class ReinitialiserPasswordComponent {
           this.toastr.success(this.message, '', {
             positionClass: 'toast-custom-center',
           });
+
+          // Si ok rediriger sur le login
+          this.router.navigate(['/login']);
         } else {
           this.message = res.message || 'Addresse email non reconnue.';
           this.toastr.error(this.message, '', {

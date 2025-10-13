@@ -106,10 +106,13 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit {
     this.errorMessage = '';
     this.otpService.verifierOtp(otp).subscribe({
       next: (response) => {
+        console.log('all respnse : ', response);
+
         this.isLoading = false;
         if (response.status === 200 && response.data) {
           // Sauvegarde dans AuthService et localStorage
-          this.authService.setUserInfo(response.data);
+          this.authService.setUserInfo(response.data, response.config);
+
           this.toastr.success('Connexion reussi avec success...', '', {
             positionClass: 'toast-custom-center',
           });
