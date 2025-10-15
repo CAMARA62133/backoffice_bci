@@ -2,14 +2,43 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/authService/auth.service';
+import { DatePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, UpperCasePipe, DatePipe],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
 })
 export class LayoutComponent implements OnInit {
+  // Information de l'utilisateur courrant
+  currentUser = {
+    OTP: '',
+    adresseOrganisation: '',
+    btBlocked: '',
+    btEnabled: '',
+    businessEmailDomainOrganisation: '',
+    cityOrganisation: '',
+    contactOrganisation: '',
+    dtCreated: '',
+    dtLastUpdate: '',
+    dtOTPExpiration: '',
+    email: '',
+    emailOrganisation: '',
+    iOrganisationID: '',
+    iRoleID: '',
+    id: '',
+    idResponsable: '',
+    nameOrganisation: '',
+    paysOrganisation: '',
+    phoneNumberOrganisation: '',
+    tiFailedLogin: '',
+    vcFirstname: '',
+    vcLastname: '',
+    vcPhoneNumber: '',
+    vcRoleName: '',
+  };
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -21,10 +50,12 @@ export class LayoutComponent implements OnInit {
     if (this.authService.isAuthenticated()) {
       // 2. Si l'utilisateur est connecté, on essaie de récupérer ses informations
       const userInfo = this.authService.getUserInfo();
+      this.currentUser = this.authService.getUserInfo();
 
       if (userInfo) {
         // Affiche les informations de l'utilisateur dans la console
         console.log('Utilisateur actuellement connecté :', userInfo);
+        console.log('Current user :', this.currentUser);
         // console.table(userInfo);
       } else {
         // Cas où l'utilisateur est techniquement "connecté" (token présent),
