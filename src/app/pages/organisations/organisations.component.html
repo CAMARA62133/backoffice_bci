@@ -114,9 +114,33 @@
               </table>
             </div>
 
-            <!-- style="display: none" -->
-            <!-- @if(isLoading){
-            <div class="text-center py-5">
+            <!-- au chargement des donnne -->
+            <div *ngIf="isLoadingOrgs" class="text-center my-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden"
+                  >Chargement des données en cours...</span
+                >
+              </div>
+              <p class="text-muted">
+                Veuillez patientez pendant que le données se charges.
+              </p>
+            </div>
+
+            <!-- Si liste des organisations est vide -->
+            <div
+              *ngIf="!isLoadingOrgs && organisations.length === 0"
+              class="text-center py-5"
+            >
+              <div class="mb-3">
+                <i class="text-muted bi bi-inbox display-1"></i>
+              </div>
+              <h5 class="text-muted">Aucune organisation disponible....</h5>
+              <p class="text-muted">
+                Il n'y a pas d'organisations enregistrée pour l'instant !
+              </p>
+            </div>
+
+            <!-- <div class="text-center py-5">
               <div class="mb-3">
                 <i class="text-muted bi bi-inbox display-1"></i>
               </div>
@@ -139,8 +163,7 @@
                   <i class="bi bi-plus-circle"></i> Générer rapport
                 </button>
               </div>
-            </div>
-            } -->
+            </div> -->
           </div>
           <div class="card-footer bg-light">
             <div class="row align-items-center">
@@ -405,26 +428,13 @@
                   class="form-select form-select"
                   required
                   formControlName="iRoleID"
-                  [disabled]="isLoading"
                   [ngClass]="getFormControlClass('iRoleID')"
                 >
-                  <option [ngValue]="null" disabled>
-                    -- Sélectionnez un rôle --
-                  </option>
-
-                  <option value="1">Role 1</option>
-
-                  <option
-                    *ngFor="let role of roles"
-                    [value]="role.id"
-                    [selected]="+role.id === 10"
-                  >
-                    {{ role.vcRoleName }}
+                  <option value="">-- Sélectionnez un rôle --</option>
+                  <option [value]="currentUser?.iRoleID">
+                    {{ currentUser.vcRoleName }}
                   </option>
                 </select>
-                <div *ngIf="isLoading" class="text-muted mt-2">
-                  Chargement des rôles...
-                </div>
                 <span class="text-danger" *ngIf="isInvalid('iRoleID')">
                   {{ getErrorMessage("iRoleID") }}
                 </span>
@@ -463,18 +473,16 @@
               </div>
 
               <div class="col-md-12">
-                <label class="form-label">
-                  Description <span class="text-danger">*</span>
-                </label>
+                <label class="form-label"> Description </label>
                 <textarea
                   class="form-control form-control"
                   formControlName="vcDescription"
-                  [ngClass]="getFormControlClass('vcDescription')"
                   rows="2"
                 ></textarea>
-                <span class="text-danger" *ngIf="isInvalid('vcDescription')">
+                <!-- [ngClass]="getFormControlClass('vcDescription')" -->
+                <!-- <span class="text-danger" *ngIf="isInvalid('vcDescription')">
                   {{ getErrorMessage("vcDescription") }}
-                </span>
+                </span> -->
               </div>
             </div>
           </fieldset>
@@ -488,6 +496,7 @@
           >
             Annuler
           </button>
+
           <button class="btn btn-primary" type="submit">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -503,7 +512,16 @@
                 fill="currentColor"
               ></path>
             </svg>
-            Enregistrer
+
+            {{ isLoading ? "Envoi en cours..." : "Enregistrer" }}
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-dark ms-2"
+            (click)="fillTestForm()"
+          >
+            Remplir formulaire test
           </button>
         </div>
       </form>

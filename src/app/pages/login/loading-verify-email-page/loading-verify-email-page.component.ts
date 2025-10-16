@@ -11,6 +11,7 @@ import { LoadingService } from '../../../services/loading/loading.service';
 export class LoadingVerifyEmailPageComponent implements OnInit {
   token!: string;
   email!: string;
+  isLoading: boolean = false;
 
   constructor(
     private router: Router,
@@ -19,6 +20,8 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
+
     this.route.queryParams.subscribe((params) => {
       // Construction des parametres
       this.token = params['token'];
@@ -41,6 +44,30 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
 
       // Appel au service de loading
       console.log('Appel du service de loading !!!');
+      this.loadingService
+        .checkTokenEmailOrganisation(this.token, this.email)
+        .subscribe({
+          next: (res) => {
+            console.log(
+              "DEBUG : After checking organisation's email and token"
+            );
+            console.log(res);
+            if (res?.status && res?.status === 200) {
+              this.router.navigate(['/valider-otp-email']);
+
+              this.isLoading = false;
+            }
+          },
+
+          error: (err) => {
+            console.error(
+              "❌ Erreur lors de la vérification du token et l'email ",
+              err
+            );
+
+            this.isLoading = false;
+          },
+        });
     });
   }
 }

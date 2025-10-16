@@ -27,4 +27,25 @@ export class LoadingService {
         )
       );
   }
+
+  // Pour verifier le token et l'email de l'organisation
+  checkTokenEmailOrganisation(
+    token: string,
+    email: string,
+    appName: string = this.appName
+  ) {
+    const body = {};
+    const params = new HttpParams()
+      .set('token', token)
+      .set('email', email)
+      .set('appName', appName);
+
+    return this.http
+      .post<any>(`${this.baseUrl}/api/checkEmailToken`, body, { params })
+      .pipe(
+        catchError((err) =>
+          throwError(() => new Error(err?.message || 'Erreur du serveur.'))
+        )
+      );
+  }
 }
