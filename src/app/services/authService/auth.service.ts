@@ -165,6 +165,18 @@ export class AuthService {
   }
 
   /**
+   * Headers pour les requêtes HTTP
+   * @returns
+   */
+  setRequestHeaders(): HttpHeaders {
+    const token = this.getToken();
+    if (!token) throw new Error('No token found');
+    return new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
+  }
+
+  /**
    * Modification des informations du profile utilisateur
    * @param nom : le nom
    * @param prenom : Le prenom
