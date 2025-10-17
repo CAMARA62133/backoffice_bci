@@ -7,6 +7,7 @@ import { LoadingPageComponent } from './pages/login/loading-page/loading-page.co
 import { LoadingVerifyEmailPageComponent } from './pages/login/loading-verify-email-page/loading-verify-email-page.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ReinitialiserPasswordComponent } from './pages/login/reinitialiser-password/reinitialiser-password.component';
+import { ResetOrgPasswordComponent } from './pages/login/reset-org-password/reset-org-password.component';
 import { ValidateOtpAfterVerifiedEmailComponent } from './pages/login/validate-otp-after-verified-email/validate-otp-after-verified-email.component';
 import { ValiderOtpAfterLoginComponent } from './pages/login/valider-otp-after-login/valider-otp-after-login.component';
 import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos/modifier-mes-infos.component';
@@ -52,10 +53,17 @@ export const routes: Routes = [
     title: 'BCI - Online | Réinitialisation du mot de passe',
     component: LoadingPageComponent,
   },
+
   {
     path: 'nouveau-mot-de-passe',
     title: 'BCI - Online | Nouveau mot de passe',
     component: FormNouveauPasswordComponent,
+  },
+
+  {
+    path: 'org-nouveau-mot-de-passe',
+    title: 'BCI - Online | Nouveau mot de passe',
+    component: ResetOrgPasswordComponent,
   },
 
   {

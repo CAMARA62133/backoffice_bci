@@ -26,13 +26,6 @@ export class FormNouveauPasswordService {
   ): Observable<any> {
     const token = this.getResetToken();
     const email = this.getResetEmail();
-    const monContenu = {
-      'Token récupéré :': token,
-      'Email récupéré :': email,
-      'Nouveau mot de passe :': nouveauPassword,
-      'App Name :': appName,
-    };
-    console.log(monContenu);
 
     const params = new HttpParams()
       .set('token', token ?? '')

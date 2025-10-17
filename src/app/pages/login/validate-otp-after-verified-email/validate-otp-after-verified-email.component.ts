@@ -114,7 +114,7 @@ export class ValidateOtpAfterVerifiedEmailComponent {
           this.toastr.success('OTP vérifier avec succès', '', {
             positionClass: 'toast-custom-center',
           });
-          this.router.navigate(['/nouveau-mot-de-passe']);
+          this.router.navigate(['/org-nouveau-mot-de-passe']);
           console.log(response);
         } else {
           this.toastr.error(response.message, '', {
