@@ -39,6 +39,12 @@ export class OrganisationsComponent implements OnInit {
   createOrgModalId: string = 'createOrgModal';
   siteUrl: string = environment.siteUrl;
 
+  // Gestion de la pagination
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalPages = 0;
+  pagedOrganisations: any[] = [];
+
   constructor(
     private modalsService: ModalsService,
     private fb: FormBuilder,
@@ -67,23 +73,20 @@ export class OrganisationsComponent implements OnInit {
 
     // Initialiser le formulaire
     this.orgForm = this.fb.group({
-      vcOrgName: ['MON ORGRANISATION 1', Validators.required],
-      vcOrgContact: ['LE DIRECTEUR', Validators.required],
-      vcOrgPhoneNumber: ['663230744', Validators.required],
-      vcOrgEmail: [
-        'soyopeg715@datoinf.com',
-        [Validators.required, Validators.email],
-      ],
-      vcOrgCity: ['MAMOU', Validators.required],
-      vcOrgCountry: ['GUINEE', Validators.required],
-      vcOrgAddress: ['HORE FELLO', Validators.required],
+      vcOrgName: ['', Validators.required],
+      vcOrgContact: ['', Validators.required],
+      vcOrgPhoneNumber: ['', Validators.required],
+      vcOrgEmail: ['', [Validators.required, Validators.email]],
+      vcOrgCity: ['', Validators.required],
+      vcOrgCountry: ['', Validators.required],
+      vcOrgAddress: ['', Validators.required],
       vcOrgLogoPath: ['', Validators.required],
-      vcBusinessEmailDomain: ['soyopeg715@datoinf.com', Validators.required],
+      vcBusinessEmailDomain: ['', Validators.required],
 
       // Pour les infos utilisateurs
-      vcFirstname: ['Daniel', Validators.required],
-      vcLastname: ['FELEMOU', Validators.required],
-      vcDescription: ["Une description qui n'est pas trop grande !"],
+      vcFirstname: ['', Validators.required],
+      vcLastname: ['', Validators.required],
+      vcDescription: [''],
       iRoleID: [''],
     });
 
@@ -188,6 +191,8 @@ export class OrganisationsComponent implements OnInit {
       next: (res) => {
         this.organisations = res.data;
         this.isLoadingOrgs = false;
+        this.currentPage = 1;
+        this.updatePagination();
       },
       error: (err) => {
         console.error('Erreur chargement organisations', err);
@@ -196,23 +201,41 @@ export class OrganisationsComponent implements OnInit {
     });
   }
 
-  // Méthode pour remplir rapidement le formulaire avec les données de test
-  fillTestForm() {
-    this.orgForm.patchValue({
-      vcOrgName: 'Test Organisation',
-      vcOrgContact: 'Daniel FELEMOU',
-      vcOrgPhoneNumber: '+224663230744',
-      vcOrgEmail: 'test@organisation.com',
-      vcOrgCity: 'Conakry',
-      vcOrgCountry: 'Guinée',
-      vcOrgAddress: 'Quartier Test',
-      vcOrgLogoPath: 'logo.png',
-      vcBusinessEmailDomain: 'organisation.com',
-      vcFirstname: 'Daniel',
-      vcLastname: 'FELEMOU',
-      vcDescription: 'Description test',
-      vcUserEmail: 'daniel@test.com',
-      iRoleID: this.currentUser?.iRoleID || '',
-    });
+  // méthode pour calculer la page courante
+  updatePagination() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+
+    this.pagedOrganisations = this.organisations.slice(start, end);
+    this.totalPages = Math.ceil(this.organisations.length / this.itemsPerPage);
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.updatePagination();
+  }
+
+  nextPage() {
+    this.goToPage(this.currentPage + 1);
+  }
+
+  prevPage() {
+    this.goToPage(this.currentPage - 1);
+  }
+
+  // Mes getters
+  get startRecord(): number {
+    if (this.organisations.length === 0) return 0;
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+
+  get endRecord(): number {
+    const end = this.currentPage * this.itemsPerPage;
+    return end > this.organisations.length ? this.organisations.length : end;
+  }
+
+  get totalRecords(): number {
+    return this.organisations.length;
   }
 }

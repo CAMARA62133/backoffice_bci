@@ -12,9 +12,46 @@ export class AuthService {
   private baseUrl = environment.apiUrl;
   private appName = environment.appName;
   private appVersion = environment.appVersion.vcVersion;
+  private user: any = null;
 
   // Injection de HttpClient pour les requêtes HTTP
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    const storedUser = localStorage.getItem('userInfo');
+    if (storedUser) this.user = JSON.parse(storedUser);
+  }
+
+  /**
+   * Retourne le user complet
+   * @returns
+   */
+  getUser() {
+    return this.user;
+  }
+
+  /**
+   * Retourne l'iRoleID
+   * @returns
+   */
+  getRoleID(): number | null {
+    return this.user?.iRoleID ?? null;
+  }
+
+  /**
+   * Vérifie si le rôle correspond à un ou plusieurs rôles autorisés
+   * @returns
+   */
+  hasRole(allowedRoles: number[]): boolean {
+    const role = this.getRoleID();
+    return role !== null && allowedRoles.includes(role);
+  }
+
+  /**
+   * Vérifie si l’utilisateur est connecté
+   * @returns
+   */
+  isLoggedIn(): boolean {
+    return !!this.user;
+  }
 
   /**
    * Connexion des utilisateurs

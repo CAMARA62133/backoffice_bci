@@ -31,7 +31,9 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": []
+            "scripts": [
+              "public/assets/webcomponents/webcomponents-bundle.umd.cjs"
+            ]
           },
           "configurations": {
             "production": {
