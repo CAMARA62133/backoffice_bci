@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environnements/environnement';
+import { ToggleAlerteParams } from '../../interfaces/alertes';
 import { AuthService } from '../authService/auth.service';
 
 @Injectable({
@@ -13,35 +14,45 @@ export class AlertesService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  //
+  /**
+   * Liste des modules
+   * @returns Observable<any>
+   */
   getListeModules(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/getListeModule`);
   }
 
-  //
+  /**
+   * Liste des niveaux d'urgence
+   * @returns
+   */
   getListeNiveauUrgence(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/getListNieauDurgence`);
   }
 
-  //
+  /**
+   *  Liste des groupes concerncer
+   * @returns
+   */
   getListeGroupeConcerner(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/getListeGroupeAlert`);
   }
 
-  //
+  /**
+   * Liste des configuration d'alertes
+   * @returns
+   */
   getListeAlertesConfig(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/getListeAlerteConfig`);
   }
 
   /**
    * Ajouter une alertes
-   * @param data
+   * @param data : Les donnees passer lors de la confugration d'une alerte
    * @returns
    */
-  addAlerte(data: any): Observable<any> {
+  createAlerte(data: any): Observable<any> {
     const headers = this.authService.setRequestHeaders();
-
-    //dev-api-bcibank.ecash-guinee.com/api/addAlerteConfig?message=ass&idNiveauUrgence=2&typeAlerte=INFO&groupeConcerne=Ecash IT&description=cc&limiteDeclenchement=5&idModule=1
     return this.http.post(`${this.baseUrl}/api/addAlerteConfig`, data, {
       headers,
     });
@@ -49,13 +60,11 @@ export class AlertesService {
 
   /**
    * Modifier une alertes
-   * @param data
+   * @param data Les donnees passer lors de la modidification d'une alerte
    * @returns
    */
   uppdateAlerte(data: any): Observable<any> {
     const headers = this.authService.setRequestHeaders();
-
-    //dev-api-bcibank.ecash-guinee.com/api/UpdateAlerteConfig?message=nnn&idNiveauUrgence=2&typeAlerte=INFO&groupeConcerne=Ecash IT&description=cc&limiteDeclenchement=5&idModule=1&idAlerte=13
     return this.http.post(`${this.baseUrl}/api/UpdateAlerteConfig`, data, {
       headers,
     });
@@ -66,12 +75,16 @@ export class AlertesService {
    * @param data les parametres de l'api (id, et true | false)
    * @returns
    */
-  toggleAlerte(data: any): Observable<any> {
+  toggleAlerte(params: ToggleAlerteParams): Observable<any> {
     const headers = this.authService.setRequestHeaders();
+    const httpParams = new HttpParams()
+      .set('idAlert', params.idAlert.toString())
+      .set('btEnableAlert', params.btEnableAlert.toString());
 
     // https://dev-api-bcibank.ecash-guinee.com/api/activeOrDesactiveAlert?idAlert=13&btEnableAlert=1
-    return this.http.post(`${this.baseUrl}/api/activeOrDesactiveAlert`, data, {
-      headers,
+    return this.http.post(`${this.baseUrl}/api/activeOrDesactiveAlert`, null, {
+      params: httpParams,
+      headers: headers,
     });
   }
 }

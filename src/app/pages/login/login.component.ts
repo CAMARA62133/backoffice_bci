@@ -63,7 +63,6 @@ export class LoginComponent implements OnInit {
         password,
         appName,
         captcha_token,
-        
       });
 
       // Appel du service d'authentification
@@ -92,9 +91,7 @@ export class LoginComponent implements OnInit {
 
           error: (err) => {
             console.error('Erreur lors de la connexion :', err);
-            this.toastr.success('Erreur lors de la connexion', '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.toastr.error('Erreur lors de la connexion');
           },
         });
     } else {
