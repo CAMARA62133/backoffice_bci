@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AlerteType, ToggleAlerteParams } from '../../interfaces/alertes';
 import { AlertesService } from '../../services/alertes/alertes.service';
 import { ModalsService } from '../../services/modals/modals.service';
+import { PaginationsService } from '../../services/paginations/paginations.service';
 import {
   getErrorMessage,
   getFormControlClass,
@@ -30,6 +31,7 @@ import {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AlertesComponent implements OnInit {
+  // Declaration des variables
   isLoadingAlerte: boolean = false;
   isLoadingGroupes: boolean = false;
   isLoadingModules: boolean = false;
@@ -42,6 +44,8 @@ export class AlertesComponent implements OnInit {
   selectedAlert: any = null;
 
   alertes: any[] = [];
+  paginatedAlertes: any[] = [];
+
   groupes: any[] = [];
   modules: any[] = [];
   niveauxUrgence: any[] = [];
@@ -51,13 +55,16 @@ export class AlertesComponent implements OnInit {
   ];
 
   isEditing: boolean = false;
+  idAlerte: number = 0;
 
+  // Constructeur
   constructor(
     private fb: FormBuilder,
     private modalsService: ModalsService,
     private toastr: ToastrService,
     private alertService: AlertesService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    public paginationService: PaginationsService
   ) {}
 
   // Raccourcis pour le template
@@ -67,6 +74,12 @@ export class AlertesComponent implements OnInit {
   getFormControlClass = (name: string) =>
     getFormControlClass(this.alertForm, name);
 
+  /**
+   * A l'initialisation du composant on :
+   * 1. Ferme tout les modals
+   * 2. Initialise le formulaire de façon reactive et rendre les champs obligatoire
+   * 3. On charge les donnnees (alertes, groupes concernes, modules, niveaux d'urgence)
+   */
   ngOnInit(): void {
     this.modalsService.closeAllModals();
 
@@ -127,6 +140,9 @@ export class AlertesComponent implements OnInit {
           this.alertForm.reset();
           this.modalsService.closeAllModals();
           this.toastr.success(res?.message || 'Alerte créée avec succès !');
+
+          this.paginationService.reset();
+          this.updatePaginatedData();
         } else {
           console.log('Erreur : ', res);
 
@@ -150,10 +166,15 @@ export class AlertesComponent implements OnInit {
     });
   }
 
-  // Au lancement du formulaire d'edition
+  /**
+   * Au lancement du formulaire d'edition
+   * On ouvre le formulaire d'edition avec les bonnes informations
+   * @param alert sera l'alerte courrante
+   */
   onEdit(alert: any) {
     this.openModal('updateAlertModal');
     this.selectedAlert = { ...alert };
+    this.idAlerte = this.selectedAlert.id;
     console.log('selected alerte : ', this.selectedAlert);
 
     this.alertForm.patchValue({
@@ -164,7 +185,6 @@ export class AlertesComponent implements OnInit {
       description: alert.vcDescription,
       limiteDeclenchement: alert.limiteDeclenchementAlerte,
       idModule: alert.idModule,
-      idAlerte: alert.id,
     });
 
     this.cd.detectChanges();
@@ -181,32 +201,35 @@ export class AlertesComponent implements OnInit {
     this.isLoading = true;
 
     // On récupère les données du formulaire
-    const formData = this.alertForm.value;
+    const formData = { ...this.alertForm.value, idAlert: this.idAlerte };
+
+    console.log('form data : ', formData);
 
     // On construit l’objet à envoyer
     const dataToSend = {
       message: formData.message,
-      idNiveauDurgence: formData.idNiveauUrgence,
+      idNiveauUrgence: formData.idNiveauUrgence,
       typeAlerte: formData.typeAlerte,
       groupeConcerne: formData.groupeConcerne,
       description: formData.description,
-      limiteDeclenchementAlerte: formData.limiteDeclenchement,
+      limiteDeclenchement: formData.limiteDeclenchement,
       idModule: formData.idModule,
-      idAlerte: this.selectedAlert?.id,
+      idAlerte: this.idAlerte,
     };
-
-    /**
-     *
-     */
 
     console.log('🟢 Données envoyées :', dataToSend);
 
-    // Appel a l'api de modification
+    /**
+     *  Appel au service de modification
+     */
     this.alertService.uppdateAlerte(dataToSend).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
           console.log('Modification effectuer avec success : ', res?.message);
           this.toastr.success(res?.message);
+
+          this.paginationService.reset();
+          this.updatePaginatedData();
         } else {
           console.log('Erreur lors de la modification : ', res?.message);
           this.toastr.error(res?.message);
@@ -220,6 +243,9 @@ export class AlertesComponent implements OnInit {
 
       complete: () => {
         this.isLoading = false;
+        this.modalsService.closeModal('updateAlertModal');
+        this.modalsService.closeAllModals();
+        this.loadAlertes();
       },
     });
   }
@@ -248,6 +274,8 @@ export class AlertesComponent implements OnInit {
           console.log(message, { res });
           this.toastr.success(message);
           this.loadAlertes();
+          this.paginationService.reset();
+          this.updatePaginatedData();
         } else {
           console.log(' Erreur : ', { res });
           this.toastr.error(res.message);
@@ -271,7 +299,14 @@ export class AlertesComponent implements OnInit {
     this.isLoadingAlerte = true;
     this.alertService.getListeAlertesConfig().subscribe({
       next: (res) => {
-        this.alertes = res.data;
+        this.alertes = res.data || [];
+
+        this.paginationService.setData(
+          this.alertes,
+          this.paginationService.itemsPerPage
+        );
+        this.paginatedAlertes = this.paginationService.getPaginatedData();
+
         console.log('Alertes liste : ', this.alertes);
       },
 
@@ -336,5 +371,40 @@ export class AlertesComponent implements OnInit {
         this.isLoadingNiveaux = false;
       },
     });
+  }
+
+  // Mise a jour de la pagination
+  updatePaginatedData(): void {
+    this.paginatedAlertes = this.paginationService.getPaginatedData();
+  }
+
+  // Page suivante
+  nextPage(): void {
+    this.paginationService.goToNextPage();
+    this.updatePaginatedData();
+  }
+
+  // Page precedante
+  previousPage(): void {
+    this.paginationService.goToPreviousPage();
+    this.updatePaginatedData();
+  }
+
+  // Premiere page
+  firstPage(): void {
+    this.paginationService.goToFirstPage();
+    this.updatePaginatedData();
+  }
+
+  // Derniere page
+  lastPage(): void {
+    this.paginationService.goToLastPage();
+    this.updatePaginatedData();
+  }
+
+  // Aller a la page
+  goToPage(page: number): void {
+    this.paginationService.currentPage = page;
+    this.updatePaginatedData();
   }
 }

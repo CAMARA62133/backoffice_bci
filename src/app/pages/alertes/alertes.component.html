@@ -46,7 +46,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let alert of alertes">
+                  <tr *ngFor="let alert of paginatedAlertes">
                     <td>{{ alert.id }}</td>
                     <td>{{ alert.messageAlerte }}</td>
                     <td>{{ alert.statusAlert }}</td>
@@ -136,7 +136,7 @@
               </p>
             </div>
 
-            <!-- Si liste des organisations est vide -->
+            <!-- Si liste des alertes est vide -->
             <div
               *ngIf="!isLoadingAlerte && alertes.length === 0"
               class="text-center py-5"
@@ -153,66 +153,85 @@
           <div class="card-footer bg-light">
             <div class="row align-items-center">
               <div class="col-md-6">
-                <!-- <small class="text-muted">
-                  Affichage de <span id="startRecord">{{ startRecord }}</span> à
-                  <span id="endRecord">{{ endRecord }}</span> sur
-                  <span id="totalRecords">{{ totalRecords }}</span>
-                  organisation(s)
-                </small> -->
+                <small class="text-muted">
+                  Affichage de
+                  <span id="startRecord">{{
+                    paginationService.startIndex + 1
+                  }}</span>
+                  à
+                  <span id="endRecord">{{ paginationService.endIndex }}</span>
+                  sur
+                  <span id="totalRecords">{{
+                    paginationService.totalItems
+                  }}</span>
+                  alerte(s)
+                </small>
               </div>
               <div class="col-md-6">
                 <!-- <nav *ngIf="totalPages > 1" aria-label="Pagination rapports"> -->
                 <nav aria-label="Pagination rapports">
                   <ul class="pagination pagination-sm justify-content-end mb-0">
                     <!-- Début -->
-                    <!-- <li class="page-item" [class.disabled]="currentPage === 1">
-                      <button class="page-link" (click)="goToPage(1)">
+                    <li
+                      class="page-item"
+                      [class.disabled]="paginationService.currentPage === 1"
+                    >
+                      <button class="page-link" (click)="firstPage()">
                         <i class="fa fa-backward"></i>
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Précédent -->
-                    <!-- <li class="page-item" [class.disabled]="currentPage === 1">
-                      <button class="page-link" (click)="prevPage()">
+                    <li
+                      class="page-item"
+                      [class.disabled]="paginationService.currentPage === 1"
+                    >
+                      <button class="page-link" (click)="previousPage()">
                         <i class="fa fa-chevron-left"></i>
                         Précédent
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Numéros de pages -->
-                    <!-- <li
+                    <li
                       class="page-item"
                       *ngFor="
-                        let page of [].constructor(totalPages);
+                        let page of paginationService.getPageNumbers();
                         let i = index
                       "
-                      [class.active]="currentPage === i + 1"
+                      [class.active]="paginationService.currentPage === page"
                     >
-                      <button class="page-link" (click)="goToPage(i + 1)">
-                        {{ i + 1 }}
+                      <button class="page-link" (click)="goToPage(page)">
+                        {{ page }}
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Suivant -->
-                    <!-- <li
+                    <li
                       class="page-item"
-                      [class.disabled]="currentPage === totalPages"
+                      [class.disabled]="
+                        paginationService.currentPage ===
+                        paginationService.totalPages
+                      "
                     >
                       <button class="page-link" (click)="nextPage()">
                         Suivant
                         <i class="fa fa-chevron-right"></i>
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Fin -->
-                    <!-- <li
+                    <li
                       class="page-item"
-                      [class.disabled]="currentPage === totalPages"
+                      [class.disabled]="
+                        paginationService.currentPage ===
+                        paginationService.totalPages
+                      "
                     >
-                      <button class="page-link" (click)="goToPage(totalPages)">
+                      <button class="page-link" (click)="lastPage()">
                         <i class="fa fa-forward"></i>
                       </button>
-                    </li> -->
+                    </li>
                   </ul>
                 </nav>
               </div>
@@ -644,6 +663,17 @@
               >
                 {{ getErrorMessage("limiteDeclenchement") }}
               </span>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label"> ID alerte </label>
+
+              <input
+                class="form-control form-control"
+                required=""
+                type="number"
+                formControlName="limiteDeclenchement"
+              />
             </div>
 
             <div class="col-md-12">
