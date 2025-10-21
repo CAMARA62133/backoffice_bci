@@ -9,7 +9,6 @@ import { AuthService } from '../authService/auth.service';
 })
 export class NotificationsService {
   baseUrl = environment.apiUrl;
-  appName = environment.appName;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

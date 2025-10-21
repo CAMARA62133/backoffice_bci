@@ -174,7 +174,7 @@ export class NotificationsComponent implements OnInit {
       return;
     }
 
-    this.isLoading = false;
+    this.isLoading = true;
 
     // On récupère les données du formulaire
     const formData = {

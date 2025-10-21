@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
 import { AlertesComponent } from './pages/alertes/alertes.component';
+import { ConfigUserDefautNotifsComponent } from './pages/config-user-defaut-notifs/config-user-defaut-notifs.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FormNouveauPasswordComponent } from './pages/login/form-nouveau-password/form-nouveau-password.component';
 import { LoadingPageComponent } from './pages/login/loading-page/loading-page.component';
@@ -10,6 +11,7 @@ import { ReinitialiserPasswordComponent } from './pages/login/reinitialiser-pass
 import { ResetOrgPasswordComponent } from './pages/login/reset-org-password/reset-org-password.component';
 import { ValidateOtpAfterVerifiedEmailComponent } from './pages/login/validate-otp-after-verified-email/validate-otp-after-verified-email.component';
 import { ValiderOtpAfterLoginComponent } from './pages/login/valider-otp-after-login/valider-otp-after-login.component';
+import { MesNotificationsComponent } from './pages/mes-notifications/mes-notifications.component';
 import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos/modifier-mes-infos.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { OrganisationsComponent } from './pages/organisations/organisations.component';
@@ -107,6 +109,20 @@ export const routes: Routes = [
         path: 'configuration-alertes',
         title: 'BCI - Online | Configuration Alertes',
         component: AlertesComponent,
+        canActivate: [AuthGuard],
+      },
+
+      {
+        path: 'configuration-notif-user-defaut',
+        title: 'BCI - Online | Configuration Alertes',
+        component: ConfigUserDefautNotifsComponent,
+        canActivate: [AuthGuard],
+      },
+
+      {
+        path: 'mes-notifications',
+        title: 'BCI - Online | Configuration Alertes',
+        component: MesNotificationsComponent,
         canActivate: [AuthGuard],
       },
     ],
