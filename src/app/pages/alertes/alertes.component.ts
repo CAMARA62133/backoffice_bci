@@ -131,32 +131,19 @@ export class AlertesComponent implements OnInit {
 
     this.alertService.createAlerte(dataToSend).subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          console.log('Parametres envoyees : ', dataToSend);
+        this.loadAlertes();
+        console.log('✅ Alertes créée :', res);
+        this.isLoading = false;
+        this.alertForm.reset();
+        this.modalsService.closeAllModals();
+        this.toastr.success('Alerte créée avec succès !');
 
-          this.loadAlertes();
-          console.log('✅ Alertes créée :', res);
-          this.isLoading = false;
-          this.alertForm.reset();
-          this.modalsService.closeAllModals();
-          this.toastr.success(res?.message || 'Alerte créée avec succès !');
-
-          this.paginationService.reset();
-          this.updatePaginatedData();
-        } else {
-          console.log('Erreur : ', res);
-
-          this.isLoading = false;
-          this.toastr.error(
-            res?.message || "Erreur lors de la création de l'alerte"
-          );
-        }
+        this.paginationService.reset();
+        this.updatePaginatedData();
       },
 
       error: (err) => {
-        this.toastr.error(
-          err?.message || "Erreur lors de la creation de l'alerte"
-        );
+        this.toastr.error("Erreur lors de la creation de l'alerte");
         console.log('Erreur create alerte : ', err);
       },
 
@@ -194,7 +181,6 @@ export class AlertesComponent implements OnInit {
   onUpdate(): void {
     if (this.alertForm.invalid) {
       this.alertForm.markAllAsTouched();
-      console.log('Formulaire invalide !');
       return;
     }
 

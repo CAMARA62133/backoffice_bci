@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environnements/environnement';
@@ -30,7 +30,7 @@ export class NotificationsService {
 
   //
   getListeNotificationsConfig(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListeAlerteConfig`);
+    return this.http.get(`${this.baseUrl}/api/getListeNotiifcationConfig`);
   }
 
   /**
@@ -38,7 +38,7 @@ export class NotificationsService {
    * @param data
    * @returns
    */
-  addNotification(data: any): Observable<any> {
+  createNotification(data: any): Observable<any> {
     const headers = this.authService.setRequestHeaders();
 
     // https://dev-api-bcibank.ecash-guinee.com/api/addNotificationConfig?message=ass&idNiveauUrgence=2&typeAlerte=INFO&description=cc&limiteDeclenchement=5&idModule=1
@@ -54,8 +54,6 @@ export class NotificationsService {
    */
   uppdateNotification(data: any): Observable<any> {
     const headers = this.authService.setRequestHeaders();
-
-    // https://dev-api-bcibank.ecash-guinee.com/api/UpdateNotificationConfig?message=bien&idNiveauUrgence=2&typeAlerte=INFO&description=cc&limiteDeclenchement=5&idModule=1&idAlerte=3
     return this.http.post(
       `${this.baseUrl}/api/UpdateNotificationConfig`,
       data,
@@ -70,15 +68,18 @@ export class NotificationsService {
    * @param data les parametres de l'api (id, et true | false)
    * @returns
    */
-  toggleNotification(data: any): Observable<any> {
+  toggleNotification(params: any): Observable<any> {
     const headers = this.authService.setRequestHeaders();
+    const httpParams = new HttpParams()
+      .set('idNotification', params.idNotification.toString())
+      .set('btEnabled', params.btEnabled.toString());
 
-    // https://dev-api-bcibank.ecash-guinee.com/api/activeOrDesactiveNotification?idNotification=4&btEnabled=0
     return this.http.post(
       `${this.baseUrl}/api/activeOrDesactiveNotification`,
-      data,
+      null,
       {
-        headers,
+        params: httpParams,
+        headers: headers,
       }
     );
   }

@@ -9,7 +9,10 @@
             </h1>
           </div>
           <div class="d-flex gap-2">
-            <button class="btn btn-primary">
+            <button
+              class="btn btn-primary"
+              (click)="openModal('createNotificationModal')"
+            >
               <i class="fas fa-plus me-1"></i>
               Créer une notification
             </button>
@@ -33,66 +36,74 @@
                     <th scope="col">ID</th>
                     <th scope="col">Message</th>
                     <th scope="col">Statut</th>
-                    <th scope="col">Niveau d’urgence</th>
                     <th scope="col">Type</th>
-                    <th scope="col">Groupe</th>
                     <th scope="col">Description</th>
                     <th scope="col">Seuil</th>
+                    <th scope="col">Niveau d’urgence</th>
                     <th scope="col">Module</th>
                     <th scope="col" class="text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                  </tr>
-                  <!-- <tr *ngFor="let org of pagedOrganisations">
-                    <td>{{ org.id }}</td>
-                    <td>{{ org.organisationName }}</td>
-                    <td>{{ org.vcContact }}</td>
-                    <td>{{ org.vcPhoneNumber }}</td>
-                    <td>{{ org.vcEmail }}</td>
-                    <td>{{ org.vcCity }}</td>
-                    <td>{{ org.vcCountry }}</td>
-                    <td>{{ org.vcAddress }}</td>
-                    <td>{{ org.vcLogoPath }}</td>
-                    <td>{{ org.vcBusinessEmailDomain }}</td>
-                    <td>{{ org.btEnabled }}</td>
-                    <td>{{ org.dtCreated }}</td>
+                  <tr *ngFor="let notif of paginatedNotification">
+                    <td>{{ notif.id }}</td>
+                    <td>{{ notif.messageNotification }}</td>
+                    <td>{{ notif.statusNotification }}</td>
+                    <td>{{ notif.type }}</td>
+                    <td>{{ notif.vcDescription }}</td>
+                    <td>{{ notif.limiteDeclenchementNotification }}</td>
+                    <td>{{ notif.niveauDurgence }}</td>
+                    <td>{{ notif.moduleConcerne }}</td>
                     <td>
                       <div class="d-flex gap-1">
                         <button
                           type="button"
-                          class="btn btn-outline-info btn-action btn-sm"
+                          class="btn btn-action btn-sm"
                           title="Consulter"
                         >
-                          <i class="fas fa-eye"></i>
+                          <i class="fas fa-eye text-info"></i>
                         </button>
+
                         <button
                           type="button"
-                          class="btn btn-outline-warning btn-action btn-sm"
+                          class="btn btn-action btn-sm"
                           title="Modifier"
+                          (click)="onEdit(notif)"
                         >
-                          <i class="fas fa-edit"></i>
+                          <i class="fas fa-edit text-success"></i>
+                        </button>
+
+                        <button
+                          type="button"
+                          class="btn btn-action btn-sm"
+                          title="{{
+                            +notif.statusNotification === 1
+                              ? 'Debloquer'
+                              : 'Bloquer'
+                          }}"
+                          (click)="onToggle(notif)"
+                        >
+                          <i
+                            class="fas fa-{{
+                              +notif.statusNotification === 1
+                                ? 'lock'
+                                : 'unlock'
+                            }} text-{{
+                              +notif.statusNotification === 1
+                                ? 'danger'
+                                : 'primary'
+                            }}"
+                          ></i>
                         </button>
                       </div>
                     </td>
-                  </tr> -->
+                  </tr>
                 </tbody>
               </table>
             </div>
 
             <!-- au chargement des donnne -->
-            <!-- <div *ngIf="isLoadingOrgs" class="text-center my-3">
+            <div *ngIf="isLoadingNotif" class="text-center my-3">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden"
                   >Chargement des données en cours...</span
@@ -101,85 +112,106 @@
               <p class="text-muted">
                 Veuillez patientez pendant que le données se charges.
               </p>
-            </div> -->
+            </div>
 
-            <!-- Si liste des organisations est vide -->
-            <!-- <div
-              *ngIf="!isLoadingOrgs && organisations.length === 0"
+            <!-- Si liste des notifications est vide -->
+            <div
+              *ngIf="!isLoadingNotif && notifications.length === 0"
               class="text-center py-5"
             >
               <div class="mb-3">
                 <i class="text-muted bi bi-inbox display-1"></i>
               </div>
-              <h5 class="text-muted">Aucune organisation disponible....</h5>
+              <h5 class="text-muted">
+                Aucune notification n'est disponible....
+              </h5>
               <p class="text-muted">
-                Il n'y a pas d'organisations enregistrée pour l'instant !
+                Il n'y a pas de notifications enregistrée pour l'instant !
               </p>
-            </div> -->
+            </div>
           </div>
           <div class="card-footer bg-light">
             <div class="row align-items-center">
               <div class="col-md-6">
-                <!-- <small class="text-muted">
-                  Affichage de <span id="startRecord">{{ startRecord }}</span> à
-                  <span id="endRecord">{{ endRecord }}</span> sur
-                  <span id="totalRecords">{{ totalRecords }}</span>
-                  organisation(s)
-                </small> -->
+                <small class="text-muted">
+                  Affichage de
+                  <span id="startRecord">{{
+                    paginationService.startIndex + 1
+                  }}</span>
+                  à
+                  <span id="endRecord">{{ paginationService.endIndex }}</span>
+                  sur
+                  <span id="totalRecords">{{
+                    paginationService.totalItems
+                  }}</span>
+                  notification(s)
+                </small>
               </div>
               <div class="col-md-6">
                 <!-- <nav *ngIf="totalPages > 1" aria-label="Pagination rapports"> -->
                 <nav aria-label="Pagination rapports">
-                  <ul class="pagination pagination-sm justify-content-end mb-0">
+                  <ul class="pagination pagination-md justify-content-end mb-0">
                     <!-- Début -->
-                    <!-- <li class="page-item" [class.disabled]="currentPage === 1">
-                      <button class="page-link" (click)="goToPage(1)">
+                    <li
+                      class="page-item"
+                      [class.disabled]="paginationService.currentPage === 1"
+                    >
+                      <button class="page-link" (click)="firstPage()">
                         <i class="fa fa-backward"></i>
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Précédent -->
-                    <!-- <li class="page-item" [class.disabled]="currentPage === 1">
-                      <button class="page-link" (click)="prevPage()">
+                    <li
+                      class="page-item"
+                      [class.disabled]="paginationService.currentPage === 1"
+                    >
+                      <button class="page-link" (click)="previousPage()">
                         <i class="fa fa-chevron-left"></i>
                         Précédent
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Numéros de pages -->
-                    <!-- <li
+                    <li
                       class="page-item"
                       *ngFor="
-                        let page of [].constructor(totalPages);
+                        let page of paginationService.getPageNumbers();
                         let i = index
                       "
-                      [class.active]="currentPage === i + 1"
+                      [class.active]="paginationService.currentPage === page"
                     >
-                      <button class="page-link" (click)="goToPage(i + 1)">
-                        {{ i + 1 }}
+                      <button class="page-link" (click)="goToPage(page)">
+                        {{ page }}
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Suivant -->
-                    <!-- <li
+                    <li
                       class="page-item"
-                      [class.disabled]="currentPage === totalPages"
+                      [class.disabled]="
+                        paginationService.currentPage ===
+                        paginationService.totalPages
+                      "
                     >
                       <button class="page-link" (click)="nextPage()">
                         Suivant
                         <i class="fa fa-chevron-right"></i>
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Fin -->
-                    <!-- <li
+                    <li
                       class="page-item"
-                      [class.disabled]="currentPage === totalPages"
+                      [class.disabled]="
+                        paginationService.currentPage ===
+                        paginationService.totalPages
+                      "
                     >
-                      <button class="page-link" (click)="goToPage(totalPages)">
+                      <button class="page-link" (click)="lastPage()">
                         <i class="fa fa-forward"></i>
                       </button>
-                    </li> -->
+                    </li>
                   </ul>
                 </nav>
               </div>
@@ -192,7 +224,12 @@
 </div>
 
 <!-- Modales -->
-<div class="modal fade" role="dialog" tabindex="-1" id="createAlertModal">
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="createNotificationModal"
+>
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header text-white bg-primary">
@@ -211,7 +248,7 @@
               fill="currentColor"
             ></path>
           </svg>
-          Créer une nouvelle alerte
+          Créer une nouvelle notification
         </h5>
         <button
           class="btn-close btn-close-white"
@@ -220,7 +257,7 @@
           type="button"
         ></button>
       </div>
-      <form [formGroup]="notifForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="notifForm" (ngSubmit)="onCreate()">
         <div class="modal-body">
           <div class="row g-3">
             <div class="col-md-12">
@@ -240,18 +277,33 @@
 
             <div class="col-md-6">
               <label class="form-label">
-                Niveau d'Urgence <span class="text-danger">*</span>
+                Niveaux d'Urgence <span class="text-danger">*</span>
               </label>
+
+              <div *ngIf="isLoadingNiveaux" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden"
+                    >Chargement des niveaux d'urgence...</span
+                  >
+                </div>
+              </div>
+
               <select
+                *ngIf="!isLoadingNiveaux"
                 class="form-select form-select"
                 required
                 formControlName="idNiveauUrgence"
                 [ngClass]="getFormControlClass('idNiveauUrgence')"
               >
-                <option value="">-- Sélectionnez un niveau d'urgence --</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                <option value="" disabled selected>
+                  -- Sélectionnez un niveau d'urgence --
+                </option>
+                <option
+                  *ngFor="let niveau of niveauxUrgence"
+                  [value]="niveau.id"
+                >
+                  {{ niveau.vcDescription }}
+                </option>
               </select>
               <span class="text-danger" *ngIf="isInvalid('idNiveauUrgence')">
                 {{ getErrorMessage("idNiveauUrgence") }}
@@ -262,16 +314,22 @@
               <label class="form-label">
                 Type alerte <span class="text-danger">*</span>
               </label>
+
               <select
                 class="form-select form-select"
                 required
                 formControlName="typeAlerte"
                 [ngClass]="getFormControlClass('typeAlerte')"
               >
-                <option value="">-- Sélectionnez un type d'alerte --</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                <option value="" disabled selected>
+                  -- Sélectionnez un type d'alerte --
+                </option>
+                <option
+                  *ngFor="let typeAlert of typeAlertes"
+                  [value]="typeAlert.id"
+                >
+                  {{ typeAlert.description }}
+                </option>
               </select>
               <span class="text-danger" *ngIf="isInvalid('typeAlerte')">
                 {{ getErrorMessage("typeAlerte") }}
@@ -280,59 +338,53 @@
 
             <div class="col-md-6">
               <label class="form-label">
-                Groupe concerner <span class="text-danger">*</span>
-              </label>
-              <select
-                class="form-select form-select"
-                required
-                formControlName="idGroupConcerner"
-                [ngClass]="getFormControlClass('idGroupConcerner')"
-              >
-                <option value="">
-                  -- Sélectionnez le groupe concerncer --
-                </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-              <span class="text-danger" *ngIf="isInvalid('idGroupConcerner')">
-                {{ getErrorMessage("idGroupConcerner") }}
-              </span>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">
                 Modules <span class="text-danger">*</span>
               </label>
+
+              <div *ngIf="isLoadingModules" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden"
+                    >Chargement des modules ...</span
+                  >
+                </div>
+              </div>
+
               <select
+                *ngIf="!isLoadingModules"
                 class="form-select form-select"
                 required
                 formControlName="idModule"
                 [ngClass]="getFormControlClass('idModule')"
               >
-                <option value="">-- Sélectionnez un module --</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                <option value="" disabled selected>
+                  -- Sélectionnez un module --
+                </option>
+                <option *ngFor="let module of modules" [value]="module.id">
+                  {{ module.vcName }}
+                </option>
               </select>
               <span class="text-danger" *ngIf="isInvalid('idModule')">
                 {{ getErrorMessage("idModule") }}
               </span>
             </div>
 
-            <div class="col-md-12">
+            <div class="col-md-6">
               <label class="form-label">
                 Limite déclenchement <span class="text-danger">*</span>
               </label>
+
               <input
                 class="form-control form-control"
                 required=""
                 type="number"
-                formControlName="limite"
-                [ngClass]="getFormControlClass('limite')"
+                formControlName="limiteDeclenchement"
+                [ngClass]="getFormControlClass('limiteDeclenchement')"
               />
-              <span class="text-danger" *ngIf="isInvalid('limite')">
-                {{ getErrorMessage("limite") }}
+              <span
+                class="text-danger"
+                *ngIf="isInvalid('limiteDeclenchement')"
+              >
+                {{ getErrorMessage("limiteDeclenchement") }}
               </span>
             </div>
 
@@ -375,8 +427,7 @@
                 fill="currentColor"
               ></path>
             </svg>
-            Enregistrer
-            <!-- {{ isLoading ? "Envoi en cours..." : "Enregistrer" }} -->
+            {{ isLoading ? "Envoi en cours..." : "Enregistrer" }}
           </button>
         </div>
       </form>
@@ -384,4 +435,207 @@
   </div>
 </div>
 
-<!-- <notification-component></notification-component> -->
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="updateNotificationModal"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-primary">
+        <h5 class="text-white modal-title">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          Modifier l’alerte
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+
+      <form [formGroup]="notifForm" (ngSubmit)="onUpdate()">
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-12">
+              <label class="form-label">
+                Message <span class="text-danger">*</span>
+              </label>
+              <textarea
+                class="form-control form-control"
+                formControlName="message"
+                rows="2"
+                [ngClass]="getFormControlClass('message')"
+              ></textarea>
+              <span class="text-danger" *ngIf="isInvalid('message')">
+                {{ getErrorMessage("message") }}
+              </span>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">
+                Niveaux d'Urgence <span class="text-danger">*</span>
+              </label>
+
+              <div *ngIf="isLoadingNiveaux" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden"
+                    >Chargement des niveaux d'urgence...</span
+                  >
+                </div>
+              </div>
+
+              <select
+                *ngIf="!isLoadingNiveaux"
+                class="form-select form-select"
+                required
+                formControlName="idNiveauUrgence"
+                [ngClass]="getFormControlClass('idNiveauUrgence')"
+              >
+                <option
+                  *ngFor="let niveau of niveauxUrgence"
+                  [value]="niveau.id"
+                >
+                  {{ niveau.vcDescription }}
+                </option>
+              </select>
+              <span class="text-danger" *ngIf="isInvalid('idNiveauUrgence')">
+                {{ getErrorMessage("idNiveauUrgence") }}
+              </span>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">
+                Type alerte <span class="text-danger">*</span>
+              </label>
+
+              <select
+                class="form-select form-select"
+                required
+                formControlName="typeAlerte"
+                [ngClass]="getFormControlClass('typeAlerte')"
+              >
+                <option
+                  *ngFor="let typeAlert of typeAlertes"
+                  [value]="typeAlert.id"
+                >
+                  {{ typeAlert.description }}
+                </option>
+              </select>
+              <span class="text-danger" *ngIf="isInvalid('typeAlerte')">
+                {{ getErrorMessage("typeAlerte") }}
+              </span>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">
+                Modules <span class="text-danger">*</span>
+              </label>
+
+              <div *ngIf="isLoadingModules" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden"
+                    >Chargement des modules ...</span
+                  >
+                </div>
+              </div>
+
+              <select
+                *ngIf="!isLoadingModules"
+                class="form-select form-select"
+                required
+                formControlName="idModule"
+                [ngClass]="getFormControlClass('idModule')"
+              >
+                <option *ngFor="let module of modules" [value]="module.id">
+                  {{ module.vcName }}
+                </option>
+              </select>
+              <span class="text-danger" *ngIf="isInvalid('idModule')">
+                {{ getErrorMessage("idModule") }}
+              </span>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">
+                Limite déclenchement <span class="text-danger">*</span>
+              </label>
+
+              <input
+                class="form-control form-control"
+                required=""
+                type="number"
+                formControlName="limiteDeclenchement"
+                [ngClass]="getFormControlClass('limiteDeclenchement')"
+              />
+              <span
+                class="text-danger"
+                *ngIf="isInvalid('limiteDeclenchement')"
+              >
+                {{ getErrorMessage("limiteDeclenchement") }}
+              </span>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">
+                Description <span class="text-danger">*</span>
+              </label>
+              <textarea
+                class="form-control form-control"
+                formControlName="description"
+                rows="2"
+                [ngClass]="getFormControlClass('description')"
+              ></textarea>
+              <span class="text-danger" *ngIf="isInvalid('description')">
+                {{ getErrorMessage("description") }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            type="button"
+          >
+            Annuler
+          </button>
+
+          <button class="btn btn-primary" type="submit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+            {{ isLoading ? "Envoi en cours..." : "Mettre à jour" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
