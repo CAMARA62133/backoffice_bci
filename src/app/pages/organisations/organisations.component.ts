@@ -33,6 +33,7 @@ export class OrganisationsComponent implements OnInit {
   isLoadingOrgs: boolean = false;
 
   roles: any[] = [];
+  filteredRole: any;
   organisations: any[] = [];
   currentUser: any;
 
@@ -64,11 +65,10 @@ export class OrganisationsComponent implements OnInit {
   ngOnInit(): void {
     this.modalsService.closeAllModals();
 
-    // const userData = localStorage.getItem('userInfo');
     const userData = this.authService.getUserInfo();
     if (userData) {
-      // this.currentUser = JSON.parse(userData);
       this.currentUser = userData;
+      console.log('org cur user ; ', this.currentUser);
     }
 
     // Initialiser le formulaire
@@ -90,26 +90,8 @@ export class OrganisationsComponent implements OnInit {
       iRoleID: [''],
     });
 
-    // Charger les rôles depuis l'API
-    this.rolesService.getAllRoles().subscribe({
-      next: (res) => {
-        const allRoles = res.data;
-
-        // Filtrer selon le rôle de l'utilisateur connecté
-        this.roles =
-          this.currentUser?.iRoleID === 10
-            ? allRoles
-            : allRoles.filter((r: any) => r.id === this.currentUser.iRoleID);
-        this.isLoading = false;
-      },
-
-      error: (err) => {
-        console.error('Erreur chargement des rôles :', err.message);
-        this.isLoading = false;
-      },
-    });
-
-    // Chargement des organisations
+    // Chargement des donnees
+    this.loadRoles();
     this.loadOrganisations();
   }
 
@@ -197,6 +179,29 @@ export class OrganisationsComponent implements OnInit {
       error: (err) => {
         console.error('Erreur chargement organisations', err);
         this.isLoadingOrgs = false;
+      },
+    });
+  }
+
+  private loadRoles(): void {
+    this.rolesService.getAllRoles().subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.roles = res.data;
+          this.filteredRole = this.roles.find((role) => role.id === '7');
+
+          console.log('liste roles : ', this.roles);
+          console.log('filteredRole : ', this.filteredRole);
+        } else {
+          console.log('Erreur chargement des rôles : ', res);
+          this.toastr.error(res?.message);
+        }
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+        console.error('Erreur chargement des rôles :', err.message);
+        this.isLoading = false;
       },
     });
   }

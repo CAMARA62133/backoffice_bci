@@ -56,10 +56,14 @@
                     <td>{{ notif.vcRoleName }}</td>
                     <td>
                       <div class="d-flex gap-1 justify-content-center">
-                        <button type="button" class="btn btn-action btn-sm">
+                        <button
+                          type="button"
+                          class="btn btn-action btn-sm"
+                          (click)="onToggle(notif)"
+                        >
                           <i
                             class="fas fa-{{
-                              +notif.btEnabled === 1 ? 'unlock' : 'unlock'
+                              +notif.btEnabled === 1 ? 'lock' : 'unlock'
                             }} text-{{
                               +notif.btEnabled === 1 ? 'danger' : 'success'
                             }}"

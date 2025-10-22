@@ -48,7 +48,20 @@
                   <tr *ngFor="let notif of paginatedNotification">
                     <td>{{ notif.id }}</td>
                     <td>{{ notif.messageNotification }}</td>
-                    <td>{{ notif.statusNotification }}</td>
+                    <td>
+                      <span
+                        class="badge text-bg-{{
+                          +notif.statusNotification === 1 ? 'success' : 'danger'
+                        }} rounded-pill"
+                      >
+                        {{
+                          +notif.statusNotification === 1
+                            ? "Active"
+                            : "Inactive"
+                        }}
+                      </span>
+                    </td>
+
                     <td>{{ notif.type }}</td>
                     <td>{{ notif.vcDescription }}</td>
                     <td>{{ notif.limiteDeclenchementNotification }}</td>

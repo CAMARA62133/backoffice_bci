@@ -222,7 +222,6 @@ export class NotificationsComponent implements OnInit {
   //
   onToggle(notification: any) {
     this.isLoading = true;
-    // idNotiification=4&btEnabled=0
 
     const isActive = +notification.statusNotification === 1;
     const btEnabled = isActive ? 0 : 1;
