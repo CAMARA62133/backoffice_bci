@@ -1,1 +1,105 @@
-<p>mes-notifications works!</p>
+<div class="page-content">
+  <div class="container-fluid py-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="text-primary mb-1 h4">
+              <i class="fas fa-building me-2"></i> Mes notifications par défaut
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid py-3">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table
+                *ngIf="!isLoading && notifications.length > 0"
+                class="table table-hover mb-0"
+                id="rapportsTable"
+              >
+                <thead class="table-primary">
+                  <tr class="text-center">
+                    <th scope="col">ID</th>
+                    <th scope="col">Messages</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Type Notification</th>
+                    <!-- <th scope="col">Module</th> -->
+                    <th scope="col">Niveaux d'urgence</th>
+                    <th scope="col">Role</th>
+                    <th scope="col" class="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let notif of notifications">
+                    <td>{{ notif.id }}</td>
+                    <td>{{ notif.vcMessage }}</td>
+                    <td>
+                      <span
+                        class="badge text-bg-{{
+                          +notif.btEnabled === 1 ? 'success' : 'danger'
+                        }} rounded-pill"
+                        >{{
+                          +notif.btEnabled === 1 ? "Active" : "Inactive"
+                        }}</span
+                      >
+                    </td>
+                    <td>{{ notif.vcType }}</td>
+                    <!-- <td>{{ notif.module }}</td> -->
+                    <td>{{ notif.niveauDurgence }}</td>
+                    <td>{{ notif.vcRoleName }}</td>
+                    <td>
+                      <div class="d-flex gap-1 justify-content-center">
+                        <button type="button" class="btn btn-action btn-sm">
+                          <i
+                            class="fas fa-{{
+                              +notif.btEnabled === 1 ? 'unlock' : 'unlock'
+                            }} text-{{
+                              +notif.btEnabled === 1 ? 'danger' : 'success'
+                            }}"
+                          ></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div *ngIf="isLoading" class="text-center my-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden"
+                  >Chargement des données en cours...</span
+                >
+              </div>
+              <p class="text-muted">
+                Veuillez patientez pendant que le données se charges.
+              </p>
+            </div>
+
+            <div
+              *ngIf="!isLoading && notifications.length === 0"
+              class="text-center py-5"
+            >
+              <div class="mb-3">
+                <i class="text-muted bi bi-inbox display-1"></i>
+              </div>
+              <h5 class="text-muted">
+                Aucune notification n'est disponible....
+              </h5>
+              <p class="text-muted">
+                Il n'y a pas de notifications pour l'instant !
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

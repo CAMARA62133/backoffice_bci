@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environnements/environnement';
@@ -43,15 +43,5 @@ export class ConfigNotificationService {
       `${this.baseUrl}/api/getListeNotiificationUsersDefaut`,
       { headers }
     );
-  }
-
-  // idRole=
-  getListeNotiificationUsers(idRole: number | string): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
-    const params = new HttpParams().set('idRole', idRole);
-
-    return this.http.get(`${this.baseUrl}/api/getListeNotiificationUsers`, {
-      params,
-    });
   }
 }
