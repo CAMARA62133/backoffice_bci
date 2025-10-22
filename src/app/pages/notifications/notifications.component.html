@@ -30,7 +30,11 @@
           <div class="card-body p-0">
             <div class="table-responsive">
               <!-- *ngIf="!isLoadingOrgs && pagedOrganisations.length > 0" -->
-              <table class="table table-hover mb-0" id="rapportsTable">
+              <table
+                *ngIf="!isLoadingNotif && paginatedNotification.length > 0"
+                class="table table-hover mb-0"
+                id="rapportsTable"
+              >
                 <thead class="table-primary">
                   <tr>
                     <th scope="col">ID</th>
@@ -83,7 +87,7 @@
                           title="Modifier"
                           (click)="onEdit(notif)"
                         >
-                          <i class="fas fa-edit text-success"></i>
+                          <i class="fas fa-edit text-primary"></i>
                         </button>
 
                         <button
@@ -99,12 +103,12 @@
                           <i
                             class="fas fa-{{
                               +notif.statusNotification === 1
-                                ? 'lock'
-                                : 'unlock'
+                                ? 'lock-open'
+                                : 'lock'
                             }} text-{{
                               +notif.statusNotification === 1
-                                ? 'danger'
-                                : 'primary'
+                                ? 'success'
+                                : 'danger'
                             }}"
                           ></i>
                         </button>
@@ -143,7 +147,10 @@
               </p>
             </div>
           </div>
-          <div class="card-footer bg-light">
+          <div
+            *ngIf="!isLoadingNotif && paginatedNotification.length > 0"
+            class="card-footer bg-light"
+          >
             <div class="row align-items-center">
               <div class="col-md-6">
                 <small class="text-muted">

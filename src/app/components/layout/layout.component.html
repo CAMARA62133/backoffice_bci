@@ -405,14 +405,13 @@
             <span>Menu</span>
           </li>
 
-          @if(+currentUser.iRoleID !== 10){
           <li class="nav-item mm-active">
             <a class="nav-link" routerLink="dashboard" aria-expanded="false">
               <i class="icon ion-ios-speedometer active"></i>
               <span data-key="t-dashboard">Tableau de Bord</span>
             </a>
           </li>
-          } @if (+currentUser.iRoleID === 10 ) {
+
           <li class="nav-item">
             <a class="nav-link has-arrow">
               <i class="icon ion-person-stalker"></i>
@@ -430,7 +429,7 @@
               </li>
             </ul>
           </li>
-          } @if (+currentUser.iRoleID !== 10 ) {
+
           <li class="nav-item">
             <a class="nav-link has-arrow">
               <i class="icon ion-person-stalker"></i>
@@ -448,7 +447,6 @@
               </li>
             </ul>
           </li>
-          }
 
           <li class="nav-item">
             <a class="nav-link has-arrow">

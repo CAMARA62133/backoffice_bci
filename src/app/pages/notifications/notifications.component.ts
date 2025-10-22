@@ -225,7 +225,7 @@ export class NotificationsComponent implements OnInit {
 
     const isActive = +notification.statusNotification === 1;
     const btEnabled = isActive ? 0 : 1;
-    const params = { idNotiification: notification.id, btEnabled };
+    const params = { idNotification: notification.id, btEnabled };
     const message = isActive
       ? 'Notification bloquée avec succès !'
       : 'Notification débloquée avec succès !';

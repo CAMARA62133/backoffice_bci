@@ -52,7 +52,7 @@
                     >
                     <div class="otp-inputs d-flex justify-content-center gap-2">
                       <input
-                        class="form-control otp-input"
+                        class="form-control otp-input border-1 border-primary"
                         type="text"
                         maxlength="1"
                         pattern="[0-9]"
@@ -63,7 +63,7 @@
                         name="otp0"
                       />
                       <input
-                        class="form-control otp-input"
+                        class="form-control otp-input border-1 border-primary"
                         type="text"
                         maxlength="1"
                         pattern="[0-9]"
@@ -74,7 +74,7 @@
                         name="otp1"
                       />
                       <input
-                        class="form-control otp-input"
+                        class="form-control otp-input border-1 border-primary"
                         type="text"
                         maxlength="1"
                         pattern="[0-9]"
@@ -85,7 +85,7 @@
                         name="otp2"
                       />
                       <input
-                        class="form-control otp-input"
+                        class="form-control otp-input border-1 border-primary"
                         type="text"
                         maxlength="1"
                         pattern="[0-9]"
@@ -113,6 +113,7 @@
                         type="button"
                         [disabled]="!isOtpComplete() || isLoading"
                         (click)="submitOtp()"
+                        [hidden]="!isOtpComplete() || isLoading"
                       >
                         {{
                           isLoading
