@@ -458,7 +458,7 @@
                   [ngClass]="getFormControlClass('iRoleID')"
                 >
                   <option value="">-- Sélectionnez un rôle --</option>
-                  <option [value]="filteredRole.id">
+                  <option [value]="filteredRole?.id">
                     {{ filteredRole.vcRoleName }}
                   </option>
                   <!-- <option *ngFor="let role of filteredRoles" [value]="role.id">

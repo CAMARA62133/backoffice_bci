@@ -33,7 +33,7 @@ export class OrganisationsComponent implements OnInit {
   isLoadingOrgs: boolean = false;
 
   roles: any[] = [];
-  filteredRole: any;
+  filteredRole: any = {};
   organisations: any[] = [];
   currentUser: any;
 
