@@ -29,8 +29,12 @@
         <div class="card">
           <div class="card-body p-0">
             <div class="table-responsive">
-              <!-- *ngIf="!isLoadingOrgs && pagedOrganisations.length > 0" -->
-              <table class="table table-hover mb-0" id="rapportsTable">
+              <!--  -->
+              <table
+                *ngIf="!isLoadingAlerte && paginatedAlertes.length > 0"
+                class="table table-hover mb-0"
+                id="rapportsTable"
+              >
                 <thead class="table-primary">
                   <tr>
                     <th scope="col">ID</th>
@@ -49,7 +53,16 @@
                   <tr *ngFor="let alert of paginatedAlertes">
                     <td>{{ alert.id }}</td>
                     <td>{{ alert.messageAlerte }}</td>
-                    <td>{{ alert.statusAlert }}</td>
+                    <td>
+                      <span
+                        class="badge text-bg-{{
+                          +alert.statusAlert === 1 ? 'success' : 'danger'
+                        }} rounded-pill"
+                        >{{
+                          +alert.statusAlert === 1 ? "Active" : "Inactive"
+                        }}</span
+                      >
+                    </td>
                     <td>{{ alert.niveauDurgence }}</td>
                     <td>{{ alert.typeAlert }}</td>
                     <td>{{ alert.groupeConcerne }}</td>

@@ -276,7 +276,6 @@ export class AuthService {
    * @returns
    */
   deconnexion(appName: string = this.appName): Observable<any> {
-    console.log('API Deconnexion');
     // Recuperer le token avant toutes suppressions
     const token = this.getToken();
     if (!token) {
@@ -284,8 +283,6 @@ export class AuthService {
         () => new Error('Token non trouvé. Veuillez vous connecter.')
       );
     }
-
-    if (token) console.log('Le token est est la : ', this.getToken());
 
     // Prépare les en-têtes d'authentification
     const headers = new HttpHeaders({
@@ -295,7 +292,6 @@ export class AuthService {
 
     // Prépare les paramètres de requête
     const params = new HttpParams().set('appName', appName);
-    console.log('Parametres envoyer : ', params.toString());
 
     // Appel API de déconnexion
     return this.http

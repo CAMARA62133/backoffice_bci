@@ -1,8 +1,8 @@
+import { DatePipe, UpperCasePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/authService/auth.service';
-import { DatePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
@@ -12,32 +12,34 @@ import { DatePipe, UpperCasePipe } from '@angular/common';
 })
 export class LayoutComponent implements OnInit {
   // Information de l'utilisateur courrant
-  currentUser = {
-    OTP: '',
-    adresseOrganisation: '',
-    btBlocked: '',
-    btEnabled: '',
-    businessEmailDomainOrganisation: '',
-    cityOrganisation: '',
-    contactOrganisation: '',
-    dtCreated: '',
-    dtLastUpdate: '',
-    dtOTPExpiration: '',
-    email: '',
-    emailOrganisation: '',
-    iOrganisationID: '',
-    iRoleID: '',
-    id: '',
-    idResponsable: '',
-    nameOrganisation: '',
-    paysOrganisation: '',
-    phoneNumberOrganisation: '',
-    tiFailedLogin: '',
-    vcFirstname: '',
-    vcLastname: '',
-    vcPhoneNumber: '',
-    vcRoleName: '',
-  };
+  // currentUser = {
+  //   OTP: '',
+  //   adresseOrganisation: '',
+  //   btBlocked: '',
+  //   btEnabled: '',
+  //   businessEmailDomainOrganisation: '',
+  //   cityOrganisation: '',
+  //   contactOrganisation: '',
+  //   dtCreated: '',
+  //   dtLastUpdate: '',
+  //   dtOTPExpiration: '',
+  //   email: '',
+  //   emailOrganisation: '',
+  //   iOrganisationID: '',
+  //   iRoleID: '',
+  //   id: '',
+  //   idResponsable: '',
+  //   nameOrganisation: '',
+  //   paysOrganisation: '',
+  //   phoneNumberOrganisation: '',
+  //   tiFailedLogin: '',
+  //   vcFirstname: '',
+  //   vcLastname: '',
+  //   vcPhoneNumber: '',
+  //   vcRoleName: '',
+  // };
+
+  currentUser: any;
 
   constructor(
     private authService: AuthService,
@@ -46,27 +48,7 @@ export class LayoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // 1. Vérifie si l'utilisateur est connecté
-    if (this.authService.isAuthenticated()) {
-      // 2. Si l'utilisateur est connecté, on essaie de récupérer ses informations
-      const userInfo = this.authService.getUserInfo();
-      this.currentUser = this.authService.getUserInfo();
-
-      if (userInfo) {
-        // Affiche les informations de l'utilisateur dans la console
-        console.log('Utilisateur actuellement connecté :', userInfo);
-        console.log('Current user :', this.currentUser);
-        // console.table(userInfo);
-      } else {
-        // Cas où l'utilisateur est techniquement "connecté" (token présent),
-        // mais les données utilisateur n'ont pas encore été chargées ou sont manquantes.
-        console.log(
-          'Utilisateur connecté, mais les données utilisateur sont introuvables.'
-        );
-      }
-    } else {
-      console.log("Aucun utilisateur n'est connecté.");
-    }
+    this.currentUser = this.authService.getUserInfo();
   }
 
   // Méthode de déconnexion et de redirection vers la page de login

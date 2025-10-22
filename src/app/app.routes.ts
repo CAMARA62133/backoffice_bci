@@ -91,6 +91,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Listes des Utilisateurs',
         component: UtilisteurComponent,
         canActivate: [AuthGuard],
+        // data: { exclude: [10] },
       },
 
       {
@@ -124,6 +125,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Configuration Alertes',
         component: MesNotificationsComponent,
         canActivate: [AuthGuard],
+        // data: { exclude: [10] },
       },
     ],
   },

@@ -1,36 +1,48 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { AuthService } from '../../authService/auth.service';
-
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class RoleGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
-    const allowedRoles: number[] = route.data['roles']; // récupère les rôles autorisés
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    const user = this.authService.getUserInfo() || {};
 
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']); // pas connecté
+    const allowedRoles =
+      (route.data['roles'] as Array<number | string>) || null;
+    const excludedRoles =
+      (route.data['exclude'] as Array<number | string>) || null;
+
+    console.log('allowedRoles:', route.data['roles']);
+    console.log('exclude:', route.data['exclude']);
+    console.log('user.iRoleID:', user.iRoleID, typeof user.iRoleID);
+
+    if (!user || user.iRoleID === undefined || user.iRoleID === null) {
+      this.router.navigate(['/login']);
       return false;
     }
 
-    if (!this.authService.hasRole(allowedRoles)) {
-      this.router.navigate(['/access-denied']); // pas le bon rôle
-      return false;
+    const userRoleStr = String(user.iRoleID);
+
+    if (excludedRoles) {
+      const excludedStr = excludedRoles.map((r) => String(r));
+      if (excludedStr.includes(userRoleStr)) {
+        this.router.navigate(['/unauthorized']);
+        return false;
+      }
     }
 
-    return true; // tout est OK
+    if (allowedRoles) {
+      const allowedStr = allowedRoles.map((r) => String(r));
+      if (!allowedStr.includes(userRoleStr)) {
+        this.router.navigate(['/unauthorized']);
+        return false;
+      }
+    }
+
+    return true;
   }
 }

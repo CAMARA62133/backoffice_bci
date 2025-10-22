@@ -12,11 +12,29 @@ export class MesNotifsService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  mesNotifications(idRole: number | string): Observable<any> {
-    // const headers = this.authService.setRequestHeaders();
-    const params = new HttpParams().set('idRole', idRole);
+  // Pour affiche la liste des notifications de l'utilisateur courrant connecter
+  mesNotifications(idUser: number | string): Observable<any> {
+    const params = new HttpParams().set('idUsersConnect', idUser.toString());
     return this.http.get(`${this.baseUrl}/api/getListeNotiificationUsers`, {
-      params,
+      params: params,
     });
+  }
+
+  // Pour bloquer ou debloquer la notification de l'user courrant.
+  setToggleNotification(data: any): Observable<any> {
+    const headers = this.authService.setRequestHeaders();
+
+    const params = new HttpParams()
+      .set('idNotification', data.idNotification.toString())
+      .set('btEnabled', data.btEnabled.toString());
+
+    return this.http.post(
+      `${this.baseUrl}/api/activeOrDesactiveNotificationUsers`,
+      null,
+      {
+        params: params,
+        headers: headers,
+      }
+    );
   }
 }
