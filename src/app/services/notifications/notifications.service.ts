@@ -71,7 +71,7 @@ export class NotificationsService {
     const headers = this.authService.setRequestHeaders();
     const httpParams = new HttpParams()
       .set('idNotification', params.idNotification.toString())
-      .set('btEnabled', params.btEnabled.toString());
+      .set('btEnabled', params.btEnabled);
 
     return this.http.post(
       `${this.baseUrl}/api/activeOrDesactiveNotification`,

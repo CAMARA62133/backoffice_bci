@@ -1,0 +1,14 @@
+.page-item.active .page-link {
+  background-color: #362A7A;
+  border-color: #362A7A;
+  color: white;
+}
+
+.page-link {
+  color: #362A7A;
+  cursor: pointer;
+}
+
+.page-link:hover:not(.disabled) {
+  background-color: #f0f0ff;
+}

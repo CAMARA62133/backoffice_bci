@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environnements/environnement';
-import { ToggleAlerteParams } from '../../interfaces/alertes';
 import { AuthService } from '../authService/auth.service';
 
 @Injectable({
@@ -70,20 +69,14 @@ export class AlertesService {
     });
   }
 
-  /**
-   * Bloquer ou Debloquer une alertes
-   * @param data les parametres de l'api (id, et true | false)
-   * @returns
-   */
-  toggleAlerte(params: ToggleAlerteParams): Observable<any> {
+  toggleAlerte(data: any): Observable<any> {
     const headers = this.authService.setRequestHeaders();
-    const httpParams = new HttpParams()
-      .set('idAlert', params.idAlert.toString())
-      .set('btEnableAlert', params.btEnableAlert.toString());
+    const params = new HttpParams()
+      .set('idAlert', data.idAlert.toString())
+      .set('btEnableAlert', data.btEnableAlert);
 
-    // https://dev-api-bcibank.ecash-guinee.com/api/activeOrDesactiveAlert?idAlert=13&btEnableAlert=1
     return this.http.post(`${this.baseUrl}/api/activeOrDesactiveAlert`, null, {
-      params: httpParams,
+      params: params,
       headers: headers,
     });
   }

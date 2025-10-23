@@ -30,8 +30,11 @@
         <div class="card">
           <div class="card-body p-0">
             <div class="table-responsive">
-              <!-- *ngIf="!isLoadingOrgs && pagedOrganisations.length > 0" -->
-              <table class="table table-hover mb-0" id="rapportsTable">
+              <table
+                *ngIf="!isLoading && paginatedDefaultNotifications.length > 0"
+                class="table table-hover table-striped mb-0"
+                id="rapportsTable"
+              >
                 <thead class="table-primary">
                   <tr class="text-center">
                     <th scope="col">ID</th>
@@ -45,7 +48,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let defNotif of defaultNotifications">
+                  <tr *ngFor="let defNotif of paginatedDefaultNotifications">
                     <td>{{ defNotif.id }}</td>
                     <td>{{ defNotif.vcMessage }}</td>
                     <td>
@@ -88,36 +91,43 @@
             </div>
 
             <!-- au chargement des donnne -->
-            <!-- <div *ngIf="isLoadingNotif" class="text-center my-3">
+            <div *ngIf="isLoading" class="text-center my-3">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden"
                   >Chargement des données en cours...</span
                 >
               </div>
               <p class="text-muted">
-                Veuillez patientez pendant que le données se charges.
+                Veuillez patientez pendant que les données se chargent.
               </p>
-            </div> -->
+            </div>
 
             <!-- Si liste des notifications est vide -->
-            <!-- <div
-              *ngIf="!isLoadingNotif && notifications.length === 0"
+            <div
+              *ngIf="!isLoading && defaultNotifications.length === 0"
               class="text-center py-5"
             >
               <div class="mb-3">
                 <i class="text-muted bi bi-inbox display-1"></i>
               </div>
               <h5 class="text-muted">
-                Aucune notification n'est disponible....
+                Aucune notification par défaut n'est disponible....
               </h5>
               <p class="text-muted">
-                Il n'y a pas de notifications enregistrée pour l'instant !
+                Il n'y a pas de notifications par défaut enregistrée pour
+                l'instant !
               </p>
-            </div> -->
+            </div>
           </div>
-          <div class="card-footer bg-light">
+
+          <div
+            *ngIf="
+              !isLoadingDefaultNotif && paginatedDefaultNotifications.length > 0
+            "
+            class="card-footer bg-light"
+          >
             <div class="row align-items-center">
-              <!-- <div class="col-md-6">
+              <div class="col-md-6">
                 <small class="text-muted">
                   Affichage de
                   <span id="startRecord">{{
@@ -129,36 +139,41 @@
                   <span id="totalRecords">{{
                     paginationService.totalItems
                   }}</span>
-                  notification(s)
+                  alerte(s)
                 </small>
-              </div> -->
+              </div>
               <div class="col-md-6">
                 <!-- <nav *ngIf="totalPages > 1" aria-label="Pagination rapports"> -->
-                <nav aria-label="Pagination rapports">
+                <nav
+                  *ngIf="
+                    !isLoadingDefaultNotif &&
+                    paginatedDefaultNotifications.length > 0
+                  "
+                  aria-label="Pagination rapports"
+                >
                   <ul class="pagination pagination-md justify-content-end mb-0">
                     <!-- Début -->
-                    <!-- <li
+                    <li
                       class="page-item"
                       [class.disabled]="paginationService.currentPage === 1"
                     >
                       <button class="page-link" (click)="firstPage()">
                         <i class="fa fa-backward"></i>
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Précédent -->
-                    <!-- <li
+                    <li
                       class="page-item"
                       [class.disabled]="paginationService.currentPage === 1"
                     >
                       <button class="page-link" (click)="previousPage()">
                         <i class="fa fa-chevron-left"></i>
-                        Précédent
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Numéros de pages -->
-                    <!-- <li
+                    <li
                       class="page-item"
                       *ngFor="
                         let page of paginationService.getPageNumbers();
@@ -169,10 +184,10 @@
                       <button class="page-link" (click)="goToPage(page)">
                         {{ page }}
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Suivant -->
-                    <!-- <li
+                    <li
                       class="page-item"
                       [class.disabled]="
                         paginationService.currentPage ===
@@ -180,13 +195,12 @@
                       "
                     >
                       <button class="page-link" (click)="nextPage()">
-                        Suivant
                         <i class="fa fa-chevron-right"></i>
                       </button>
-                    </li> -->
+                    </li>
 
                     <!-- Fin -->
-                    <!-- <li
+                    <li
                       class="page-item"
                       [class.disabled]="
                         paginationService.currentPage ===
@@ -196,7 +210,7 @@
                       <button class="page-link" (click)="lastPage()">
                         <i class="fa fa-forward"></i>
                       </button>
-                    </li> -->
+                    </li>
                   </ul>
                 </nav>
               </div>

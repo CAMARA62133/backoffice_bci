@@ -16,6 +16,12 @@ export class MesNotificationsComponent implements OnInit {
   notifications: any[] = [];
   currentUser: any = null;
 
+  selectedUserId: number | null = null;
+  btEnabled: boolean = false;
+  showModalOpenBloquerDebloquer = false;
+  errorMessage: string = '';
+  isloadingBloquerDebloquer: boolean = false;
+
   constructor(
     private mesNotifsService: MesNotifsService,
     private authService: AuthService,
@@ -24,7 +30,6 @@ export class MesNotificationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getUserInfo();
-    console.log('org user : ', this.currentUser);
     this.loadNotifications();
   }
 
@@ -33,7 +38,6 @@ export class MesNotificationsComponent implements OnInit {
 
     this.mesNotifsService.mesNotifications(this.currentUser.id).subscribe({
       next: (res) => {
-        this.isLoading = false;
         if (res?.status && res?.status === 200) {
           this.notifications = res.data;
           console.log('res api => ', res);
@@ -41,49 +45,68 @@ export class MesNotificationsComponent implements OnInit {
           this.toastr.error(res?.message);
           console.log('Erreur chargement mes notifs : ', res);
         }
+        this.isLoading = false;
       },
 
       error: (err) => {
         this.toastr.error(err?.message);
         console.log('Erreur chargement mes notifs : ', err);
+        this.isLoading = false;
       },
     });
   }
 
-  onToggle(notification: any): void {
-    // this.isLoading = true;
+  openModalBloquerDebloquer(notification: any) {
+    this.selectedUserId = notification.id;
+    this.btEnabled = notification.btEnabled === '0';
+    this.showModalOpenBloquerDebloquer = true;
+  }
 
-    const isActive = +notification.btEnabled === 1;
+  closeModalBloquerDebloquer() {
+    const overlay = document.querySelector('.modal-overlay');
+    const content = document.querySelector('.modal-content');
 
-    const enable = isActive ? 0 : 1;
-    console.log(enable);
+    overlay?.classList.add('closing');
+    content?.classList.add('closing');
 
-    const params = { idNotification: notification.id, btEnabled: enable };
-    const message = isActive
-      ? 'Notification bloquée avec succès !'
-      : 'Notification débloquée avec succès !';
+    // Attends la fin de l'animation avant de cacher le modal
+    setTimeout(() => {
+      this.showModalOpenBloquerDebloquer = false;
+    }, 300);
 
-    console.log(`${isActive ? 'Debloquage' : 'Bloquage'} : `, { notification });
-    console.log('params : ', params);
+    if (this.isloadingBloquerDebloquer) return; // 🔒 bloque la fermeture pendant le chargement
+    this.showModalOpenBloquerDebloquer = false;
+  }
+
+  bloquerEtDebloquer(): void {
+    if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
+    if (this.selectedUserId === null) {
+      this.toastr.error('Aucune notification sélectionnée.');
+      return;
+    }
+
+    this.isloadingBloquerDebloquer = true;
+
+    const params = {
+      idNotification: this.selectedUserId,
+      btEnabled: this.btEnabled,
+    };
 
     this.mesNotifsService.setToggleNotification(params).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          console.log(res?.message);
-          this.toastr.success(message);
+          this.toastr.success(res?.message);
           this.loadNotifications();
         } else {
-          console.log(res?.message);
           this.toastr.error(res?.message);
-          this.loadNotifications();
         }
-        this.isLoading = false;
+        this.showModalOpenBloquerDebloquer = false;
+        this.isloadingBloquerDebloquer = false;
       },
 
       error: (err) => {
-        console.log(err?.message);
-        this.toastr.success(err?.message);
-        this.isLoading = false;
+        this.toastr.error(err?.message);
+        this.isloadingBloquerDebloquer = false;
       },
     });
   }

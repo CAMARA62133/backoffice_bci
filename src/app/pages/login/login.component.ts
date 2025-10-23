@@ -8,24 +8,24 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { NgxCaptchaModule } from 'ngx-captcha';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../environnements/environnement';
 import { AuthService } from '../../services/authService/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, RouterLink],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    HttpClientModule,
+    RouterLink,
+    NgxCaptchaModule,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
-  constructor(
-    private authService: AuthService,
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private toastr: ToastrService
-  ) {}
-
   // Formulaire de connexion
   loginForm!: FormGroup;
 
@@ -33,6 +33,17 @@ export class LoginComponent implements OnInit {
   message: any = '';
   success: boolean = false;
   loading: boolean = false;
+
+  passwordVisible = false; // false = masque, true = visible
+
+  siteKey: string = '6LfNstgrAAAAAHnIIdUeCuDyv7IBMWfEOh2uzWhF';
+
+  constructor(
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   // Lifecycle hook appelé à l'initialisation du composant
   ngOnInit(): void {
@@ -109,7 +120,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  passwordVisible = false; // false = masque, true = visible
   // bascule visibilité
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;

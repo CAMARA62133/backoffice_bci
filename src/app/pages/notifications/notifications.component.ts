@@ -47,6 +47,12 @@ export class NotificationsComponent implements OnInit {
   idNotif: number = 0;
   paginatedNotification: any[] = [];
 
+  selectedNotificationId: number | null = null;
+  btEnabled: boolean = false;
+  showModalOpenBloquerDebloquer = false;
+  errorMessage: string = '';
+  isloadingBloquerDebloquer: boolean = false;
+
   modules: any[] = [];
   niveauxUrgence: any[] = [];
 
@@ -219,58 +225,86 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
-  //
-  onToggle(notification: any) {
-    this.isLoading = true;
+  openModalBloquerDebloquer(notification: any) {
+    this.selectedNotificationId = notification.id;
+    this.btEnabled = notification.statusNotification === '0';
+    this.showModalOpenBloquerDebloquer = true;
+  }
 
-    const isActive = +notification.statusNotification === 1;
-    const btEnabled = isActive ? 0 : 1;
-    const params = { idNotification: notification.id, btEnabled };
-    const message = isActive
-      ? 'Notification bloquée avec succès !'
-      : 'Notification débloquée avec succès !';
+  closeModalBloquerDebloquer() {
+    const overlay = document.querySelector('.modal-overlay');
+    const content = document.querySelector('.modal-content');
 
-    console.log(`${isActive ? 'Bloquage' : 'Debloquage'} : `, { notification });
-    console.log('params : ', params);
+    overlay?.classList.add('closing');
+    content?.classList.add('closing');
 
-    // Appel au service
+    // Attends la fin de l'animation avant de cacher le modal
+    setTimeout(() => {
+      this.showModalOpenBloquerDebloquer = false;
+    }, 300);
+
+    if (this.isloadingBloquerDebloquer) return; // 🔒 bloque la fermeture pendant le chargement
+    this.showModalOpenBloquerDebloquer = false;
+  }
+
+  bloquerEtDebloquer(): void {
+    if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
+    if (this.selectedNotificationId === null) {
+      this.toastr.error('Aucune notification sélectionnée.');
+      return;
+    }
+
+    this.isloadingBloquerDebloquer = true;
+
+    const params = {
+      idNotification: this.selectedNotificationId,
+      btEnabled: this.btEnabled,
+    };
+
     this.notifService.toggleNotification(params).subscribe({
       next: (res) => {
-        console.log(res?.message || message, { res });
-        this.toastr.success(res?.message || message);
-
-        this.loadNotifications();
-        this.paginationService.reset();
-        this.updatePaginatedData();
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res?.message);
+          this.loadNotifications();
+          this.updatePaginatedData();
+        } else {
+          this.toastr.error(res?.message);
+        }
+        console.log('res api : ', res);
+        this.showModalOpenBloquerDebloquer = false;
+        this.isloadingBloquerDebloquer = false;
       },
 
       error: (err) => {
-        this.toastr.error(err.message);
-        console.log(message, { err });
-        this.loadNotifications();
-      },
-
-      complete: () => {
-        this.isLoading = false;
-        this.loadNotifications();
+        this.toastr.error(err?.message);
+        console.log('err api : ', err);
+        this.isloadingBloquerDebloquer = false;
       },
     });
   }
 
   private loadNotifications(): void {
     this.isLoadingNotif = true;
+
     this.notifService.getListeNotificationsConfig().subscribe({
       next: (res) => {
         this.notifications = res.data || [];
 
-        this.paginationService.setData(this.notifications, 10);
-
+        this.paginationService.setData(
+          this.notifications,
+          this.paginationService.itemsPerPage
+        );
+        
         this.paginatedNotification = this.paginationService.getPaginatedData();
-
         console.log('Notification liste : ', this.notifications);
+        this.isLoadingNotif = false;
       },
-      error: (err) => console.log('Erreur chargement notifications : ', err),
-      complete: () => (this.isLoadingNotif = false),
+
+      error: (err) => {
+        console.log('Erreur chargement notifications : ', err);
+        this.isLoadingNotif = false;
+      },
+      // complete: () => (this.isLoadingNotif = false),
     });
   }
 

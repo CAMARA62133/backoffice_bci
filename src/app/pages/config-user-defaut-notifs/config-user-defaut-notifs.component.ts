@@ -9,6 +9,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { ConfigNotificationService } from '../../services/configNotification/config-notification.service';
 import { ModalsService } from '../../services/modals/modals.service';
+import { PaginationsService } from '../../services/paginations/paginations.service';
 import { RolesService } from '../../services/roles/roles.service';
 import {
   getErrorMessage,
@@ -31,7 +32,10 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
   roles: any[] = [];
   notifications: any[] = [];
   listeNotiificationUsersDefaut: any[] = [];
+
   defaultNotifications: any[] = [];
+  paginatedDefaultNotifications: any[] = [];
+
   selectedDefaultNotif: any = null;
   idNotif: number = 0;
 
@@ -43,7 +47,8 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
     private configNotifService: ConfigNotificationService,
     private modalsService: ModalsService,
     private fb: FormBuilder,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    public paginationService: PaginationsService
   ) {}
 
   // Raccourcis pour le template
@@ -73,7 +78,7 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
       idNotification: ['', Validators.required],
       iRoleID: ['', Validators.required],
     });
-    
+
     // Chargement
     this.loadRoles();
     this.loadDefaultNotification();
@@ -93,10 +98,10 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
 
     this.configNotifService.createNotificationDefaut(dataToSend).subscribe({
       next: (res) => {
+        this.toastr.success(res?.message);
         console.log('Notification configuer avec success', res);
         this.configDefNotifForm.reset();
         this.modalsService.closeAllModals();
-        this.toastr.success(res?.message);
         this.loadDefaultNotification();
       },
 
@@ -181,9 +186,24 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
   private loadDefaultNotification(): void {
     this.isLoading = true;
     this.configNotifService.getListeNotiificationUsersDefaut().subscribe({
-      next: (res) => (this.defaultNotifications = res.data),
+      next: (res) => {
+        this.defaultNotifications = res.data;
+
+        this.paginationService.setData(
+          this.defaultNotifications,
+          this.paginationService.itemsPerPage
+        );
+
+        this.paginatedDefaultNotifications =
+          this.paginationService.getPaginatedData();
+        console.log('Default Notifi list : ', this.defaultNotifications);
+      },
+
       error: (err) => console.log('Erreur chargement default notif :', err),
-      complete: () => (this.isLoading = false),
+
+      complete: () => {
+        this.isLoading = false;
+      },
     });
   }
 
@@ -194,5 +214,41 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
       error: (err) => console.log('Erreur chargement role :', err),
       complete: () => (this.isLoadingRole = false),
     });
+  }
+
+  // Mise a jour de la pagination
+  updatePaginatedData(): void {
+    this.paginatedDefaultNotifications =
+      this.paginationService.getPaginatedData();
+  }
+
+  // Page suivante
+  nextPage(): void {
+    this.paginationService.goToNextPage();
+    this.updatePaginatedData();
+  }
+
+  // Page precedante
+  previousPage(): void {
+    this.paginationService.goToPreviousPage();
+    this.updatePaginatedData();
+  }
+
+  // Premiere page
+  firstPage(): void {
+    this.paginationService.goToFirstPage();
+    this.updatePaginatedData();
+  }
+
+  // Derniere page
+  lastPage(): void {
+    this.paginationService.goToLastPage();
+    this.updatePaginatedData();
+  }
+
+  // Aller a la page
+  goToPage(page: number): void {
+    this.paginationService.currentPage = page;
+    this.updatePaginatedData();
   }
 }

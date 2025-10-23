@@ -1,0 +1,58 @@
+<div class="row align-items-center">
+  <div class="col-md-6">
+    <small class="text-muted">
+      Affichage de
+      <span>{{ startIndex + 1 }}</span>
+      à
+      <span>{{ endIndex }}</span>
+      sur
+      <span>{{ totalItems }}</span>
+      élément(s)
+    </small>
+  </div>
+
+  <div class="col-md-6">
+    <nav *ngIf="totalPages > 1" aria-label="Pagination">
+      <ul class="pagination pagination-md justify-content-end mb-0">
+        <!-- Début -->
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="firstPage()">
+            <i class="fa fa-backward"></i>
+          </button>
+        </li>
+
+        <!-- Précédent -->
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="previousPage()">
+            <i class="fa fa-chevron-left"></i>
+          </button>
+        </li>
+
+        <!-- Numéros de pages -->
+        <li
+          class="page-item"
+          *ngFor="let page of getPageNumbers()"
+          [class.active]="currentPage === page"
+        >
+          <button class="page-link" (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        </li>
+
+        <!-- Suivant -->
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="nextPage()">
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </li>
+
+        <!-- Fin -->
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="lastPage()">
+            <i class="fa fa-forward"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

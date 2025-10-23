@@ -29,10 +29,9 @@
         <div class="card">
           <div class="card-body p-0">
             <div class="table-responsive">
-              <!-- *ngIf="!isLoadingOrgs && pagedOrganisations.length > 0" -->
               <table
-                *ngIf="!isLoadingNotif && paginatedNotification.length > 0"
-                class="table table-hover mb-0"
+                *ngIf="paginatedNotification.length > 0"
+                class="table table-hover table-striped mb-0"
                 id="rapportsTable"
               >
                 <thead class="table-primary">
@@ -98,7 +97,7 @@
                               ? 'Debloquer'
                               : 'Bloquer'
                           }}"
-                          (click)="onToggle(notif)"
+                          (click)="openModalBloquerDebloquer(notif)"
                         >
                           <i
                             class="fas fa-{{
@@ -127,7 +126,7 @@
                 >
               </div>
               <p class="text-muted">
-                Veuillez patientez pendant que le données se charges.
+                Veuillez patientez pendant que les données se chargent.
               </p>
             </div>
 
@@ -656,6 +655,44 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de blocage et deblocage -->
+<div *ngIf="showModalOpenBloquerDebloquer" class="modal-overlay">
+  <div class="modal-content">
+    <p class="modal-text">
+      Êtes-vous sûr de vouloir
+      <strong class="text-{{ btEnabled ? 'primary' : 'danger' }}">{{
+        btEnabled ? "activer" : "bloquer"
+      }}</strong>
+      cette notification ?
+    </p>
+
+    <div class="modal-actions">
+      <button
+        type="button"
+        class="btn-cancel"
+        (click)="closeModalBloquerDebloquer()"
+        [disabled]="isloadingBloquerDebloquer"
+      >
+        Non
+      </button>
+
+      <button
+        type="button"
+        class="btn-confirm"
+        (click)="bloquerEtDebloquer()"
+        [disabled]="isloadingBloquerDebloquer"
+      >
+        <ng-container *ngIf="!isloadingBloquerDebloquer; else loadingTemplate">
+          Oui
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <span class="spinner"></span> En cours...
+        </ng-template>
+      </button>
     </div>
   </div>
 </div>

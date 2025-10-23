@@ -30,7 +30,7 @@
             <div class="table-responsive">
               <table
                 *ngIf="!isLoadingOrgs && pagedOrganisations.length > 0"
-                class="table table-hover mb-0"
+                class="table table-hover table-striped mb-0"
                 id="rapportsTable"
               >
                 <thead class="table-primary">
@@ -62,8 +62,16 @@
                     <td>{{ org.vcAddress }}</td>
                     <td>{{ org.vcLogoPath }}</td>
                     <td>{{ org.vcBusinessEmailDomain }}</td>
-                    <td>{{ org.btEnabled }}</td>
-                    <td>{{ org.dtCreated }}</td>
+                    <td>
+                      <span
+                        class="badge text-bg-{{
+                          org.btEnabled ? 'success' : 'danger'
+                        }} rounded-pill"
+                        >{{ org.btEnabled ? "Active" : "Inactive" }}</span
+                      >
+                      <!-- {{ org.btEnabled ? "Active" : "Inactive" }} -->
+                    </td>
+                    <td>{{ org.dtCreated | date : "dd/MM/YY" }}</td>
                     <td>
                       <div class="d-flex gap-1">
                         <button
@@ -80,13 +88,13 @@
                         >
                           <i class="fas fa-edit"></i>
                         </button>
-                        <!-- <button
-                      type="button"
-                      class="btn btn-outline-success btn-action btn-sm"
-                      title="Réactiver"
-                    >
-                      <i class="fas fa-lock"></i>
-                    </button> -->
+                        <button
+                          type="button"
+                          class="btn btn-outline-success btn-action btn-sm"
+                          title="Réactiver"
+                        >
+                          <i class="fas fa-lock"></i>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -102,7 +110,7 @@
                 >
               </div>
               <p class="text-muted">
-                Veuillez patientez pendant que le données se charges.
+                Veuillez patientez pendant que les données se chargent.
               </p>
             </div>
 

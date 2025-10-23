@@ -12,7 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { AlerteType, ToggleAlerteParams } from '../../interfaces/alertes';
+import { AlerteType } from '../../interfaces/alertes';
 import { AlertesService } from '../../services/alertes/alertes.service';
 import { ModalsService } from '../../services/modals/modals.service';
 import { PaginationsService } from '../../services/paginations/paginations.service';
@@ -56,6 +56,12 @@ export class AlertesComponent implements OnInit {
 
   isEditing: boolean = false;
   idAlerte: number = 0;
+
+  selectedAlerteId: number | null = null;
+  btEnabled: boolean = false;
+  showModalOpenBloquerDebloquer = false;
+  errorMessage: string = '';
+  isloadingBloquerDebloquer: boolean = false;
 
   // Constructeur
   constructor(
@@ -236,46 +242,60 @@ export class AlertesComponent implements OnInit {
     });
   }
 
-  /**
-   * Bloquer ou Debloquer une alerte
-   * @param alert : l'alerte a bloquer ou debloquer
-   */
-  onToggle(alert: any): void {
-    this.isLoading = true;
+  openModalBloquerDebloquer(alerte: any) {
+    this.selectedAlerteId = alerte.id;
+    this.btEnabled = alerte.statusAlert === '0';
+    this.showModalOpenBloquerDebloquer = true;
+  }
 
-    const isActive = +alert.statusAlert === 1;
-    const btEnableAlert = isActive ? 0 : 1;
-    const params: ToggleAlerteParams = { idAlert: alert.id, btEnableAlert };
-    const message = isActive
-      ? 'Alerte bloqué avec succès !'
-      : 'Alerte débloqué avec succès !';
+  closeModalBloquerDebloquer() {
+    const overlay = document.querySelector('.modal-overlay');
+    const content = document.querySelector('.modal-content');
 
-    console.log(`${isActive ? 'Bloquage' : 'Debloquage'}: `, { alert });
-    console.log('params : ', params);
+    overlay?.classList.add('closing');
+    content?.classList.add('closing');
 
-    // Appel au service
+    // Attends la fin de l'animation avant de cacher le modal
+    setTimeout(() => {
+      this.showModalOpenBloquerDebloquer = false;
+    }, 300);
+
+    if (this.isloadingBloquerDebloquer) return; // 🔒 bloque la fermeture pendant le chargement
+    this.showModalOpenBloquerDebloquer = false;
+  }
+
+  bloquerEtDebloquer(): void {
+    if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
+    if (this.selectedAlerteId === null) {
+      this.toastr.error('Aucune alerte sélectionnée.');
+      return;
+    }
+
+    this.isloadingBloquerDebloquer = true;
+
+    const params = {
+      idAlert: this.selectedAlerteId,
+      btEnableAlert: this.btEnabled,
+    };
+
     this.alertService.toggleAlerte(params).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          console.log(message, { res });
-          this.toastr.success(message);
+          this.toastr.success(res?.message);
           this.loadAlertes();
-          this.paginationService.reset();
           this.updatePaginatedData();
         } else {
-          console.log(' Erreur : ', { res });
-          this.toastr.error(res.message);
-          this.loadAlertes();
+          this.toastr.error(res?.message);
         }
+        console.log('res api : ', res);
+        this.showModalOpenBloquerDebloquer = false;
+        this.isloadingBloquerDebloquer = false;
       },
-
+      
       error: (err) => {
-        this.toastr.error(err.message);
-        console.log(message, { err });
-      },
-
-      complete: () => {
-        this.isLoading = false;
+        this.toastr.error(err?.message);
+        console.log('err api : ', err);
+        this.isloadingBloquerDebloquer = false;
       },
     });
   }
@@ -283,6 +303,7 @@ export class AlertesComponent implements OnInit {
   /** Fonction priver pour recharger automatiquement la liste des alertes a chaque fois qu'il y a un changement */
   private loadAlertes(): void {
     this.isLoadingAlerte = true;
+
     this.alertService.getListeAlertesConfig().subscribe({
       next: (res) => {
         this.alertes = res.data || [];
@@ -292,17 +313,16 @@ export class AlertesComponent implements OnInit {
           this.paginationService.itemsPerPage
         );
         this.paginatedAlertes = this.paginationService.getPaginatedData();
-
         console.log('Alertes liste : ', this.alertes);
+        this.isLoadingAlerte = false;
       },
 
       error: (err) => {
         console.error('Erreur chargement alertes : ', err);
-      },
-
-      complete: () => {
         this.isLoadingAlerte = false;
       },
+
+      // complete: () => (this.isLoadingAlerte = false),
     });
   }
 
@@ -393,4 +413,9 @@ export class AlertesComponent implements OnInit {
     this.paginationService.currentPage = page;
     this.updatePaginatedData();
   }
+
+  // onPageChange(page: number): void {
+  //   this.paginationService.currentPage = page;
+  //   this.updatePaginatedData();
+  // }
 }

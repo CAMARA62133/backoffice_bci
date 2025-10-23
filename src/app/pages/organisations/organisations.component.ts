@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -22,7 +22,7 @@ import {
 
 @Component({
   selector: 'app-organisations',
-  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, NgClass],
+  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, NgClass, DatePipe],
   templateUrl: './organisations.component.html',
   styleUrl: './organisations.component.css',
 })

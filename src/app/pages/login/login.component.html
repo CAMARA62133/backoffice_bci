@@ -32,7 +32,7 @@
                   <div class="mb-3">
                     <label class="form-label">Email</label>
                     <input
-                      class="form-control form-control border-1 border-primary"
+                      class="form-control form-control"
                       type="text"
                       placeholder="Entrez votre adresse email"
                       formControlName="email"
@@ -69,14 +69,14 @@
 
                     <div class="input-group auth-pass-inputgroup">
                       <input
-                        class="form-control border-1 border-primary"
+                        class="form-control"
                         [type]="passwordVisible ? 'text' : 'password'"
                         formControlName="password"
                         placeholder="Entrez votre mot de passe"
                         aria-label="Mot de passe"
                       />
                       <button
-                        class="btn btn-primary shadow-none ms-0"
+                        class="btn btn-light shadow-none ms-0"
                         type="button"
                         (click)="togglePasswordVisibility()"
                         [attr.aria-pressed]="passwordVisible"
@@ -95,48 +95,9 @@
                         ></i>
                       </button>
                     </div>
-
-                    <!-- <div class="input-group auth-pass-inputgroup">
-                      <input
-                        class="form-control form-control"
-                        type="password"
-                        aria-describedby="password-addon"
-                        aria-label="Password"
-                        placeholder="**********"
-                        formControlName="password"
-                      />
-                      <button
-                        class="btn btn-light shadow-none ms-0"
-                        type="button"
-                        id="password-addon"
-                      >
-                        <i class="mdi mdi-eye-outline"></i>
-                      </button>
-                      <div
-                        *ngIf="
-                          loginForm.get('email')?.touched &&
-                          loginForm.get('password')?.invalid
-                        "
-                        class="text-danger mt-1"
-                      >
-                        <div
-                          *ngIf="loginForm.get('password')?.errors?.['required']"
-                        >
-                          Le mot de passe est requis.
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      *ngIf="message"
-                      [ngClass]="{
-                        'text-success': success,
-                        'text-danger': !success
-                      }"
-                    >
-                      {{ message }}
-                    </div> -->
                   </div>
 
+                  <!-- Boutton -->
                   <div class="mb-3">
                     <button
                       class="btn btn-primary w-100 waves-effect waves-light"
@@ -147,10 +108,28 @@
                       {{ loading ? "Connexion en cours..." : "Connexion" }}
                     </button>
                   </div>
+
+                  <!-- Captcha -->
+                  <div class="mb-3 text-center">
+                    <ngx-recaptcha2
+                      [siteKey]="siteKey"
+                      formControlName="recaptcha"
+                    >
+                    </ngx-recaptcha2>
+                    <div
+                      *ngIf="
+                        loginForm.get('recaptcha')?.touched &&
+                        loginForm.get('recaptcha')?.invalid
+                      "
+                      class="text-danger"
+                    >
+                      Veuillez compléter le captcha
+                    </div>
+                  </div>
                 </form>
 
-                <!-- <div class="text-center mt-5 pt-2">
-                  <div class="signin-other-title">
+                <div class="text-center mt-5 pt-2">
+                  <!-- <div class="signin-other-title">
                     <h5 class="text-muted mb-3 font-size-14 fw-medium">
                       - Vous n'avez pas de compte ? -
                     </h5>
@@ -163,8 +142,8 @@
                     >
                       Souscrire à BCI Online
                     </a>
-                  </div>
-                </div> -->
+                  </div> -->
+                </div>
               </div>
               <div class="text-center mt-4 mt-md-5">
                 <p>
