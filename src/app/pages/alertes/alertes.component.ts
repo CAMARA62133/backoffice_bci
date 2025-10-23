@@ -242,30 +242,15 @@ export class AlertesComponent implements OnInit {
     });
   }
 
-  openModalBloquerDebloquer(alerte: any) {
+  onToggle(alerte: any) {
+    this.openModal('bloquerDebloquerModal');
     this.selectedAlerteId = alerte.id;
     this.btEnabled = alerte.statusAlert === '0';
-    this.showModalOpenBloquerDebloquer = true;
-  }
-
-  closeModalBloquerDebloquer() {
-    const overlay = document.querySelector('.modal-overlay');
-    const content = document.querySelector('.modal-content');
-
-    overlay?.classList.add('closing');
-    content?.classList.add('closing');
-
-    // Attends la fin de l'animation avant de cacher le modal
-    setTimeout(() => {
-      this.showModalOpenBloquerDebloquer = false;
-    }, 300);
-
-    if (this.isloadingBloquerDebloquer) return; // 🔒 bloque la fermeture pendant le chargement
-    this.showModalOpenBloquerDebloquer = false;
+    console.log('Selected alerte : ', alerte);
   }
 
   bloquerEtDebloquer(): void {
-    if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
+    if (this.isloadingBloquerDebloquer) return;
     if (this.selectedAlerteId === null) {
       this.toastr.error('Aucune alerte sélectionnée.');
       return;
@@ -290,12 +275,14 @@ export class AlertesComponent implements OnInit {
         console.log('res api : ', res);
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
       },
-      
+
       error: (err) => {
         this.toastr.error(err?.message);
         console.log('err api : ', err);
         this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
       },
     });
   }

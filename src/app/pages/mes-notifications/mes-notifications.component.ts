@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/authService/auth.service';
 import { MesNotifsService } from '../../services/mesNotifs/mes-notifs.service';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-mes-notifications',
   imports: [FormsModule, NgFor, NgIf],
@@ -18,7 +20,6 @@ export class MesNotificationsComponent implements OnInit {
 
   selectedUserId: number | null = null;
   btEnabled: boolean = false;
-  showModalOpenBloquerDebloquer = false;
   errorMessage: string = '';
   isloadingBloquerDebloquer: boolean = false;
 
@@ -59,23 +60,18 @@ export class MesNotificationsComponent implements OnInit {
   openModalBloquerDebloquer(notification: any) {
     this.selectedUserId = notification.id;
     this.btEnabled = notification.btEnabled === '0';
-    this.showModalOpenBloquerDebloquer = true;
   }
 
   closeModalBloquerDebloquer() {
-    const overlay = document.querySelector('.modal-overlay');
-    const content = document.querySelector('.modal-content');
-
-    overlay?.classList.add('closing');
-    content?.classList.add('closing');
-
-    // Attends la fin de l'animation avant de cacher le modal
-    setTimeout(() => {
-      this.showModalOpenBloquerDebloquer = false;
-    }, 300);
+    const modalElement = document.getElementById('bloquerDebloquerModal');
+    if (modalElement) {
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      if (modal) {
+        modal.hide();
+      }
+    }
 
     if (this.isloadingBloquerDebloquer) return; // 🔒 bloque la fermeture pendant le chargement
-    this.showModalOpenBloquerDebloquer = false;
   }
 
   bloquerEtDebloquer(): void {
@@ -100,13 +96,14 @@ export class MesNotificationsComponent implements OnInit {
         } else {
           this.toastr.error(res?.message);
         }
-        this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
+        this.closeModalBloquerDebloquer();
       },
 
       error: (err) => {
         this.toastr.error(err?.message);
         this.isloadingBloquerDebloquer = false;
+        this.closeModalBloquerDebloquer();
       },
     });
   }

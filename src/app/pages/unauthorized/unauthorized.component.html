@@ -1,2 +1,73 @@
-<h2>⛔ Accès refusé</h2>
-<p>Vous n'avez pas la permission d'accéder à cette page.</p>
+<main class="unauth-root" role="main" aria-labelledby="unauthTitle">
+  <div class="card">
+    <div class="icon" aria-hidden="true">
+      <!-- Simple SVG lock + shield -->
+      <svg
+        width="80"
+        height="80"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect
+          x="3"
+          y="11"
+          width="18"
+          height="10"
+          rx="2"
+          stroke="currentColor"
+          stroke-width="1.6"
+        />
+        <path
+          d="M8 11V8a4 4 0 0 1 8 0v3"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M12 15v.01"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </div>
+
+    <h1 id="unauthTitle" class="title">Accès refusé</h1>
+    <p class="subtitle">
+      Vous n'avez pas la permission d'accéder à cette ressource.
+    </p>
+
+    <div class="details">
+      <p>
+        Si vous pensez que c'est une erreur, contactez l'administrateur ou
+        reconnectez-vous avec un autre compte.
+      </p>
+
+      <div class="actions">
+        <button
+          class="btn btn-primary"
+          (click)="goHome()"
+          aria-label="Aller à l'accueil"
+        >
+          Aller à l'accueil
+        </button>
+        <button
+          class="btn btn-outline"
+          (click)="goBack()"
+          aria-label="Retourner"
+        >
+          Retour
+        </button>
+      </div>
+
+      <p class="countdown" *ngIf="autoRedirectSeconds > 0">
+        Redirection automatique dans <strong>{{ remaining }}</strong> seconde{{
+          remaining > 1 ? "s" : ""
+        }}…
+      </p>
+    </div>
+  </div>
+</main>

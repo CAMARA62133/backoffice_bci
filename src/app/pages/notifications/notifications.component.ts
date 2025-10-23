@@ -225,26 +225,11 @@ export class NotificationsComponent implements OnInit {
     });
   }
 
-  openModalBloquerDebloquer(notification: any) {
+  onToggle(notification: any) {
+    this.openModal('bloquerDebloquerModal');
     this.selectedNotificationId = notification.id;
     this.btEnabled = notification.statusNotification === '0';
-    this.showModalOpenBloquerDebloquer = true;
-  }
-
-  closeModalBloquerDebloquer() {
-    const overlay = document.querySelector('.modal-overlay');
-    const content = document.querySelector('.modal-content');
-
-    overlay?.classList.add('closing');
-    content?.classList.add('closing');
-
-    // Attends la fin de l'animation avant de cacher le modal
-    setTimeout(() => {
-      this.showModalOpenBloquerDebloquer = false;
-    }, 300);
-
-    if (this.isloadingBloquerDebloquer) return; // 🔒 bloque la fermeture pendant le chargement
-    this.showModalOpenBloquerDebloquer = false;
+    console.log('Selected notification : ', notification);
   }
 
   bloquerEtDebloquer(): void {
@@ -273,12 +258,14 @@ export class NotificationsComponent implements OnInit {
         console.log('res api : ', res);
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
       },
 
       error: (err) => {
         this.toastr.error(err?.message);
         console.log('err api : ', err);
         this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
       },
     });
   }
@@ -294,7 +281,7 @@ export class NotificationsComponent implements OnInit {
           this.notifications,
           this.paginationService.itemsPerPage
         );
-        
+
         this.paginatedNotification = this.paginationService.getPaginatedData();
         console.log('Notification liste : ', this.notifications);
         this.isLoadingNotif = false;

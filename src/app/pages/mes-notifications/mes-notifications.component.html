@@ -58,6 +58,8 @@
                         <button
                           type="button"
                           class="btn btn-action btn-sm"
+                          data-bs-toggle="modal"
+                          data-bs-target="#bloquerDebloquerModal"
                           (click)="openModalBloquerDebloquer(notif)"
                         >
                           <i
@@ -111,39 +113,66 @@
 </div>
 
 <!-- Modal de blocage et deblocage -->
-<div *ngIf="showModalOpenBloquerDebloquer" class="modal-overlay">
-  <div class="modal-content">
-    <p class="modal-text">
-      Êtes-vous sûr de vouloir
-      <strong class="text-{{ btEnabled ? 'primary' : 'danger' }}">{{
-        btEnabled ? "activer" : "bloquer"
-      }}</strong>
-      cette notification ?
-    </p>
+<div
+  class="modal fade"
+  id="bloquerDebloquerModal"
+  tabindex="-1"
+  aria-labelledby="bloquerDebloquerLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bloquerDebloquerLabel">Confirmation</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fermer"
+        ></button>
+      </div>
 
-    <div class="modal-actions">
-      <button
-        type="button"
-        class="btn-cancel"
-        (click)="closeModalBloquerDebloquer()"
-        [disabled]="isloadingBloquerDebloquer"
-      >
-        Non
-      </button>
+      <div class="modal-body text-center">
+        <p class="modal-text">
+          Êtes-vous sûr de vouloir
+          <strong class="text-{{ btEnabled ? 'primary' : 'danger' }}">
+            {{ btEnabled ? "activer" : "bloquer" }}
+          </strong>
+          cette notification ?
+        </p>
+      </div>
 
-      <button
-        type="button"
-        class="btn-confirm"
-        (click)="bloquerEtDebloquer()"
-        [disabled]="isloadingBloquerDebloquer"
-      >
-        <ng-container *ngIf="!isloadingBloquerDebloquer; else loadingTemplate">
-          Oui
-        </ng-container>
-        <ng-template #loadingTemplate>
-          <span class="spinner"></span> En cours...
-        </ng-template>
-      </button>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          [disabled]="isloadingBloquerDebloquer"
+        >
+          Non
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="bloquerEtDebloquer()"
+          [disabled]="isloadingBloquerDebloquer"
+        >
+          <ng-container
+            *ngIf="!isloadingBloquerDebloquer; else loadingTemplate"
+          >
+            Oui
+          </ng-container>
+          <ng-template #loadingTemplate>
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            En cours...
+          </ng-template>
+        </button>
+      </div>
     </div>
   </div>
 </div>

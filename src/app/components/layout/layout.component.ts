@@ -12,33 +12,6 @@ import { AuthService } from '../../services/authService/auth.service';
 })
 export class LayoutComponent implements OnInit {
   // Information de l'utilisateur courrant
-  // currentUser = {
-  //   OTP: '',
-  //   adresseOrganisation: '',
-  //   btBlocked: '',
-  //   btEnabled: '',
-  //   businessEmailDomainOrganisation: '',
-  //   cityOrganisation: '',
-  //   contactOrganisation: '',
-  //   dtCreated: '',
-  //   dtLastUpdate: '',
-  //   dtOTPExpiration: '',
-  //   email: '',
-  //   emailOrganisation: '',
-  //   iOrganisationID: '',
-  //   iRoleID: '',
-  //   id: '',
-  //   idResponsable: '',
-  //   nameOrganisation: '',
-  //   paysOrganisation: '',
-  //   phoneNumberOrganisation: '',
-  //   tiFailedLogin: '',
-  //   vcFirstname: '',
-  //   vcLastname: '',
-  //   vcPhoneNumber: '',
-  //   vcRoleName: '',
-  // };
-
   currentUser: any;
 
   constructor(
