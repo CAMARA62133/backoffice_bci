@@ -1,5 +1,5 @@
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -46,13 +46,17 @@ export class OrganisationsComponent implements OnInit {
   totalPages = 0;
   pagedOrganisations: any[] = [];
 
+  selectedOrg: any = null;
+  selectedOrgId: number | null = null;
+
   constructor(
     private modalsService: ModalsService,
     private fb: FormBuilder,
     private rolesService: RolesService,
     private orgService: OrganisationsService,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cd: ChangeDetectorRef
   ) {}
 
   // Raccourcis pour le template
@@ -96,7 +100,7 @@ export class OrganisationsComponent implements OnInit {
   }
 
   // Ouvrir le formulaire de creation
-  openCreateOrgModal(modalId: string = this.createOrgModalId): void {
+  openModal(modalId: string = this.createOrgModalId): void {
     const isCreateOrgModalOpen = this.modalsService.isModalOpen(modalId);
     if (!isCreateOrgModalOpen) {
       this.modalsService.openModal(modalId);
@@ -164,6 +168,46 @@ export class OrganisationsComponent implements OnInit {
         });
       },
     });
+  }
+
+  onEdit(org: any) {
+    this.openModal('updateOrgModal');
+    this.selectedOrg = org;
+    console.log('selected org : ', this.selectedOrg);
+
+    //
+    this.orgForm.patchValue({
+      // Org infos
+      vcOrgName: this.selectedOrg.organisationName,
+      vcOrgContact: this.selectedOrg.vcContact,
+      vcOrgPhoneNumber: this.selectedOrg.vcPhoneNumber,
+      vcOrgEmail: this.selectedOrg.vcEmail,
+      vcOrgCity: this.selectedOrg.vcCity,
+      vcOrgCountry: this.selectedOrg.vcCountry,
+      vcOrgAddress: this.selectedOrg.vcAddress,
+      vcOrgLogoPath: '',
+      vcBusinessEmailDomain: this.selectedOrg.vcBusinessEmailDomain,
+
+      // Pour les infos utilisateurs
+      vcFirstname: this.selectedOrg.vcFirstnameUsers,
+      vcLastname: this.selectedOrg.vcLastnameUsers,
+      vcDescription: this.selectedOrg.vcDescription,
+      iRoleID: this.selectedOrg.iRoleID,
+    });
+
+    this.cd.detectChanges();
+  }
+
+  onUpdate() {
+    if (this.orgForm.invalid) {
+      this.orgForm.markAllAsTouched();
+      console.log('invalid forms');
+      return;
+    }
+
+    console.log(this.orgForm.value);
+
+    this.modalsService.closeAllModals();
   }
 
   // Fonction priver pour Recharger automatiquement la liste des organisations
