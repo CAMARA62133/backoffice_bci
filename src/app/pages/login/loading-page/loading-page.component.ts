@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../../../services/loading/loading.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class LoadingPageComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +46,11 @@ export class LoadingPageComponent implements OnInit {
           console.log(res);
           if (res?.status && res?.status === 200) {
             this.router.navigate(['/nouveau-mot-de-passe']);
+          } else {
+            this.router.navigate(['/reinitialiser-mot-de-passe']);
+            this.toastr.error(res?.message || 'Lien est expiré !', '', {
+              positionClass: 'toast-custom-center',
+            });
           }
         },
         error: (err) => {

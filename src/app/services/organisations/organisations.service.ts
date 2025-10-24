@@ -57,6 +57,19 @@ export class OrganisationsService {
       );
   }
 
+  //
+  renvoieLienVerification(businnessEmailDomain: string): Observable<any> {
+    const params = new HttpParams()
+      .set('vcBusinessEmailDomain', businnessEmailDomain)
+      .set('lienSite', environment.lienSite);
+
+    return this.http.post<any>(
+      `${this.baseUrl}/api/renvoisEmailValidationAnouveau`,
+      {},
+      { params }
+    );
+  }
+
   private getResetOrgPasswordToken(): string | null {
     return localStorage.getItem('validateEmailUrlToken');
   }

@@ -129,7 +129,11 @@
               </p>
             </div>
           </div>
-          <div class="card-footer bg-light">
+
+          <div
+            *ngIf="!isLoadingOrgs && pagedOrganisations.length > 0"
+            class="card-footer bg-light"
+          >
             <div class="row align-items-center">
               <div class="col-md-6">
                 <small class="text-muted">

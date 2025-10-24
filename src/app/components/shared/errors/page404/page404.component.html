@@ -1,0 +1,14 @@
+<div class="error-page d-flex align-items-center justify-content-center">
+  <div class="container text-center">
+    <p class="lead mb-5">Votre lien de vérification d'email a expiré</p>
+    <div class="d-flex justify-content-center gap-3">
+      <button
+        class="btn btn-primary"
+        (click)="onResentLink()"
+        [disabled]="isLoading"
+      >
+        Demander un nouveau lien
+      </button>
+    </div>
+  </div>
+</div>

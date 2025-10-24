@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../../../services/loading/loading.service';
 
 @Component({
@@ -16,7 +17,8 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -54,9 +56,17 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
             console.log(res);
             if (res?.status && res?.status === 200) {
               this.router.navigate(['/valider-otp-email']);
-
-              this.isLoading = false;
+            } else {
+              this.router.navigate(['/lien-expire']);
+              this.toastr.error(
+                res?.message || 'Lien expiré pour raisons de sécurité',
+                '',
+                {
+                  positionClass: 'toast-custom-center',
+                }
+              );
             }
+            this.isLoading = false;
           },
 
           error: (err) => {

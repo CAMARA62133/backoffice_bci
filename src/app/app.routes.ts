@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
+import { Page404NotFoundComponent } from './components/shared/errors/page404-not-found/page404-not-found.component';
+import { Page404Component } from './components/shared/errors/page404/page404.component';
 import { AlertesComponent } from './pages/alertes/alertes.component';
 import { ConfigUserDefautNotifsComponent } from './pages/config-user-defaut-notifs/config-user-defaut-notifs.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -69,6 +71,18 @@ export const routes: Routes = [
   },
 
   {
+    path: 'not-found',
+    title: 'BCI - Online | Page non trouvée',
+    component: Page404NotFoundComponent,
+  },
+
+  {
+    path: 'lien-expire',
+    title: 'BCI - Online | Lien expiré',
+    component: Page404Component,
+  },
+
+  {
     path: '',
     component: LayoutComponent,
     children: [
@@ -130,5 +144,5 @@ export const routes: Routes = [
     ],
   },
 
-  { path: '**', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'not-found', pathMatch: 'full' },
 ];
