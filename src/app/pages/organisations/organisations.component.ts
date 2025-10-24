@@ -38,7 +38,7 @@ export class OrganisationsComponent implements OnInit {
   currentUser: any;
 
   createOrgModalId: string = 'createOrgModal';
-  siteUrl: string = environment.siteUrl;
+  lienSite: string = environment.lienSite;
 
   // Gestion de la pagination
   currentPage = 1;
@@ -72,7 +72,6 @@ export class OrganisationsComponent implements OnInit {
     const userData = this.authService.getUserInfo();
     if (userData) {
       this.currentUser = userData;
-      console.log('org cur user ; ', this.currentUser);
     }
 
     // Initialiser le formulaire
@@ -85,13 +84,13 @@ export class OrganisationsComponent implements OnInit {
       vcOrgCountry: ['', Validators.required],
       vcOrgAddress: ['', Validators.required],
       vcOrgLogoPath: ['', Validators.required],
-      vcBusinessEmailDomain: ['', Validators.required],
+      vcBusinessEmailDomain: ['', [Validators.required, Validators.email]],
 
       // Pour les infos utilisateurs
       vcFirstname: ['', Validators.required],
       vcLastname: ['', Validators.required],
-      vcDescription: [''],
-      iRoleID: [''],
+      vcDescription: ['', Validators.required],
+      iRoleID: ['', Validators.required],
     });
 
     // Chargement des donnees
@@ -106,6 +105,13 @@ export class OrganisationsComponent implements OnInit {
       this.modalsService.openModal(modalId);
     }
     this.modalsService.closeModal(modalId);
+  }
+
+  closeModal(modalId: string) {
+    const isCreateOrgModalOpen = this.modalsService.isModalOpen(modalId);
+    if (isCreateOrgModalOpen) {
+      this.modalsService.closeModal(modalId);
+    }
   }
 
   // a la soumission du formulaire
@@ -139,33 +145,37 @@ export class OrganisationsComponent implements OnInit {
       iRoleID: formData.iRoleID,
       vcPhoneNumber: formData.vcOrgPhoneNumber,
       iParentID: this.currentUser.id,
-      lienSite: environment.siteUrl,
+      lienSite: this.lienSite,
     };
 
     // appel a l'API de creation d'une organisation
     this.orgService.createOrganisation(dataToSend).subscribe({
       next: (res) => {
         console.log('Parametres envoyees : ', dataToSend);
-        // Recharger automatiquement la liste
-        this.loadOrganisations();
 
-        console.log('✅ Organisation créée :', res);
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+
+          console.log('✅ Organisation créée :', res);
+          this.loadOrganisations();
+
+          this.orgForm.reset();
+          this.modalsService.closeAllModals();
+        } else {
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
         this.isLoading = false;
-        this.orgForm.reset();
-        this.modalsService.closeAllModals();
-
-        this.toastr.success(res.message, '', {
-          positionClass: 'toast-custom-center',
-        });
       },
 
       error: (err) => {
         console.error('❌ Erreur lors de la création :', err);
         this.isLoading = false;
-
-        this.toastr.error(err.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.toastr.error(err.message);
+        this.modalsService.closeAllModals();
       },
     });
   }
