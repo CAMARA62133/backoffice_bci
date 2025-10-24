@@ -80,6 +80,12 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit {
           this.toastr.success(response.message, '', {
             positionClass: 'toast-custom-center',
           });
+
+          if (this.otpInputs && this.otpInputs.first) {
+            setTimeout(() => {
+              this.otpInputs.first.nativeElement.focus();
+            }, 100);
+          }
         }
         console.log(response);
       },
@@ -113,7 +119,7 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit {
           // Sauvegarde dans AuthService et localStorage
           this.authService.setUserInfo(response.data, response.config);
 
-          this.toastr.success('Connexion reussi avec success...', '', {
+          this.toastr.success(response?.message, '', {
             positionClass: 'toast-custom-center',
           });
           this.router.navigate(['/dashboard']);

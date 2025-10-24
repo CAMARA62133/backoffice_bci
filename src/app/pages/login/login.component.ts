@@ -102,7 +102,9 @@ export class LoginComponent implements OnInit {
 
           error: (err) => {
             console.error('Erreur lors de la connexion :', err);
-            this.toastr.error('Erreur lors de la connexion');
+            this.toastr.error('Erreur lors de la connexion', '', {
+            positionClass: 'toast-custom-center',
+          });
           },
         });
     } else {

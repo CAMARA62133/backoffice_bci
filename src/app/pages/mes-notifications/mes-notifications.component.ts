@@ -77,7 +77,9 @@ export class MesNotificationsComponent implements OnInit {
   bloquerEtDebloquer(): void {
     if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
     if (this.selectedUserId === null) {
-      this.toastr.error('Aucune notification sélectionnée.');
+      this.toastr.error('Aucune notification sélectionnée.', '', {
+        positionClass: 'toast-custom-center',
+      });
       return;
     }
 
@@ -91,17 +93,23 @@ export class MesNotificationsComponent implements OnInit {
     this.mesNotifsService.setToggleNotification(params).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message);
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
           this.loadNotifications();
         } else {
-          this.toastr.error(res?.message);
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         }
         this.isloadingBloquerDebloquer = false;
         this.closeModalBloquerDebloquer();
       },
 
       error: (err) => {
-        this.toastr.error(err?.message);
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
         this.isloadingBloquerDebloquer = false;
         this.closeModalBloquerDebloquer();
       },

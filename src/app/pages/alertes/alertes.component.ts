@@ -229,8 +229,11 @@ export class AlertesComponent implements OnInit {
       },
 
       error: (err) => {
+        this.toastr.error(err.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+
         console.log('Erreur : ', err);
-        this.toastr.error(err?.message);
       },
 
       complete: () => {
@@ -266,7 +269,9 @@ export class AlertesComponent implements OnInit {
     this.alertService.toggleAlerte(params).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message);
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
           this.loadAlertes();
           this.updatePaginatedData();
         } else {
@@ -279,7 +284,9 @@ export class AlertesComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.message);
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
         console.log('err api : ', err);
         this.isloadingBloquerDebloquer = false;
         this.modalsService.closeModal('bloquerDebloquerModal');

@@ -172,9 +172,13 @@ export class OrganisationsComponent implements OnInit {
       },
 
       error: (err) => {
+        this.toastr.error(err.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+
         console.error('❌ Erreur lors de la création :', err);
         this.isLoading = false;
-        this.toastr.error(err.message);
+
         this.modalsService.closeAllModals();
       },
     });

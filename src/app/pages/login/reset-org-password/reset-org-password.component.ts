@@ -88,7 +88,9 @@ export class ResetOrgPasswordComponent implements OnInit {
       next: (res) => {
         this.loading = false;
         if (res?.status === 200) {
-          this.toastr.success('Mot de passe réinitialisé avec succès.');
+          this.toastr.success('Mot de passe réinitialisé avec succès.', '', {
+            positionClass: 'toast-custom-center',
+          });
           this.router.navigate(['/login']);
         } else {
           this.toastr.error(
@@ -98,7 +100,9 @@ export class ResetOrgPasswordComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.toastr.error(err.message || 'Erreur serveur.');
+        this.toastr.error(err.message || 'Erreur serveur.', '', {
+          positionClass: 'toast-custom-center',
+        });
       },
     });
   }

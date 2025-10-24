@@ -135,7 +135,9 @@ export class NotificationsComponent implements OnInit {
         console.log('✅ Notification créée :', res);
         this.notifForm.reset();
         this.modalsService.closeAllModals();
-        this.toastr.success('Notification créée avec succès !');
+        this.toastr.success('Notification créée avec succès !', '', {
+          positionClass: 'toast-custom-center',
+        });
 
         this.paginationService.reset();
         this.updatePaginatedData();
@@ -143,7 +145,9 @@ export class NotificationsComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error("Erreur lors de la creation de l'alerte");
+        this.toastr.error("Erreur lors de la creation de l'alerte", '', {
+          positionClass: 'toast-custom-center',
+        });
         console.log('Erreur create notification : ', err);
       },
 
@@ -205,7 +209,9 @@ export class NotificationsComponent implements OnInit {
     this.notifService.uppdateNotification(dataToSend).subscribe({
       next: (res) => {
         console.log('Modification effectuer avec success : ', res?.message);
-        this.toastr.success('Modification effectuer avec success ');
+        this.toastr.success('Modification effectuer avec success ', '', {
+          positionClass: 'toast-custom-center',
+        });
 
         this.paginationService.reset();
         this.updatePaginatedData();
@@ -213,7 +219,9 @@ export class NotificationsComponent implements OnInit {
 
       error: (err) => {
         console.log('Erreur de modification : ', err);
-        this.toastr.error(err?.message);
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
       },
 
       complete: () => {
@@ -249,11 +257,15 @@ export class NotificationsComponent implements OnInit {
     this.notifService.toggleNotification(params).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message);
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
           this.loadNotifications();
           this.updatePaginatedData();
         } else {
-          this.toastr.error(res?.message);
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         }
         console.log('res api : ', res);
         this.showModalOpenBloquerDebloquer = false;
@@ -262,7 +274,9 @@ export class NotificationsComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.message);
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
         console.log('err api : ', err);
         this.isloadingBloquerDebloquer = false;
         this.modalsService.closeModal('bloquerDebloquerModal');

@@ -98,7 +98,9 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
 
     this.configNotifService.createNotificationDefaut(dataToSend).subscribe({
       next: (res) => {
-        this.toastr.success(res?.message);
+        this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         console.log('Notification configuer avec success', res);
         this.configDefNotifForm.reset();
         this.modalsService.closeAllModals();
@@ -106,7 +108,9 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.message);
+        this.toastr.error(err?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         console.log('Erreur configuration notif : ', err);
       },
 
@@ -151,9 +155,11 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
     this.configNotifService.updateNotificationDefaut(dataToSend).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          console.log('Modification effectuer avec success : ', res?.message);
-          this.toastr.success('Modification effectuer avec success ');
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
           this.loadDefaultNotification();
+          console.log('Modification effectuer avec success : ', res?.message);
         } else {
           console.log('Erreur api : ', res?.message);
           this.toastr.error(res?.message);
@@ -162,7 +168,9 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
 
       error: (err) => {
         console.log('Erreur de modification : ', err);
-        this.toastr.error(err?.message);
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
       },
 
       complete: () => {
