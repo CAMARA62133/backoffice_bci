@@ -276,7 +276,7 @@
 
               <div class="col-md-6">
                 <label class="form-label">
-                  Téléphone<span class="text-danger">*</span>
+                  Téléphone<span class="text-danger">* (9 carractère obligatoire)</span>
                 </label>
                 <input
                   class="form-control form-control"
@@ -284,6 +284,8 @@
                   type="text"
                   formControlName="vcOrgPhoneNumber"
                   [ngClass]="getFormControlClass('vcOrgPhoneNumber')"
+                  [maxlength]="9"
+                  appOnlyDigits
                 />
                 <span class="text-danger" *ngIf="isInvalid('vcOrgPhoneNumber')">
                   {{ getErrorMessage("vcOrgPhoneNumber") }}
@@ -465,11 +467,7 @@
         </div>
 
         <div class="modal-footer">
-          <button
-            class="btn btn-danger"
-            data-bs-dismiss="modal"
-            type="button"
-          >
+          <button class="btn btn-danger" data-bs-dismiss="modal" type="button">
             Annuler
           </button>
 

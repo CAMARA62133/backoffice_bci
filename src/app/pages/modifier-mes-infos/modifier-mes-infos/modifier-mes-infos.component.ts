@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/authService/auth.service';
 
@@ -56,8 +56,60 @@ export class ModifierMesInfosComponent {
       this.passwordVisibleConfirm = !this.passwordVisibleConfirm;
   }
 
+  // Empêcher la saisie de lettres, caractères spéciaux et espaces
+  onlyDigits(event: KeyboardEvent) {
+    const allowedKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'Delete',
+      'Tab',
+    ];
+
+    if (allowedKeys.includes(event.key)) return;
+
+    // Bloquer tout sauf chiffres
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
+
+    // Bloquer si déjà 9 chiffres saisis
+    const input = event.target as HTMLInputElement;
+    if (input.value.length >= 9) {
+      event.preventDefault();
+    }
+  }
+
+  // Empêcher le collage de texte invalide
+  onPaste(event: ClipboardEvent) {
+    const pastedData = event.clipboardData?.getData('text') || '';
+
+    // Autoriser uniquement les chiffres et max 9 caractères
+    if (!/^\d{1,9}$/.test(pastedData)) {
+      event.preventDefault();
+    }
+
+    // Vérifier que la longueur totale après collage ne dépasse pas 9
+    const input = event.target as HTMLInputElement;
+    if (input.value.length + pastedData.length > 9) {
+      event.preventDefault();
+    }
+  }
+
   // ✅ Modifier infos profil
   modifierInfos() {
+    const phoneNumber = this.currentUserInfo.vcPhoneNumber;
+
+    // Vérifier que le numéro de téléphone a au moins 9 chiffres
+    if (!phoneNumber || phoneNumber.replace(/\D/g, '').length < 9) {
+      this.toastr.error(
+        'Le numéro de téléphone doit contenir au moins 9 chiffres.',
+        '',
+        { positionClass: 'toast-custom-center' }
+      );
+      return;
+    }
+
     this.isLoading = true;
     this.authService
       .modifierProfile(
@@ -125,9 +177,13 @@ export class ModifierMesInfosComponent {
             this.password = { old: '', new: '', confirm: '' };
             form.resetForm();
           } else {
-            this.toastr.error(response?.message || 'Échec de la modification.', '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.toastr.error(
+              response?.message || 'Échec de la modification.',
+              '',
+              {
+                positionClass: 'toast-custom-center',
+              }
+            );
           }
         },
         error: (error: any) => {

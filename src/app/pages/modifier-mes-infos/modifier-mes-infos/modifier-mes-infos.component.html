@@ -102,6 +102,9 @@
                           name="vcPhoneNumber"
                           placeholder="Entrez votre téléphone"
                           class="form-control form-control"
+                          maxlength="9"
+                          (keydown)="onlyDigits($event)"
+                          (paste)="onPaste($event)"
                         />
                       </div>
 

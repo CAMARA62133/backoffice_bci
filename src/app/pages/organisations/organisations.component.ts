@@ -19,10 +19,11 @@ import {
   isInvalid,
   isValid,
 } from '../../utils/form-helpers';
+import { OnlyDigitsDirective } from "../../directives/only-digits.directive";
 
 @Component({
   selector: 'app-organisations',
-  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, NgClass, DatePipe],
+  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, NgClass, DatePipe, OnlyDigitsDirective],
   templateUrl: './organisations.component.html',
   styleUrl: './organisations.component.css',
 })
@@ -86,7 +87,15 @@ export class OrganisationsComponent implements OnInit {
     this.orgForm = this.fb.group({
       vcOrgName: ['', Validators.required],
       vcOrgContact: ['', Validators.required],
-      vcOrgPhoneNumber: ['', Validators.required],
+      vcOrgPhoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]+$/),
+          Validators.minLength(9),
+          Validators.maxLength(9),
+        ],
+      ],
       vcOrgEmail: ['', [Validators.required, Validators.email]],
       vcOrgCity: ['', Validators.required],
       vcOrgCountry: ['', Validators.required],
@@ -100,6 +109,48 @@ export class OrganisationsComponent implements OnInit {
       vcDescription: ['', Validators.required],
       iRoleID: ['', Validators.required],
     });
+  }
+
+  // Empêcher la saisie de lettres, caractères spéciaux et espaces
+  onlyDigits(event: KeyboardEvent) {
+    const allowedKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'Delete',
+      'Tab',
+    ];
+
+    if (allowedKeys.includes(event.key)) {
+      return; // autoriser touches de navigation/suppression
+    }
+
+    // Bloquer tout sauf chiffres
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
+
+    // Optionnel : bloquer si déjà 9 chiffres saisis
+    const input = event.target as HTMLInputElement;
+    if (input.value.length >= 9) {
+      event.preventDefault();
+    }
+  }
+
+  // Empêcher le collage de texte invalide
+  onPaste(event: ClipboardEvent) {
+    const pastedData = event.clipboardData?.getData('text') || '';
+
+    // Autoriser uniquement les chiffres et max 9 caractères
+    if (!/^\d{1,9}$/.test(pastedData)) {
+      event.preventDefault();
+    }
+
+    // Vérifier que la longueur totale après collage ne dépasse pas 9
+    const input = event.target as HTMLInputElement;
+    if (input.value.length + pastedData.length > 9) {
+      event.preventDefault();
+    }
   }
 
   openCreateModal() {
