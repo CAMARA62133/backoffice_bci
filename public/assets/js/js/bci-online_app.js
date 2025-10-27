@@ -95,51 +95,25 @@ File: Main Js File
     });
   }
 
-  // function initLeftMenuCollapse() {
-  //     var currentSidebarSize = document.body.getAttribute('data-sidebar-size');
-  //     $(window).on('load', function () {
-  //         $('.switch').on('switch-change', function () {
-  //             toggleWeather();
-  //         });
-
-  //         if (window.innerWidth >= 1024 && window.innerWidth <= 1366) {
-  //             document.body.setAttribute('data-sidebar-size', 'sm');
-  //             updateRadio('sidebar-size-small');
-  //         }
-  //     });
-
-  //     $('#vertical-menu-btn').on('click', function (event) {
-  //         event.preventDefault();
-  //         $('body').toggleClass('sidebar-enable');
-  //         if ($(window).width() >= 992) {
-  //             if (currentSidebarSize == null || currentSidebarSize === "lg") {
-  //                 document.body.setAttribute('data-sidebar-size', 'sm');
-  //             } else {
-  //                 document.body.setAttribute('data-sidebar-size', 'lg');
-  //             }
-  //         }
-  //     });
-  // }
-
   function initLeftMenuCollapse() {
-    //Supprimer cet ligne de lecture ICI ---> var currentSidebarSize = document.body.getAttribute('data-sidebar-size');
     $(window).on("load", function () {
       $(".switch").on("switch-change", function () {
         toggleWeather();
       });
+
       if (window.innerWidth >= 1024 && window.innerWidth <= 1366) {
         document.body.setAttribute("data-sidebar-size", "sm");
         updateRadio("sidebar-size-small");
       }
     });
 
-    // var currentSidebarSize = document.body.getAttribute("data-sidebar-size");
     $("#vertical-menu-btn").on("click", function (event) {
       event.preventDefault();
       $("body").toggleClass("sidebar-enable");
       if ($(window).width() >= 992) {
         var currentSidebarSize =
-          document.body.getAttribute("data-sidebar-size"); //deplacez la lecture ICI
+          document.body.getAttribute("data-sidebar-size");
+
         if (currentSidebarSize == null || currentSidebarSize === "lg") {
           document.body.setAttribute("data-sidebar-size", "sm");
         } else {
@@ -148,6 +122,35 @@ File: Main Js File
       }
     });
   }
+
+  // function initLeftMenuCollapse() {
+  //   //Supprimer cet ligne de lecture ICI ---> var currentSidebarSize = document.body.getAttribute('data-sidebar-size');
+  //   $(window).on("load", function () {
+  //     $(".switch").on("switch-change", function () {
+  //       toggleWeather();
+  //     });
+
+  //     if (window.innerWidth >= 1024 && window.innerWidth <= 1366) {
+  //       document.body.setAttribute("data-sidebar-size", "sm");
+  //       updateRadio("sidebar-size-small");
+  //     }
+  //   });
+
+  //   // var currentSidebarSize = document.body.getAttribute("data-sidebar-size");
+  //   $("#vertical-menu-btn").on("click", function (event) {
+  //     event.preventDefault();
+  //     $("body").toggleClass("sidebar-enable");
+  //     if ($(window).width() >= 992) {
+  //       var currentSidebarSize =
+  //         document.body.getAttribute("data-sidebar-size"); //deplacez la lecture ICI
+  //       if (currentSidebarSize == null || currentSidebarSize === "lg") {
+  //         document.body.setAttribute("data-sidebar-size", "sm");
+  //       } else {
+  //         document.body.setAttribute("data-sidebar-size", "lg");
+  //       }
+  //     }
+  //   });
+  // }
 
   function initActiveMenu() {
     $("#sidebar-menu a").each(function () {
