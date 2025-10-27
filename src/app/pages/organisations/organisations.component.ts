@@ -74,7 +74,15 @@ export class OrganisationsComponent implements OnInit {
       this.currentUser = userData;
     }
 
-    // Initialiser le formulaire
+    this.initForm();
+
+    // Chargement des donnees
+    this.loadRoles();
+    this.loadOrganisations();
+  }
+
+  // Initialiser le formulaire
+  initForm() {
     this.orgForm = this.fb.group({
       vcOrgName: ['', Validators.required],
       vcOrgContact: ['', Validators.required],
@@ -92,26 +100,15 @@ export class OrganisationsComponent implements OnInit {
       vcDescription: ['', Validators.required],
       iRoleID: ['', Validators.required],
     });
-
-    // Chargement des donnees
-    this.loadRoles();
-    this.loadOrganisations();
   }
 
-  // Ouvrir le formulaire de creation
-  openModal(modalId: string = this.createOrgModalId): void {
-    const isCreateOrgModalOpen = this.modalsService.isModalOpen(modalId);
-    if (!isCreateOrgModalOpen) {
-      this.modalsService.openModal(modalId);
-    }
-    this.modalsService.closeModal(modalId);
+  openCreateModal() {
+    this.orgForm.reset(); // Vider le formulaire
+    this.modalsService.openModal('createOrgModal');
   }
 
   closeModal(modalId: string) {
-    const isCreateOrgModalOpen = this.modalsService.isModalOpen(modalId);
-    if (isCreateOrgModalOpen) {
-      this.modalsService.closeModal(modalId);
-    }
+    this.modalsService.closeModal(modalId);
   }
 
   // a la soumission du formulaire
@@ -185,7 +182,7 @@ export class OrganisationsComponent implements OnInit {
   }
 
   onEdit(org: any) {
-    this.openModal('updateOrgModal');
+    this.modalsService.openModal('updateOrgModal');
     this.selectedOrg = org;
     console.log('selected org : ', this.selectedOrg);
 

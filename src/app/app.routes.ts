@@ -21,7 +21,8 @@ import { UtilisteurComponent } from './pages/utilisateurs/utilisteur/utilisteur.
 import { AuthGuard } from './services/guard/auth-guard.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // { path: '', redirectTo: 'login', pathMatch: 'full' },
+
   {
     path: 'login',
     title: 'BCI - Online | Connexion',
@@ -86,6 +87,11 @@ export const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
       {
         path: 'dashboard',
         title: 'BCI - Online | Tableau de bord',

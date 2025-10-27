@@ -9,10 +9,7 @@
             </h1>
           </div>
           <div class="d-flex gap-2">
-            <button
-              class="btn btn-primary"
-              (click)="openModal('createOrgModal')"
-            >
+            <button class="btn btn-primary" (click)="openCreateModal()">
               <i class="fas fa-plus me-1"></i>
               Créer une organisation
             </button>
@@ -469,7 +466,7 @@
 
         <div class="modal-footer">
           <button
-            class="btn btn-secondary"
+            class="btn btn-danger"
             data-bs-dismiss="modal"
             type="button"
           >

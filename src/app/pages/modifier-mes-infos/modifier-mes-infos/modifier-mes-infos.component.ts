@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/authService/auth.service';
 
@@ -11,13 +11,13 @@ import { AuthService } from '../../../services/authService/auth.service';
   styleUrl: './modifier-mes-infos.component.css',
 })
 export class ModifierMesInfosComponent {
-  // Gestion de la tabulation
+  // 🔹 Gestion de la tabulation
   activeTab: string = 'profile1';
   setActiveTab(tabId: string): void {
     this.activeTab = tabId;
   }
 
-  // La variable contient les informations de l'utlisateur courrant
+  // 🔹 Informations de l'utilisateur courant
   currentUserInfo = {
     vcFirstname: '',
     vcLastname: '',
@@ -26,27 +26,29 @@ export class ModifierMesInfosComponent {
     id: 0,
   };
 
-  // Variables pour la gestion des messages et du chargement
+  // 🔹 États
   isLoading: boolean = false;
+  showSuccessModal: boolean = false;
+  showErrorModal: boolean = false;
   modalMessage: string = '';
 
-  message: any = '';
-  success: boolean = false;
+  // 🔹 Changement mot de passe
+  passwordVisibleOld = false;
+  passwordVisibleNew = false;
+  passwordVisibleConfirm = false;
+  password = { old: '', new: '', confirm: '' };
 
   constructor(
     private authService: AuthService,
     private toastr: ToastrService
   ) {}
 
-  // formulaire de changement de password
-  changePasswordForm!: FormGroup;
+  ngOnInit(): void {
+    const data = this.authService.getUserInfo();
+    if (data) this.currentUserInfo = { ...data };
+  }
 
-  // Ajouter dans ton composant
-  passwordVisibleOld = false;
-  passwordVisibleNew = false;
-  passwordVisibleConfirm = false;
-  password = { old: '', new: '', confirm: '' };
-
+  // ✅ Changer visibilité mot de passe
   togglePasswordVisibility(field: 'old' | 'new' | 'confirm') {
     if (field === 'old') this.passwordVisibleOld = !this.passwordVisibleOld;
     if (field === 'new') this.passwordVisibleNew = !this.passwordVisibleNew;
@@ -54,16 +56,9 @@ export class ModifierMesInfosComponent {
       this.passwordVisibleConfirm = !this.passwordVisibleConfirm;
   }
 
-  // A l'initialisation du composant
-  ngOnInit(): void {
-    const data = this.authService.getUserInfo();
-    if (data) this.currentUserInfo = { ...data };
-  }
-
-  // Modification des informations de profile
+  // ✅ Modifier infos profil
   modifierInfos() {
     this.isLoading = true;
-
     this.authService
       .modifierProfile(
         this.currentUserInfo.vcLastname,
@@ -75,96 +70,82 @@ export class ModifierMesInfosComponent {
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
-          this.authService.getUserInfo();
-
           if (response.status === 200) {
-            this.success = true;
-            this.modalMessage =
-              response.message || 'Profil mis à jour avec succès.';
-            this.toastr.success(this.modalMessage, '', {
+            this.toastr.success('Profil mis à jour avec succès', '', {
               positionClass: 'toast-custom-center',
             });
           } else {
-            this.modalMessage =
-              response.message || 'Échec de la mise à jour du profil.';
-            this.toastr.error(this.modalMessage, '', {
+            this.toastr.error('Échec de la mise à jour du profil.', '', {
               positionClass: 'toast-custom-center',
             });
           }
         },
-        error: (error: any) => {
-          console.error(error);
+        error: () => {
           this.isLoading = false;
-          this.modalMessage = 'Échec de la mise à jour du profil.';
-          this.toastr.error(this.modalMessage, '', {
+          this.toastr.error('Erreur lors de la mise à jour du profil.', '', {
             positionClass: 'toast-custom-center',
           });
         },
       });
   }
 
-  changerMotDePasse(): void {
-    // Vérification de la correspondance des mots de passe
+  // ✅ Changer mot de passe
+  changerMotDePasse(form: NgForm): void {
+    // Vérification du formulaire avant tout
+    if (form.invalid) {
+      Object.values(form.controls).forEach((control) =>
+        control.markAsTouched()
+      );
+      return; // Ne pas appeler l'API
+    }
+
+    // Vérifier correspondance des mots de passe
     if (this.password.new !== this.password.confirm) {
-      this.modalMessage = 'Les mots de passe ne correspondent pas.';
+      this.toastr.error('Les mots de passe ne correspondent pas.', '', {
+        positionClass: 'toast-custom-center',
+      });
       return;
     }
 
-    // Logs utiles pour le débogage
-    console.log('Ancien mot de passe :', this.password.old);
-    console.log('Nouveau mot de passe :', this.password.new);
-    console.log('Email utilisateur :', this.currentUserInfo.email);
-
     this.isLoading = true;
 
-    // Appel du service
     this.authService
       .updatePassword(
-        this.password.old, // ✅ ancien mot de passe
-        this.password.new, // ✅ nouveau mot de passe
-        this.currentUserInfo.email // ✅ email de l'utilisateur
+        this.password.old,
+        this.password.new,
+        this.currentUserInfo.email
       )
       .subscribe({
         next: (response: any) => {
-          console.log('Réponse API :', response);
           this.isLoading = false;
-
           if (response?.status === 200 || response?.success) {
-            this.modalMessage =
-              response?.message || 'Mot de passe changé avec succès.';
-            this.toastr.success(this.modalMessage, '', {
+            this.toastr.success(response?.message, '', {
               positionClass: 'toast-custom-center',
             });
-
-            // Réinitialiser les champs du formulaire
             this.password = { old: '', new: '', confirm: '' };
+            form.resetForm();
           } else {
-            this.modalMessage =
-              response?.message || 'Échec du changement de mot de passe.';
-            this.toastr.success(this.modalMessage, '', {
+            this.toastr.error(response?.message || 'Échec de la modification.', '', {
               positionClass: 'toast-custom-center',
             });
           }
         },
         error: (error: any) => {
-          console.error('Erreur API :', error);
           this.isLoading = false;
-          this.modalMessage =
-            error?.error?.message ||
-            'Erreur lors du changement de mot de passe.';
-          this.toastr.success(this.modalMessage, '', {
+          this.toastr.error(error.error?.message || 'Erreur API.', '', {
             positionClass: 'toast-custom-center',
           });
         },
       });
   }
 
-  // Fermer les modales
   closeModal() {
+    this.showSuccessModal = false;
+    this.showErrorModal = false;
     this.modalMessage = '';
   }
 
   btnClicked() {
-    console.log('Boutton clicker');
+    console.log('Bouton cliqué');
   }
 }
