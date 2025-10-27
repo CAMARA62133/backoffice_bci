@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnInit,
   QueryList,
   ViewChildren,
 } from '@angular/core';
@@ -19,7 +20,7 @@ import { OtpLoginServiceService } from '../../../services/otpLogin/otp-login.ser
   templateUrl: './valider-otp-after-login.component.html',
   styleUrls: ['./valider-otp-after-login.component.css'],
 })
-export class ValiderOtpAfterLoginComponent implements AfterViewInit {
+export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
   @ViewChildren('otp0, otp1, otp2, otp3') otpInputs!: QueryList<ElementRef>;
   otpValues: string[] = ['', '', '', ''];
   isLoading = false;
@@ -30,12 +31,18 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit {
   showModalError: boolean = false;
   showModalOTP_expire: boolean = false;
 
+  loginEmail: string | null = '';
+
   constructor(
     private otpService: OtpLoginServiceService,
     private router: Router,
     private authService: AuthService,
     private toastr: ToastrService
   ) {}
+
+  ngOnInit() {
+    this.loginEmail = localStorage.getItem('loginEmail');
+  }
 
   moveToNext(event: any, index: number) {
     const input = event.target;
@@ -110,7 +117,10 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit {
     const otp = this.otpValues.join('');
     this.isLoading = true;
     this.errorMessage = '';
-    this.otpService.verifierOtp(otp).subscribe({
+
+    console.log('params envoyer otp : ', otp);
+
+    this.otpService.verifierOtp(otp, this.loginEmail).subscribe({
       next: (response) => {
         console.log('all respnse : ', response);
 
@@ -118,6 +128,8 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit {
         if (response.status === 200 && response.data) {
           // Sauvegarde dans AuthService et localStorage
           this.authService.setUserInfo(response.data, response.config);
+          this.authService.saveToken(response.token);
+          console.log('res : ', response);
 
           this.toastr.success(response?.message, '', {
             positionClass: 'toast-custom-center',

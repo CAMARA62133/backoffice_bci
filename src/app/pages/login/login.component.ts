@@ -87,7 +87,9 @@ export class LoginComponent implements OnInit {
             if (res?.status && res.status === 200) {
               this.loading = false;
               this.success = true;
-              this.authService.saveToken(res.token);
+              // this.authService.saveToken(res.token);
+              localStorage.setItem('loginEmail', email);
+              
               console.log('Login réussi, redirection vers la validation OTP');
               this.router.navigate(['/valider-otp-login']);
             } else {
@@ -103,8 +105,8 @@ export class LoginComponent implements OnInit {
           error: (err) => {
             console.error('Erreur lors de la connexion :', err);
             this.toastr.error('Erreur lors de la connexion', '', {
-            positionClass: 'toast-custom-center',
-          });
+              positionClass: 'toast-custom-center',
+            });
           },
         });
     } else {

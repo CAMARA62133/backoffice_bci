@@ -91,6 +91,7 @@ export const routes: Routes = [
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
+        canActivate: [AuthGuard],
       },
       {
         path: 'dashboard',
@@ -135,14 +136,14 @@ export const routes: Routes = [
 
       {
         path: 'configuration-notif-user-defaut',
-        title: 'BCI - Online | Configuration Alertes',
+        title: 'BCI - Online | Configuration Notification par défaut',
         component: ConfigUserDefautNotifsComponent,
         canActivate: [AuthGuard],
       },
 
       {
         path: 'mes-notifications',
-        title: 'BCI - Online | Configuration Alertes',
+        title: 'BCI - Online | Mes notifications',
         component: MesNotificationsComponent,
         canActivate: [AuthGuard],
         // data: { exclude: [10] },
