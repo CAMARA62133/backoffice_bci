@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
               this.success = true;
               // this.authService.saveToken(res.token);
               localStorage.setItem('loginEmail', email);
-              
+
               console.log('Login réussi, redirection vers la validation OTP');
               this.router.navigate(['/valider-otp-login']);
             } else {
@@ -118,9 +118,6 @@ export class LoginComponent implements OnInit {
         }
       );
       console.log('Formulaire invalide');
-      this.message = 'Veuillez remplir tous les champs.';
-      this.success = false;
-      return;
     }
   }
 

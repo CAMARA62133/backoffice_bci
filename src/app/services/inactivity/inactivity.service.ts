@@ -11,10 +11,10 @@ export class InactivityService {
   private warningTimeoutId: any;
   private countdownInterval: any;
 
-  // ⏱️ 15 minutes d'inactivité (production)
+  // ⏱️ 15 minutes d'inactivité (ici 1 min pour test)
   private readonly INACTIVITY_TIME = 15 * 60 * 1000;
-  private readonly WARNING_TIME = 60 * 1000; // ⏰ avertissement à 1 minute avant la déconnexion
-  private countdownValue = 60; // 🕐 60 secondes
+  private readonly WARNING_TIME = 60 * 1000;
+  private countdownValue = 60;
 
   constructor(
     private router: Router,
@@ -23,31 +23,56 @@ export class InactivityService {
     private toastr: ToastrService
   ) {}
 
+  // 🚀 Démarrer la surveillance
   startWatching(): void {
+    // ⚠️ Ne démarre que si l'utilisateur est connecté
+    if (!this.authService.isAuthenticated()) {
+      console.warn('⛔ Inactivité non démarrée : utilisateur non connecté.');
+      return;
+    }
+
     this.resetTimer();
 
-    // 🔄 Écoute toutes les activités utilisateur
+    // 🔄 Écoute les activités utilisateur
     ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(
       (event) => {
         window.addEventListener(event, () => this.resetTimer());
       }
     );
+
+    console.log("🟢 Surveillance d'inactivité démarrée.");
   }
 
-  private resetTimer(): void {
-    // 🧹 Nettoyage
+  // 🛑 Stopper la surveillance
+  stopWatching(): void {
     if (this.timeoutId) clearTimeout(this.timeoutId);
     if (this.warningTimeoutId) clearTimeout(this.warningTimeoutId);
     if (this.countdownInterval) clearInterval(this.countdownInterval);
     this.toastr.clear();
 
-    // ⏰ Timer principal (déconnexion automatique)
+    // Retirer les écouteurs
+    ['click', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(
+      (event) => {
+        window.removeEventListener(event, () => this.resetTimer());
+      }
+    );
+
+    console.log("🔴 Surveillance d'inactivité arrêtée.");
+  }
+
+  private resetTimer(): void {
+    if (this.timeoutId) clearTimeout(this.timeoutId);
+    if (this.warningTimeoutId) clearTimeout(this.warningTimeoutId);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
+    this.toastr.clear();
+
+    if (!this.authService.isAuthenticated()) return;
+
     this.ngZone.runOutsideAngular(() => {
       this.timeoutId = setTimeout(() => {
         this.ngZone.run(() => this.handleInactivity());
       }, this.INACTIVITY_TIME);
 
-      // ⚠️ Timer d'avertissement : 1 minute avant
       this.warningTimeoutId = setTimeout(() => {
         this.ngZone.run(() => this.showWarningToastr());
       }, this.INACTIVITY_TIME - this.WARNING_TIME);
@@ -55,24 +80,21 @@ export class InactivityService {
   }
 
   private showWarningToastr(): void {
-    this.countdownValue = 60;
+    this.countdownValue = this.WARNING_TIME / 1000;
 
-    // 🔔 Toastr fixe sans timeout
     const toast = this.toastr.error(
-      `Vous allez être déconnecté dans 1 minute.`,
+      `Vous allez être déconnecté dans ${this.countdownValue} secondes.`,
       '',
       {
         disableTimeOut: true,
         tapToDismiss: false,
         closeButton: false,
-        positionClass: 'toast-custom-center', // ou 'toast-bottom-right'
+        positionClass: 'toast-custom-center',
       }
     );
 
-    // ⏳ Décrémentation du message chaque seconde
     this.countdownInterval = setInterval(() => {
       this.countdownValue--;
-
       if (this.countdownValue > 0) {
         const message =
           this.countdownValue > 1
@@ -94,9 +116,11 @@ export class InactivityService {
     console.log('⏳ Utilisateur inactif — déconnexion automatique.');
     this.authService.deconnexion().subscribe({
       next: () => {
+        this.stopWatching();
         this.router.navigate(['/login']);
       },
       error: () => {
+        this.stopWatching();
         this.router.navigate(['/login']);
       },
     });
