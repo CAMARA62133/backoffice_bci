@@ -49,36 +49,29 @@ export class ReinitialiserPasswordComponent {
         if (res?.status && res.status === 200) {
           this.success = true;
           this.loading = false;
-          this.message =
-            "Un email de réinitialisation a été envoyé à l'adresse fournie. Veuillez vérifier votre boîte de réception. Si vous ne le voyez pas, vérifiez votre dossier de spam.";
-
-          this.toastr.success(this.message, '', {
+          this.toastr.success(res?.message, '', {
             positionClass: 'toast-custom-center',
           });
 
           // Si ok rediriger sur le login
           this.router.navigate(['/login']);
         } else {
-          this.message = res.message || 'Addresse email non reconnue.';
-          this.toastr.error(this.message, '', {
+          this.toastr.error(res?.message, '', {
             positionClass: 'toast-custom-center',
           });
           this.success = false;
           this.loading = false;
-          console.log("En cas d'erreur : ", res);
+          console.log({ res });
         }
       },
 
       error: (err) => {
         this.loading = false;
         this.success = false;
-        this.message =
-          err.error?.message ||
-          'Une erreur est survenue lors de la réinitialisation du mot de passe. Veuillez réessayer.';
-        this.toastr.error(this.message, '', {
+        this.toastr.error(err?.message, '', {
           positionClass: 'toast-custom-center',
         });
-        console.log(this.success, this.message, this.loading);
+        console.log({ err });
       },
     });
   }

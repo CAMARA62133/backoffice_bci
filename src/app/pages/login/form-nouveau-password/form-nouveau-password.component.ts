@@ -59,20 +59,10 @@ export class FormNouveauPasswordComponent implements OnInit {
       next: (res) => {
         console.log('Réponse API :', res);
 
-        if (res?.status && res?.status !== 200) {
-          this.success = false;
-          this.loading = false;
-          this.message = res.message || 'Erreur lors de la réinitialisation.';
-          this.toastr.error(this.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        } else {
+        if (res?.status && res?.status === 200) {
           this.success = true;
           this.loading = false;
-
-          this.message =
-            res.message || 'Mot de passe réinitialisé avec succès.';
-          this.toastr.success(this.message, '', {
+          this.toastr.success(res?.message, '', {
             positionClass: 'toast-custom-center',
           });
 
@@ -82,6 +72,12 @@ export class FormNouveauPasswordComponent implements OnInit {
 
           // ✅ Redirection vers la page de connexion
           this.router.navigate(['/login']);
+        } else {
+          this.success = false;
+          this.loading = false;
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
         }
       },
 

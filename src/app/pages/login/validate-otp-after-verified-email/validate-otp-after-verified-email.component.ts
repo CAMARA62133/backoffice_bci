@@ -77,7 +77,6 @@ export class ValidateOtpAfterVerifiedEmailComponent {
             positionClass: 'toast-custom-center',
           });
         }
-        console.log('DEBUG: OTP Renvoyez avec success !');
         console.log('reponse api : ', response);
       },
 

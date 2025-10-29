@@ -125,7 +125,7 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
         console.log('all respnse : ', response);
 
         this.isLoading = false;
-        if (response.status === 200 && response.data) {
+        if (response?.status && response.status === 200) {
           // Sauvegarde dans AuthService et localStorage
           this.authService.setUserInfo(response.data, response.config);
           this.authService.saveToken(response.token);
@@ -135,20 +135,17 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
             positionClass: 'toast-custom-center',
           });
           this.router.navigate(['/dashboard']);
-          console.log(response);
-
-          // Ouvrir modal succès
-          // this.showModalSuccess = true;
         } else if (response.status === 401) {
           this.toastr.error(response.message, '', {
             positionClass: 'toast-custom-center',
           });
         }
+        console.log(response);
       },
       error: (err) => {
         this.isLoading = false;
         console.log({ err });
-        this.toastr.error(err, '', {
+        this.toastr.error(err?.message, '', {
           positionClass: 'toast-custom-center',
         });
       },

@@ -58,22 +58,15 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
               this.router.navigate(['/valider-otp-email']);
             } else {
               this.router.navigate(['/lien-expire']);
-              this.toastr.error(
-                res?.message || 'Lien expiré pour raisons de sécurité',
-                '',
-                {
-                  positionClass: 'toast-custom-center',
-                }
-              );
+              this.toastr.error(res?.message, '', {
+                positionClass: 'toast-custom-center',
+              });
             }
             this.isLoading = false;
           },
 
           error: (err) => {
-            console.error(
-              "❌ Erreur lors de la vérification du token et l'email ",
-              err
-            );
+            console.error(err);
 
             this.isLoading = false;
           },

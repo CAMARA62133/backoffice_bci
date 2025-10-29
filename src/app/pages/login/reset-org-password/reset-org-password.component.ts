@@ -87,22 +87,22 @@ export class ResetOrgPasswordComponent implements OnInit {
     this.orgService.resetPasswordOrganisation(newPassword).subscribe({
       next: (res) => {
         this.loading = false;
-        if (res?.status === 200) {
-          this.toastr.success('Mot de passe réinitialisé avec succès.', '', {
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res?.message, '', {
             positionClass: 'toast-custom-center',
           });
           this.router.navigate(['/login']);
         } else {
-          this.toastr.error(
-            res.message || 'Erreur lors de la réinitialisation'
-          );
+          this.toastr.error(res.message);
         }
+        console.log({ res });
       },
       error: (err) => {
         this.loading = false;
-        this.toastr.error(err.message || 'Erreur serveur.', '', {
+        this.toastr.error(err.message, '', {
           positionClass: 'toast-custom-center',
         });
+        console.log({ err });
       },
     });
   }
