@@ -78,7 +78,7 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
   // message = '';
   reEnvoiOtp() {
     this.isLoadingReEnvoi = true;
-    this.otpService.reenvoiOtp().subscribe({
+    this.otpService.reenvoiOtp(this.loginEmail).subscribe({
       next: (response) => {
         if (response.status === 200) {
           this.isLoadingReEnvoi = false;

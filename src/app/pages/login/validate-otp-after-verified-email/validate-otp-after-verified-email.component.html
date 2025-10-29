@@ -112,7 +112,6 @@
                         type="button"
                         [disabled]="!isOtpComplete() || isLoading"
                         (click)="submitOtp()"
-                        [hidden]="!isOtpComplete() || isLoading"
                       >
                         {{
                           isLoading

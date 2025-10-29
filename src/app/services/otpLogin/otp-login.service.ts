@@ -50,8 +50,11 @@ export class OtpLoginServiceService {
   }
 
   // Méthode pour renvoyer l'OTP
-  reenvoiOtp(appName: string = this.appName): Observable<any> {
-    const body = { appName };
+  reenvoiOtp(
+    email: string | null,
+    appName: string = this.appName
+  ): Observable<any> {
+    const body = { email, appName };
     console.log(body);
 
     return this.http
