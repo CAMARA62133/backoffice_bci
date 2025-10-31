@@ -1,10 +1,11 @@
+import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { OrganisationsService } from '../../../../services/organisations/organisations.service';
 
 @Component({
   selector: 'app-page404',
-  imports: [],
+  imports: [NgIf],
   templateUrl: './page404.component.html',
   styleUrl: './page404.component.css',
 })
@@ -35,16 +36,12 @@ export class Page404Component implements OnInit {
       .renvoieLienVerification(this.businnessEmailDomain)
       .subscribe({
         next: (res) => {
-          if (res?.status || res?.status === 200) {
-            this.toastr.success(
-              res?.message || 'Lien renvoyer avec succès !',
-              '',
-              {
-                positionClass: 'toast-custom-center',
-              }
-            );
+          if (res?.status && res?.status === 200) {
+            this.toastr.success(res?.message, '', {
+              positionClass: 'toast-custom-center',
+            });
           } else {
-            this.toastr.error(res?.message || 'Erreur', '', {
+            this.toastr.error(res?.message, '', {
               positionClass: 'toast-custom-center',
             });
           }
@@ -53,7 +50,7 @@ export class Page404Component implements OnInit {
         },
 
         error: (err) => {
-          this.toastr.error(err?.message || 'Erreur', '', {
+          this.toastr.error(err?.message, '', {
             positionClass: 'toast-custom-center',
           });
           console.log('erreur : ', err);

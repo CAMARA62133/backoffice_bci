@@ -407,7 +407,6 @@
             <span>Menu</span>
           </li>
 
-          <!-- Dashboard -->
           <li class="nav-item mm-active">
             <a class="nav-link" routerLink="dashboard" aria-expanded="false">
               <i class="icon ion-ios-speedometer active"></i>
@@ -415,29 +414,10 @@
             </a>
           </li>
 
-          <!-- Organisation -->
-          <li class="nav-item">
-            <a class="nav-link has-arrow">
-              <i class="icon ion-briefcase"></i>
-              <span>Organisations</span>
-            </a>
-            <ul class="sub-menu mm-collapse" aria-expanded="false">
-              <li class="nav-item mm-active">
-                <a
-                  class="nav-link"
-                  routerLink="/organisations"
-                  aria-expanded="false"
-                >
-                  <span>Liste des organisations</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-
           <!-- <li class="nav-item">
             <a class="nav-link has-arrow">
               <i class="icon ion-eye"></i>
-              <span> Pilotage &amp; supervision </span>
+              <span>Pilotage &amp; supervision</span>
             </a>
             <ul class="sub-menu mmm-collapse" aria-expanded="false">
               <li>
@@ -446,7 +426,7 @@
                 </a>
                 <ul class="sub-menu mmm-collapse" aria-expanded="false">
                   <li>
-                    <a href="rapports-periodiques.html">
+                    <a href="../rapports-periodiques.html">
                       <span>Rapports périodiques</span>
                     </a>
                   </li>
@@ -487,7 +467,7 @@
             </ul>
           </li> -->
 
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link has-arrow">
               <i class="icon ion-briefcase"></i>
               <span>Entreprises clientes</span>
@@ -496,49 +476,39 @@
               <li>
                 <a
                   class="text-truncate align-self-center"
-                  href="entreprises-clientes/dashboard-entreprises-clientes.html"
+                  routerLink="/organisations"
                 >
-                  <span>Tableau de Bord</span>
+                  <span>Liste des organisations</span>
+                </a>
+              </li>
+              <!-- <li>
+                <a class="text-truncate align-self-center" href="#">
+                  <span>Liste des entreprises </span>
                 </a>
               </li>
               <li>
-                <a
-                  class="text-truncate align-self-center"
-                  href="entreprises-clientes/liste-entreprises.html"
-                >
-                  <span>Liste des entreprises</span>
+                <a class="text-truncate align-self-center" href="#">
+                  <span>Nouvelle entreprise </span>
                 </a>
               </li>
               <li>
-                <a
-                  class="text-truncate align-self-center"
-                  href="entreprises-clientes/create-company.html"
-                >
-                  <span>Nouvelle entreprise</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  class="text-truncate align-self-center"
-                  href="entreprises-clientes/gestion-modules.html"
-                >
+                <a class="text-truncate align-self-center" href="#">
                   <span>Gestion des Modules Activés</span>
                 </a>
               </li>
               <li>
-                <a
-                  class="text-truncate align-self-center"
-                  href="entreprises-clientes/workflows.html"
-                >
+                <a class="text-truncate align-self-center" href="#">
                   <span>Workflows &amp; validations</span>
                 </a>
               </li>
               <li>
-                <a
-                  class="text-truncate align-self-center"
-                  href="tickets-support.html"
-                >
-                  <span> Tickets &amp; Support </span>
+                <a class="text-truncate align-self-center" href="#">
+                  <span>Tickets &amp; Support</span>
+                </a>
+              </li>
+              <li>
+                <a class="text-truncate align-self-center" href="#">
+                  <span>Alertes &amp; Supervision</span>
                 </a>
               </li>
               <li>
@@ -550,29 +520,28 @@
                 <a class="text-truncate align-self-center" href="#">
                   <span>Audit &amp; traçabilité</span>
                 </a>
-              </li>
+              </li> -->
             </ul>
-          </li> -->
+          </li>
 
-          <!-- Utilisateurs -->
           <li class="nav-item">
             <a class="nav-link has-arrow">
               <i class="icon ion-person-stalker"></i>
-              <span> Utilisateurs internes </span>
+              <span>Utilisateurs internes</span>
             </a>
             <ul class="sub-menu mmm-collapse" aria-expanded="false">
-              <li class="nav-item mm-active">
+              <li>
                 <a
                   class="text-truncate align-self-center"
                   routerLink="/utilisateurs"
-                  aria-expanded="false"
                 >
-                  <span>Liste des utilisateurs</span>
+                  <span>Liste des utilisateurs </span>
                 </a>
               </li>
+
               <!-- <li>
                 <a class="text-truncate align-self-center" href="#">
-                  <span>Créer un utilisateur</span>
+                  <span>Créer un utilisateur </span>
                 </a>
               </li>
               <li>
@@ -582,7 +551,7 @@
               </li>
               <li>
                 <a class="text-truncate align-self-center" href="#">
-                  <span> Historique des modifications de droits </span>
+                  <span>Historique des modifications de droits</span>
                 </a>
               </li>
               <li>
@@ -606,7 +575,7 @@
               </li>
               <li>
                 <a class="text-truncate" href="#">
-                  <span data-key="t-chat">Transactions sensibles</span>
+                  <span data-key="t-chat">Transactions sensibles </span>
                 </a>
               </li>
               <li>
@@ -625,9 +594,9 @@
                 </a>
               </li>
             </ul>
-          </li> -->
+          </li>
 
-          <!-- <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link has-arrow">
               <i class="icon ion-chatboxes"></i>
               <span data-key="t-apps">Tickets &amp; support</span>
@@ -640,7 +609,7 @@
               </li>
               <li>
                 <a class="text-truncate" href="#">
-                  <span data-key="t-chat">Suivi SLA &amp; délais</span>
+                  <span data-key="t-chat">Suivi SLA &amp; délais </span>
                 </a>
               </li>
               <li>
@@ -658,126 +627,29 @@
               <span>Paramétrage &amp; administr...</span>
             </a>
             <ul class="sub-menu mm-collapse" aria-expanded="false">
-              <li class="nav-item mm-active">
-                <a
-                  class="nav-link"
-                  routerLink="configuration-alertes"
-                  aria-expanded="false"
-                >
-                  <span data-key="t-dashboard">Config. Alertes</span>
+              <li>
+                <a routerLink="configuration-alertes">
+                  <span>Config. Alertes</span>
                 </a>
               </li>
 
-              <li class="nav-item mm-active">
-                <a
-                  class="nav-link"
-                  routerLink="configuration-notifications"
-                  aria-expanded="false"
-                >
-                  <span data-key="t-dashboard">Config. Notifications</span>
+              <li>
+                <a routerLink="configuration-notifications">
+                  <span>Config. Notifications</span>
                 </a>
               </li>
 
-              <li class="nav-item mm-active">
-                <a
-                  class="nav-link"
-                  routerLink="configuration-notif-user-defaut"
-                  aria-expanded="false"
-                >
-                  <span data-key="t-dashboard">Config. Notif User Défaut</span>
+              <li>
+                <a routerLink="configuration-notif-user-defaut">
+                  <span>Config. Notif Défaut User</span>
                 </a>
               </li>
 
-              <li class="nav-item mm-active">
-                <a
-                  class="nav-link"
-                  routerLink="mes-notifications"
-                  aria-expanded="false"
-                >
-                  <span data-key="t-dashboard">Mes Notifications</span>
+              <li>
+                <a routerLink="mes-notifications">
+                  <span>Mes Notifications</span>
                 </a>
               </li>
-              <!--
-              <li class="nav-item mm-active">
-                <a class="has-arrow" href="#">
-                  <span>Taux de change</span>
-                </a>
-                <ul class="sub-menu mm-collapse" aria-expanded="false">
-                  <li>
-                    <a href="#">
-                      <span>Liste des taux de change</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span>Fluctuations des devises</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span>Sources de données</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span>Notifications &amp; alertes / Taux</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-item mm-active">
-                <a class="has-arrow" href="#">
-                  <span>Seuils &amp; alertes</span>
-                </a>
-                <ul class="sub-menu mm-collapse" aria-expanded="false">
-                  <li>
-                    <a href="#">
-                      <span>Liste des seuils</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span>Liste Alertes automatiques</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span>Notifications automatiques</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-item mm-active">
-                <a class="has-arrow" href="#">
-                  <span>Droits &amp; profils</span>
-                </a>
-                <ul class="sub-menu mm-collapse" aria-expanded="false">
-                  <li>
-                    <a href="#">
-                      <span>Liste des profils et droits</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span>Historique des modifications</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="nav-item mm-active">
-                <a href="#">
-                  <span>Journal des modifications</span>
-                </a>
-              </li>
-
-              <li class="nav-item mm-active">
-                <a href="#">
-                  <span>Données et rapports</span>
-                </a>
-              </li> -->
             </ul>
           </li>
         </ul>
@@ -827,95 +699,4 @@
     </footer> -->
   </div>
   <!-- End: Main -->
-
-  <!-- <div
-    class="modal fade"
-    role="dialog"
-    tabindex="-1"
-    id="createUtilisateurModal"
-  >
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Créer un nouveau utilisateur</h5>
-          <button
-            class="btn-close btn-close-dark"
-            data-bs-dismiss="modal"
-            type="button"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <form id="createTicketForm">
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label required" for="prenom">Prénom</label>
-                <input
-                  class="form-control form-control"
-                  type="text"
-                  id="prenom"
-                  name="prenom"
-                  required=""
-                />
-                <div class="invalid-feedback">
-                  <span>Veuillez saisir le prénom</span>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label required" for="nom">Nom</label>
-                <input
-                  class="form-control form-control"
-                  type="text"
-                  id="nom"
-                  name="nom"
-                  required=""
-                />
-                <div class="invalid-feedback">
-                  <span>Veuillez saisir le nom</span>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label required" for="telephone"
-                  >Numéro de téléphone</label
-                >
-                <input
-                  class="form-control form-control"
-                  type="text"
-                  id="telephone"
-                  name="telephone"
-                  required=""
-                />
-                <div class="invalid-feedback">
-                  <span>Veuillez saisir le numéro de téléphone</span>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label required" for="email">Email</label>
-                <input
-                  class="form-control form-control"
-                  type="email"
-                  id="email"
-                  name="email"
-                  required=""
-                />
-                <div class="invalid-feedback">
-                  <span>Veuillez saisir l'adresse email</span>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-danger" data-bs-dismiss="modal" type="button">
-            Annuler
-          </button>
-          <button class="btn btn-primary" type="button">
-            Créer l'utlisateur
-          </button>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>

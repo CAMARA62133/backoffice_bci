@@ -83,8 +83,8 @@ export class AuthService {
    */
   requestResetPassword(
     email: string,
-    // lienSite: string = 'http://localhost:4200',
-    lienSite: string = 'https://devbackoffice-bci.ecash-guinee.com',
+    lienSite: string = 'http://localhost:4200',
+    // lienSite: string = 'https://devbackoffice-bci.ecash-guinee.com',
     appName: string = this.appName
   ): Observable<any> {
     const body = { email, appName, lienSite };

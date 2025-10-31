@@ -1,14 +1,38 @@
-<div class="error-page d-flex align-items-center justify-content-center">
-  <div class="container text-center">
-    <p class="lead mb-5">Votre lien de vérification d'email a expiré</p>
-    <div class="d-flex justify-content-center gap-3">
-      <button
-        class="btn btn-primary"
-        (click)="onResentLink()"
-        [disabled]="isLoading"
-      >
-        Demander un nouveau lien
-      </button>
+<div class="preview-img overflow-hidden">
+  <div class="swiper-container">
+    <div class="swiper-wrapper preview-thumb">
+      <div class="swiper-slide">
+        <div
+          class="slide-bg"
+          style="
+            background-image: url(assets/img/images-bci/flyers-bci_internet-banking_3.jpg?h=81d6463f975795c60d5fc7a9405ce9e8);
+          "
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="coming-content min-vh-100 py-4 px-3 py-sm-5">
+  <div class="bg-primary bg-overlay"></div>
+
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="card shadow-lg" style="max-width: 400px; width: 100%">
+      <div class="card-body">
+        <h5 class="card-title text-center mb-4 text-primary">
+          Votre lien de vérification d'email a expiré
+        </h5>
+
+        <div class="d-flex justify-content-center gap-3">
+          <button
+            class="btn btn-primary"
+            (click)="onResentLink()"
+            [disabled]="isLoading"
+          >
+            Demander un nouveau lien
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

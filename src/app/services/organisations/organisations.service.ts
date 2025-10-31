@@ -61,7 +61,7 @@ export class OrganisationsService {
   renvoieLienVerification(businnessEmailDomain: string): Observable<any> {
     const params = new HttpParams()
       .set('vcBusinessEmailDomain', businnessEmailDomain)
-      .set('lienSite', environment.lienSite);
+      .set('lienSite', 'http://localhost:4200');
 
     return this.http.post<any>(
       `${this.baseUrl}/api/renvoisEmailValidationAnouveau`,

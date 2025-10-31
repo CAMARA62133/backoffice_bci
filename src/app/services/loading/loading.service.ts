@@ -15,12 +15,18 @@ export class LoadingService {
   // Méthode pour vérifier le token
   verifierToken(
     token: string,
+    email: string,
     appName: string = this.appName
   ): Observable<any> {
-    const body = {};
-    const params = new HttpParams().set('token', token).set('appName', appName);
+    const params = new HttpParams()
+      .set('token', token)
+      .set('appName', appName)
+      .set('email', email);
+
+    console.log('params : ', params);
+
     return this.http
-      .post<any>(`${this.baseUrl}/api/verifyToken`, body, { params })
+      .post<any>(`${this.baseUrl}/api/verifyToken`, {}, { params })
       .pipe(
         catchError((err) =>
           throwError(() => new Error(err?.message || 'Erreur du serveur.'))
