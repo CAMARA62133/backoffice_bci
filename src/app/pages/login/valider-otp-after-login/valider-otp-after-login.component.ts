@@ -80,7 +80,7 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
     this.isLoadingReEnvoi = true;
     this.otpService.reenvoiOtp(this.loginEmail).subscribe({
       next: (response) => {
-        if (response.status === 200) {
+        if (response?.status && response.status === 200) {
           this.isLoadingReEnvoi = false;
           this.otpValues = ['', '', '', ''];
 
@@ -135,7 +135,12 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
             positionClass: 'toast-custom-center',
           });
           this.router.navigate(['/dashboard']);
-        } else if (response.status === 401) {
+        } else {
+          // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
+          if (response?.status === 405 || response?.status === '405') {
+            this.router.navigate(['/login']);
+          }
+
           this.toastr.error(response.message, '', {
             positionClass: 'toast-custom-center',
           });

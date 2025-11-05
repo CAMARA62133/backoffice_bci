@@ -96,16 +96,22 @@
 
                       <div class="col-md-6 mt-2">
                         <label>Téléphone :</label>
-                        <input
-                          type="text"
-                          [(ngModel)]="currentUserInfo.vcPhoneNumber"
-                          name="vcPhoneNumber"
-                          placeholder="Entrez votre téléphone"
-                          class="form-control form-control"
-                          maxlength="9"
-                          (keydown)="onlyDigits($event)"
-                          (paste)="onPaste($event)"
-                        />
+
+                        <div class="input-group mb-3">
+                          <span class="input-group-text" id="basic-addon1">
+                            +{{ phoneCode }}
+                          </span>
+
+                          <input
+                            type="text"
+                            [(ngModel)]="currentUserInfo.vcPhoneNumber"
+                            name="vcPhoneNumber"
+                            placeholder="Entrez votre téléphone"
+                            class="form-control form-control"
+                            (keydown)="onlyDigits($event)"
+                            (paste)="onPaste($event)"
+                          />
+                        </div>
                       </div>
 
                       <div class="col-md-3 mt-3">

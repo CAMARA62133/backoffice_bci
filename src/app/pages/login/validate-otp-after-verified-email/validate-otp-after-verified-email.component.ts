@@ -114,13 +114,17 @@ export class ValidateOtpAfterVerifiedEmailComponent {
             positionClass: 'toast-custom-center',
           });
           this.router.navigate(['/org-nouveau-mot-de-passe']);
-          console.log(response);
         } else {
+          // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
+          if (response?.status === 405 || response?.status === '405') {
+            this.router.navigate(['/login']);
+          }
+
           this.toastr.error(response.message, '', {
             positionClass: 'toast-custom-center',
           });
-          console.log(response);
         }
+        console.log(response);
       },
 
       error: (err) => {

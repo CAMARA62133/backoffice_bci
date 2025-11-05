@@ -83,8 +83,7 @@ export class AuthService {
    */
   requestResetPassword(
     email: string,
-    lienSite: string = 'http://localhost:4200',
-    // lienSite: string = 'https://devbackoffice-bci.ecash-guinee.com',
+    lienSite: string = environment.lienSite,
     appName: string = this.appName
   ): Observable<any> {
     const body = { email, appName, lienSite };
@@ -105,6 +104,11 @@ export class AuthService {
     localStorage.setItem('userConfigInfo', JSON.stringify(userConfigInfo));
   }
 
+  setUpdateUserInfo(userInfo: any): void {
+    this.userInfo = userInfo;
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  }
+
   /**
    * Récupère les informations de l'utilisateur depuis la mémoire ou le localStorage
    * @returns
@@ -117,6 +121,16 @@ export class AuthService {
       return this.userInfo;
     }
     return null;
+  }
+
+  getUserConfigInfo() {
+    if (this.userConfigInfo) return this.userConfigInfo;
+    const storedUserConfigInfo = localStorage.getItem('userConfigInfo');
+
+    if (storedUserConfigInfo) {
+      this.userConfigInfo = JSON.parse(storedUserConfigInfo);
+      return this.userConfigInfo;
+    }
   }
 
   /**

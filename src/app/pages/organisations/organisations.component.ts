@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../environnements/environnement';
+import { OnlyDigitsDirective } from '../../directives/only-digits.directive';
 import { AuthService } from '../../services/authService/auth.service';
 import { ModalsService } from '../../services/modals/modals.service';
 import { OrganisationsService } from '../../services/organisations/organisations.service';
@@ -19,11 +20,18 @@ import {
   isInvalid,
   isValid,
 } from '../../utils/form-helpers';
-import { OnlyDigitsDirective } from "../../directives/only-digits.directive";
 
 @Component({
   selector: 'app-organisations',
-  imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf, NgClass, DatePipe, OnlyDigitsDirective],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgFor,
+    NgIf,
+    NgClass,
+    DatePipe,
+    OnlyDigitsDirective,
+  ],
   templateUrl: './organisations.component.html',
   styleUrl: './organisations.component.css',
 })
@@ -32,11 +40,14 @@ export class OrganisationsComponent implements OnInit {
   orgForm!: FormGroup;
   isLoading: boolean = false;
   isLoadingOrgs: boolean = false;
+  isLoadingCountry: boolean = false;
 
   roles: any[] = [];
   filteredRole: any = {};
   organisations: any[] = [];
   currentUser: any;
+
+  countries: any[] = [];
 
   createOrgModalId: string = 'createOrgModal';
   lienSite: string = environment.lienSite;
@@ -49,6 +60,14 @@ export class OrganisationsComponent implements OnInit {
 
   selectedOrg: any = null;
   selectedOrgId: number | null = null;
+
+  country = '';
+  phoneCode!: number;
+  phoneFormat = '';
+  currency = '';
+  appVersion!: number;
+  phoneMaxLength!: number;
+  phoneFirstNumber!: string;
 
   constructor(
     private modalsService: ModalsService,
@@ -75,11 +94,42 @@ export class OrganisationsComponent implements OnInit {
       this.currentUser = userData;
     }
 
+    const config = this.authService.getUserConfigInfo();
+    console.log(config);
+
+    this.country = config.organisation.find(
+      (c: any) => c.vcKey === 'Pays'
+    )?.vcValue;
+
+    this.phoneCode = config.organisation.find(
+      (c: any) => c.vcKey === 'Telephone_Code'
+    )?.vcValue;
+
+    this.phoneFormat = config.organisation.find(
+      (c: any) => c.vcKey === 'Telephone_Format'
+    )?.vcValue;
+    this.phoneMaxLength = this.phoneFormat.length - 1;
+
+    this.currency = config.organisation.find(
+      (c: any) => c.vcKey === 'Devise'
+    )?.vcValue;
+
+    this.appVersion = config.appVersion;
+    this.phoneFirstNumber = this.phoneFormat.charAt(0);
+
+    console.log('country : ', this.country);
+    console.log('phoneCode : ', this.phoneCode);
+    console.log('phoneFormat : ', this.phoneFormat);
+    console.log('currency : ', this.currency);
+    console.log('phoneMaxLength : ', this.phoneMaxLength);
+    console.log('phoneFirstNumber : ', this.phoneFirstNumber);
+
     this.initForm();
 
     // Chargement des donnees
     this.loadRoles();
     this.loadOrganisations();
+    this.loadListePays();
   }
 
   // Initialiser le formulaire
@@ -92,8 +142,8 @@ export class OrganisationsComponent implements OnInit {
         [
           Validators.required,
           Validators.pattern(/^[0-9]+$/),
-          Validators.minLength(9),
-          Validators.maxLength(9),
+          Validators.minLength(this.phoneMaxLength),
+          Validators.maxLength(this.phoneMaxLength),
         ],
       ],
       vcOrgEmail: ['', [Validators.required, Validators.email]],
@@ -108,6 +158,9 @@ export class OrganisationsComponent implements OnInit {
       vcLastname: ['', Validators.required],
       vcDescription: ['', Validators.required],
       iRoleID: ['', Validators.required],
+
+      // Mode d'envoie des OTPs
+      modeOtp: ['', Validators.required],
     });
   }
 
@@ -121,18 +174,23 @@ export class OrganisationsComponent implements OnInit {
       'Tab',
     ];
 
-    if (allowedKeys.includes(event.key)) {
-      return; // autoriser touches de navigation/suppression
-    }
+    const input = event.target as HTMLInputElement;
+
+    if (allowedKeys.includes(event.key)) return;
 
     // Bloquer tout sauf chiffres
     if (!/^[0-9]$/.test(event.key)) {
       event.preventDefault();
     }
 
-    // Optionnel : bloquer si déjà 9 chiffres saisis
-    const input = event.target as HTMLInputElement;
-    if (input.value.length >= 9) {
+    // Si l'utilisateur essaie de taper le premier chiffre
+    if (input.value.length === 0 && event.key !== this.phoneFirstNumber) {
+      event.preventDefault();
+      return;
+    }
+
+    // Optionnel : bloquer si déjà max de chiffres saisis
+    if (input.value.length >= this.phoneMaxLength) {
       event.preventDefault();
     }
   }
@@ -140,15 +198,30 @@ export class OrganisationsComponent implements OnInit {
   // Empêcher le collage de texte invalide
   onPaste(event: ClipboardEvent) {
     const pastedData = event.clipboardData?.getData('text') || '';
+    const input = event.target as HTMLInputElement;
 
     // Autoriser uniquement les chiffres et max 9 caractères
-    if (!/^\d{1,9}$/.test(pastedData)) {
+    // if (!/^\d{1,9}$/.test(pastedData)) {
+    //   event.preventDefault();
+    // }
+
+    const regex = new RegExp(`^\\d{1,${this.phoneMaxLength}}$`);
+    if (!regex.test(pastedData)) {
       event.preventDefault();
+      return;
+    }
+
+    const finalValue = input.value + pastedData;
+    if (
+      finalValue.length > 0 &&
+      finalValue.charAt(0) !== this.phoneFirstNumber
+    ) {
+      event.preventDefault();
+      return;
     }
 
     // Vérifier que la longueur totale après collage ne dépasse pas 9
-    const input = event.target as HTMLInputElement;
-    if (input.value.length + pastedData.length > 9) {
+    if (input.value.length + pastedData.length > this.phoneMaxLength) {
       event.preventDefault();
     }
   }
@@ -194,6 +267,7 @@ export class OrganisationsComponent implements OnInit {
       vcPhoneNumber: formData.vcOrgPhoneNumber,
       iParentID: this.currentUser.id,
       lienSite: this.lienSite,
+      modeOtp: formData.modeOtp,
     };
 
     // appel a l'API de creation d'une organisation
@@ -308,6 +382,25 @@ export class OrganisationsComponent implements OnInit {
       error: (err) => {
         console.error('Erreur chargement des rôles :', err.message);
         this.isLoading = false;
+      },
+    });
+  }
+
+  private loadListePays(): void {
+    this.isLoadingCountry = true;
+    this.orgService.getListePays().subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.countries = res?.data;
+          console.log(this.countries);
+        }
+        console.log(res);
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+        console.log(err);
+        this.isLoadingCountry = false;
       },
     });
   }

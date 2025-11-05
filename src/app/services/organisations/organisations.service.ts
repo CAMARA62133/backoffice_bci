@@ -17,6 +17,10 @@ export class OrganisationsService {
     return this.http.get(`${this.baseUrl}/api/getListeOrganisation`);
   }
 
+  getListePays(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/getListePays`);
+  }
+
   // Pour les infos utilisateurs
   createOrganisation(data: any): Observable<any> {
     const token = this.authServie.getToken();
@@ -61,7 +65,7 @@ export class OrganisationsService {
   renvoieLienVerification(businnessEmailDomain: string): Observable<any> {
     const params = new HttpParams()
       .set('vcBusinessEmailDomain', businnessEmailDomain)
-      .set('lienSite', 'http://localhost:4200');
+      .set('lienSite', environment.lienSite);
 
     return this.http.post<any>(
       `${this.baseUrl}/api/renvoisEmailValidationAnouveau`,

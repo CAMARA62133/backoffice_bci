@@ -48,8 +48,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let org of pagedOrganisations">
-                    <td>{{ org.id }}</td>
+                  <tr *ngFor="let org of pagedOrganisations; let i = index">
+                    <td>{{ i + 1 }}</td>
                     <td>{{ org.organisationName }}</td>
                     <td>{{ org.vcContact }}</td>
                     <td>{{ org.vcPhoneNumber }}</td>
@@ -276,17 +276,26 @@
 
               <div class="col-md-6">
                 <label class="form-label">
-                  Téléphone<span class="text-danger">* (9 carractère obligatoire)</span>
+                  Téléphone<span class="text-danger"
+                    >* ({{ phoneMaxLength }} carractères obligatoire)</span
+                  >
                 </label>
-                <input
-                  class="form-control form-control"
-                  required=""
-                  type="text"
-                  formControlName="vcOrgPhoneNumber"
-                  [ngClass]="getFormControlClass('vcOrgPhoneNumber')"
-                  [maxlength]="9"
-                  appOnlyDigits
-                />
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">
+                    +{{ phoneCode }}
+                  </span>
+
+                  <input
+                    class="form-control form-control"
+                    required=""
+                    type="text"
+                    formControlName="vcOrgPhoneNumber"
+                    [ngClass]="getFormControlClass('vcOrgPhoneNumber')"
+                    (keydown)="onlyDigits($event)"
+                    (paste)="onPaste($event)"
+                  />
+                </div>
+
                 <span class="text-danger" *ngIf="isInvalid('vcOrgPhoneNumber')">
                   {{ getErrorMessage("vcOrgPhoneNumber") }}
                 </span>
@@ -328,13 +337,30 @@
                 <label class="form-label">
                   Pays<span class="text-danger">*</span>
                 </label>
-                <input
+                <select
+                  class="form-select form-select"
+                  required
+                  formControlName="vcOrgCountry"
+                  [ngClass]="getFormControlClass('vcOrgCountry')"
+                >
+                  <option value="">-- Sélectionnez un pays --</option>
+                  <!-- <option [value]="filteredRole?.id">
+                    {{ filteredRole.vcRoleName }}
+                  </option> -->
+                  <option
+                    *ngFor="let country of countries"
+                    [value]="country.vcName"
+                  >
+                    {{ country.vcName }}
+                  </option>
+                </select>
+                <!-- <input
                   class="form-control form-control"
                   required=""
                   type="text"
                   formControlName="vcOrgCountry"
                   [ngClass]="getFormControlClass('vcOrgCountry')"
-                />
+                /> -->
                 <span class="text-danger" *ngIf="isInvalid('vcOrgCountry')">
                   {{ getErrorMessage("vcOrgCountry") }}
                 </span>
@@ -454,13 +480,56 @@
                 </span>
               </div>
 
-              <div class="col-md-12">
-                <label class="form-label"> Description </label>
+              <div class="col-md-8">
+                <label class="form-label">
+                  Description<span class="text-danger">*</span></label
+                >
                 <textarea
                   class="form-control form-control"
                   formControlName="vcDescription"
                   rows="2"
+                  [ngClass]="getFormControlClass('vcDescription')"
                 ></textarea>
+                <span class="text-danger" *ngIf="isInvalid('vcDescription')">
+                  {{ getErrorMessage("vcDescription") }}
+                </span>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">
+                  Mode d'envoi de l'OTP<span class="text-danger">*</span>
+                </label>
+
+                <div
+                  class="form-check"
+                  [ngClass]="getFormControlClass('modeOtp')"
+                >
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="modeOtp"
+                    id="otp_sms"
+                    value="SMS"
+                  />
+                  <label class="form-check-label" for="otp_sms"> SMS </label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="modeOtp"
+                    id="otp_email"
+                    value="Email"
+                  />
+                  <label class="form-check-label" for="otp_email">
+                    Email
+                  </label>
+                </div>
+
+                <span class="text-danger" *ngIf="isInvalid('modeOtp')">
+                  {{ getErrorMessage("modeOtp") }}
+                </span>
               </div>
             </div>
           </fieldset>
