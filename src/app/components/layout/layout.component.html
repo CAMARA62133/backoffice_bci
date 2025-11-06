@@ -322,25 +322,22 @@
             <span
               class="text-end d-none d-xl-inline-block ms-3 fw-medium"
               id="username"
+              *ngIf="getUser() as user"
             >
               Bienvenue
-              {{
-                currentUser!.vcFirstname + " " + currentUser!.vcLastname
-                  | uppercase
-              }}
+              {{ user!.vcFirstname + " " + user!.vcLastname | uppercase }}
               !
               <br />
               <span
                 class="fw-semibold me-2 my-sm-2 font-size-11"
                 id="user-role"
               >
-                <strong>{{ currentUser.vcRoleName }}</strong>
+                <strong>{{ user.vcRoleName }}</strong>
               </span>
               <span class="my-sm-2 font-size-11">
                 - Dernière connexion
                 {{
-                  currentUser.dtLastSuccessfulLogin
-                    | date : "dd/MM/yyyy à HH:mm:ss"
+                  user.dtLastSuccessfulLogin | date : "dd/MM/yyyy à HH:mm:ss"
                 }}
               </span>
             </span>

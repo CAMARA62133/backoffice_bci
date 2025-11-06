@@ -9,7 +9,6 @@ import {
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../environnements/environnement';
-import { OnlyDigitsDirective } from '../../directives/only-digits.directive';
 import { AuthService } from '../../services/authService/auth.service';
 import { ModalsService } from '../../services/modals/modals.service';
 import { OrganisationsService } from '../../services/organisations/organisations.service';
@@ -30,7 +29,7 @@ import {
     NgIf,
     NgClass,
     DatePipe,
-    OnlyDigitsDirective,
+    // OnlyDigitsDirective,
   ],
   templateUrl: './organisations.component.html',
   styleUrl: './organisations.component.css',

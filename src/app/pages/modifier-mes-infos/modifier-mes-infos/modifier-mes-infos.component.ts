@@ -4,6 +4,11 @@ import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/authService/auth.service';
 
+interface OrganisationItem {
+  vcKey: string;
+  vcValue: string;
+}
+
 @Component({
   selector: 'app-modifier-mes-infos',
   imports: [FormsModule, CommonModule, ReactiveFormsModule],
@@ -38,53 +43,59 @@ export class ModifierMesInfosComponent {
   passwordVisibleConfirm = false;
   password = { old: '', new: '', confirm: '' };
 
-  country = '';
-  phoneCode!: number;
-  phoneFormat = '';
-  currency = '';
-  appVersion!: number;
-  phoneMaxLength!: number;
-  phoneFirstNumber!: string;
-
   constructor(
     private authService: AuthService,
     private toastr: ToastrService
   ) {}
 
+  userInfoConfig: any;
+  country: string = '';
+  phoneCode: number = 0;
+  phoneFormat: string = '';
+  currency: string = '';
+
+  phoneMaxLengthNumber: number = 0;
+  firstNumberPhone: number = 0;
+
   ngOnInit(): void {
+    const dataConfig = this.authService.getUserInfoConfig();
+    if (dataConfig) this.userInfoConfig = { ...dataConfig };
+    console.log(dataConfig);
+
+    this.country = dataConfig.organisation.find(
+      (c: OrganisationItem) => c.vcKey === 'Pays'
+    )?.vcValue;
+    console.log(this.country);
+
+    this.phoneCode = dataConfig.organisation.find(
+      (c: OrganisationItem) => c.vcKey === 'Telephone_Code'
+    )?.vcValue;
+    console.log(this.phoneCode);
+
+    this.phoneFormat = dataConfig.organisation.find(
+      (c: OrganisationItem) => c.vcKey === 'Telephone_Format'
+    )?.vcValue;
+    console.log(this.phoneFormat);
+
+    if (this.phoneFormat) {
+      // Premier chiffre
+      this.firstNumberPhone = parseInt(this.phoneFormat.charAt(0), 10);
+
+      // Nombre total de caractères (y compris le premier chiffre)
+      this.phoneMaxLengthNumber = this.phoneFormat.length - 1;
+
+      console.log('Premier chiffre :', this.firstNumberPhone);
+      console.log('Nombre total de chiffres :', this.phoneMaxLengthNumber);
+    }
+
+    this.currency = dataConfig.organisation.find(
+      (c: OrganisationItem) => c.vcKey === 'Devise'
+    )?.vcValue;
+    console.log(this.currency);
+
     const data = this.authService.getUserInfo();
     console.log(data);
     if (data) this.currentUserInfo = { ...data };
-
-    const config = this.authService.getUserConfigInfo();
-    console.log(config);
-
-    this.country = config.organisation.find(
-      (c: any) => c.vcKey === 'Pays'
-    )?.vcValue;
-
-    this.phoneCode = config.organisation.find(
-      (c: any) => c.vcKey === 'Telephone_Code'
-    )?.vcValue;
-
-    this.phoneFormat = config.organisation.find(
-      (c: any) => c.vcKey === 'Telephone_Format'
-    )?.vcValue;
-    this.phoneMaxLength = this.phoneFormat.length - 1;
-
-    this.currency = config.organisation.find(
-      (c: any) => c.vcKey === 'Devise'
-    )?.vcValue;
-
-    this.appVersion = config.appVersion;
-    this.phoneFirstNumber = this.phoneFormat.charAt(0);
-
-    console.log('country : ', this.country);
-    console.log('phoneCode : ', this.phoneCode);
-    console.log('phoneFormat : ', this.phoneFormat);
-    console.log('currency : ', this.currency);
-    console.log('phoneMaxLength : ', this.phoneMaxLength);
-    console.log('phoneFirstNumber : ', this.phoneFirstNumber);
   }
 
   // ✅ Changer visibilité mot de passe
@@ -105,24 +116,18 @@ export class ModifierMesInfosComponent {
       'Tab',
     ];
 
-    if (allowedKeys.includes(event.key)) return;
+    if (allowedKeys.includes(event.key)) {
+      return; // autoriser touches de navigation/suppression
+    }
 
     // Bloquer tout sauf chiffres
     if (!/^[0-9]$/.test(event.key)) {
       event.preventDefault();
     }
 
-    // Bloquer si déjà 9 chiffres saisis
+    // Optionnel : bloquer si déjà 9 chiffres saisis
     const input = event.target as HTMLInputElement;
-
-    // ✅ Si phoneCode = 224, forcer que le premier chiffre soit 6
-    // Si l'utilisateur essaie de taper le premier chiffre
-    if (input.value.length === 0 && event.key !== this.phoneFirstNumber) {
-      event.preventDefault();
-      return;
-    }
-
-    if (input.value.length >= this.phoneMaxLength) {
+    if (input.value.length >= this.phoneMaxLengthNumber) {
       event.preventDefault();
     }
   }
@@ -130,76 +135,76 @@ export class ModifierMesInfosComponent {
   // Empêcher le collage de texte invalide
   onPaste(event: ClipboardEvent) {
     const pastedData = event.clipboardData?.getData('text') || '';
-    const input = event.target as HTMLInputElement;
 
     // Autoriser uniquement les chiffres et max 9 caractères
     if (!/^\d{1,9}$/.test(pastedData)) {
       event.preventDefault();
     }
 
-    // ✅ Si phoneCode = 224, vérifier que le premier chiffre collé commence par 6
-    const finalValue = input.value + pastedData;
-    if (
-      finalValue.length > 0 &&
-      finalValue.charAt(0) !== this.phoneFirstNumber
-    ) {
-      event.preventDefault();
-      return;
-    }
-
     // Vérifier que la longueur totale après collage ne dépasse pas 9
-    if (input.value.length + pastedData.length > this.phoneMaxLength) {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length + pastedData.length > this.phoneMaxLengthNumber) {
       event.preventDefault();
     }
   }
 
-  // ✅ Modifier infos profil
+  phoneErrorMessage: string = '';
+
   modifierInfos() {
     const phoneNumber = this.currentUserInfo.vcPhoneNumber;
 
-    // Vérifier que le numéro de téléphone a au moins 9 chiffres
+    // Réinitialiser le message d'erreur
+    this.phoneErrorMessage = '';
+
+    // Premier chiffre du numéro saisi
+    const firstNumberPhoneSaisi = parseInt(phoneNumber.charAt(0), 10);
+
+    console.log('Numéro complet :', phoneNumber);
+    console.log('Premier chiffre saisi :', firstNumberPhoneSaisi);
+    console.log('firstNumberPhone :', this.firstNumberPhone);
+
+    // Vérifier que le numéro de téléphone a le bon nombre de chiffres
     if (
       !phoneNumber ||
-      phoneNumber.replace(/\D/g, '').length < this.phoneMaxLength
+      phoneNumber.replace(/\D/g, '').length < this.phoneMaxLengthNumber
     ) {
-      this.toastr.error(
-        `Le numéro de téléphone doit contenir au moins ${this.phoneMaxLength} chiffres.`,
-        '',
-        { positionClass: 'toast-custom-center' }
-      );
-      return;
+      this.phoneErrorMessage = `Le numéro de téléphone doit contenir au moins ${this.phoneMaxLengthNumber} chiffres.`;
+      return; // arrêter l'exécution si la condition n'est pas respectée
     }
 
+    // Vérifier que le numéro commence par le bon chiffre
+    if (firstNumberPhoneSaisi !== this.firstNumberPhone) {
+      this.phoneErrorMessage = `Le numéro de téléphone doit commencer par ${this.firstNumberPhone}.`;
+      return; // arrêter l'exécution si la condition n'est pas respectée
+    }
+
+    // Si tout est correct, on peut continuer l'appel API
     this.isLoading = true;
     this.authService
       .modifierProfile(
         this.currentUserInfo.vcLastname,
         this.currentUserInfo.vcFirstname,
         this.currentUserInfo.email,
-        this.currentUserInfo.vcPhoneNumber,
+        phoneNumber,
         Number(this.currentUserInfo.id)
       )
       .subscribe({
-        next: (res: any) => {
+        next: (response: any) => {
           this.isLoading = false;
-          if (res.status === 200) {
-            this.toastr.success(res?.message, '', {
+          if (response.status === 200) {
+            this.toastr.success(response.message, '', {
               positionClass: 'toast-custom-center',
             });
-
-            // Delete old value and update new user infos
-            this.authService.setUpdateUserInfo(res?.data);
-            console.log(res?.data);
+            this.authService.setUserInfo(response.data);
           } else {
-            this.toastr.error(res?.message, '', {
+            this.toastr.error(response.message, '', {
               positionClass: 'toast-custom-center',
             });
           }
         },
-
-        error: (err) => {
+        error: (error) => {
           this.isLoading = false;
-          this.toastr.error(err?.message, '', {
+          this.toastr.error(error.message, '', {
             positionClass: 'toast-custom-center',
           });
         },

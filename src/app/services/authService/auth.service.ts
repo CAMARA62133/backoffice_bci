@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from './../../../environnements/environnement';
 @Injectable({
@@ -7,17 +7,26 @@ import { environment } from './../../../environnements/environnement';
 })
 export class AuthService {
   // Stocke les informations de l'utilisateur
-  private userInfo: any = null;
+  // private userInfo: any = null;
   private userConfigInfo: any = null;
   private baseUrl = environment.apiUrl;
   private appName = environment.appName;
   private appVersion = environment.appVersion.vcVersion;
   private user: any = null;
 
+  // ✅ Signals
+  private _userInfo = signal<any | null>(null);
+  private _userInfoConfig = signal<any | null>(null);
+
+  // ✅ Exposition lecture seule
+  userInfo = this._userInfo.asReadonly();
+  userInfoConfig = this._userInfoConfig.asReadonly();
+
   // Injection de HttpClient pour les requêtes HTTP
   constructor(private http: HttpClient) {
     const storedUser = localStorage.getItem('userInfo');
     if (storedUser) this.user = JSON.parse(storedUser);
+    this.restoreFromLocalStorage();
   }
 
   /**
@@ -96,13 +105,13 @@ export class AuthService {
    * @param userInfo les informations de l'utilisateur connecter
    * @param userConfigInfo les informations de l'organisation de l'utilisateur connnecter
    */
-  setUserInfo(userInfo: any, userConfigInfo: any): void {
-    this.userInfo = userInfo;
-    this.userConfigInfo = userConfigInfo || null;
+  // setUserInfo(userInfo: any, userConfigInfo: any): void {
+  //   this.userInfo = userInfo;
+  //   this.userConfigInfo = userConfigInfo || null;
 
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
-    localStorage.setItem('userConfigInfo', JSON.stringify(userConfigInfo));
-  }
+  //   localStorage.setItem('userInfo', JSON.stringify(userInfo));
+  //   localStorage.setItem('userConfigInfo', JSON.stringify(userConfigInfo));
+  // }
 
   setUpdateUserInfo(userInfo: any): void {
     this.userInfo = userInfo;
@@ -113,15 +122,15 @@ export class AuthService {
    * Récupère les informations de l'utilisateur depuis la mémoire ou le localStorage
    * @returns
    */
-  getUserInfo(): any {
-    if (this.userInfo) return this.userInfo;
-    const storedUserInfo = localStorage.getItem('userInfo');
-    if (storedUserInfo) {
-      this.userInfo = JSON.parse(storedUserInfo);
-      return this.userInfo;
-    }
-    return null;
-  }
+  // getUserInfo(): any {
+  //   if (this.userInfo) return this.userInfo;
+  //   const storedUserInfo = localStorage.getItem('userInfo');
+  //   if (storedUserInfo) {
+  //     this.userInfo = JSON.parse(storedUserInfo);
+  //     return this.userInfo;
+  //   }
+  //   return null;
+  // }
 
   getUserConfigInfo() {
     if (this.userConfigInfo) return this.userConfigInfo;
@@ -330,5 +339,132 @@ export class AuthService {
   private handleError(error: any): Observable<never> {
     console.error('Une erreur est survenue :', error);
     return throwError(() => new Error(error.message || 'Erreur du serveur'));
+  }
+
+  // 🧩 Restauration du localStorage
+  restoreFromLocalStorage(): void {
+    console.log(
+      '%c[AuthService] 🔹 Restauration depuis localStorage...',
+      'color: #999;'
+    );
+
+    const storedUser = localStorage.getItem('userInfo');
+    const storedConfig = localStorage.getItem('userInfoConfig');
+
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      this._userInfo.set(parsed);
+      console.log(
+        '%c[AuthService] 🟢 Utilisateur restauré :',
+        'color: #6f6;',
+        parsed
+      );
+    } else {
+      console.log('%c[AuthService] ⚠️ Aucun userInfo trouvé', 'color: orange;');
+    }
+
+    if (storedConfig) {
+      const parsedConfig = JSON.parse(storedConfig);
+      this._userInfoConfig.set(parsedConfig);
+      console.log(
+        '%c[AuthService] ⚙️ Config restaurée :',
+        'color: #0ff;',
+        parsedConfig
+      );
+    }
+  }
+
+  setUserInfo(userInfo: any): void {
+    console.log(
+      '%c[AuthService] 🟢 setUserInfo() appelé avec :',
+      'color: #6f6;',
+      userInfo
+    );
+    const previous = this._userInfo();
+    console.log('%c[AuthService] Ancienne valeur :', 'color: gray;', previous);
+
+    this._userInfo.set({ ...userInfo }); // clone → force la réactivité
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+    console.log(
+      '%c[AuthService] ✅ Nouvelle valeur signal userInfo :',
+      'color: #0f0;',
+      this._userInfo()
+    );
+  }
+
+  getUserInfo(): any {
+    console.log('%c[AuthService] 📖 getUserInfo() appelé', 'color: #09f;');
+    const user = this._userInfo();
+    if (user) {
+      console.log(
+        '%c[AuthService] ↪️ Signal actuel userInfo :',
+        'color: #0ff;',
+        user
+      );
+      return user;
+    }
+
+    const stored = localStorage.getItem('userInfo');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      this._userInfo.set(parsed);
+      console.log(
+        '%c[AuthService] 🔄 Restauré depuis localStorage :',
+        'color: #6f6;',
+        parsed
+      );
+      return parsed;
+    }
+
+    console.warn(
+      '%c[AuthService] ⚠️ Aucun userInfo disponible',
+      'color: orange;'
+    );
+    return null;
+  }
+
+  setUserInfoConfig(config: any): void {
+    console.log(
+      '%c[AuthService] ⚙️ setUserInfoConfig() appelé avec :',
+      'color: cyan;',
+      config
+    );
+    this._userInfoConfig.set(config);
+    localStorage.setItem('userInfoConfig', JSON.stringify(config));
+  }
+
+  getUserInfoConfig(): any {
+    console.log(
+      '%c[AuthService] 📖 getUserInfoConfig() appelé',
+      'color: #09f;'
+    );
+    const config = this._userInfoConfig();
+    if (config) {
+      console.log(
+        '%c[AuthService] ↪️ Signal actuel config :',
+        'color: #0ff;',
+        config
+      );
+      return config;
+    }
+
+    const stored = localStorage.getItem('userInfoConfig');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      this._userInfoConfig.set(parsed);
+      console.log(
+        '%c[AuthService] 🔄 Restauré depuis localStorage :',
+        'color: #6f6;',
+        parsed
+      );
+      return parsed;
+    }
+
+    console.warn(
+      '%c[AuthService] ⚠️ Aucun userInfoConfig disponible',
+      'color: orange;'
+    );
+    return null;
   }
 }

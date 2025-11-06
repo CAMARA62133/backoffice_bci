@@ -112,6 +112,12 @@
                             (paste)="onPaste($event)"
                           />
                         </div>
+                        <div
+                          *ngIf="phoneErrorMessage"
+                          class="text-danger slide-in-right"
+                        >
+                          {{ phoneErrorMessage }}
+                        </div>
                       </div>
 
                       <div class="col-md-3 mt-3">

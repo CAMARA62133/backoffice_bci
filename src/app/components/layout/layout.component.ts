@@ -1,4 +1,4 @@
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { DatePipe, NgIf, UpperCasePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -6,7 +6,7 @@ import { AuthService } from '../../services/authService/auth.service';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, RouterLink, UpperCasePipe, DatePipe],
+  imports: [RouterOutlet, RouterLink, UpperCasePipe, DatePipe, NgIf],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
 })
@@ -55,5 +55,10 @@ export class LayoutComponent implements OnInit {
         // this.router.navigate(['/login']);
       },
     });
+  }
+
+  // Ajoute une méthode getUser() pour exposer le signal value dans le template
+  getUser() {
+    return this.authService.userInfo();
   }
 }

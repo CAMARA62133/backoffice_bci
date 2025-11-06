@@ -127,8 +127,10 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
         this.isLoading = false;
         if (response?.status && response.status === 200) {
           // Sauvegarde dans AuthService et localStorage
-          this.authService.setUserInfo(response.data, response.config);
+          this.authService.setUserInfo(response.data);
+          this.authService.setUserInfoConfig(response.config);
           this.authService.saveToken(response.token);
+
           console.log('res : ', response);
 
           this.toastr.success(response?.message, '', {
