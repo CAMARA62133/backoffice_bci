@@ -184,7 +184,9 @@ export class AuthService {
   private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
     if (!token) throw new Error('No token found');
-    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
   }
 
   /**

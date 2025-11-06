@@ -10,8 +10,11 @@ import { AuthService } from '../authService/auth.service';
 export class OrganisationsService {
   baseUrl = environment.apiUrl;
   appName = environment.appName;
+  public headers!: HttpHeaders;
 
-  constructor(private http: HttpClient, private authServie: AuthService) {}
+  constructor(private http: HttpClient, private authServie: AuthService) {
+    this.headers = authServie.setRequestHeaders();
+  }
 
   getOrganisations(): Observable<any> {
     return this.http.get(`${this.baseUrl}/api/getListeOrganisation`);
@@ -21,16 +24,28 @@ export class OrganisationsService {
     return this.http.get(`${this.baseUrl}/api/getListePays`);
   }
 
-  // Pour les infos utilisateurs
-  createOrganisation(data: any): Observable<any> {
-    const token = this.authServie.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
+  // getListeOrganisationConfig(data: any): Observable<any> {
+  //   const params = new HttpParams().set(
+  //     'iOrganisationID',
+  //     data?.iOrganisationID
+  //   );
+  //   return this.http.get(
+  //     `${this.baseUrl}/api/getListeOrganisationConfig`,
+  //     {},
+  //   );
+  // }
 
+  // Pour les infos organisation
+  createOrganisation(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/addOrganisationAndUser`, data, {
-      headers,
+      headers: this.headers,
+    });
+  }
+
+  // Mise a jour des infos
+  updateOrganisation(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/updateOrganisation`, data, {
+      headers: this.headers,
     });
   }
 
@@ -61,7 +76,20 @@ export class OrganisationsService {
       );
   }
 
-  //
+  // Activer ou Desactiver une organisation
+  toggleActiveOrDesactiveOrg(data: any): Observable<any> {
+    const params = new HttpParams()
+      .set('idOrganisation', data.idOrganisation)
+      .set('btEnabled', data.btEnabled);
+
+    return this.http.post(
+      `${this.baseUrl}/api/activeOrDesactiveOrganisation`,
+      {},
+      { params }
+    );
+  }
+
+  // Renvoie du lien de verification d'email
   renvoieLienVerification(businnessEmailDomain: string): Observable<any> {
     const params = new HttpParams()
       .set('vcBusinessEmailDomain', businnessEmailDomain)

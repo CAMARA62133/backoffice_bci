@@ -57,16 +57,23 @@
                     <td>{{ org.vcCity }}</td>
                     <td>{{ org.vcCountry }}</td>
                     <td>{{ org.vcAddress }}</td>
-                    <td>{{ org.vcLogoPath }}</td>
+                    <td>
+                      <!-- <img
+                        [src]="org.vcLogoPath"
+                        [alt]="org.organisationName"
+                      /> -->
+                      <img src="logoBCI.svg" alt="" width="50px" />
+                    </td>
                     <td>{{ org.vcBusinessEmailDomain }}</td>
                     <td>
                       <span
                         class="badge text-bg-{{
-                          org.btEnabled ? 'success' : 'danger'
+                          +org.btEnabled === 1 ? 'success' : 'danger'
                         }} rounded-pill"
-                        >{{ org.btEnabled ? "Active" : "Inactive" }}</span
+                        >{{
+                          +org.btEnabled === 1 ? "Active" : "Inactive"
+                        }}</span
                       >
-                      <!-- {{ org.btEnabled ? "Active" : "Inactive" }} -->
                     </td>
                     <td>{{ org.dtCreated | date : "dd/MM/yyyy" }}</td>
                     <td>
@@ -88,10 +95,19 @@
                         </button>
                         <button
                           type="button"
-                          class="btn btn-outline-success btn-action btn-sm"
-                          title="Réactiver"
+                          class="btn btn-action btn-sm"
+                          title="{{
+                            +org.btEnabled === 1 ? 'Désactiver' : 'Réactiver'
+                          }}"
+                          (click)="onToggle(org)"
                         >
-                          <i class="fas fa-lock"></i>
+                          <i
+                            class="fas fa-{{
+                              +org.btEnabled === 1 ? 'lock-open' : 'lock'
+                            }} text-{{
+                              +org.btEnabled === 1 ? 'success' : 'danger'
+                            }}"
+                          ></i>
                         </button>
                       </div>
                     </td>
@@ -716,19 +732,13 @@
               </div>
 
               <div class="col-md-6">
-                <label class="form-label">
-                  Logo Path<span class="text-danger">*</span>
-                </label>
+                <label class="form-label"> Logo Path </label>
                 <input
                   class="form-control form-control"
                   required=""
                   type="file"
                   formControlName="vcOrgLogoPath"
-                  [ngClass]="getFormControlClass('vcOrgLogoPath')"
                 />
-                <span class="text-danger" *ngIf="isInvalid('vcOrgLogoPath')">
-                  {{ getErrorMessage("vcOrgLogoPath") }}
-                </span>
               </div>
 
               <div class="col-md-12">
@@ -813,13 +823,52 @@
                 </span>
               </div>
 
-              <div class="col-md-12">
-                <label class="form-label"> Description </label>
+              <div class="col-md-8">
+                <label class="form-label">
+                  Description <span class="text-danger">*</span>
+                </label>
                 <textarea
                   class="form-control form-control"
                   formControlName="vcDescription"
                   rows="2"
                 ></textarea>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label">
+                  Mode d'envoi de l'OTP<span class="text-danger">*</span>
+                </label>
+
+                <div
+                  class="form-check"
+                  [ngClass]="getFormControlClass('modeOtp')"
+                >
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="modeOtp"
+                    id="otp_sms"
+                    value="SMS"
+                  />
+                  <label class="form-check-label" for="otp_sms"> SMS </label>
+                </div>
+
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="modeOtp"
+                    id="otp_email"
+                    value="Email"
+                  />
+                  <label class="form-check-label" for="otp_email">
+                    Email
+                  </label>
+                </div>
+
+                <span class="text-danger" *ngIf="isInvalid('modeOtp')">
+                  {{ getErrorMessage("modeOtp") }}
+                </span>
               </div>
             </div>
           </fieldset>
@@ -850,6 +899,71 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- Blocage et deblocage -->
+<div
+  class="modal fade"
+  id="bloquerDebloquerModal"
+  tabindex="-1"
+  aria-labelledby="bloquerDebloquerLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bloquerDebloquerLabel">Confirmation</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fermer"
+        ></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <p>
+          Êtes-vous sûr de vouloir
+          <strong class="text-{{ btEnabled ? 'primary' : 'danger' }}">
+            {{ btEnabled ? "activer" : "bloquer" }}
+          </strong>
+          cette organisation ?
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          [disabled]="isloadingBloquerDebloquer"
+        >
+          Non
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="bloquerEtDebloquer()"
+          [disabled]="isloadingBloquerDebloquer"
+        >
+          <ng-container
+            *ngIf="!isloadingBloquerDebloquer; else loadingTemplate"
+          >
+            Oui
+          </ng-container>
+          <ng-template #loadingTemplate>
+            <span
+              class="spinner-border spinner-border-sm me-1"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            En cours...
+          </ng-template>
+        </button>
+      </div>
     </div>
   </div>
 </div>

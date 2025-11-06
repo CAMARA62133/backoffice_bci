@@ -68,6 +68,13 @@ export class OrganisationsComponent implements OnInit {
   phoneMaxLength!: number;
   phoneFirstNumber!: string;
 
+  btEnabled!: number;
+  showModalOpenBloquerDebloquer = false;
+  isloadingBloquerDebloquer: boolean = false;
+
+  isEditMode: boolean = true;
+  idUsers!: number | string;
+
   constructor(
     private modalsService: ModalsService,
     private fb: FormBuilder,
@@ -93,7 +100,7 @@ export class OrganisationsComponent implements OnInit {
       this.currentUser = userData;
     }
 
-    const config = this.authService.getUserConfigInfo();
+    const config = this.authService.getUserInfoConfig();
     console.log(config);
 
     this.country = config.organisation.find(
@@ -123,6 +130,7 @@ export class OrganisationsComponent implements OnInit {
     console.log('phoneMaxLength : ', this.phoneMaxLength);
     console.log('phoneFirstNumber : ', this.phoneFirstNumber);
 
+    // initialiser le formulaire
     this.initForm();
 
     // Chargement des donnees
@@ -226,15 +234,30 @@ export class OrganisationsComponent implements OnInit {
   }
 
   openCreateModal() {
+    this.isEditMode = false;
+    this.initForm(); // 🔁 remet tous les Validators.required
     this.orgForm.reset(); // Vider le formulaire
     this.modalsService.openModal('createOrgModal');
+  }
+
+  // Ouverture de modal
+  openModal(modalId: string) {
+    const isModalOpen = this.modalsService.isModalOpen(modalId);
+
+    if (!isModalOpen) {
+      this.modalsService.openModal(modalId);
+      this.orgForm.reset();
+    }
+
+    this.modalsService.closeModal(modalId);
+    this.modalsService.closeAllModals();
   }
 
   closeModal(modalId: string) {
     this.modalsService.closeModal(modalId);
   }
 
-  // a la soumission du formulaire
+  // Create organisation
   onSubmit() {
     if (this.orgForm.invalid) {
       this.orgForm.markAllAsTouched();
@@ -305,14 +328,31 @@ export class OrganisationsComponent implements OnInit {
     });
   }
 
+  setOptionalFieldsForEdit() {
+    // Supprimer la validation du logo si on est en mode édition
+    this.orgForm.get('vcOrgLogoPath')?.clearValidators();
+    this.orgForm.get('vcOrgLogoPath')?.updateValueAndValidity();
+
+    // Si tu veux, tu peux aussi rendre d'autres champs optionnels
+    this.orgForm.get('vcDescription')?.clearValidators();
+    this.orgForm.get('vcDescription')?.updateValueAndValidity();
+  }
+
+  // Open de edit modal form with correct information
   onEdit(org: any) {
+    this.isEditMode = true;
+    this.initForm();
+
     this.modalsService.openModal('updateOrgModal');
-    this.selectedOrg = org;
+    this.selectedOrg = { ...org };
+    this.selectedOrgId = this.selectedOrg.id;
+
+    this.idUsers = this.selectedOrg.idUsers;
+
     console.log('selected org : ', this.selectedOrg);
 
-    //
+    // 🧱 Remplir le formulaire avec les données existantes
     this.orgForm.patchValue({
-      // Org infos
       vcOrgName: this.selectedOrg.organisationName,
       vcOrgContact: this.selectedOrg.vcContact,
       vcOrgPhoneNumber: this.selectedOrg.vcPhoneNumber,
@@ -323,26 +363,147 @@ export class OrganisationsComponent implements OnInit {
       vcOrgLogoPath: '',
       vcBusinessEmailDomain: this.selectedOrg.vcBusinessEmailDomain,
 
-      // Pour les infos utilisateurs
       vcFirstname: this.selectedOrg.vcFirstnameUsers,
       vcLastname: this.selectedOrg.vcLastnameUsers,
       vcDescription: this.selectedOrg.vcDescription,
       iRoleID: this.selectedOrg.iRoleID,
+      modeOtp: this.selectedOrg.modeOtp || 'Email',
     });
+
+    // 🧩 Retirer la validation "required" pour le champ logo uniquement en modification
+    this.orgForm.get('vcOrgLogoPath')?.clearValidators();
+    this.orgForm.get('vcOrgLogoPath')?.updateValueAndValidity();
 
     this.cd.detectChanges();
   }
 
+  // Update the informations
   onUpdate() {
+    this.orgForm.get('vcOrgLogoPath')?.clearValidators();
+    this.orgForm.get('vcOrgLogoPath')?.updateValueAndValidity();
+
     if (this.orgForm.invalid) {
       this.orgForm.markAllAsTouched();
       console.log('invalid forms');
+      // console.log(this.orgForm.value);
       return;
     }
 
+    this.isLoading = true;
     console.log(this.orgForm.value);
 
+    // On récupère les données du formulaire
+    const formData = {
+      ...this.orgForm.value,
+      iOrganisationID: this.selectedOrgId,
+    };
+
+    console.log('form data : ', formData);
+
+    // On construit l'objet a envoyer
+    const dataToSend = {
+      iOrganisationID: this.selectedOrgId,
+      vcOrgName: formData.vcOrgName,
+      vcOrgContact: formData.vcOrgContact,
+      vcOrgPhoneNumber: formData.vcOrgPhoneNumber,
+      vcOrgEmail: formData.vcOrgEmail,
+      vcOrgCity: formData.vcOrgCity,
+      vcOrgCountry: formData.vcOrgCountry,
+      vcOrgAddress: formData.vcOrgAddress,
+      vcOrgLogoPath: formData.vcOrgLogoPath,
+      vcBusinessEmailDomain: formData.vcBusinessEmailDomain,
+      vcDescription: formData.vcDescription,
+      modeOtp: formData.modeOtp,
+
+      iUserID: this.idUsers,
+      vcFirstname: formData.vcFirstname,
+      vcLastname: formData.vcLastname,
+      vcUserEmail: formData.vcOrgEmail,
+      vcPhoneNumber: formData.vcOrgPhoneNumber,
+      iRoleID: formData.iRoleID,
+    };
+
+    console.log('🟢 Données envoyées :', dataToSend);
+
+    // Appel au service de modification
+    // console.log('Appel au service de modification');
+    this.orgService.updateOrganisation(dataToSend).subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.orgForm.reset();
+        } else {
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+        console.log('updating : ', res);
+        this.loadOrganisations();
+        this.modalsService.closeAllModals();
+      },
+      error: (err) => {
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+        console.log('error updating : ', err);
+      },
+    });
+
     this.modalsService.closeAllModals();
+  }
+
+  // onToggle
+  onToggle(organisation: any) {
+    this.openModal('bloquerDebloquerModal');
+    this.selectedOrgId = organisation.id;
+    this.btEnabled = +organisation.btEnabled === 0 ? 1 : 0;
+    console.log('Selected organisation : ', organisation);
+    console.log(this.selectedOrgId, this.btEnabled);
+  }
+
+  // Active or Deactive
+  bloquerEtDebloquer(): void {
+    if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
+    if (this.selectedOrgId === null) {
+      this.toastr.error('Aucune organisation sélectionnée.');
+      return;
+    }
+
+    const params = {
+      idOrganisation: this.selectedOrgId,
+      btEnabled: this.btEnabled,
+    };
+
+    this.orgService.toggleActiveOrDesactiveOrg(params).subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.loadOrganisations();
+          this.updatePagination();
+        } else {
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+        console.log('res api : ', res);
+        this.showModalOpenBloquerDebloquer = false;
+        this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
+      },
+
+      error: (err) => {
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+        console.log('err api : ', err);
+        this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
+      },
+    });
   }
 
   // Fonction priver pour Recharger automatiquement la liste des organisations
