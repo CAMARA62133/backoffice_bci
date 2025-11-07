@@ -1,8 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../../services/authService/auth.service';
+import { ConfigurationsService } from '../../../services/configurations/configurations.service';
+import { OrganisationsService } from '../../../services/organisations/organisations.service';
 
 interface OrganisationItem {
   vcKey: string;
@@ -43,39 +52,71 @@ export class ModifierMesInfosComponent {
   passwordVisibleConfirm = false;
   password = { old: '', new: '', confirm: '' };
 
-  constructor(
-    private authService: AuthService,
-    private toastr: ToastrService
-  ) {}
+  countries: any[] = [];
+  isLoadingCoutries: boolean = false;
 
   userInfoConfig: any;
   country: string = '';
   phoneCode: number = 0;
   phoneFormat: string = '';
   currency: string = '';
+  timeZone: string = '';
+  timeZonePerUser: any = '';
 
   phoneMaxLengthNumber: number = 0;
   firstNumberPhone: number = 0;
+  phoneErrorMessage: string = '';
+
+  orgForm!: FormGroup;
+  orgId!: number;
+  configs!: any;
+
+  constructor(
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private orgService: OrganisationsService,
+    private fb: FormBuilder,
+    private configService: ConfigurationsService
+  ) {}
 
   ngOnInit(): void {
     const dataConfig = this.authService.getUserInfoConfig();
-    if (dataConfig) this.userInfoConfig = { ...dataConfig };
-    console.log(dataConfig);
+    const userInfo = this.authService.getUserInfo();
+    this.orgId = userInfo.iOrganisationID;
 
-    this.country = dataConfig.organisation.find(
-      (c: OrganisationItem) => c.vcKey === 'Pays'
-    )?.vcValue;
-    console.log(this.country);
+    console.log('dataConfig : ', dataConfig);
+    console.log('userInfo : ', userInfo);
 
-    this.phoneCode = dataConfig.organisation.find(
-      (c: OrganisationItem) => c.vcKey === 'Telephone_Code'
-    )?.vcValue;
-    console.log(this.phoneCode);
+    if (dataConfig) {
+      this.userInfoConfig = { ...dataConfig };
+      console.log('userInfoConfig : ', this.userInfoConfig);
 
-    this.phoneFormat = dataConfig.organisation.find(
-      (c: OrganisationItem) => c.vcKey === 'Telephone_Format'
-    )?.vcValue;
-    console.log(this.phoneFormat);
+      this.country = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'Pays'
+      )?.vcValue;
+      console.log(this.country);
+
+      this.phoneCode = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'Telephone_Code'
+      )?.vcValue;
+
+      this.phoneFormat = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'Telephone_Format'
+      )?.vcValue;
+
+      this.currency = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'Devise'
+      )?.vcValue;
+
+      this.timeZone = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'TimeZone'
+      )?.vcValue;
+
+      this.timeZonePerUser = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'TimeZonePerUser'
+      )?.vcValue;
+      console.log('timeZonePerUser : ', this.timeZonePerUser);
+    }
 
     if (this.phoneFormat) {
       // Premier chiffre
@@ -88,14 +129,41 @@ export class ModifierMesInfosComponent {
       console.log('Nombre total de chiffres :', this.phoneMaxLengthNumber);
     }
 
-    this.currency = dataConfig.organisation.find(
-      (c: OrganisationItem) => c.vcKey === 'Devise'
-    )?.vcValue;
-    console.log(this.currency);
-
+    // Chargement de l'utilisateur connecté
     const data = this.authService.getUserInfo();
-    console.log(data);
     if (data) this.currentUserInfo = { ...data };
+
+    // Initialisation du formulaire
+    this.initForm();
+
+    // Chargement de la liste des pays
+    this.loadListePays();
+
+    // 🔄 Mettre à jour les champs auto quand le pays change
+    this.orgForm.get('Pays')?.valueChanges.subscribe((selectedCountryCode) => {
+      console.log('entre sle : ', selectedCountryCode);
+      if (!selectedCountryCode) return;
+
+      const selected = this.countries.find(
+        (c: any) =>
+          c.vcCode.toLowerCase().trim() ==
+          selectedCountryCode.toLowerCase().trim()
+      );
+      console.log('selected country : ', selected);
+
+      if (selected) {
+        this.orgForm.patchValue(
+          {
+            Telephone_Code: selected.vcPhoneCode,
+            Telephone_Format: selected.vcPhoneFormat,
+            TimeZone: selected.vcTimeZone,
+            Devise: selected.devise || this.currency, // si ton API renvoie une devise
+            TimeZonePerUser: this.timeZonePerUser,
+          },
+          { emitEvent: false } // 🛑 évite la boucle infinie
+        );
+      }
+    });
   }
 
   // ✅ Changer visibilité mot de passe
@@ -147,8 +215,6 @@ export class ModifierMesInfosComponent {
       event.preventDefault();
     }
   }
-
-  phoneErrorMessage: string = '';
 
   modifierInfos() {
     const phoneNumber = this.currentUserInfo.vcPhoneNumber;
@@ -263,6 +329,130 @@ export class ModifierMesInfosComponent {
           });
         },
       });
+  }
+
+  // Initialisation du formulaire
+  private initForm(): void {
+    this.orgForm = this.fb.group({
+      Pays: [this.country || '', Validators.required],
+      Telephone_Code: [this.phoneCode || '', Validators.required],
+      Telephone_Format: [this.phoneFormat || '', Validators.required],
+      TimeZone: [this.timeZone || '', Validators.required],
+      Devise: [this.currency || '', Validators.required],
+      TimeZonePerUser: [this.timeZonePerUser || false],
+    });
+  }
+
+  // Liste des pays.
+  private loadListePays(): void {
+    this.isLoadingCoutries = true;
+    this.orgService.getListePays().subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.countries = res?.data;
+          console.log(this.countries);
+
+          // ✅ Sélectionner le pays de l'utilisateur connecté (après chargement)
+          const selectedCountry = this.countries.find(
+            (c: any) =>
+              c.vcName.toLowerCase().trim() ===
+                this.country?.toLowerCase().trim() ||
+              c.vcCode.toLowerCase().trim() ===
+                this.country?.toLowerCase().trim()
+          );
+
+          if (selectedCountry) {
+            this.orgForm.patchValue(
+              {
+                Pays: selectedCountry.vcCode,
+                Telephone_Code: selectedCountry.vcPhoneCode,
+                Telephone_Format: selectedCountry.vcPhoneFormat,
+                TimeZone: selectedCountry.vcTimeZone,
+                Devise: selectedCountry.vcCurrency || this.currency,
+              },
+              { emitEvent: false } // évite boucle
+            );
+          }
+        } else {
+          this.toastr.error(res?.message || 'Erreur de chargement', '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+        console.log(res);
+        this.isLoadingCoutries = false;
+      },
+
+      error: (err) => {
+        this.toastr.error(
+          err?.message || 'Erreur lors du chargement des pays',
+          '',
+          {
+            positionClass: 'toast-custom-center',
+          }
+        );
+        console.log(err);
+        this.isLoadingCoutries = false;
+      },
+    });
+  }
+
+  // Changer les informations de configuration du pays
+  onSubmit(): void {
+    if (this.orgForm.invalid) return;
+    const formValue = this.orgForm.value;
+
+    console.log('formValue', formValue);
+
+    const payload = Object.keys(formValue).map((key) => ({
+      vcKey: key,
+      vcValue:
+        key === 'TimeZonePerUser'
+          ? formValue[key]
+            ? '1'
+            : '0'
+          : formValue[key],
+    }));
+
+    // (formValue[key] ? 1 : 0)
+
+    console.log('✅ Données à envoyer au backend :', payload);
+
+    this.isLoading = true;
+
+    // Appel au service de mise ajour.
+    this.configService.updateMultipleConfigs(this.orgId, payload).subscribe({
+      next: (res) => {
+        console.log('doneer envoyer sont : ', this.orgId, payload);
+
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+
+          const oldConf = this.authService.getUserInfoConfig();
+          console.log('dany', oldConf, { ...oldConf, organisation: res?.data });
+          this.authService.setUserInfoConfig({
+            ...oldConf,
+            organisation: res?.data,
+          });
+        } else {
+          this.toastr.error(res.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+        console.log(res);
+        console.log(this.timeZonePerUser);
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+        console.log(err);
+        this.toastr.error(err.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+        this.isLoading = false;
+      },
+    });
   }
 
   closeModal() {

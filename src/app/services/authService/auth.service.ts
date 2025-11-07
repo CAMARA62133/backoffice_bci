@@ -295,6 +295,8 @@ export class AuthService {
     );
   }
 
+
+
   /**
    * Deconnexion de l'utilisateur
    * @param appName : le nom de l'application

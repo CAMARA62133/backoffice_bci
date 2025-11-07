@@ -24,16 +24,6 @@ export class OrganisationsService {
     return this.http.get(`${this.baseUrl}/api/getListePays`);
   }
 
-  // getListeOrganisationConfig(data: any): Observable<any> {
-  //   const params = new HttpParams().set(
-  //     'iOrganisationID',
-  //     data?.iOrganisationID
-  //   );
-  //   return this.http.get(
-  //     `${this.baseUrl}/api/getListeOrganisationConfig`,
-  //     {},
-  //   );
-  // }
 
   // Pour les infos organisation
   createOrganisation(data: any): Observable<any> {
