@@ -1,11 +1,10 @@
-import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { OrganisationsService } from '../../../../services/organisations/organisations.service';
 
 @Component({
   selector: 'app-page404',
-  imports: [NgIf],
+  imports: [],
   templateUrl: './page404.component.html',
   styleUrl: './page404.component.css',
 })

@@ -9,9 +9,18 @@
             </h1>
           </div>
           <div class="d-flex gap-2">
+            <button
+              class="btn btn-dark"
+              (click)="refreshUsers()"
+              [disabled]="isLoading"
+            >
+              <i class="fas fa-sync me-1"></i>
+              Rafraîchir
+            </button>
+
             <button class="btn btn-primary" (click)="openCreateModal()">
               <i class="fas fa-plus me-1"></i>
-              Créer un nouveau Utilisateur
+              Créer un nouveau utilisateur
             </button>
           </div>
         </div>
@@ -343,45 +352,23 @@
             </div>
 
             <div class="col-md-4">
-              <div class="mb-3">
-                <label for="password" class="form-label">
-                  Mot de passe <span class="text-danger">*</span>
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  class="form-control"
-                  required
-                  formControlName="vcPassword"
-                  [ngClass]="getFormControlClass('vcPassword')"
-                />
-                <span class="text-danger" *ngIf="isInvalid('vcPassword')">
-                  {{ getErrorMessage("vcPassword") }}
-                </span>
-              </div>
-            </div>
-
-            <div class="col-md-4">
               <label class="form-label">
                 Pays<span class="text-danger">*</span>
               </label>
               <select
                 class="form-select form-select"
                 required
-                formControlName="vcOrgCountry"
-                [ngClass]="getFormControlClass('vcOrgCountry')"
+                formControlName="idPays"
+                [ngClass]="getFormControlClass('idPays')"
               >
                 <option [value]="null">-- Sélectionnez un pays --</option>
-                <option
-                  *ngFor="let country of countries"
-                  [value]="country.vcName"
-                >
+                <option *ngFor="let country of countries" [value]="country.id">
                   {{ country.vcName }}
                 </option>
               </select>
 
-              <span class="text-danger" *ngIf="isInvalid('vcOrgCountry')">
-                {{ getErrorMessage("vcOrgCountry") }}
+              <span class="text-danger" *ngIf="isInvalid('idPays')">
+                {{ getErrorMessage("idPays") }}
               </span>
             </div>
 

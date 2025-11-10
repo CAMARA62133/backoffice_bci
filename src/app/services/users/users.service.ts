@@ -22,39 +22,28 @@ export class UsersService {
     });
   }
 
-  // CREATE - Créer un nouvel utilisateur
+  /**
+   * Créer un nouvel utilisateur
+   * @param payload
+   * @returns
+   */
   createUser(payload: any): Observable<any> {
-    console.log('Create user params : ', { payload });
+    console.log('Create user payload : ', { payload });
 
-    return this.http.post<any>(`${this.apiUrl}/createUser`, payload, {
+    const body = { ...payload, appName: environment.appName };
+    console.log('Create user body : ', { body });
+
+    return this.http.post(`${this.apiUrl}/api/addUsers`, body, {
       headers: this.getHeaders(),
     });
   }
 
-  // READ - Récupérer tous les utilisateurs
+  /**
+   *  Récupérer tous les utilisateurs
+   * @returns
+   */
   getAllUsers(): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/getListeUsers`, {
-      headers: this.getHeaders(),
-    });
-  }
-
-  // READ - Récupérer un utilisateur par ID
-  getUserById(id: string | number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/users/${id}`, {
-      headers: this.getHeaders(),
-    });
-  }
-
-  // UPDATE - Mettre à jour un utilisateur
-  updateUser(id: string | number, payload: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/users/${id}`, payload, {
-      headers: this.getHeaders(),
-    });
-  }
-
-  // DELETE - Supprimer un utilisateur
-  deleteUser(id: string | number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/users/${id}`, {
       headers: this.getHeaders(),
     });
   }

@@ -78,18 +78,14 @@ export class UtilisteurComponent implements OnInit {
    */
   initForm(): void {
     this.userForm = this.fb.group({
-      vcFirstname: ['', Validators.required],
       vcLastname: ['', Validators.required],
-      vcPhoneNumber: [
-        '',
-        [Validators.required, Validators.pattern('^[0-9+()\\-\\s]+$')],
-      ],
-      vcDescription: ['', Validators.required],
+      vcFirstname: ['', Validators.required],
       vcEmail: ['', [Validators.required, Validators.email]],
       iRoleID: [null, Validators.required],
-      vcPassword: ['', [Validators.required, Validators.minLength(6)]],
-      vcOrgCountry: [null, [Validators.required]],
-      modeOtp: ['', [Validators.required]],
+      vcPhoneNumber: ['', Validators.required],
+      modeOtp: ['', Validators.required],
+      idPays: [null, Validators.required],
+      vcDescription: ['', Validators.required],
     });
   }
 
@@ -107,6 +103,10 @@ export class UtilisteurComponent implements OnInit {
     this.btEnabled = +user.btEnabled === 0 ? 1 : 0;
     console.log('Selected user : ', user);
     console.log(this.selectedUserId, this.btEnabled);
+  }
+
+  refreshUsers() {
+    this.loadUsers();
   }
 
   // Ouverture de modal
@@ -129,7 +129,6 @@ export class UtilisteurComponent implements OnInit {
 
   onSubmit() {
     if (this.userForm.invalid) {
-      // this.isLoading = true;
       this.userForm.markAllAsTouched();
       console.warn('Formulaire invalide, vérifie les champs.');
       return;
@@ -137,23 +136,51 @@ export class UtilisteurComponent implements OnInit {
 
     const raw = this.userForm.value;
 
+    console.log(raw);
+
     // Construire le payload final
     const payload: any = {
-      vcFirstname: raw.vcFirstname,
-      vcLastname: raw.vcLastname,
-      vcPhoneNumber: raw.vcPhoneNumber, // source unique
-      vcDescription: raw.vcDescription,
-      vcEmail: raw.vcEmail, // source unique
+      nom: raw.vcLastname,
+      prenom: raw.vcFirstname,
+      email: raw.vcEmail,
       iRoleID: raw.iRoleID,
-      vcPassword: raw.vcPassword,
+      PhoneNumber: raw.vcPhoneNumber,
+      modeOtp: raw.modeOtp,
+      idPays: raw.idPays,
+      // appName: environment.appName,
+      vcDescription: raw.vcDescription,
     };
 
-    // this.isLoading = false;
+    this.isLoading = true;
 
     // Appel a l'API
-    console.log('Formulaire valide, envoi du payload :', payload);
-    console.log('Payload prêt à envoyer', payload);
-    this.modalsService.closeAllModals();
+    this.usersService.createUser(payload).subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.loadUsers();
+          this.userForm.reset();
+          this.closeModal('createUserModal');
+        } else {
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+
+        console.log('create user res:', res);
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+        console.log(err);
+        this.isLoading = false;
+      },
+    });
   }
 
   /**
@@ -274,7 +301,7 @@ export class UtilisteurComponent implements OnInit {
   private loadCountries() {
     this.isLoading = true;
 
-    this.sharedService.getAllRoles().subscribe({
+    this.sharedService.getAllPays().subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
           this.countries = res?.data || [];
