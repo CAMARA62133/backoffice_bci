@@ -7,8 +7,16 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 import { ModalsService } from '../../../services/modals/modals.service';
+import { SharedService } from '../../../services/shared/shared.service';
+import { UsersService } from '../../../services/users/users.service';
+import {
+  getErrorMessage,
+  getFormControlClass,
+  isInvalid,
+  isValid,
+} from '../../../utils/form-helpers';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
@@ -20,180 +28,102 @@ declare var bootstrap: any;
   styleUrl: './utilisteur.component.css',
 })
 export class UtilisteurComponent implements OnInit {
-  // Liste des utilisateurs
-  utilisateurs = [
-    {
-      id: 1,
-      nom: 'FELEMOU',
-      prenom: 'Nyankoye Daniel',
-      email: 'ndfelemou.dev@gmail.com',
-      telephone: '620000000',
-      role: 'Developer',
-    },
-    {
-      id: 2,
-      nom: 'Diallo',
-      prenom: 'Mamadou',
-      email: 'mamadou@mail.com',
-      telephone: '620000002',
-      role: 'Comptable',
-    },
-    {
-      id: 3,
-      nom: 'Bah',
-      prenom: 'Aminata',
-      email: 'aminata@mail.com',
-      telephone: '620000003',
-      role: 'Chef Comptable',
-    },
-    {
-      id: 4,
-      nom: 'Camara',
-      prenom: 'Ibrahima',
-      email: 'ibrahima@mail.com',
-      telephone: '620000004',
-      role: 'DAF',
-    },
-    {
-      id: 5,
-      nom: 'Sylla',
-      prenom: 'Fatoumata',
-      email: 'fatoumata@mail.com',
-      telephone: '620000005',
-      role: 'Comptable',
-    },
-    {
-      id: 6,
-      nom: 'Barry',
-      prenom: 'Ousmane',
-      email: 'ousmane@mail.com',
-      telephone: '620000006',
-      role: 'Chef Comptable',
-    },
-  ];
-
   userForm!: FormGroup;
-  private subs = new Subscription();
 
-  createUserModalId: string = 'createUserModal';
-  updateUserModalId: string = 'updateUserModal';
   isLoading: boolean = false;
+  isLoadingUser: boolean = false;
+  isEditMode: boolean = false;
 
-  // // userparams
-  // newUser = {
-  //   firstname: '',
-  //   lastname: '',
-  //   email: '',
-  //   telephone: '',
-  //   selectedRole: '',
-  //   description: '',
-  // };
+  roles: any = [];
+  users: any = [];
 
-  // newOrganisation = {
-  //   nomOrganisation: '',
-  //   contact: '',
-  //   addresse: '',
-  //   city: '',
-  //   country: '',
-  // };
+  btEnabled!: number;
+  showModalOpenBloquerDebloquer = false;
+  isloadingBloquerDebloquer: boolean = false;
 
-  roles = [
-    { id: 1, name: 'developper', libelle: 'Developpeur', showExtra: true },
-    { id: 2, name: 'user', libelle: 'Simple Utilisateur', showExtra: false },
-    { id: 3, name: 'manager', libelle: 'Manager', showExtra: false },
-    { id: 4, name: 'admin', libelle: 'Administrateur', showExtra: true },
-    { id: 5, name: 'supervisor', libelle: 'Superviseur', showExtra: true },
-  ];
+  selectedUser: any = null;
+  selectedUserId: number | null = null;
 
-  // contrôlera l'affichage de la section "business"
-  showBusinessInfo = false;
+  constructor(
+    private modalsService: ModalsService,
+    private fb: FormBuilder,
+    private usersService: UsersService,
+    private toastr: ToastrService,
+    private sharedService: SharedService
+  ) {}
 
-  constructor(private modalsService: ModalsService, private fb: FormBuilder) {
+  // Raccourcis pour le template
+  isInvalid = (name: string) => isInvalid(this.userForm, name);
+  isValid = (name: string) => isValid(this.userForm, name);
+  getErrorMessage = (name: string) => getErrorMessage(this.userForm, name);
+  getFormControlClass = (name: string) =>
+    getFormControlClass(this.userForm, name);
+
+  ngOnInit(): void {
+    this.initForm();
+
+    // Chargement des utilisateurs
+    this.loadUsers();
+
+    // Chargement des roles
+    this.loadRoles();
+  }
+
+  /**
+   * Initialiser le formulaire de creation d'un utilisateur
+   */
+  initForm(): void {
     this.userForm = this.fb.group({
       vcFirstname: ['', Validators.required],
       vcLastname: ['', Validators.required],
-      // ces deux contrôles sont uniques (racine)
       vcPhoneNumber: [
         '',
         [Validators.required, Validators.pattern('^[0-9+()\\-\\s]+$')],
       ],
-      vcDescription: [''],
+      vcDescription: ['', Validators.required],
       vcEmail: ['', [Validators.required, Validators.email]],
       iRoleID: [null, Validators.required],
       vcPassword: ['', [Validators.required, Validators.minLength(6)]],
-
-      // Organisation
-      business: this.fb.group({
-        vcName: [''],
-        vcContact: [''],
-        vcCity: [''],
-        vcCountry: [''],
-        vcAddress: [''],
-        vcLogoPath: [''],
-        vcBusinessEmailDomain: [''],
-      }),
     });
   }
 
-  ngOnInit(): void {
-    // écouter les changements de rôle pour afficher / valider la section business
-    const s = this.userForm
-      .get('iRoleID')!
-      .valueChanges.subscribe((roleId: any) => {
-        const role = this.roles.find((r) => +r.id === +roleId);
-        this.showBusinessInfo = !!role && !!role.showExtra;
-        this.toggleBusinessValidators(this.showBusinessInfo);
-      });
-    this.subs.add(s);
-
-    // Pour pre remplir le formualire
-    // this.userForm.patchValue({
-    //   vcFirstname: 'Daniel FELEMOU',
-    //   vcEmail: 'daniel@example.com',
-    //   iRoleID: 1,
-    //   business: {
-    //     vcName: 'Ma boîte',
-    //     vcCity: 'Conakry',
-    //   },
-    // });
+  // Creation Modal
+  openCreateModal() {
+    this.isEditMode = false;
+    this.initForm(); // 🔁 remet tous les Validators.required
+    this.userForm.reset(); // Vider le formulaire
+    this.modalsService.openModal('createUserModal');
   }
 
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
+  onToggle(user: any) {
+    this.openModal('bloquerDebloquerModal');
+    this.selectedUserId = user.id;
+    this.btEnabled = +user.btEnabled === 0 ? 1 : 0;
+    console.log('Selected user : ', user);
+    console.log(this.selectedUserId, this.btEnabled);
   }
 
-  // Active/désactive validateurs pour les champs business
-  private toggleBusinessValidators(enable: boolean) {
-    const business = this.userForm.get('business') as FormGroup;
-    if (!business) return;
+  // Ouverture de modal
+  openModal(modalId: string) {
+    const isModalOpen = this.modalsService.isModalOpen(modalId);
 
-    if (enable) {
-      business.get('vcName')!.setValidators([Validators.required]);
-      business.get('vcContact')!.setValidators([Validators.required]);
-      business
-        .get('vcBusinessEmailDomain')!
-        .setValidators([Validators.required]);
-    } else {
-      // Enlever les validateurs (et vider les champs)
-      Object.values(business.controls).forEach((ctrl) => {
-        ctrl.clearValidators();
-        // ctrl.setValue('');
-        ctrl.updateValueAndValidity();
-      });
+    if (!isModalOpen) {
+      this.modalsService.openModal(modalId);
+      this.userForm.reset();
     }
+
+    this.modalsService.closeModal(modalId);
+    this.modalsService.closeAllModals();
   }
 
-  // Convenience getters
-  get f() {
-    return this.userForm.controls;
-  }
-  get b() {
-    return (this.userForm.get('business') as FormGroup).controls;
+  // Fermeture de modal
+  closeModal(modalId: string) {
+    this.modalsService.closeModal(modalId);
   }
 
   onSubmit() {
     if (this.userForm.invalid) {
-      this.isLoading = true;
+      // this.isLoading = true;
       this.userForm.markAllAsTouched();
       console.warn('Formulaire invalide, vérifie les champs.');
       return;
@@ -201,7 +131,7 @@ export class UtilisteurComponent implements OnInit {
 
     const raw = this.userForm.value;
 
-    // Construire le payload final de façon garante d'avoir UNE SEULE email/phone :
+    // Construire le payload final
     const payload: any = {
       vcFirstname: raw.vcFirstname,
       vcLastname: raw.vcLastname,
@@ -212,155 +142,117 @@ export class UtilisteurComponent implements OnInit {
       vcPassword: raw.vcPassword,
     };
 
-    // Si le rôle demande les champs business, on les ajoute — et on réutilise vcPhoneNumber/vcEmail
-    if (this.showBusinessInfo) {
-      payload.business = {
-        ...raw.business,
-        vcPhoneNumber: raw.vcPhoneNumber,
-        vcEmail: raw.vcEmail,
-      };
-    }
+    // this.isLoading = false;
 
     // Appel a l'API
-    this.isLoading = false;
-
-    // Sinon on peut ne pas envoyer la section business du tout
-    // Envoi au serveur / service
     console.log('Formulaire valide, envoi du payload :', payload);
     console.log('Payload prêt à envoyer', payload);
     this.modalsService.closeAllModals();
-    // this.myService.createUser(payload).subscribe(...);
   }
 
-  openCreateUserModal(modalId: string = this.createUserModalId): void {
-    const isCreateUserModalOpen = this.modalsService.isModalOpen(modalId);
-    if (!isCreateUserModalOpen) {
-      this.modalsService.openModal(modalId);
+  /**
+   * Active or Deactive
+   * @returns
+   */
+  bloquerEtDebloquer(): void {
+    if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
+    if (this.selectedUserId === null) {
+      this.toastr.error('Aucun utilisateur sélectionné.');
+      return;
     }
-    this.modalsService.closeModal(modalId);
+
+    const params = {
+      idUsers: this.selectedUserId,
+      btEnabled: this.btEnabled,
+    };
+
+    this.usersService.toggleUserStatus(params).subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.loadUsers();
+        } else {
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+
+        console.log('res api : ', res);
+        this.showModalOpenBloquerDebloquer = false;
+        this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
+      },
+
+      error: (err) => {
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+
+        console.log('err api : ', err);
+        this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
+      },
+    });
   }
 
-  // Permer de reset le formulaire
-  resetForm(): void {
-    this.userForm.reset();
-    this.toggleBusinessValidators(false); // désactive validateurs business
-    this.showBusinessInfo = false;
-    this.modalsService.closeAllModals();
+  private loadUsers() {
+    this.isLoadingUser = true;
+
+    this.usersService.getAllUsers().subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.users = res?.data;
+          console.log('users:', this.users);
+        } else {
+          this.toastr.error(res.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+        console.log('api res : ', res);
+        this.isLoadingUser = false;
+      },
+      error: (err) => {
+        this.toastr.error(err.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+        console.log('api err : ', err);
+        this.isLoadingUser = false;
+      },
+    });
   }
 
-  // @ViewChild('modalBody') modalBody!: ElementRef<HTMLDivElement>;
-  // private hasFocusedModalBody = false;
+  private loadRoles() {
+    this.isLoading = true;
 
-  // showModalAjoutUtilisateur: boolean = false;
+    this.sharedService.getAllRoles().subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          // Liste des IDs à exclure
+          const excludedRoleIds = [7, 10];
 
-  // newUser = {
-  //   nom: '',
-  //   prenom: '',
-  //   email: '',
-  //   telephone: '',
-  //   role: ''
-  // };
+          // Filtrage des rôles
+          this.roles = (res?.data || []).filter(
+            (role: any) => !excludedRoleIds.includes(+role.id)
+          );
 
-  // roles = ['Developer', 'Comptable', 'Chef Comptable', 'DAF'];
+          // this.roles = res?.data || [];
+          console.log('roles:>', this.roles);
+          console.log('roles filtrés :>', this.roles);
+        } else {
+          this.toastr.error(res.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+        console.log('api res : ', res);
+        this.isLoading = false;
+      },
 
-  // // Pagination
-  // pageSizeOptions = [5, 10, 25, 50];
-  // pageSize: number = 5;
-  // currentPage: number = 1;
-
-  // // On expose Math pour l'utiliser dans le template
-  // Math = Math;
-
-  // get totalPages(): number {
-  //   return Math.ceil(this.utilisateurs.length / this.pageSize);
-  // }
-
-  // get utilisateursPagines() {
-  //   const startIndex = (this.currentPage - 1) * this.pageSize;
-  //   return this.utilisateurs.slice(startIndex, startIndex + this.pageSize);
-  // }
-
-  // changerPage(page: number) {
-  //   if (page >= 1 && page <= this.totalPages) {
-  //     this.currentPage = page;
-  //   }
-  // }
-
-  // onPageSizeChange(event: Event) {
-  //   const select = event.target as HTMLSelectElement;
-  //   const newSize = parseInt(select.value, 10);
-  //   if (!isNaN(newSize) && newSize > 0) {
-  //     this.pageSize = newSize;
-  //     this.currentPage = 1;
-  //   }
-  // }
-
-  // // Modal & scroll logic
-  // ngAfterViewChecked() {
-  //   if (this.showModalAjoutUtilisateur && this.modalBody && !this.hasFocusedModalBody) {
-  //     this.modalBody.nativeElement.focus();
-  //     this.hasFocusedModalBody = true;
-  //   }
-  // }
-
-  // onModalBodyKeydown(event: KeyboardEvent) {
-  //   const element = this.modalBody.nativeElement;
-  //   const scrollStep = 40;
-
-  //   switch (event.key) {
-  //     case 'ArrowDown':
-  //       element.scrollBy({ top: scrollStep, behavior: 'smooth' });
-  //       event.preventDefault();
-  //       break;
-  //     case 'ArrowUp':
-  //       element.scrollBy({ top: -scrollStep, behavior: 'smooth' });
-  //       event.preventDefault();
-  //       break;
-  //     case 'PageDown':
-  //       element.scrollBy({ top: element.clientHeight, behavior: 'smooth' });
-  //       event.preventDefault();
-  //       break;
-  //     case 'PageUp':
-  //       element.scrollBy({ top: -element.clientHeight, behavior: 'smooth' });
-  //       event.preventDefault();
-  //       break;
-  //     case 'Home':
-  //       element.scrollTo({ top: 0, behavior: 'smooth' });
-  //       event.preventDefault();
-  //       break;
-  //     case 'End':
-  //       element.scrollTo({ top: element.scrollHeight, behavior: 'smooth' });
-  //       event.preventDefault();
-  //       break;
-  //   }
-  // }
-
-  // openModalAjout() {
-  //   this.showModalAjoutUtilisateur = true;
-  //   this.hasFocusedModalBody = false;
-  //   this.resetNewUser();
-  // }
-
-  // closeModalAjout() {
-  //   this.showModalAjoutUtilisateur = false;
-  // }
-
-  // resetNewUser() {
-  //   this.newUser = { nom: '', prenom: '', email: '', telephone: '', role: '' };
-  // }
-
-  // addUtilisateur(form: NgForm) {
-  //   if (form.valid) {
-  //     const newId = this.utilisateurs.length + 1;
-  //     this.utilisateurs.push({ id: newId, ...this.newUser });
-  //     this.closeModalAjout();
-
-  //     // ajuster si on est à la dernière page
-  //     if (this.currentPage < this.totalPages) {
-  //       // rien
-  //     } else {
-  //       this.currentPage = this.totalPages;
-  //     }
-  //   }
-  // }
+      error: (err) => {
+        this.isLoading = false;
+        console.log(err);
+      },
+    });
+  }
 }

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environnements/environnement';
@@ -32,8 +32,8 @@ export class UsersService {
   }
 
   // READ - Récupérer tous les utilisateurs
-  getAllUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/users`, {
+  getAllUsers(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/getListeUsers`, {
       headers: this.getHeaders(),
     });
   }
@@ -59,14 +59,23 @@ export class UsersService {
     });
   }
 
-  // Bloquer et Debloquer
-  toggleUserStatus(
-    id: string | string,
-    currentStatus: boolean
-  ): Observable<any> {
-    const payload = { isBlocked: !currentStatus };
-    return this.http.put<any>(`${this.apiUrl}/users/${id}`, payload, {
-      headers: this.getHeaders(),
-    });
+  /**
+   * Bloquer et Debloquer
+   * @param data sont les paramatres qui sont passer dans l'API (idUsers et btEnabled)
+   * @returns
+   */
+  toggleUserStatus(data: any): Observable<any> {
+    const currentParams = new HttpParams()
+      .set('idUsers', data.idUsers)
+      .set('btEnabled', data.btEnabled);
+
+    return this.http.post(
+      `${this.apiUrl}/api/activeOrDesactiveUsers`,
+      {},
+      {
+        headers: this.getHeaders(),
+        params: currentParams,
+      }
+    );
   }
 }
