@@ -370,13 +370,7 @@
                     {{ country.vcName }}
                   </option>
                 </select>
-                <!-- <input
-                  class="form-control form-control"
-                  required=""
-                  type="text"
-                  formControlName="vcOrgCountry"
-                  [ngClass]="getFormControlClass('vcOrgCountry')"
-                /> -->
+
                 <span class="text-danger" *ngIf="isInvalid('vcOrgCountry')">
                   {{ getErrorMessage("vcOrgCountry") }}
                 </span>

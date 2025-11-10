@@ -222,6 +222,26 @@
 
         <form [formGroup]="userForm" autocomplete="off">
           <div class="row">
+            <div class="col-md-12">
+              <div class="mb-3">
+                <label class="form-label" for="description">
+                  Description <span class="text-danger">*</span>
+                </label>
+                <textarea
+                  class="form-control"
+                  required
+                  rows="3"
+                  name="description"
+                  formControlName="vcDescription"
+                  [ngClass]="getFormControlClass('vcDescription')"
+                ></textarea>
+
+                <span class="text-danger" *ngIf="isInvalid('vcDescription')">
+                  {{ getErrorMessage("vcDescription") }}
+                </span>
+              </div>
+            </div>
+
             <div class="col-md-4">
               <div class="mb-3">
                 <label class="form-label" for="role">
@@ -341,24 +361,63 @@
               </div>
             </div>
 
-            <div class="col-md-12">
-              <div class="mb-3">
-                <label class="form-label" for="description">
-                  Description <span class="text-danger">*</span>
-                </label>
-                <textarea
-                  class="form-control"
-                  required
-                  rows="3"
-                  name="description"
-                  formControlName="vcDescription"
-                  [ngClass]="getFormControlClass('vcDescription')"
-                ></textarea>
+            <div class="col-md-4">
+              <label class="form-label">
+                Pays<span class="text-danger">*</span>
+              </label>
+              <select
+                class="form-select form-select"
+                required
+                formControlName="vcOrgCountry"
+                [ngClass]="getFormControlClass('vcOrgCountry')"
+              >
+                <option [value]="null">-- Sélectionnez un pays --</option>
+                <option
+                  *ngFor="let country of countries"
+                  [value]="country.vcName"
+                >
+                  {{ country.vcName }}
+                </option>
+              </select>
 
-                <span class="text-danger" *ngIf="isInvalid('vcDescription')">
-                  {{ getErrorMessage("vcDescription") }}
-                </span>
+              <span class="text-danger" *ngIf="isInvalid('vcOrgCountry')">
+                {{ getErrorMessage("vcOrgCountry") }}
+              </span>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">
+                Mode d'envoi de l'OTP<span class="text-danger">*</span>
+              </label>
+
+              <div
+                class="form-check"
+                [ngClass]="getFormControlClass('modeOtp')"
+              >
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  formControlName="modeOtp"
+                  id="otp_sms"
+                  value="SMS"
+                />
+                <label class="form-check-label" for="otp_sms"> SMS </label>
               </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  formControlName="modeOtp"
+                  id="otp_email"
+                  value="Email"
+                />
+                <label class="form-check-label" for="otp_email"> Email </label>
+              </div>
+
+              <span class="text-danger" *ngIf="isInvalid('modeOtp')">
+                {{ getErrorMessage("modeOtp") }}
+              </span>
             </div>
           </div>
         </form>

@@ -36,6 +36,7 @@ export class UtilisteurComponent implements OnInit {
 
   roles: any = [];
   users: any = [];
+  countries: any = [];
 
   btEnabled!: number;
   showModalOpenBloquerDebloquer = false;
@@ -67,6 +68,9 @@ export class UtilisteurComponent implements OnInit {
 
     // Chargement des roles
     this.loadRoles();
+
+    // Chargement des pays
+    this.loadCountries();
   }
 
   /**
@@ -84,6 +88,8 @@ export class UtilisteurComponent implements OnInit {
       vcEmail: ['', [Validators.required, Validators.email]],
       iRoleID: [null, Validators.required],
       vcPassword: ['', [Validators.required, Validators.minLength(6)]],
+      vcOrgCountry: [null, [Validators.required]],
+      modeOtp: ['', [Validators.required]],
     });
   }
 
@@ -197,6 +203,9 @@ export class UtilisteurComponent implements OnInit {
     });
   }
 
+  /**
+   * Charger les utilisateur
+   */
   private loadUsers() {
     this.isLoadingUser = true;
 
@@ -223,6 +232,9 @@ export class UtilisteurComponent implements OnInit {
     });
   }
 
+  /**
+   * Charger les roles
+   */
   private loadRoles() {
     this.isLoading = true;
 
@@ -240,6 +252,33 @@ export class UtilisteurComponent implements OnInit {
           // this.roles = res?.data || [];
           console.log('roles:>', this.roles);
           console.log('roles filtrés :>', this.roles);
+        } else {
+          this.toastr.error(res.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+        console.log('api res : ', res);
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+        this.isLoading = false;
+        console.log(err);
+      },
+    });
+  }
+
+  /**
+   * Charger les pays
+   */
+  private loadCountries() {
+    this.isLoading = true;
+
+    this.sharedService.getAllRoles().subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.countries = res?.data || [];
+          console.log('countries :>', this.roles);
         } else {
           this.toastr.error(res.message, '', {
             positionClass: 'toast-custom-center',
