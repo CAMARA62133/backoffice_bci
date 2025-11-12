@@ -114,7 +114,7 @@ export class OrganisationsComponent implements OnInit {
     this.phoneFormat = config.organisation.find(
       (c: any) => c.vcKey === 'Telephone_Format'
     )?.vcValue;
-    this.phoneMaxLength = this.phoneFormat.length - 1;
+    this.phoneMaxLength = this.phoneFormat.length;
 
     this.currency = config.organisation.find(
       (c: any) => c.vcKey === 'Devise'

@@ -95,9 +95,13 @@
                       </div>
 
                       <div class="col-md-6 mt-2">
-                        <label
-                          >Téléphone <span class="text-danger">*</span></label
-                        >
+                        <label>
+                          Téléphone
+                          <span class="text-danger"
+                            >* ({{ phoneMaxLength }} carractères
+                            obligatoire)</span
+                          >
+                        </label>
 
                         <div class="input-group mb-3">
                           <span class="input-group-text" id="basic-addon1">
@@ -113,12 +117,6 @@
                             (keydown)="onlyDigits($event)"
                             (paste)="onPaste($event)"
                           />
-                        </div>
-                        <div
-                          *ngIf="phoneErrorMessage"
-                          class="text-danger slide-in-right"
-                        >
-                          {{ phoneErrorMessage }}
                         </div>
                       </div>
 
@@ -384,7 +382,6 @@
                             class="form-check-input me-2"
                             id="timeZonePerUser"
                             formControlName="TimeZonePerUser"
-
                           />
                           <label
                             class="form-check-label mt-1"

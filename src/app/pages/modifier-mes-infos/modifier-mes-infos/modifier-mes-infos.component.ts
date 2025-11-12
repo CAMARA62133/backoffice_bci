@@ -63,13 +63,14 @@ export class ModifierMesInfosComponent {
   timeZone: string = '';
   timeZonePerUser: any = '';
 
-  phoneMaxLengthNumber: number = 0;
-  firstNumberPhone: number = 0;
-  phoneErrorMessage: string = '';
+  phoneMaxLength!: number;
+  phoneFirstNumber!: string;
 
   orgForm!: FormGroup;
   orgId!: number;
   configs!: any;
+
+  isChecked = false;
 
   constructor(
     private authService: AuthService,
@@ -103,6 +104,7 @@ export class ModifierMesInfosComponent {
       this.phoneFormat = dataConfig.organisation.find(
         (c: any) => c.vcKey === 'Telephone_Format'
       )?.vcValue;
+      this.phoneMaxLength = this.phoneFormat.length;
 
       this.currency = dataConfig.organisation.find(
         (c: any) => c.vcKey === 'Devise'
@@ -115,18 +117,24 @@ export class ModifierMesInfosComponent {
       this.timeZonePerUser = dataConfig.organisation.find(
         (c: any) => c.vcKey === 'TimeZonePerUser'
       )?.vcValue;
-      console.log('timeZonePerUser : ', this.timeZonePerUser);
+      console.log('TimeZonePerUser : ', this.timeZonePerUser);
+
+      this.phoneFirstNumber = this.phoneFormat.charAt(0);
+
+      console.log('country : ', this.country);
+      console.log('phoneCode : ', this.phoneCode);
+      console.log('phoneFormat : ', this.phoneFormat);
+      console.log('currency : ', this.currency);
+      console.log('phoneMaxLength : ', this.phoneMaxLength);
+      console.log('phoneFirstNumber : ', this.phoneFirstNumber);
     }
 
-    if (this.phoneFormat) {
-      // Premier chiffre
-      this.firstNumberPhone = parseInt(this.phoneFormat.charAt(0), 10);
-
-      // Nombre total de caractères (y compris le premier chiffre)
-      this.phoneMaxLengthNumber = this.phoneFormat.length - 1;
-
-      console.log('Premier chiffre :', this.firstNumberPhone);
-      console.log('Nombre total de chiffres :', this.phoneMaxLengthNumber);
+    if (
+      this.timeZonePerUser === 1 ||
+      this.timeZonePerUser === '1' ||
+      this.timeZonePerUser === true
+    ) {
+      this.isChecked = true;
     }
 
     // Chargement de l'utilisateur connecté
@@ -158,7 +166,7 @@ export class ModifierMesInfosComponent {
             Telephone_Format: selected.vcPhoneFormat,
             TimeZone: selected.vcTimeZone,
             Devise: selected.devise || this.currency, // si ton API renvoie une devise
-            TimeZonePerUser: this.timeZonePerUser,
+            TimeZonePerUser: this.timeZonePerUser === 1 ? true : false,
           },
           { emitEvent: false } // 🛑 évite la boucle infinie
         );
@@ -184,18 +192,23 @@ export class ModifierMesInfosComponent {
       'Tab',
     ];
 
-    if (allowedKeys.includes(event.key)) {
-      return; // autoriser touches de navigation/suppression
-    }
+    const input = event.target as HTMLInputElement;
+
+    if (allowedKeys.includes(event.key)) return;
 
     // Bloquer tout sauf chiffres
     if (!/^[0-9]$/.test(event.key)) {
       event.preventDefault();
     }
 
-    // Optionnel : bloquer si déjà 9 chiffres saisis
-    const input = event.target as HTMLInputElement;
-    if (input.value.length >= this.phoneMaxLengthNumber) {
+    // Si l'utilisateur essaie de taper le premier chiffre
+    if (input.value.length === 0 && event.key !== this.phoneFirstNumber) {
+      event.preventDefault();
+      return;
+    }
+
+    // Optionnel : bloquer si déjà max de chiffres saisis
+    if (input.value.length >= this.phoneMaxLength) {
       event.preventDefault();
     }
   }
@@ -203,47 +216,30 @@ export class ModifierMesInfosComponent {
   // Empêcher le collage de texte invalide
   onPaste(event: ClipboardEvent) {
     const pastedData = event.clipboardData?.getData('text') || '';
+    const input = event.target as HTMLInputElement;
 
-    // Autoriser uniquement les chiffres et max 9 caractères
-    if (!/^\d{1,9}$/.test(pastedData)) {
+    const regex = new RegExp(`^\\d{1,${this.phoneMaxLength}}$`);
+    if (!regex.test(pastedData)) {
       event.preventDefault();
+      return;
     }
 
-    // Vérifier que la longueur totale après collage ne dépasse pas 9
-    const input = event.target as HTMLInputElement;
-    if (input.value.length + pastedData.length > this.phoneMaxLengthNumber) {
+    const finalValue = input.value + pastedData;
+    if (
+      finalValue.length > 0 &&
+      finalValue.charAt(0) !== this.phoneFirstNumber
+    ) {
+      event.preventDefault();
+      return;
+    }
+
+    // Vérifier que la longueur totale après collage ne dépasse pas le {phoneMaxLength}
+    if (input.value.length + pastedData.length > this.phoneMaxLength) {
       event.preventDefault();
     }
   }
 
   modifierInfos() {
-    const phoneNumber = this.currentUserInfo.vcPhoneNumber;
-
-    // Réinitialiser le message d'erreur
-    this.phoneErrorMessage = '';
-
-    // Premier chiffre du numéro saisi
-    const firstNumberPhoneSaisi = parseInt(phoneNumber.charAt(0), 10);
-
-    console.log('Numéro complet :', phoneNumber);
-    console.log('Premier chiffre saisi :', firstNumberPhoneSaisi);
-    console.log('firstNumberPhone :', this.firstNumberPhone);
-
-    // Vérifier que le numéro de téléphone a le bon nombre de chiffres
-    if (
-      !phoneNumber ||
-      phoneNumber.replace(/\D/g, '').length < this.phoneMaxLengthNumber
-    ) {
-      this.phoneErrorMessage = `Le numéro de téléphone doit contenir au moins ${this.phoneMaxLengthNumber} chiffres.`;
-      return; // arrêter l'exécution si la condition n'est pas respectée
-    }
-
-    // Vérifier que le numéro commence par le bon chiffre
-    if (firstNumberPhoneSaisi !== this.firstNumberPhone) {
-      this.phoneErrorMessage = `Le numéro de téléphone doit commencer par ${this.firstNumberPhone}.`;
-      return; // arrêter l'exécution si la condition n'est pas respectée
-    }
-
     // Si tout est correct, on peut continuer l'appel API
     this.isLoading = true;
     this.authService
@@ -251,7 +247,7 @@ export class ModifierMesInfosComponent {
         this.currentUserInfo.vcLastname,
         this.currentUserInfo.vcFirstname,
         this.currentUserInfo.email,
-        phoneNumber,
+        this.currentUserInfo.vcPhoneNumber,
         Number(this.currentUserInfo.id)
       )
       .subscribe({
@@ -339,7 +335,7 @@ export class ModifierMesInfosComponent {
       Telephone_Format: [this.phoneFormat || '', Validators.required],
       TimeZone: [this.timeZone || '', Validators.required],
       Devise: [this.currency || '', Validators.required],
-      TimeZonePerUser: [this.timeZonePerUser || false],
+      TimeZonePerUser: [this.isChecked ? true : false],
     });
   }
 

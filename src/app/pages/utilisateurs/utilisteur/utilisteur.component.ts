@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../../services/authService/auth.service';
 import { ModalsService } from '../../../services/modals/modals.service';
 import { SharedService } from '../../../services/shared/shared.service';
 import { UsersService } from '../../../services/users/users.service';
@@ -45,12 +46,22 @@ export class UtilisteurComponent implements OnInit {
   selectedUser: any = null;
   selectedUserId: number | null = null;
 
+  userInfoConfig: any;
+  phoneCode: number = 0;
+  phoneFormat: string = '';
+
+  phoneMaxLength!: number;
+  phoneFirstNumber!: string;
+
+  orgId!: string | number;
+
   constructor(
     private modalsService: ModalsService,
     private fb: FormBuilder,
     private usersService: UsersService,
     private toastr: ToastrService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private authService: AuthService
   ) {}
 
   // Raccourcis pour le template
@@ -61,6 +72,35 @@ export class UtilisteurComponent implements OnInit {
     getFormControlClass(this.userForm, name);
 
   ngOnInit(): void {
+    const dataConfig = this.authService.getUserInfoConfig();
+    const userInfo = this.authService.getUserInfo();
+    this.orgId = userInfo.iOrganisationID;
+
+    console.log('dataConfig : ', dataConfig);
+    console.log('userInfo : ', userInfo);
+
+    if (dataConfig) {
+      this.userInfoConfig = { ...dataConfig };
+      console.log('userInfoConfig : ', this.userInfoConfig);
+
+      this.phoneCode = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'Telephone_Code'
+      )?.vcValue;
+
+      this.phoneFormat = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'Telephone_Format'
+      )?.vcValue;
+
+      this.phoneMaxLength = this.phoneFormat.length;
+      this.phoneFirstNumber = this.phoneFormat.charAt(0);
+
+      console.log('phoneCode : ', this.phoneCode);
+      console.log('phoneFormat : ', this.phoneFormat);
+      console.log('phoneMaxLength : ', this.phoneMaxLength);
+      console.log('phoneFirstNumber : ', this.phoneFirstNumber);
+    }
+
+    // Initialiser le formulaire
     this.initForm();
 
     // Chargement des utilisateurs
@@ -87,6 +127,63 @@ export class UtilisteurComponent implements OnInit {
       idPays: [null, Validators.required],
       vcDescription: ['', Validators.required],
     });
+  }
+
+  // Empêcher la saisie de lettres, caractères spéciaux et espaces
+  onlyDigits(event: KeyboardEvent) {
+    const allowedKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'Delete',
+      'Tab',
+    ];
+
+    const input = event.target as HTMLInputElement;
+
+    if (allowedKeys.includes(event.key)) return;
+
+    // Bloquer tout sauf chiffres
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
+
+    // Si l'utilisateur essaie de taper le premier chiffre
+    if (input.value.length === 0 && event.key !== this.phoneFirstNumber) {
+      event.preventDefault();
+      return;
+    }
+
+    // Optionnel : bloquer si déjà max de chiffres saisis
+    if (input.value.length >= this.phoneMaxLength) {
+      event.preventDefault();
+    }
+  }
+
+  // Empêcher le collage de texte invalide
+  onPaste(event: ClipboardEvent) {
+    const pastedData = event.clipboardData?.getData('text') || '';
+    const input = event.target as HTMLInputElement;
+
+    const regex = new RegExp(`^\\d{1,${this.phoneMaxLength}}$`);
+    if (!regex.test(pastedData)) {
+      event.preventDefault();
+      return;
+    }
+
+    const finalValue = input.value + pastedData;
+    if (
+      finalValue.length > 0 &&
+      finalValue.charAt(0) !== this.phoneFirstNumber
+    ) {
+      event.preventDefault();
+      return;
+    }
+
+    // Vérifier que la longueur totale après collage ne dépasse pas le {phoneMaxLength}
+    if (input.value.length + pastedData.length > this.phoneMaxLength) {
+      event.preventDefault();
+    }
   }
 
   // Creation Modal
