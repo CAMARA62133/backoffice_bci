@@ -100,37 +100,10 @@ export class AuthService {
     return this.http.post(`${this.baseUrl}/api/requestResetPassword`, body);
   }
 
-  /**
-   * Ajouter les informations de l'utilisateur depuis la mémoire ou le localStorage
-   * @param userInfo les informations de l'utilisateur connecter
-   * @param userConfigInfo les informations de l'organisation de l'utilisateur connnecter
-   */
-  // setUserInfo(userInfo: any, userConfigInfo: any): void {
-  //   this.userInfo = userInfo;
-  //   this.userConfigInfo = userConfigInfo || null;
-
-  //   localStorage.setItem('userInfo', JSON.stringify(userInfo));
-  //   localStorage.setItem('userConfigInfo', JSON.stringify(userConfigInfo));
-  // }
-
   setUpdateUserInfo(userInfo: any): void {
     this.userInfo = userInfo;
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
   }
-
-  /**
-   * Récupère les informations de l'utilisateur depuis la mémoire ou le localStorage
-   * @returns
-   */
-  // getUserInfo(): any {
-  //   if (this.userInfo) return this.userInfo;
-  //   const storedUserInfo = localStorage.getItem('userInfo');
-  //   if (storedUserInfo) {
-  //     this.userInfo = JSON.parse(storedUserInfo);
-  //     return this.userInfo;
-  //   }
-  //   return null;
-  // }
 
   getUserConfigInfo() {
     if (this.userConfigInfo) return this.userConfigInfo;
@@ -295,8 +268,6 @@ export class AuthService {
     );
   }
 
-
-
   /**
    * Deconnexion de l'utilisateur
    * @param appName : le nom de l'application
@@ -434,8 +405,18 @@ export class AuthService {
       'color: cyan;',
       config
     );
-    this._userInfoConfig.set(config);
+
+    const previous = this._userInfoConfig();
+    console.log('%c[AuthService] Ancienne valeur :', 'color: gray;', previous);
+
+    this._userInfoConfig.set({ ...config });
     localStorage.setItem('userInfoConfig', JSON.stringify(config));
+
+    console.log(
+      '%c[AuthService] ✅ Nouvelle valeur signal userInfoConfig :',
+      'color: #00e;',
+      this._userInfoConfig()
+    );
   }
 
   getUserInfoConfig(): any {

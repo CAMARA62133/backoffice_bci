@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -77,7 +77,8 @@ export class ModifierMesInfosComponent {
     private toastr: ToastrService,
     private orgService: OrganisationsService,
     private fb: FormBuilder,
-    private configService: ConfigurationsService
+    private configService: ConfigurationsService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -421,22 +422,26 @@ export class ModifierMesInfosComponent {
         console.log('doneer envoyer sont : ', this.orgId, payload);
 
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.toastr.success(
+            'Votre fuseau horaire a été modifié avec succès !',
+            '',
+            {
+              positionClass: 'toast-custom-center',
+            }
+          );
 
           const oldConf = this.authService.getUserInfoConfig();
           console.log('dany', oldConf, { ...oldConf, organisation: res?.data });
-          this.authService.setUserInfoConfig({
-            ...oldConf,
-            organisation: res?.data,
-          });
+          const config = { ...oldConf, organisation: res?.data };
+          console.log('New config : ', config);
+          this.authService.setUserInfoConfig(config);
+          this.cdr.detectChanges();
         } else {
           this.toastr.error(res.message, '', {
             positionClass: 'toast-custom-center',
           });
         }
-        console.log(res);
+        console.log('test res:', res);
         console.log(this.timeZonePerUser);
         this.isLoading = false;
       },

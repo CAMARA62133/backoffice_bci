@@ -13,6 +13,7 @@ import { AuthService } from '../../services/authService/auth.service';
 export class LayoutComponent implements OnInit {
   // Information de l'utilisateur courrant
   currentUser: any;
+  userCurrentTimeZone: string = '';
 
   constructor(
     private authService: AuthService,
@@ -22,6 +23,16 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getUserInfo();
+
+    // const dataConfig = this.authService.getUserInfoConfig();
+    // console.log('dataConfig : ', dataConfig);
+
+    // if (dataConfig) {
+    //   this.userCurrentTimeZone = dataConfig.organisation.find(
+    //     (c: any) => c.vcKey === 'TimeZone'
+    //   )?.vcValue;
+    //   console.log('userCurrentTimeZone : ', this.userCurrentTimeZone);
+    // }
   }
 
   // Méthode de déconnexion et de redirection vers la page de login
@@ -60,5 +71,20 @@ export class LayoutComponent implements OnInit {
   // Ajoute une méthode getUser() pour exposer le signal value dans le template
   getUser() {
     return this.authService.userInfo();
+  }
+
+  getUserInfoConfig() {
+    const result = this.authService.userInfoConfig();
+    console.log('Résultat de userInfoConfig:', result);
+
+    const dataConfig = result;
+    console.log('dataConfig : ', dataConfig);
+    if (dataConfig) {
+      this.userCurrentTimeZone = dataConfig.organisation.find(
+        (c: any) => c.vcKey === 'TimeZone'
+      )?.vcValue;
+      console.log('userCurrentTimeZone : ', this.userCurrentTimeZone);
+    }
+    return result;
   }
 }

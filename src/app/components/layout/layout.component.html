@@ -310,6 +310,7 @@
             </div>
           </div>
         </div>
+        <span *ngIf="getUserInfoConfig() as user"> </span>
         <div class="dropdown d-inline-block">
           <button
             class="btn d-xl-flex d-xxl-flex align-items-xl-center align-items-xxl-center header-item"
@@ -337,7 +338,8 @@
               <span class="my-sm-2 font-size-11">
                 - Dernière connexion
                 {{
-                  user.dtLastSuccessfulLogin | date : "dd/MM/yyyy à HH:mm:ss"
+                  user.dtLastSuccessfulLogin
+                    | date : "dd/MM/yyyy '-' HH:mm:ss" : userCurrentTimeZone
                 }}
               </span>
             </span>
