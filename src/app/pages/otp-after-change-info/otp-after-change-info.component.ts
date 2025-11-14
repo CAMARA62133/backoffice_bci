@@ -75,7 +75,7 @@ export class OtpAfterChangeInfoComponent {
   // message = '';
   reEnvoiOtp() {
     this.isLoadingReEnvoi = true;
-    this.otpService.verifyOTP(this.loginEmail).subscribe({
+    this.otpService.resentOTP(this.userEmail).subscribe({
       next: (response) => {
         if (response?.status && response.status === 200) {
           this.isLoadingReEnvoi = false;
@@ -126,44 +126,44 @@ export class OtpAfterChangeInfoComponent {
     console.log('params envoyer otp : ', otp);
 
     // Appel au service de verification de l'email
-    // this.otpService.verifierOtp(otp, this.loginEmail).subscribe({
-    //   next: (response) => {
-    //     console.log('all respnse : ', response);
+    this.otpService.verifyOTP(otp, this.userEmail).subscribe({
+      next: (response) => {
+        console.log('all respnse : ', response);
 
-    //     this.isLoading = false;
-    //     if (response?.status && response.status === 200) {
-    //       // Sauvegarde dans AuthService et localStorage
-    //       this.authService.setUserInfo(response.data);
-    //       this.authService.setUserInfoConfig(response.config);
-    //       this.authService.saveToken(response.token);
+        this.isLoading = false;
+        if (response?.status && response.status === 200) {
+          // Sauvegarde dans AuthService et localStorage
+          this.authService.setUserInfo(response.data);
+          this.authService.setUserInfoConfig(response.config);
+          this.authService.saveToken(response.token);
 
-    //       console.log('res : ', response);
+          console.log('res : ', response);
 
-    //       this.toastr.success(response?.message, '', {
-    //         positionClass: 'toast-custom-center',
-    //       });
-    //       this.router.navigate(['/dashboard']);
-    //        localStorage.removeItem('userEmail');
-    //     } else {
-    //       // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
-    //       if (response?.status === 405 || response?.status === '405') {
-    //         this.router.navigate(['/login']);
-    //       }
+          this.toastr.success("Numéro de téléphone vérifié avec succès", '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.router.navigate(['/login']);
+          localStorage.removeItem('userEmail');
+        } else {
+          // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
+          if (response?.status === 405 || response?.status === '405') {
+            this.router.navigate(['/login']);
+          }
 
-    //       this.toastr.error(response.message, '', {
-    //         positionClass: 'toast-custom-center',
-    //       });
-    //     }
-    //     console.log(response);
-    //   },
-    //   error: (err) => {
-    //     this.isLoading = false;
-    //     console.log({ err });
-    //     this.toastr.error(err?.message, '', {
-    //       positionClass: 'toast-custom-center',
-    //     });
-    //   },
-    // });
+          this.toastr.error(response.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+        console.log(response);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.log({ err });
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+      },
+    });
   }
 
   // Fermer le modal d'expiration d'OTP

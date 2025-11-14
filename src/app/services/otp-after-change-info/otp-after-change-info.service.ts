@@ -19,14 +19,14 @@ export class OtpAfterChangeInfoService {
   // Méthode pour vérifier l'OTP
   verifyOTP(
     otp: string | null,
+    email: string | null,
     appName: string = this.appName
   ): Observable<any> {
-    const email = this.getVerifierOtpEmail();
     const body = { otp, appName, email };
     console.log('Debug OTP Org : ', body);
 
     return this.http
-      .post<any>(`${this.baseUrl}/api/validePhone`, body)
+      .post<any>(`${this.baseUrl}/api/validePhoneAfterUpdate`, body)
       .pipe(
         catchError((err) =>
           throwError(() => new Error(err?.message || 'Erreur du serveur'))
@@ -35,13 +35,11 @@ export class OtpAfterChangeInfoService {
   }
 
   // Méthode pour renvoyer l'OTP
-  resentOTP(appName: string = this.appName): Observable<any> {
-    const email = this.getVerifierOtpEmail();
-    const body = {
-      appName,
-      email,
-    };
-
+  resentOTP(
+    email: string | null,
+    appName: string = this.appName
+  ): Observable<any> {
+    const body = { appName, email };
     console.log('debug 1 : ', body);
 
     return this.http

@@ -268,7 +268,7 @@ export class ModifierMesInfosComponent {
             // Gestion des scénarios de déconnexion
             if (response?.isDeconnectUsersPhone === 'pageotp') {
               // Affichage du message de success
-              this.toastr.info(
+              this.toastr.success(
                 'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation téléphone.',
                 '',
                 {
@@ -284,7 +284,7 @@ export class ModifierMesInfosComponent {
               }, 5000);
             } else if (response?.isDeconnectUsersEmail === 'pageemail') {
               // Affichage du message de success si l'email a ete modifier
-              this.toastr.info(
+              this.toastr.success(
                 'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation email.',
                 '',
                 {

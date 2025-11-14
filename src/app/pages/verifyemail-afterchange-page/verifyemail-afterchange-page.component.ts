@@ -31,12 +31,11 @@ export class VerifyemailAfterchangePageComponent {
 
       console.log('url params : ', { email: this.email, token: this.token });
 
-      // this.token, this.email
       this.loadingService.verifyUserUpdate(this.token, this.email).subscribe({
         next: (res) => {
           if (res?.status && res?.status === 200) {
             this.router.navigate(['/login']);
-            this.toastr.success(res?.message, '', {
+            this.toastr.success('Adresse email vérifié avec succès', '', {
               positionClass: 'toast-custom-center',
             });
           } else {
