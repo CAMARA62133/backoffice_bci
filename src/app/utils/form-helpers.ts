@@ -19,48 +19,28 @@ export function isValid(form: FormGroup, controlName: string): boolean {
 /**
  * Retourne le message d'erreur correspondant au validateur.
  */
-
 export function getErrorMessage(
   form: FormGroup,
   controlName: string
 ): string | null {
-  // const control = form.get(controlName);
-  // if (!control) return null;
-
-  // if (control.hasError('required')) return 'Ce champ est obligatoire.';
-
-  // if (control.hasError('email')) return 'Adresse e-mail invalide.';
-
-  // if (control.hasError('minlength'))
-  //   return `Ce champ doit contenir au moins ${control.errors?.['minlength'].requiredLength} caractères.`;
-
-  // if (control.hasError('maxlength'))
-  //   return `Ce champ ne peut pas dépasser ${control.errors?.['maxlength'].requiredLength} caractères.`;
-
-  // // Patterns
-  // if (control.hasError('pattern')) return 'Le format de ce champ est invalide.';
-
-  // // If the password not the same
-  // if (control.hasError('passwordMismatch'))
-  //   return 'Les mots de passe ne correspondent pas.';
-
-  // if (control.hasError('mismatch'))
-  //   return 'Les mots de passe ne correspondent pas.';
-
-  // return null;
-
   const control = form.get(controlName);
   if (!control) return null;
 
   if (control.hasError('required')) return 'Ce champ est obligatoire.';
+
   if (control.hasError('email')) return 'Adresse e-mail invalide.';
+
   if (control.hasError('minlength'))
     return `Ce champ doit contenir au moins ${control.errors?.['minlength'].requiredLength} caractères.`;
+
   if (control.hasError('maxlength'))
     return `Ce champ ne peut pas dépasser ${control.errors?.['maxlength'].requiredLength} caractères.`;
+
   if (control.hasError('pattern')) return 'Le format de ce champ est invalide.';
+
   if (control.hasError('passwordMismatch'))
     return 'Les mots de passe ne correspondent pas.';
+
   if (control.hasError('mismatch'))
     return 'Les mots de passe ne correspondent pas.';
 

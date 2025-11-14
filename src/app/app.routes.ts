@@ -13,14 +13,16 @@ import { ReinitialiserPasswordComponent } from './pages/login/reinitialiser-pass
 import { ResetOrgPasswordComponent } from './pages/login/reset-org-password/reset-org-password.component';
 import { ValidateOtpAfterVerifiedEmailComponent } from './pages/login/validate-otp-after-verified-email/validate-otp-after-verified-email.component';
 import { ValiderOtpAfterLoginComponent } from './pages/login/valider-otp-after-login/valider-otp-after-login.component';
+import { LogOrgComponent } from './pages/logs/log-org/log-org.component';
+import { LogUserComponent } from './pages/logs/log-user/log-user.component';
 import { MesNotificationsComponent } from './pages/mes-notifications/mes-notifications.component';
 import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { OrganisationsComponent } from './pages/organisations/organisations.component';
 import { OtpAfterChangeInfoComponent } from './pages/otp-after-change-info/otp-after-change-info.component';
 import { UtilisteurComponent } from './pages/utilisateurs/utilisteur/utilisteur.component';
-import { AuthGuard } from './services/guard/auth-guard.guard';
 import { VerifyemailAfterchangePageComponent } from './pages/verifyemail-afterchange-page/verifyemail-afterchange-page.component';
+import { AuthGuard } from './services/guard/auth-guard.guard';
 
 export const routes: Routes = [
   // { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -97,6 +99,7 @@ export const routes: Routes = [
     component: OtpAfterChangeInfoComponent,
   },
 
+  // Layout global
   {
     path: '',
     component: LayoutComponent,
@@ -106,6 +109,7 @@ export const routes: Routes = [
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
+
       {
         path: 'dashboard',
         title: 'BCI - Online | Tableau de bord',
@@ -117,6 +121,20 @@ export const routes: Routes = [
         path: 'organisations',
         title: 'BCI - Online | Listes des Organisations',
         component: OrganisationsComponent,
+        canActivate: [AuthGuard],
+      },
+
+      {
+        path: 'logs-utilisateurs',
+        title: 'BCI - Online | Logs des Utilisateurs',
+        component: LogUserComponent,
+        canActivate: [AuthGuard],
+      },
+
+      {
+        path: 'logs-organisations',
+        title: 'BCI - Online | Logs des Organisations',
+        component: LogOrgComponent,
         canActivate: [AuthGuard],
       },
 
@@ -134,12 +152,14 @@ export const routes: Routes = [
         component: ModifierMesInfosComponent,
         canActivate: [AuthGuard],
       },
+
       {
         path: 'configuration-notifications',
         title: 'BCI - Online | Configuration Notifications',
         component: NotificationsComponent,
         canActivate: [AuthGuard],
       },
+
       {
         path: 'configuration-alertes',
         title: 'BCI - Online | Configuration Alertes',

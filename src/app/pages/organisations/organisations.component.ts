@@ -158,7 +158,7 @@ export class OrganisationsComponent implements OnInit {
       vcOrgCountry: ['', Validators.required],
       vcOrgAddress: ['', Validators.required],
       vcOrgLogoPath: ['', Validators.required],
-      vcBusinessEmailDomain: ['', [Validators.required, Validators.email]],
+      vcBusinessEmailDomain: ['', [Validators.required]],
 
       // Pour les infos utilisateurs
       vcFirstname: ['', Validators.required],
@@ -206,11 +206,6 @@ export class OrganisationsComponent implements OnInit {
   onPaste(event: ClipboardEvent) {
     const pastedData = event.clipboardData?.getData('text') || '';
     const input = event.target as HTMLInputElement;
-
-    // Autoriser uniquement les chiffres et max 9 caractères
-    // if (!/^\d{1,9}$/.test(pastedData)) {
-    //   event.preventDefault();
-    // }
 
     const regex = new RegExp(`^\\d{1,${this.phoneMaxLength}}$`);
     if (!regex.test(pastedData)) {

@@ -1,0 +1,169 @@
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
+          <div>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Liste des logs utilisateurs
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid mt-4">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <div class="row align-items-end g-3">
+          <div class="col-md-2">
+            <label class="fw-semibold form-label" for="dateDebut"
+              >Date Debut</label
+            >
+            <input
+              type="date"
+              name="dateDebut"
+              id="dateDebut"
+              class="form-control"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label class="fw-semibold form-label" for="dateFin">Date Fin</label>
+            <input
+              type="date"
+              name="dateFin"
+              id="dateFin"
+              class="form-control"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label class="fw-semibold form-label" for="application">
+              Application
+            </label>
+            <select class="form-select" id="application">
+              <option value="">Toutes</option>
+              <option value="app1">Application 1</option>
+              <option value="app2">Application 2</option>
+              <option value="app3">Application 3</option>
+              <option value="app4">Application 4</option>
+              <option value="app5">Application 5</option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <label class="fw-semibold form-label" for="application">
+              Nom utilisateur
+            </label>
+            <select class="form-select" id="application">
+              <option value="">Tous</option>
+              <option value="user1">Utilisateur 1</option>
+              <option value="user2">Utilisateur 2</option>
+              <option value="user3">Utilisateur 3</option>
+              <option value="user4">Utilisateur 4</option>
+              <option value="user5">Utilisateur 5</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <div class="btn-group gap-2 d-grid d-md-flex w-100" role="group">
+              <!-- <button class="btn btn-primary">
+                <i class="fas fa-filter me-1"></i>Filtrer
+              </button>
+
+              <button class="btn btn-outline-info">
+                <i class="fas fa-undo me-1"></i>Reset
+              </button> -->
+
+              <div class="dropdown dropup">
+                <button
+                  class="btn btn-primary dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                >
+                  <i class="fas fa-download me-1"></i>Exporter
+                </button>
+
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="#" onclick="exportToPDF()">
+                      <i class="fas fa-file-pdf text-danger me-2"></i>PDF
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" onclick="exportToCSV()">
+                      <i class="fas fa-file-csv text-success me-2"></i>CSV
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#" onclick="exportToJSON()">
+                      <i class="fas fa-file-code text-warning me-2"></i>JSON
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card mt-4">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped">
+            <thead class="table-primary">
+              <tr class="text-center">
+                <th>ID</th>
+                <th>Date</th>
+                <th>Organisation</th>
+                <th>Nom utilisateur</th>
+                <th>Login utilisateur</th>
+                <th>Statut</th>
+                <th>IP</th>
+                <th>Navigateur</th>
+                <th>Application</th>
+                <th>Source</th>
+                <th>Message</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1542</td>
+                <td>2025-11-14 10:32:12</td>
+                <td>BANK CI</td>
+                <td>Fofana Moussa</td>
+                <td>mfofana</td>
+                <td>Succès</td>
+                <td>102.67.14.22</td>
+                <td>Chrome 141.0</td>
+                <td>Back-Office Web</td>
+                <td>Connexion</td>
+                <td>Authentification réussie</td>
+                <td class="text-center">
+                  <div style="display: flex; justify-content: center; gap: 8px">
+                    <button class="btn btn-sm btn-info">
+                      <i class="fas fa-eye"></i>
+                    </button>
+
+                    <!-- <button class="btn btn-sm btn-warning">
+                      <i class="fas fa-edit"></i>
+                    </button>
+
+                    <button class="btn btn-sm btn-danger">
+                      <i class="fas fa-trash-alt"></i>
+                    </button> -->
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
