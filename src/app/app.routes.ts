@@ -14,11 +14,13 @@ import { ResetOrgPasswordComponent } from './pages/login/reset-org-password/rese
 import { ValidateOtpAfterVerifiedEmailComponent } from './pages/login/validate-otp-after-verified-email/validate-otp-after-verified-email.component';
 import { ValiderOtpAfterLoginComponent } from './pages/login/valider-otp-after-login/valider-otp-after-login.component';
 import { MesNotificationsComponent } from './pages/mes-notifications/mes-notifications.component';
-import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos/modifier-mes-infos.component';
+import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { OrganisationsComponent } from './pages/organisations/organisations.component';
+import { OtpAfterChangeInfoComponent } from './pages/otp-after-change-info/otp-after-change-info.component';
 import { UtilisteurComponent } from './pages/utilisateurs/utilisteur/utilisteur.component';
 import { AuthGuard } from './services/guard/auth-guard.guard';
+import { VerifyemailAfterchangePageComponent } from './pages/verifyemail-afterchange-page/verifyemail-afterchange-page.component';
 
 export const routes: Routes = [
   // { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -39,6 +41,12 @@ export const routes: Routes = [
     path: 'validate-email',
     title: "BCI - Online | Validation de l'email",
     component: LoadingVerifyEmailPageComponent,
+  },
+
+  {
+    path: 'validate-email2',
+    title: "BCI - Online | Validation de l'email",
+    component: VerifyemailAfterchangePageComponent,
   },
 
   {
@@ -81,6 +89,12 @@ export const routes: Routes = [
     path: 'lien-expire',
     title: 'BCI - Online | Lien expiré',
     component: Page404Component,
+  },
+
+  {
+    path: 'valider-otp',
+    title: 'BCI - Online | Validation du code OTP de modification',
+    component: OtpAfterChangeInfoComponent,
   },
 
   {

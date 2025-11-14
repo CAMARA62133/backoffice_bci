@@ -8,10 +8,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../services/authService/auth.service';
-import { ConfigurationsService } from '../../../services/configurations/configurations.service';
-import { OrganisationsService } from '../../../services/organisations/organisations.service';
+import { AuthService } from '../../services/authService/auth.service';
+import { ConfigurationsService } from '../../services/configurations/configurations.service';
+import { OrganisationsService } from '../../services/organisations/organisations.service';
 
 interface OrganisationItem {
   vcKey: string;
@@ -72,13 +73,16 @@ export class ModifierMesInfosComponent {
 
   isChecked = false;
 
+  userEmail: string = '';
+
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
     private orgService: OrganisationsService,
     private fb: FormBuilder,
     private configService: ConfigurationsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -254,16 +258,59 @@ export class ModifierMesInfosComponent {
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
+
           if (response.status === 200) {
-            this.toastr.success(response.message, '', {
-              positionClass: 'toast-custom-center',
-            });
             this.authService.setUserInfo(response.data);
+            this.userEmail = this.authService.getUserInfo().email;
+            console.log('userEmail', this.userEmail);
+            localStorage.setItem('userEmail', this.userEmail);
+
+            // Gestion des scénarios de déconnexion
+            if (response?.isDeconnectUsersPhone === 'pageotp') {
+              // Affichage du message de success
+              this.toastr.info(
+                'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation téléphone.',
+                '',
+                {
+                  positionClass: 'toast-custom-center',
+                  timeOut: 5000,
+                }
+              );
+
+              // Deconnexion et redirection apres 5 secondes
+              setTimeout(() => {
+                this.authService.deconnexion();
+                this.router.navigate(['/valider-otp']);
+              }, 5000);
+            } else if (response?.isDeconnectUsersEmail === 'pageemail') {
+              // Affichage du message de success si l'email a ete modifier
+              this.toastr.info(
+                'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation email.',
+                '',
+                {
+                  positionClass: 'toast-custom-center',
+                  timeOut: 5000,
+                }
+              );
+
+              // Deconnexion et redirection apres 5 secondes
+              setTimeout(() => {
+                this.authService.deconnexion();
+                this.router.navigate(['/login']);
+              }, 5000);
+            } else {
+              // Sinon afficher cas meme le message de modification uniquement
+              this.toastr.success(response.message, '', {
+                positionClass: 'toast-custom-center',
+              });
+            }
+            // Si Erreur
           } else {
             this.toastr.error(response.message, '', {
               positionClass: 'toast-custom-center',
             });
           }
+          console.log(response);
         },
         error: (error) => {
           this.isLoading = false;

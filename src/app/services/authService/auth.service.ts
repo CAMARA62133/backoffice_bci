@@ -188,7 +188,8 @@ export class AuthService {
     prenom: string,
     email: string,
     phoneNumber: string,
-    userId: number
+    userId: number,
+    appName: string = this.appName
   ): Observable<any> {
     // Construction des paramètres
     const params = new HttpParams()
@@ -196,7 +197,8 @@ export class AuthService {
       .set('prenom', prenom)
       .set('email', email)
       .set('phoneNumber', phoneNumber)
-      .set('userId', userId);
+      .set('userId', userId)
+      .set('appName', appName);
     console.log('Paramètres envoyés:', params.toString());
     // Requête POST avec params au lieu de body
     return this.http
@@ -296,8 +298,15 @@ export class AuthService {
       .post(`${this.baseUrl}/api/logout`, {}, { headers, params })
       .pipe(
         tap(() => {
-          localStorage.clear();
+          // localStorage.clear();
+
+          localStorage.removeItem('loginEmail');
+          localStorage.removeItem('token');
+          localStorage.removeItem('userInfo');
+          localStorage.removeItem('userInfoConfig');
+
           console.log('Dexonnexion reussi !');
+          console.clear();
         }),
         catchError((error) => {
           console.error('Erreur lors de la déconnexion :', error);

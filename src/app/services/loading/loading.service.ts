@@ -40,14 +40,35 @@ export class LoadingService {
     email: string,
     appName: string = this.appName
   ) {
-    const body = {};
     const params = new HttpParams()
       .set('token', token)
       .set('email', email)
       .set('appName', appName);
 
     return this.http
-      .post<any>(`${this.baseUrl}/api/checkEmailToken`, body, { params })
+      .post<any>(`${this.baseUrl}/api/checkEmailToken`, {}, { params })
+      .pipe(
+        catchError((err) =>
+          throwError(() => new Error(err?.message || 'Erreur du serveur.'))
+        )
+      );
+  }
+
+  // Verifier l'email et le token apres modification des informations (si email inclus)
+  verifyUserUpdate(
+    token: string,
+    email: string,
+    appName: string = this.appName
+  ): Observable<any> {
+    const params = new HttpParams()
+      .set('token', token)
+      .set('email', email)
+      .set('appName', appName);
+
+    console.log('params : ', params);
+
+    return this.http
+      .post(`${this.baseUrl}/api/verifyTokenmailAfterUpdate`, {}, { params })
       .pipe(
         catchError((err) =>
           throwError(() => new Error(err?.message || 'Erreur du serveur.'))
