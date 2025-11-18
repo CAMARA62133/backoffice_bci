@@ -59,36 +59,28 @@ export class FormNouveauPasswordComponent implements OnInit {
       next: (res) => {
         console.log('Réponse API :', res);
 
-        if (res?.status && res?.status === 200) {
-          this.success = true;
-          this.loading = false;
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+        this.success = true;
+        this.loading = false;
+        this.toastr.success(res?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
 
-          // ✅ Nettoyage du localStorage
-          localStorage.removeItem('urlEmail');
-          localStorage.removeItem('urlToken');
+        // ✅ Nettoyage du localStorage
+        localStorage.removeItem('urlEmail');
+        localStorage.removeItem('urlToken');
 
-          // ✅ Redirection vers la page de connexion
-          this.router.navigate(['/login']);
-        } else {
-          this.success = false;
-          this.loading = false;
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
+        // ✅ Redirection vers la page de connexion
+        this.router.navigate(['/login']);
       },
 
       error: (err) => {
         this.success = false;
+        this.loading = false;
         this.message =
           err.error?.message || 'Erreur lors de la réinitialisation.';
         this.toastr.error(this.message, '', {
           positionClass: 'toast-custom-center',
         });
-        this.loading = false;
 
         console.log("Réponse en cas d'erreur serveur :", {
           Message: this.message,

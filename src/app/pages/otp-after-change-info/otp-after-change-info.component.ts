@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router, RouterLink } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../services/authService/auth.service';
-import { OtpAfterChangeInfoService } from '../../services/otp-after-change-info/otp-after-change-info.service';
+import {CommonModule} from '@angular/common';
+import {Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {Router, RouterLink} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../services/authService/auth.service';
+import {OtpAfterChangeInfoService} from '../../services/otp-after-change-info/otp-after-change-info.service';
 
 @Component({
   selector: 'app-otp-after-change-info',
@@ -33,7 +33,8 @@ export class OtpAfterChangeInfoComponent {
     private router: Router,
     private authService: AuthService,
     private toastr: ToastrService
-  ) {}
+  ) {
+  }
 
   // A l'initialisation
   ngOnInit() {
@@ -77,22 +78,22 @@ export class OtpAfterChangeInfoComponent {
     this.isLoadingReEnvoi = true;
     this.otpService.resentOTP(this.userEmail).subscribe({
       next: (response) => {
-        if (response?.status && response.status === 200) {
-          this.isLoadingReEnvoi = false;
-          this.otpValues = ['', '', '', ''];
+        this.isLoadingReEnvoi = false;
 
-          this.toastr.success(response.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+        this.otpValues = ['', '', '', ''];
 
-          if (this.otpInputs && this.otpInputs.first) {
-            setTimeout(() => {
-              this.otpInputs.first.nativeElement.focus();
-            }, 100);
-          }
+        this.toastr.success(response.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+
+        if (this.otpInputs && this.otpInputs.first) {
+          setTimeout(() => {
+            this.otpInputs.first.nativeElement.focus();
+          }, 100);
         }
         console.log(response);
       },
+
       error: (err) => {
         this.isLoadingReEnvoi = false;
         console.log(err);
@@ -158,7 +159,7 @@ export class OtpAfterChangeInfoComponent {
       },
       error: (err) => {
         this.isLoading = false;
-        console.log({ err });
+        console.log({err});
         this.toastr.error(err?.message, '', {
           positionClass: 'toast-custom-center',
         });

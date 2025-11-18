@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,11 +8,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../services/authService/auth.service';
-import { ConfigurationsService } from '../../services/configurations/configurations.service';
-import { OrganisationsService } from '../../services/organisations/organisations.service';
+import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../services/authService/auth.service';
+import {ConfigurationsService} from '../../services/configurations/configurations.service';
+import {OrganisationsService} from '../../services/organisations/organisations.service';
 
 interface OrganisationItem {
   vcKey: string;
@@ -28,6 +28,7 @@ interface OrganisationItem {
 export class ModifierMesInfosComponent {
   // 🔹 Gestion de la tabulation
   activeTab: string = 'profile1';
+
   setActiveTab(tabId: string): void {
     this.activeTab = tabId;
   }
@@ -51,7 +52,7 @@ export class ModifierMesInfosComponent {
   passwordVisibleOld = false;
   passwordVisibleNew = false;
   passwordVisibleConfirm = false;
-  password = { old: '', new: '', confirm: '' };
+  password = {old: '', new: '', confirm: ''};
 
   countries: any[] = [];
   isLoadingCoutries: boolean = false;
@@ -83,7 +84,8 @@ export class ModifierMesInfosComponent {
     private configService: ConfigurationsService,
     private cdr: ChangeDetectorRef,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     const dataConfig = this.authService.getUserInfoConfig();
@@ -94,7 +96,7 @@ export class ModifierMesInfosComponent {
     console.log('userInfo : ', userInfo);
 
     if (dataConfig) {
-      this.userInfoConfig = { ...dataConfig };
+      this.userInfoConfig = {...dataConfig};
       console.log('userInfoConfig : ', this.userInfoConfig);
 
       this.country = dataConfig.organisation.find(
@@ -144,7 +146,7 @@ export class ModifierMesInfosComponent {
 
     // Chargement de l'utilisateur connecté
     const data = this.authService.getUserInfo();
-    if (data) this.currentUserInfo = { ...data };
+    if (data) this.currentUserInfo = {...data};
 
     // Initialisation du formulaire
     this.initForm();
@@ -173,7 +175,7 @@ export class ModifierMesInfosComponent {
             Devise: selected.devise || this.currency, // si ton API renvoie une devise
             TimeZonePerUser: this.timeZonePerUser === 1 ? true : false,
           },
-          { emitEvent: false } // 🛑 évite la boucle infinie
+          {emitEvent: false} // 🛑 évite la boucle infinie
         );
       }
     });
@@ -259,59 +261,56 @@ export class ModifierMesInfosComponent {
         next: (response: any) => {
           this.isLoading = false;
 
-          if (response.status === 200) {
-            this.authService.setUserInfo(response.data);
-            this.userEmail = this.authService.getUserInfo().email;
-            console.log('userEmail', this.userEmail);
-            localStorage.setItem('userEmail', this.userEmail);
+          this.authService.setUserInfo(response.data);
+          this.userEmail = this.authService.getUserInfo().email;
 
-            // Gestion des scénarios de déconnexion
-            if (response?.isDeconnectUsersPhone === 'pageotp') {
-              // Affichage du message de success
-              this.toastr.success(
-                'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation téléphone.',
-                '',
-                {
-                  positionClass: 'toast-custom-center',
-                  timeOut: 5000,
-                }
-              );
+          console.log('userEmail', this.userEmail);
+          localStorage.setItem('userEmail', this.userEmail);
 
-              // Deconnexion et redirection apres 5 secondes
-              setTimeout(() => {
-                this.authService.deconnexion();
-                this.router.navigate(['/valider-otp']);
-              }, 5000);
-            } else if (response?.isDeconnectUsersEmail === 'pageemail') {
-              // Affichage du message de success si l'email a ete modifier
-              this.toastr.success(
-                'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation email.',
-                '',
-                {
-                  positionClass: 'toast-custom-center',
-                  timeOut: 5000,
-                }
-              );
-
-              // Deconnexion et redirection apres 5 secondes
-              setTimeout(() => {
-                this.authService.deconnexion();
-                this.router.navigate(['/login']);
-              }, 5000);
-            } else {
-              // Sinon afficher cas meme le message de modification uniquement
-              this.toastr.success(response.message, '', {
+          // Gestion des scénarios de déconnexion
+          if (response?.isDeconnectUsersPhone === 'pageotp') {
+            // Affichage du message de success
+            this.toastr.success(
+              'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation téléphone.',
+              '',
+              {
                 positionClass: 'toast-custom-center',
-              });
-            }
-            // Si Erreur
+                timeOut: 5000,
+              }
+            );
+
+            // Deconnexion et redirection apres 5 secondes
+            setTimeout(() => {
+              this.authService.deconnexion();
+              this.router.navigate(['/valider-otp']);
+            }, 5000);
+          } else if (response?.isDeconnectUsersEmail === 'pageemail') {
+
+            // Affichage du message de success si l'email a ete modifier
+            this.toastr.success(
+              'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation email.',
+              '',
+              {
+                positionClass: 'toast-custom-center',
+                timeOut: 5000,
+              }
+            );
+
+            // Deconnexion et redirection apres 5 secondes
+            setTimeout(() => {
+              this.authService.deconnexion();
+              this.router.navigate(['/login']);
+            }, 5000);
           } else {
-            this.toastr.error(response.message, '', {
+            // Sinon afficher cas meme le message de modification uniquement
+            this.toastr.success(response.message, '', {
               positionClass: 'toast-custom-center',
             });
           }
+
           console.log(response);
         },
+
         error: (error) => {
           this.isLoading = false;
           this.toastr.error(error.message, '', {
@@ -350,25 +349,18 @@ export class ModifierMesInfosComponent {
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
-          if (response?.status === 200 || response?.success) {
-            this.toastr.success(response?.message, '', {
-              positionClass: 'toast-custom-center',
-            });
-            this.password = { old: '', new: '', confirm: '' };
-            form.resetForm();
-          } else {
-            this.toastr.error(
-              response?.message || 'Échec de la modification.',
-              '',
-              {
-                positionClass: 'toast-custom-center',
-              }
-            );
-          }
+
+          this.toastr.success(response?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+
+          this.password = {old: '', new: '', confirm: ''};
+          form.resetForm();
         },
+
         error: (error: any) => {
           this.isLoading = false;
-          this.toastr.error(error.error?.message || 'Erreur API.', '', {
+          this.toastr.error('Échec de la modification.', '', {
             positionClass: 'toast-custom-center',
           });
         },
@@ -392,49 +384,42 @@ export class ModifierMesInfosComponent {
     this.isLoadingCoutries = true;
     this.orgService.getListePays().subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          this.countries = res?.data;
-          console.log(this.countries);
+        this.countries = res?.data;
+        console.log(this.countries);
 
-          // ✅ Sélectionner le pays de l'utilisateur connecté (après chargement)
-          const selectedCountry = this.countries.find(
-            (c: any) =>
-              c.vcName.toLowerCase().trim() ===
-                this.country?.toLowerCase().trim() ||
-              c.vcCode.toLowerCase().trim() ===
-                this.country?.toLowerCase().trim()
+        // ✅ Sélectionner le pays de l'utilisateur connecté (après chargement)
+        const selectedCountry = this.countries.find(
+          (c: any) =>
+            c.vcName.toLowerCase().trim() ===
+            this.country?.toLowerCase().trim() ||
+            c.vcCode.toLowerCase().trim() ===
+            this.country?.toLowerCase().trim()
+        );
+
+        if (selectedCountry) {
+          this.orgForm.patchValue(
+            {
+              Pays: selectedCountry.vcCode,
+              Telephone_Code: selectedCountry.vcPhoneCode,
+              Telephone_Format: selectedCountry.vcPhoneFormat,
+              TimeZone: selectedCountry.vcTimeZone,
+              Devise: selectedCountry.vcCurrency || this.currency,
+            },
+            {emitEvent: false} // évite boucle
           );
-
-          if (selectedCountry) {
-            this.orgForm.patchValue(
-              {
-                Pays: selectedCountry.vcCode,
-                Telephone_Code: selectedCountry.vcPhoneCode,
-                Telephone_Format: selectedCountry.vcPhoneFormat,
-                TimeZone: selectedCountry.vcTimeZone,
-                Devise: selectedCountry.vcCurrency || this.currency,
-              },
-              { emitEvent: false } // évite boucle
-            );
-          }
-        } else {
-          this.toastr.error(res?.message || 'Erreur de chargement', '', {
-            positionClass: 'toast-custom-center',
-          });
         }
         console.log(res);
         this.isLoadingCoutries = false;
       },
 
       error: (err) => {
-        this.toastr.error(
-          err?.message || 'Erreur lors du chargement des pays',
+        this.toastr.error(err?.error?.message === "Unauthenticated." ? "Votre session a expirée" : 'Une erreur est survenue.',
           '',
           {
             positionClass: 'toast-custom-center',
           }
         );
-        console.log(err);
+        console.log("Une erreur est survenue : ", err);
         this.isLoadingCoutries = false;
       },
     });
@@ -478,8 +463,8 @@ export class ModifierMesInfosComponent {
           );
 
           const oldConf = this.authService.getUserInfoConfig();
-          console.log('dany', oldConf, { ...oldConf, organisation: res?.data });
-          const config = { ...oldConf, organisation: res?.data };
+          console.log('dany', oldConf, {...oldConf, organisation: res?.data});
+          const config = {...oldConf, organisation: res?.data};
           console.log('New config : ', config);
           this.authService.setUserInfoConfig(config);
           this.cdr.detectChanges();

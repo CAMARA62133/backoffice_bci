@@ -1,7 +1,7 @@
-import { Injectable, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../authService/auth.service';
+import {Injectable, NgZone} from '@angular/core';
+import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../authService/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,8 @@ export class InactivityService {
     private ngZone: NgZone,
     private authService: AuthService,
     private toastr: ToastrService
-  ) {}
+  ) {
+  }
 
   // 🚀 Démarrer la surveillance
   startWatching(): void {

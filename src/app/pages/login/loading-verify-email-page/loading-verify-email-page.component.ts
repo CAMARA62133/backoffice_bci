@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { LoadingService } from '../../../services/loading/loading.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {LoadingService} from '../../../services/loading/loading.service';
 
 @Component({
   selector: 'app-loading-verify-email-page',
@@ -19,7 +19,8 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
     private route: ActivatedRoute,
     private loadingService: LoadingService,
     private toastr: ToastrService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -50,24 +51,16 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
         .checkTokenEmailOrganisation(this.token, this.email)
         .subscribe({
           next: (res) => {
-            console.log(
-              "DEBUG : After checking organisation's email and token"
-            );
+            console.log("DEBUG : After checking organisation's email and token");
             console.log(res);
-            if (res?.status && res?.status === 200) {
-              this.router.navigate(['/valider-otp-email']);
-            } else {
-              this.router.navigate(['/lien-expire']);
-              this.toastr.error(res?.message, '', {
-                positionClass: 'toast-custom-center',
-              });
-            }
-            this.isLoading = false;
+            this.router.navigate(['/valider-otp-email']);
           },
 
           error: (err) => {
-            console.error(err);
+            this.toastr.error(err?.message, '', {positionClass: 'toast-custom-center'});
 
+            console.error(err);
+            this.router.navigate(['/lien-expire']);
             this.isLoading = false;
           },
         });

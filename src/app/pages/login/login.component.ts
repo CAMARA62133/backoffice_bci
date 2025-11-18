@@ -1,17 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { NgxCaptchaModule } from 'ngx-captcha';
-import { ToastrService } from 'ngx-toastr';
-import { environment } from '../../../environnements/environnement';
-import { AuthService } from '../../services/authService/auth.service';
+import {Router, RouterLink} from '@angular/router';
+import {NgxCaptchaModule} from 'ngx-captcha';
+import {ToastrService} from 'ngx-toastr';
+import {environment} from '../../../environnements/environnement';
+import {AuthService} from '../../services/authService/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -43,7 +43,8 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) {
+  }
 
   // Lifecycle hook appelé à l'initialisation du composant
   ngOnInit(): void {
@@ -83,26 +84,18 @@ export class LoginComponent implements OnInit {
           next: (res) => {
             console.log('Connexion reussie :', res);
 
-            // Si la réponse est un succès (200), on sauvegarde le token et on redirige
-            if (res?.status && res.status === 200) {
-              this.loading = false;
-              this.success = true;
-              // this.authService.saveToken(res.token);
-              localStorage.setItem('loginEmail', email);
+            // Si la réponse est un succès, on sauvegarde le token et on redirige
+            this.loading = false;
+            this.success = true;
 
-              console.log('Login réussi, redirection vers la validation OTP');
-              this.router.navigate(['/valider-otp-login']);
-            } else {
-              this.loading = false;
-              this.success = false;
-              this.toastr.error(res.message, '', {
-                positionClass: 'toast-custom-center',
-              });
-              this.router.navigate(['/login']);
-            }
+            localStorage.setItem('loginEmail', email);
+            this.router.navigate(['/valider-otp-login']);
+
+            console.log('Login réussi, redirection vers la validation OTP');
           },
 
           error: (err) => {
+            this.router.navigate(['/login']);
             console.error('Erreur lors de la connexion :', err);
             this.toastr.error('Erreur lors de la connexion', '', {
               positionClass: 'toast-custom-center',

@@ -1,4 +1,4 @@
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import {NgClass, NgFor, NgIf} from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -11,12 +11,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { AlerteType } from '../../interfaces/alertes';
-import { AlertesService } from '../../services/alertes/alertes.service';
-import { ModalsService } from '../../services/modals/modals.service';
-import { NotificationsService } from '../../services/notifications/notifications.service';
-import { PaginationsService } from '../../services/paginations/paginations.service';
+import {ToastrService} from 'ngx-toastr';
+import {AlerteType} from '../../interfaces/alertes';
+import {AlertesService} from '../../services/alertes/alertes.service';
+import {ModalsService} from '../../services/modals/modals.service';
+import {NotificationsService} from '../../services/notifications/notifications.service';
+import {PaginationsService} from '../../services/paginations/paginations.service';
 import {
   getErrorMessage,
   getFormControlClass,
@@ -57,8 +57,8 @@ export class NotificationsComponent implements OnInit {
   niveauxUrgence: any[] = [];
 
   typeAlertes: AlerteType[] = [
-    { id: 'URGENT', description: 'URGENT' },
-    { id: 'INFO', description: 'INFO' },
+    {id: 'URGENT', description: 'URGENT'},
+    {id: 'INFO', description: 'INFO'},
   ];
 
   constructor(
@@ -69,7 +69,8 @@ export class NotificationsComponent implements OnInit {
     private alertesService: AlertesService,
     private cd: ChangeDetectorRef,
     public paginationService: PaginationsService
-  ) {}
+  ) {
+  }
 
   // Raccourcis pour le template
   isInvalid = (name: string) => isInvalid(this.notifForm, name);
@@ -127,38 +128,41 @@ export class NotificationsComponent implements OnInit {
 
     this.isLoading = true;
 
-    const dataToSend = { ...this.notifForm.value };
+    const dataToSend = {...this.notifForm.value};
     console.log('Data to send : ', dataToSend);
 
     this.notifService.createNotification(dataToSend).subscribe({
       next: (res) => {
-        console.log('✅ Notification créée :', res);
+        this.isLoading = false
         this.notifForm.reset();
         this.modalsService.closeAllModals();
-        this.toastr.success('Notification créée avec succès !', '', {
+
+        this.toastr.success(res?.message || 'Notification créée avec succès !', '', {
           positionClass: 'toast-custom-center',
         });
 
         this.paginationService.reset();
         this.updatePaginatedData();
         this.loadNotifications();
+
+        console.log('✅ Notification créée :', res);
       },
 
       error: (err) => {
-        this.toastr.error("Erreur lors de la creation de l'alerte", '', {
+        this.isLoading = false
+
+        this.toastr.error(err?.message || "Erreur lors de la creation de l'alerte", '', {
           positionClass: 'toast-custom-center',
         });
         console.log('Erreur create notification : ', err);
       },
-
-      complete: () => (this.isLoading = false),
     });
   }
 
   // A l'edition
   onEdit(notification: any) {
     this.openModal('updateNotificationModal');
-    this.selectedNotification = { ...notification };
+    this.selectedNotification = {...notification};
     this.idNotif = this.selectedNotification.id;
 
     console.log('selected notification : ', this.selectedNotification);
@@ -256,21 +260,19 @@ export class NotificationsComponent implements OnInit {
 
     this.notifService.toggleNotification(params).subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-          this.loadNotifications();
-          this.updatePaginatedData();
-        } else {
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
-        console.log('res api : ', res);
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
+
+        this.toastr.success(res?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+
+        this.loadNotifications();
+        this.updatePaginatedData();
+
         this.modalsService.closeModal('bloquerDebloquerModal');
+
+        console.log('res api : ', res);
       },
 
       error: (err) => {

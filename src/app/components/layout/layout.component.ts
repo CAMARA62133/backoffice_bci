@@ -1,8 +1,8 @@
-import { DatePipe, NgIf, UpperCasePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../services/authService/auth.service';
+import {DatePipe, NgIf, UpperCasePipe} from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../services/authService/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -19,7 +19,8 @@ export class LayoutComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.currentUser = this.authService.getUserInfo();
@@ -35,25 +36,20 @@ export class LayoutComponent implements OnInit {
   logout(): void {
     this.authService.deconnexion().subscribe({
       next: (response) => {
-        if (response.status === 200) {
-          console.log('Déconnexion réussie :', response);
-          // this.showNotification(response.message);
-          this.toastr.success(response.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-          // Nettoyage déjà fait dans le service, redirection après succès
-          this.router.navigate(['/login']);
-        } else {
-          // this.showNotification(response.message);
-          this.toastr.error(response.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
+        console.log('Déconnexion réussie :', response);
+
+        this.toastr.success(response.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+        // Nettoyage déjà fait dans le service, redirection après succès
+        this.router.navigate(['/login']);
       },
+
       error: (error) => {
+        this.toastr.error(error.message, '', {
+          positionClass: 'toast-custom-center',
+        });
         console.error('Erreur lors de la déconnexion :', error);
-        // Même en cas d'erreur, on peut forcer la redirection vers la page de login
-        // this.router.navigate(['/login']);
       },
     });
   }

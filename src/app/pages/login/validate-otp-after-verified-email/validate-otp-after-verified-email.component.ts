@@ -1,10 +1,10 @@
-import { NgIf } from '@angular/common';
-import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../services/authService/auth.service';
-import { OrgOtpLoginService } from '../../../services/orgOtpLogin/org-otp-login.service';
+import {NgIf} from '@angular/common';
+import {Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../../services/authService/auth.service';
+import {OrgOtpLoginService} from '../../../services/orgOtpLogin/org-otp-login.service';
 
 @Component({
   selector: 'app-validate-otp-after-verified-email',
@@ -29,7 +29,8 @@ export class ValidateOtpAfterVerifiedEmailComponent {
     private router: Router,
     private authService: AuthService,
     private toastr: ToastrService
-  ) {}
+  ) {
+  }
 
   moveToNext(event: any, index: number) {
     const input = event.target;
@@ -69,14 +70,12 @@ export class ValidateOtpAfterVerifiedEmailComponent {
     this.isLoadingReEnvoi = true;
     this.otpService.orgReenvoieOtp().subscribe({
       next: (response) => {
-        if (response.status === 200) {
-          this.isLoadingReEnvoi = false;
-          this.otpValues = ['', '', '', ''];
+        this.isLoadingReEnvoi = false;
+        this.otpValues = ['', '', '', ''];
 
-          this.toastr.success(response.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
+        this.toastr.success(response.message, '', {
+          positionClass: 'toast-custom-center',
+        });
         console.log('reponse api : ', response);
       },
 
@@ -144,6 +143,7 @@ export class ValidateOtpAfterVerifiedEmailComponent {
   closeModalOtpExpire() {
     this.showModalOTP_expire = false;
   }
+
   closeModalError() {
     this.showModalError = false;
   }

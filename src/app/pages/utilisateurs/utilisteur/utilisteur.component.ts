@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Component, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,17 +7,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../services/authService/auth.service';
-import { ModalsService } from '../../../services/modals/modals.service';
-import { SharedService } from '../../../services/shared/shared.service';
-import { UsersService } from '../../../services/users/users.service';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../../services/authService/auth.service';
+import {ModalsService} from '../../../services/modals/modals.service';
+import {SharedService} from '../../../services/shared/shared.service';
+import {UsersService} from '../../../services/users/users.service';
 import {
   getErrorMessage,
   getFormControlClass,
   isInvalid,
   isValid,
 } from '../../../utils/form-helpers';
+import {PaginationsService} from '../../../services/paginations/paginations.service';
+import {ActivatedRoute} from '@angular/router';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
@@ -55,14 +57,19 @@ export class UtilisteurComponent implements OnInit {
 
   orgId!: string | number;
 
+  paginatedUsers:any[] = [];
+
   constructor(
     private modalsService: ModalsService,
     private fb: FormBuilder,
     private usersService: UsersService,
     private toastr: ToastrService,
     private sharedService: SharedService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    public paginationService: PaginationsService,
+    private route: ActivatedRoute
+  ) {
+  }
 
   // Raccourcis pour le template
   isInvalid = (name: string) => isInvalid(this.userForm, name);
@@ -79,8 +86,13 @@ export class UtilisteurComponent implements OnInit {
     console.log('dataConfig : ', dataConfig);
     console.log('userInfo : ', userInfo);
 
+    this.route.queryParamMap.subscribe(params => {
+      const id = params.get('id');
+      console.log('ID = ', id);
+    });
+
     if (dataConfig) {
-      this.userInfoConfig = { ...dataConfig };
+      this.userInfoConfig = {...dataConfig};
       console.log('userInfoConfig : ', this.userInfoConfig);
 
       this.phoneCode = dataConfig.organisation.find(
@@ -298,20 +310,16 @@ export class UtilisteurComponent implements OnInit {
 
     this.usersService.toggleUserStatus(params).subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-          this.loadUsers();
-        } else {
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
+        this.toastr.success(res?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+        this.loadUsers();
 
         console.log('res api : ', res);
+
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
+
         this.modalsService.closeModal('bloquerDebloquerModal');
       },
 
@@ -335,14 +343,10 @@ export class UtilisteurComponent implements OnInit {
 
     this.usersService.getAllUsers().subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          this.users = res?.data;
-          console.log('users:', this.users);
-        } else {
-          this.toastr.error(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
+        this.users = res?.data;
+        console.log('users:', this.users);
+
+
         console.log('api res : ', res);
         this.isLoadingUser = false;
       },
@@ -364,23 +368,18 @@ export class UtilisteurComponent implements OnInit {
 
     this.sharedService.getAllRoles().subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          // Liste des IDs à exclure
-          const excludedRoleIds = [7, 10];
+        // Liste des IDs à exclure
+        const excludedRoleIds = [7, 10];
 
-          // Filtrage des rôles
-          this.roles = (res?.data || []).filter(
-            (role: any) => !excludedRoleIds.includes(+role.id)
-          );
+        // Filtrage des rôles
+        this.roles = (res?.data || []).filter(
+          (role: any) => !excludedRoleIds.includes(+role.id)
+        );
 
-          // this.roles = res?.data || [];
-          console.log('roles:>', this.roles);
-          console.log('roles filtrés :>', this.roles);
-        } else {
-          this.toastr.error(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
+        // this.roles = res?.data || [];
+        console.log('roles:>', this.roles);
+        console.log('roles filtrés :>', this.roles);
+
         console.log('api res : ', res);
         this.isLoading = false;
       },
@@ -400,14 +399,10 @@ export class UtilisteurComponent implements OnInit {
 
     this.sharedService.getAllPays().subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          this.countries = res?.data || [];
-          console.log('countries :>', this.roles);
-        } else {
-          this.toastr.error(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
+        this.countries = res?.data || [];
+        console.log('countries :>', this.roles);
+
+
         console.log('api res : ', res);
         this.isLoading = false;
       },
@@ -417,5 +412,42 @@ export class UtilisteurComponent implements OnInit {
         console.log(err);
       },
     });
+  }
+
+
+  // Mise a jour de la pagination
+  updatePaginatedData(): void {
+    this.paginatedUsers =
+      this.paginationService.getPaginatedData();
+  }
+
+  // Page suivante
+  nextPage(): void {
+    this.paginationService.goToNextPage();
+    this.updatePaginatedData();
+  }
+
+  // Page precedante
+  previousPage(): void {
+    this.paginationService.goToPreviousPage();
+    this.updatePaginatedData();
+  }
+
+  // Premiere page
+  firstPage(): void {
+    this.paginationService.goToFirstPage();
+    this.updatePaginatedData();
+  }
+
+  // Derniere page
+  lastPage(): void {
+    this.paginationService.goToLastPage();
+    this.updatePaginatedData();
+  }
+
+  // Aller a la page
+  goToPage(page: number): void {
+    this.paginationService.currentPage = page;
+    this.updatePaginatedData();
   }
 }

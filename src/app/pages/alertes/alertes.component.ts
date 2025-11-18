@@ -1,4 +1,4 @@
-import { CommonModule, NgClass, NgIf } from '@angular/common';
+import {CommonModule, NgClass, NgIf} from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -11,11 +11,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { AlerteType } from '../../interfaces/alertes';
-import { AlertesService } from '../../services/alertes/alertes.service';
-import { ModalsService } from '../../services/modals/modals.service';
-import { PaginationsService } from '../../services/paginations/paginations.service';
+import {ToastrService} from 'ngx-toastr';
+import {AlerteType} from '../../interfaces/alertes';
+import {AlertesService} from '../../services/alertes/alertes.service';
+import {ModalsService} from '../../services/modals/modals.service';
+import {PaginationsService} from '../../services/paginations/paginations.service';
 import {
   getErrorMessage,
   getFormControlClass,
@@ -50,8 +50,8 @@ export class AlertesComponent implements OnInit {
   modules: any[] = [];
   niveauxUrgence: any[] = [];
   typeAlertes: AlerteType[] = [
-    { id: 'URGENT', description: 'URGENT' },
-    { id: 'INFO', description: 'INFO' },
+    {id: 'URGENT', description: 'URGENT'},
+    {id: 'INFO', description: 'INFO'},
   ];
 
   isEditing: boolean = false;
@@ -71,7 +71,8 @@ export class AlertesComponent implements OnInit {
     private alertService: AlertesService,
     private cd: ChangeDetectorRef,
     public paginationService: PaginationsService
-  ) {}
+  ) {
+  }
 
   // Raccourcis pour le template
   isInvalid = (name: string) => isInvalid(this.alertForm, name);
@@ -132,7 +133,7 @@ export class AlertesComponent implements OnInit {
 
     this.isLoading = true;
 
-    const dataToSend = { ...this.alertForm.value };
+    const dataToSend = {...this.alertForm.value};
     console.log('Data to send : ', dataToSend);
 
     this.alertService.createAlerte(dataToSend).subscribe({
@@ -166,7 +167,7 @@ export class AlertesComponent implements OnInit {
    */
   onEdit(alert: any) {
     this.openModal('updateAlertModal');
-    this.selectedAlert = { ...alert };
+    this.selectedAlert = {...alert};
     this.idAlerte = this.selectedAlert.id;
     console.log('selected alerte : ', this.selectedAlert);
 
@@ -193,7 +194,7 @@ export class AlertesComponent implements OnInit {
     this.isLoading = true;
 
     // On récupère les données du formulaire
-    const formData = { ...this.alertForm.value, idAlert: this.idAlerte };
+    const formData = {...this.alertForm.value, idAlert: this.idAlerte};
 
     console.log('form data : ', formData);
 
@@ -245,6 +246,7 @@ export class AlertesComponent implements OnInit {
     });
   }
 
+  // A l'affichage du formulaire de validation
   onToggle(alerte: any) {
     this.openModal('bloquerDebloquerModal');
     this.selectedAlerteId = alerte.id;
@@ -252,6 +254,7 @@ export class AlertesComponent implements OnInit {
     console.log('Selected alerte : ', alerte);
   }
 
+  // Au changement d'etat (Blocage et deblocage)
   bloquerEtDebloquer(): void {
     if (this.isloadingBloquerDebloquer) return;
     if (this.selectedAlerteId === null) {
@@ -268,26 +271,23 @@ export class AlertesComponent implements OnInit {
 
     this.alertService.toggleAlerte(params).subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-          this.loadAlertes();
-          this.updatePaginatedData();
-        } else {
-          this.toastr.error(res?.message);
-        }
-        console.log('res api : ', res);
+        this.toastr.success(res?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+        this.loadAlertes();
+        this.updatePaginatedData();
+
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
         this.modalsService.closeModal('bloquerDebloquerModal');
+        console.log('toggle alertes : ', res);
       },
 
       error: (err) => {
         this.toastr.error(err?.message, '', {
           positionClass: 'toast-custom-center',
         });
-        console.log('err api : ', err);
+        console.log('err toggle alertes : ', err);
         this.isloadingBloquerDebloquer = false;
         this.modalsService.closeModal('bloquerDebloquerModal');
       },
@@ -315,8 +315,6 @@ export class AlertesComponent implements OnInit {
         console.error('Erreur chargement alertes : ', err);
         this.isLoadingAlerte = false;
       },
-
-      // complete: () => (this.isLoadingAlerte = false),
     });
   }
 

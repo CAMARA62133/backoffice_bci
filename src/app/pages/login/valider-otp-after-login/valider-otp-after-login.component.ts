@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -7,12 +7,13 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router, RouterLink } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../services/authService/auth.service';
-import { OtpLoginServiceService } from '../../../services/otpLogin/otp-login.service';
+import {FormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {Router, RouterLink} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../../services/authService/auth.service';
+import {OtpLoginServiceService} from '../../../services/otpLogin/otp-login.service';
+
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
   selector: 'app-valider-otp-after-login',
@@ -38,7 +39,8 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
     private router: Router,
     private authService: AuthService,
     private toastr: ToastrService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.loginEmail = localStorage.getItem('loginEmail');
@@ -80,28 +82,30 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
     this.isLoadingReEnvoi = true;
     this.otpService.reenvoiOtp(this.loginEmail).subscribe({
       next: (response) => {
-        if (response?.status && response.status === 200) {
-          this.isLoadingReEnvoi = false;
-          this.otpValues = ['', '', '', ''];
+        this.isLoadingReEnvoi = false;
+        this.otpValues = ['', '', '', ''];
 
-          this.toastr.success(response.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+        this.toastr.success(response.message, '', {
+          positionClass: 'toast-custom-center',
+        });
 
-          if (this.otpInputs && this.otpInputs.first) {
-            setTimeout(() => {
-              this.otpInputs.first.nativeElement.focus();
-            }, 100);
-          }
+        if (this.otpInputs && this.otpInputs.first) {
+          setTimeout(() => {
+            this.otpInputs.first.nativeElement.focus();
+          }, 100);
         }
+
         console.log(response);
       },
+
       error: (err) => {
         this.isLoadingReEnvoi = false;
-        console.log(err);
+
         this.toastr.success(err, '', {
           positionClass: 'toast-custom-center',
         });
+
+        console.log(err);
       },
     });
   }
@@ -151,7 +155,7 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        console.log({ err });
+        console.log({err});
         this.toastr.error(err?.message, '', {
           positionClass: 'toast-custom-center',
         });
@@ -162,6 +166,7 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
   closeModalOtpExpire() {
     this.showModalOTP_expire = false;
   }
+
   closeModalError() {
     this.showModalError = false;
   }

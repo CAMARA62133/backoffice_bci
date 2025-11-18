@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,9 +7,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../../../services/authService/auth.service';
+import {Router, RouterLink} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../../services/authService/auth.service';
 
 @Component({
   selector: 'app-reinitialiser-password',
@@ -40,29 +40,21 @@ export class ReinitialiserPasswordComponent {
     }
 
     this.loading = true;
-    const { email } = this.forgotPasswordForm.value;
+    const {email} = this.forgotPasswordForm.value;
 
     // Appel au service d'authentification pour réinitialiser le mot de passe
     this.authService.requestResetPassword(email).subscribe({
       next: (res) => {
-        console.log(res);
-        if (res?.status && res.status === 200) {
-          this.success = true;
-          this.loading = false;
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+        this.success = true;
+        this.loading = false;
 
-          // Si ok rediriger sur le login
-          this.router.navigate(['/login']);
-        } else {
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-          this.success = false;
-          this.loading = false;
-          console.log({ res });
-        }
+        this.toastr.success(res?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+
+        // Si ok rediriger sur le login
+        this.router.navigate(['/login']);
+        console.log(res);
       },
 
       error: (err) => {
@@ -71,7 +63,7 @@ export class ReinitialiserPasswordComponent {
         this.toastr.error(err?.message, '', {
           positionClass: 'toast-custom-center',
         });
-        console.log({ err });
+        console.log({err});
       },
     });
   }

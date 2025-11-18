@@ -1,5 +1,5 @@
-import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {DatePipe, NgClass, NgFor, NgIf} from '@angular/common';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,18 +7,19 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { environment } from '../../../environnements/environnement';
-import { AuthService } from '../../services/authService/auth.service';
-import { ModalsService } from '../../services/modals/modals.service';
-import { OrganisationsService } from '../../services/organisations/organisations.service';
-import { RolesService } from '../../services/roles/roles.service';
+import {ToastrService} from 'ngx-toastr';
+import {environment} from '../../../environnements/environnement';
+import {AuthService} from '../../services/authService/auth.service';
+import {ModalsService} from '../../services/modals/modals.service';
+import {OrganisationsService} from '../../services/organisations/organisations.service';
+import {RolesService} from '../../services/roles/roles.service';
 import {
   getErrorMessage,
   getFormControlClass,
   isInvalid,
   isValid,
 } from '../../utils/form-helpers';
+import {ActivatedRoute, Route, Router, RouterConfigOptions, RouterLinkActive, Routes} from '@angular/router';
 
 @Component({
   selector: 'app-organisations',
@@ -82,8 +83,10 @@ export class OrganisationsComponent implements OnInit {
     private orgService: OrganisationsService,
     private authService: AuthService,
     private toastr: ToastrService,
-    private cd: ChangeDetectorRef
-  ) {}
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute
+  ) {
+  }
 
   // Raccourcis pour le template
   isInvalid = (name: string) => isInvalid(this.orgForm, name);
@@ -94,6 +97,12 @@ export class OrganisationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalsService.closeAllModals();
+
+    // this.route.queryParamMap.subscribe(p => console.log(p.get('id')));
+    this.route.queryParamMap.subscribe(params => {
+      const id = params.get('id');
+      console.log('ID = ', id);
+    });
 
     const userData = this.authService.getUserInfo();
     if (userData) {
@@ -290,24 +299,20 @@ export class OrganisationsComponent implements OnInit {
     // appel a l'API de creation d'une organisation
     this.orgService.createOrganisation(dataToSend).subscribe({
       next: (res) => {
+        this.isLoading = false;
         console.log('Parametres envoyees : ', dataToSend);
 
-        if (res?.status && res?.status === 200) {
-          this.toastr.success(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
 
-          console.log('✅ Organisation créée :', res);
-          this.loadOrganisations();
+        this.toastr.success(res.message, '', {
+          positionClass: 'toast-custom-center',
+        });
 
-          this.orgForm.reset();
-          this.modalsService.closeAllModals();
-        } else {
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
-        }
-        this.isLoading = false;
+        this.loadOrganisations();
+
+        this.orgForm.reset();
+        this.modalsService.closeAllModals();
+
+        console.log('✅ Organisation créée :', res);
       },
 
       error: (err) => {
@@ -339,7 +344,7 @@ export class OrganisationsComponent implements OnInit {
     this.initForm();
 
     this.modalsService.openModal('updateOrgModal');
-    this.selectedOrg = { ...org };
+    this.selectedOrg = {...org};
     this.selectedOrgId = this.selectedOrg.id;
 
     this.idUsers = this.selectedOrg.idUsers;
@@ -521,22 +526,19 @@ export class OrganisationsComponent implements OnInit {
   private loadRoles(): void {
     this.rolesService.getAllRoles().subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          this.roles = res.data;
-          this.filteredRole = this.roles.find((role) => role.id === '7');
-
-          console.log('liste roles : ', this.roles);
-          console.log('filteredRole : ', this.filteredRole);
-        } else {
-          console.log('Erreur chargement des rôles : ', res);
-          this.toastr.error(res?.message);
-        }
         this.isLoading = false;
+        this.roles = res.data;
+        this.filteredRole = this.roles.find((role) => role.id === '7');
+
+        console.log('liste roles : ', this.roles);
+        console.log('filteredRole : ', this.filteredRole);
+
+        console.log('Erreur chargement des rôles : ', res);
       },
 
       error: (err) => {
-        console.error('Erreur chargement des rôles :', err.message);
         this.isLoading = false;
+        console.error('Erreur chargement des rôles :', err.message);
       },
     });
   }
@@ -545,12 +547,11 @@ export class OrganisationsComponent implements OnInit {
     this.isLoadingCountry = true;
     this.orgService.getListePays().subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
-          this.countries = res?.data;
-          console.log(this.countries);
-        }
-        console.log(res);
         this.isLoading = false;
+        this.countries = res?.data;
+
+        console.log(this.countries);
+        console.log(res);
       },
 
       error: (err) => {
