@@ -8,6 +8,8 @@ import {HttpClient} from '@angular/common/http';
 import {debounce, debounceTime, distinctUntilChanged} from 'rxjs';
 import {SearchParams} from '../../../interfaces/search-params.interface';
 import {RouterLink} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {exportToCSV, exportToPDF} from '../../../utils/export.utils';
 
 @Component({
   selector: 'app-log-user',
@@ -37,7 +39,8 @@ export class LogUserComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userLogSerive: UserLogService,
-    public paginationService: PaginationsService
+    public paginationService: PaginationsService,
+    private toastr: ToastrService
   ) {
     this.searchForm = this.createForm();
   }
@@ -45,7 +48,7 @@ export class LogUserComponent implements OnInit {
 
   // A l'initialisation du composant
   ngOnInit() {
-    this.setupRealTimeSearch();
+    // this.setupRealTimeSearch();
     this.loadLogActiviteUsers();
     this.loadNomUsers()
   }
@@ -221,11 +224,11 @@ export class LogUserComponent implements OnInit {
    * Exporter en PDF
    * @param event
    */
-  exportToPDF(event: Event) {
+  exportToPDFHandler(event: Event) {
     event.preventDefault()
 
     // Implementation de la logique d'export
-    console.log(`Export To PDF : ${this.searchResults}`)
+    exportToPDF(this.paginatedLogActiviteUser, "LogsActivitesUtilisateurs.pdf")
   }
 
 
@@ -233,22 +236,10 @@ export class LogUserComponent implements OnInit {
    * Exporter en CSV
    * @param event
    */
-  exportToCSV(event: Event) {
+  exportToCSVHandler(event: Event) {
     event.preventDefault()
 
     // Implementation de la logique d'export
-    console.log(`Export To CSV : ${this.searchResults}`)
-  }
-
-
-  /**
-   * Exporter en JSON
-   * @param event
-   */
-  exportToJSON(event: Event) {
-    event.preventDefault()
-
-    // Implementation de la logique d'export
-    console.log(`Export To JSON : ${this.searchResults}`)
+    exportToCSV(this.paginatedLogActiviteUser, 'LogsActivitesUtilisateurs.csv')
   }
 }

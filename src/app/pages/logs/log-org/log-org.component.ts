@@ -8,6 +8,7 @@ import {SearchOrgParams} from '../../../interfaces/search-params.interface';
 import {createWebpackLoggingCallback} from '@angular-devkit/build-angular/src/tools/webpack/utils/stats';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
+import {exportOrgLogToPDF, exportToCSV, exportToPDF} from '../../../utils/export.utils';
 
 @Component({
   selector: 'app-log-org',
@@ -44,7 +45,7 @@ export class LogOrgComponent implements OnInit {
 
   // A l'initialisation du composant
   ngOnInit() {
-    this.setupRealTimeSearch();
+    // this.setupRealTimeSearch();
     this.loadLogActiviteOrgs();
     this.loadNomOrgs()
   }
@@ -206,18 +207,17 @@ export class LogOrgComponent implements OnInit {
     this.updatePaginatedData();
   }
 
-
-  // ====================== TYPES D'EXPORTATIONS ======================
+// ====================== TYPES D'EXPORTATIONS ======================
 
   /**
    * Exporter en PDF
    * @param event
    */
-  exportToPDF(event: Event) {
+  exportToPDFHandler(event: Event) {
     event.preventDefault()
 
     // Implementation de la logique d'export
-    console.log(`Export To PDF : ${this.searchResults}`)
+    exportOrgLogToPDF(this.paginatedLogActivitesOrg, "LogsActivitesOrganisations.pdf")
   }
 
 
@@ -225,22 +225,10 @@ export class LogOrgComponent implements OnInit {
    * Exporter en CSV
    * @param event
    */
-  exportToCSV(event: Event) {
+  exportToCSVHandler(event: Event) {
     event.preventDefault()
 
     // Implementation de la logique d'export
-    console.log(`Export To CSV : ${this.searchResults}`)
-  }
-
-
-  /**
-   * Exporter en JSON
-   * @param event
-   */
-  exportToJSON(event: Event) {
-    event.preventDefault()
-
-    // Implementation de la logique d'export
-    console.log(`Export To JSON : ${this.searchResults}`)
+    exportToCSV(this.paginatedLogActivitesOrg, 'LogsActivitesOrganisations.csv')
   }
 }

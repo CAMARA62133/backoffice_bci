@@ -50,7 +50,7 @@
                 Applications
               </label>
               <select class="form-select" id="application" formControlName="application">
-                <option value="">Toutes</option>
+                <option [defaultSelected]="true">Toutes</option>
                 <option value="Backoffice web site">Backoffice web site</option>
                 <option value="Banking web site">Banking web site</option>
               </select>
@@ -73,18 +73,6 @@
 
             <div class="col-md-4">
               <div class="btn-group gap-2 d-grid d-md-flex w-100" role="group">
-                <!--
-                  <button class="btn btn-primary">
-                    <i class="fas fa-filter me-1"></i>Filtrer
-                  </button>
-                -->
-
-                <!--
-                    <button class="btn btn-outline-info">
-                      <i class="fas fa-undo me-1"></i>Reset
-                    </button>
-                -->
-
                 <button
                   class="btn btn-success"
                   (click)="onSearchClick()"
@@ -92,16 +80,6 @@
                 >
                   <i class="fas fa-search me-1"></i>
                   {{ isLoading ? 'Recherche...' : 'Rechercher' }}
-                </button>
-
-                <!-- Bouton Reset -->
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  (click)="resetForm()"
-                  [disabled]="isLoading"
-                >
-                  <i class="fas fa-undo me-1"></i>Reset
                 </button>
 
                 <div class="dropdown dropup">
@@ -116,20 +94,14 @@
 
                   <ul class="dropdown-menu">
                     <li>
-                      <a class="dropdown-item" href="#" (click)="exportToPDF($event)">
+                      <a class="dropdown-item" href="#" (click)="exportToPDFHandler($event)">
                         <i class="fas fa-file-pdf text-danger me-2"></i>PDF
                       </a>
                     </li>
 
                     <li>
-                      <a class="dropdown-item" href="#" (click)="exportToCSV($event)">
+                      <a class="dropdown-item" href="#" (click)="exportToCSVHandler($event)">
                         <i class="fas fa-file-csv text-success me-2"></i>CSV
-                      </a>
-                    </li>
-
-                    <li>
-                      <a class="dropdown-item" href="#" (click)="exportToJSON($event)">
-                        <i class="fas fa-file-code text-warning me-2"></i>JSON
                       </a>
                     </li>
                   </ul>
@@ -165,9 +137,9 @@
             </thead>
 
             <tbody>
-            <tr *ngFor="let log of paginatedLogActiviteUser; let i =  index;">
+            <tr *ngFor="let log of paginatedLogActiviteUser; let i =  index;" id="{i}">
               <td>{{ i + 1 }}</td>
-              <td>{{ log.dtDate | date:'dd/MM/yyyy - HH:mm:ss' }}</td>
+              <td>{{ log.dtDate | date:'dd/MM/yyyy' }} <br> {{ log.dtDate | date: 'HH:mm:ss' }}</td>
               <td>{{ log.FullName || "Nom inconnu" }}</td>
               <td>{{ log.vcUserName || "Login inconnu" }}</td>
               <td>
@@ -176,7 +148,6 @@
                   {{ +log.btEnabled === 1 ? "Active" : "Inactive" }}
                 </span>
               </td>
-
               <td>
                 <span class="badge rounded-pill text-bg-{{+log.btBlocked === 1 ? 'danger' : 'success' }}">
                   <i class="fa fa-{{+log.btBlocked === 1 ? 'exclamation-triangle' : 'check'}} "></i>
@@ -193,14 +164,6 @@
                   <a [routerLink]="['/utilisateurs']" [queryParams]="{id: log.iUserID}" class="btn btn-sm btn-info">
                     <i class="fas fa-eye"></i>
                   </a>
-
-                  <!-- <button class="btn btn-sm btn-warning">
-                    <i class="fas fa-edit"></i>
-                  </button>
-
-                  <button class="btn btn-sm btn-danger">
-                    <i class="fas fa-trash-alt"></i>
-                  </button> -->
                 </div>
               </td>
             </tr>

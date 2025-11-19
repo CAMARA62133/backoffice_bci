@@ -89,15 +89,6 @@
                   {{ isLoading ? 'Recherche...' : 'Rechercher' }}
                 </button>
 
-                <!-- Bouton Reset -->
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  (click)="resetForm()"
-                  [disabled]="isLoading"
-                >
-                  <i class="fas fa-undo me-1"></i>Reset
-                </button>
 
                 <div class="dropdown dropup">
                   <button
@@ -111,20 +102,16 @@
 
                   <ul class="dropdown-menu">
                     <li>
-                      <a class="dropdown-item" href="#" (click)="exportToPDF($event)">
+                      <a class="dropdown-item"  (click)="exportToPDFHandler($event)">
                         <i class="fas fa-file-pdf text-danger me-2"></i>PDF
                       </a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#" (click)="exportToCSV($event)">
+                      <a class="dropdown-item" (click)="exportToCSVHandler($event)">
                         <i class="fas fa-file-csv text-success me-2"></i>CSV
                       </a>
                     </li>
-                    <li>
-                      <a class="dropdown-item" href="#" (click)="exportToJSON($event)">
-                        <i class="fas fa-file-code text-warning me-2"></i>JSON
-                      </a>
-                    </li>
+
                   </ul>
                 </div>
               </div>
@@ -184,17 +171,9 @@
               <td>{{ log.vcMessage }}</td>
               <td class="text-center">
                 <div style="display: flex; justify-content: center; gap: 8px">
-                  <a [routerLink]="['/organisations']" [queryParams]="{id: log.OrganisationID}" class="btn btn-sm btn-info">
+                  <a [routerLink]="['/utilisateurs']" [queryParams]="{id: log.OrganisationID}" class="btn btn-sm btn-info">
                     <i class="fas fa-eye"></i>
                   </a>
-
-                  <!-- <button class="btn btn-sm btn-warning">
-                    <i class="fas fa-edit"></i>
-                  </button>
-
-                  <button class="btn btn-sm btn-danger">
-                    <i class="fas fa-trash-alt"></i>
-                  </button> -->
                 </div>
               </td>
             </tr>

@@ -101,13 +101,6 @@ export class OrganisationsComponent implements OnInit {
   ngOnInit(): void {
     this.modalsService.closeAllModals();
 
-    // Recuperation de l'ID passer dans l'url
-    this.route.queryParamMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      console.log('ID = ', id);
-      this.loadOrganisations();
-    });
-
     const userData = this.authService.getUserInfo();
     if (userData) {
       this.currentUser = userData;

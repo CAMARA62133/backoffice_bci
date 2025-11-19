@@ -57,7 +57,9 @@ export class UtilisteurComponent implements OnInit {
 
   orgId!: string | number;
 
-  paginatedUsers:any[] = [];
+  paginatedUsers: any[] = [];
+
+  id: number | null = null;
 
   constructor(
     private modalsService: ModalsService,
@@ -86,9 +88,10 @@ export class UtilisteurComponent implements OnInit {
     console.log('dataConfig : ', dataConfig);
     console.log('userInfo : ', userInfo);
 
+    // Recuperer l'ID dans l'url automatiquement
     this.route.queryParamMap.subscribe(params => {
-      const id = params.get('id');
-      console.log('ID = ', id);
+      this.id = params.get('id') ? Number(params.get('id')) : null;
+      console.log('ID = ', this.id);
     });
 
     if (dataConfig) {
@@ -341,17 +344,26 @@ export class UtilisteurComponent implements OnInit {
   private loadUsers() {
     this.isLoadingUser = true;
 
+    const idToFilter = this.id ? Number(this.id) : null;
+
     this.usersService.getAllUsers().subscribe({
       next: (res) => {
-        this.users = res?.data;
-        console.log('users:', this.users);
+        const allUsers = res?.data;
 
+        console.log("allUser", {allUsers});
+        console.log(this.id, idToFilter)
 
-        console.log('api res : ', res);
+        // Filtrage si un id est présent
+        this.users = idToFilter ? allUsers.filter((user: any) => +user.id === idToFilter) : allUsers;
+
+        console.log('API res:', res);
+        console.log('Users filtrés:', this.users);
+
         this.isLoadingUser = false;
       },
+
       error: (err) => {
-        this.toastr.error(err.message, '', {
+        this.toastr.error(err?.error?.message === 'Unauthorized.' ? "Votre session a expirée." : err.message, '', {
           positionClass: 'toast-custom-center',
         });
         console.log('api err : ', err);
