@@ -76,6 +76,9 @@ export class OrganisationsComponent implements OnInit {
   isEditMode: boolean = true;
   idUsers!: number | string;
 
+  id!: number | null;
+  org!: any[];
+
   constructor(
     private modalsService: ModalsService,
     private fb: FormBuilder,
@@ -98,10 +101,11 @@ export class OrganisationsComponent implements OnInit {
   ngOnInit(): void {
     this.modalsService.closeAllModals();
 
-    // this.route.queryParamMap.subscribe(p => console.log(p.get('id')));
+    // Recuperation de l'ID passer dans l'url
     this.route.queryParamMap.subscribe(params => {
-      const id = params.get('id');
+      const id = Number(params.get('id'));
       console.log('ID = ', id);
+      this.loadOrganisations();
     });
 
     const userData = this.authService.getUserInfo();
@@ -515,7 +519,15 @@ export class OrganisationsComponent implements OnInit {
         this.isLoadingOrgs = false;
         this.currentPage = 1;
         this.updatePagination();
+
+        //
+        if (this.id) {
+          this.org = this.organisations.filter(og => og.id === this.id);
+        } else {
+          this.org = this.organisations;
+        }
       },
+
       error: (err) => {
         console.error('Erreur chargement organisations', err);
         this.isLoadingOrgs = false;
