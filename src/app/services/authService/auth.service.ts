@@ -68,7 +68,7 @@ export class AuthService {
    * @param password
    * @param appName
    * @param captcha_token
-   * @returns
+   * @param appVersion
    */
   login(
     email: string,
@@ -93,7 +93,7 @@ export class AuthService {
   requestResetPassword(
     email: string,
     lienSite: string = environment.lienSite,
-    appName: string = this.appName
+    appName: string = this.appName,
   ): Observable<any> {
     const body = { email, appName, lienSite };
     console.log('body:', body);

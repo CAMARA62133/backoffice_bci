@@ -36,7 +36,8 @@ export class LoginComponent implements OnInit {
 
   passwordVisible = false; // false = masque, true = visible
 
-  siteKey: string = '6LfNstgrAAAAAHnIIdUeCuDyv7IBMWfEOh2uzWhF';
+  // siteKey: string = '6LfNstgrAAAAAHnIIdUeCuDyv7IBMWfEOh2uzWhF';
+  siteKey: string = '6LfVN9UrAAAAABnkhkRbaBBFeT5P5I7SO9OPXBVp';
 
   constructor(
     private authService: AuthService,
@@ -51,7 +52,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
-      // recaptcha: ['', Validators.required],
+      recaptcha: ['', Validators.required],
     });
   }
 
@@ -66,7 +67,7 @@ export class LoginComponent implements OnInit {
       const email = this.loginForm.get('email')?.value;
       const password = this.loginForm.get('password')?.value;
       const appName = environment.appName;
-      const captcha_token = 'captcha_token_placeholder';
+      const captcha_token = this.loginForm.get('recaptcha')?.value;
 
       // console.log(object)
 
