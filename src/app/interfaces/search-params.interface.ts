@@ -16,4 +16,5 @@ export interface SearchOrgParams {
   dateFin?: string;
   application?: string;
   organisation?: string;
+  username?:string;
 }

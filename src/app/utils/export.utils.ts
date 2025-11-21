@@ -51,20 +51,26 @@ export function exportToCSV(data: any[], filename: string = "exportation.csv") {
  * Fonction pour exporter un tableau au format PDF
  * @param data  Consiste le tableau a exporter
  * @param filename Consiste le nom du fichier lors de l'exportation
+ * @param title Est le titre du fichier
  */
-export function exportToPDF(data: any[], filename: string = "exportation.pdf") {
+export function exportToPDF(data: any[], filename: string = "exportation.pdf", title: string = "") {
   // Si le tableau a exporter n'existe pas ou est vide
-  if (!data || data.length === 0) {
-    alert("Aucune donnée à exporter");
-    console.error("Aucune donnée à exporter");
-    return;
-  }
+  if (!validateExportData(data)) return;
 
   const doc = new jsPDF({
     orientation: 'landscape',
     unit: 'pt',
     format: 'a4'
   });
+
+  // 🔵 ---------- AJOUT DU TITRE AU CENTRE ----------
+  if (title) {
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(54, 42, 122); // #362A7A
+    doc.text(title, pageWidth / 2, 30, {align: "center"});
+  }
 
   // ------------- Colonnes fixes (posées en dur) --------------
   const columns = [
@@ -105,7 +111,7 @@ export function exportToPDF(data: any[], filename: string = "exportation.pdf") {
     margin: {top: 40, left: 20, right: 20},
 
     styles: {
-      fontSize: 9,
+      fontSize: 10,
       cellPadding: 5,
       overflow: 'linebreak',
       lineColor: [0, 0, 0],      // Couleur des bordures
@@ -147,7 +153,7 @@ export function exportToPDF(data: any[], filename: string = "exportation.pdf") {
   });
 
 
-  // Sauvegard du fichier avec le nom
+  // Sauvegarde du fichier avec numéro unique
   doc.save(generateNameNumber(filename));
   console.log("Export ToPDF : ", data);
 }
@@ -156,20 +162,26 @@ export function exportToPDF(data: any[], filename: string = "exportation.pdf") {
  * Fonction pour exporter un tableau au format PDF
  * @param data  Consiste le tableau a exporter
  * @param filename Consiste le nom du fichier lors de l'exportation
+ * @param title Consiste le titre du fichier
  */
-export function exportOrgLogToPDF(data: any[], filename: string = "exportation.pdf") {
+export function exportOrgLogToPDF(data: any[], filename: string = "exportation.pdf", title: string = "") {
   // Si le tableau a exporter n'existe pas ou est vide
-  if (!data || data.length === 0) {
-    alert("Aucune donnée à exporter");
-    console.error("Aucune donnée à exporter");
-    return;
-  }
+  if (!validateExportData(data)) return;
 
   const doc = new jsPDF({
     orientation: 'landscape',
     unit: 'pt',
     format: 'a4'
   });
+
+  // 🔵 ---------- AJOUT DU TITRE AU CENTRE ----------
+  if (title) {
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(54, 42, 122); // #362A7A
+    doc.text(title, pageWidth / 2, 30, {align: "center"});
+  }
 
   // ------------- Colonnes fixes (posées en dur) --------------
   const columns = [
@@ -282,6 +294,19 @@ function generateNameNumber(fileName: string): string {
   const ext = fileParts[1] || 'pdf';
 
   return `${name}_${timestamp}.${ext}`;
+}
+
+/**
+ * Permet de verifier si l'export des donnees est valide
+ * @param data
+ */
+function validateExportData(data: any[]): boolean {
+  if (!data || data.length === 0) {
+    alert("Aucune donnée à exporter");
+    console.error("Aucune donnée à exporter");
+    return false;
+  }
+  return true;
 }
 
 

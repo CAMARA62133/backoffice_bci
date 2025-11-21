@@ -7,7 +7,7 @@
         >
           <div>
             <h4 class="fw-semibold text-primary mb-sm-0 h3">
-              Liste des logs organisations
+              Liste des logs d'activitées organisations
             </h4>
           </div>
         </div>
@@ -70,16 +70,23 @@
               </div>
             </div>
 
+            <div class="col-md-2">
+              <label class="fw-semibold form-label" for="username">
+                Nom utilisateur
+              </label>
+              <select *ngIf="!isLoadingNomUser" class="form-select" id="username" formControlName="username">
+                <option value="">Tous</option>
+                <option *ngFor="let user of nomUsers" [value]="user.id">
+                  {{ user.nomComplet + ' | ' + user.vcPhoneNumber }}
+                </option>
+              </select>
+              <div *ngIf="isLoadingNomUser" class="text-muted">
+                Chargement...
+              </div>
+            </div>
+
             <div class="col-md-4">
               <div class="btn-group gap-2 d-grid d-md-flex w-60" role="group">
-                <!-- <button class="btn btn-primary">
-                  <i class="fas fa-filter me-1"></i>Filtrer
-                </button>
-
-                <button class="btn btn-outline-info">
-                  <i class="fas fa-undo me-1"></i>Reset
-                </button> -->
-
                 <button
                   class="btn btn-success"
                   (click)="onSearchClick()"
@@ -89,20 +96,19 @@
                   {{ isLoading ? 'Recherche...' : 'Rechercher' }}
                 </button>
 
-
                 <div class="dropdown dropup">
                   <button
                     class="btn btn-primary dropdown-toggle"
                     type="button"
                     data-bs-toggle="dropdown"
-                    [disabled]="paginatedLogActivitesOrg.length === 0"
+                    [disabled]="logActivitesOrg.length === 0"
                   >
                     <i class="fas fa-download me-1"></i>Exporter
                   </button>
 
                   <ul class="dropdown-menu">
                     <li>
-                      <a class="dropdown-item"  (click)="exportToPDFHandler($event)">
+                      <a class="dropdown-item" (click)="exportToPDFHandler($event)">
                         <i class="fas fa-file-pdf text-danger me-2"></i>PDF
                       </a>
                     </li>
@@ -124,8 +130,10 @@
       <div class="card-body">
         <div class="table-responsive">
           <table
-            *ngIf="!isLoadingOrgLogs && paginatedLogActivitesOrg.length > 0"
-            class="table table-hover table-striped">
+            *ngIf="!isLoadingOrgLogs && logActivitesOrg.length > 0"
+            appDataTable
+            class="table table-hover table-striped datatable"
+          >
             <thead class="table-primary">
             <tr>
               <th>ID</th>
@@ -144,7 +152,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let log of paginatedLogActivitesOrg; let i = index">
+            <tr *ngFor="let log of logActivitesOrg; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ log.dtDate | date: 'dd/MM/yyy HH:mm:ss' }}</td>
               <td>{{ log.Organisation }}</td>
@@ -153,7 +161,7 @@
               <td>
                 <span class="badge rounded-pill text-bg-{{+log.btEnabled === 1 ? 'success' : 'danger' }}">
                   <i class="fa fa-{{+log.btEnabled === 1 ? 'check' : 'exclamation-triangle'}} "></i>
-                  {{ +log.btEnabled === 1 ? "Active" : "Inactive" }}
+                  {{ +log.btEnabled === 1 ? "Actif" : "Inactif" }}
                 </span>
               </td>
 
@@ -161,7 +169,7 @@
 
                 <span class="badge rounded-pill text-bg-{{+log.btBlocked === 1 ? 'danger' : 'success' }}">
                   <i class="fa fa-{{+log.btBlocked === 1 ? 'exclamation-triangle' : 'check'}} "></i>
-                  {{ +log.btBlocked === 1 ? "Compte bloqué" : "Compte non bloqué" }}
+                  {{ +log.btBlocked === 1 ? "Bloqué" : "Non bloqué" }}
                 </span>
               </td>
               <td>{{ log.vcIP }}</td>
@@ -171,7 +179,8 @@
               <td>{{ log.vcMessage }}</td>
               <td class="text-center">
                 <div style="display: flex; justify-content: center; gap: 8px">
-                  <a [routerLink]="['/utilisateurs']" [queryParams]="{id: log.OrganisationID}" class="btn btn-sm btn-info">
+                  <a [routerLink]="['/utilisateurs']" [queryParams]="{id: log.OrganisationID}"
+                     class="btn btn-sm btn-info">
                     <i class="fas fa-eye"></i>
                   </a>
                 </div>
@@ -194,7 +203,7 @@
 
         <!-- Si liste des organisations est vide -->
         <div
-          *ngIf="!isLoadingOrgLogs && paginatedLogActivitesOrg.length === 0"
+          *ngIf="!isLoadingOrgLogs && logActivitesOrg.length === 0"
           class="text-center py-5"
         >
           <div class="mb-3">
@@ -204,95 +213,6 @@
           <p class="text-muted">
             Il n'y a pas de logs enregistrées pour l'instant !
           </p>
-        </div>
-
-        <!-- Pagination -->
-        <div
-          *ngIf="
-              !isLoadingOrgLogs && paginatedLogActivitesOrg.length > 0
-            "
-          class="card-footer bg-light"
-        >
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <small class="text-muted">
-                Affichage de
-                <span id="startRecord">{{
-                    paginationService.startIndex + 1
-                  }}</span>
-                à
-                <span id="endRecord">{{ paginationService.endIndex }}</span>
-                sur
-                <span id="totalRecords">{{
-                    paginationService.totalItems
-                  }}</span>
-
-              </small>
-            </div>
-            <div class="col-md-6">
-              <!-- <nav *ngIf="totalPages > 1" aria-label="Pagination rapports"> -->
-              <nav
-                *ngIf=" !isLoadingOrgLogs && paginatedLogActivitesOrg.length > 0 "
-                aria-label="Pagination rapports"
-              >
-                <ul class="pagination pagination-md justify-content-end mb-0">
-                  <!-- Début -->
-                  <li
-                    class="page-item"
-                    [class.disabled]="paginationService.currentPage === 1"
-                  >
-                    <button class="page-link" (click)="firstPage()">
-                      <i class="fa fa-backward"></i>
-                    </button>
-                  </li>
-
-                  <!-- Précédent -->
-                  <li
-                    class="page-item"
-                    [class.disabled]="paginationService.currentPage === 1"
-                  >
-                    <button class="page-link" (click)="previousPage()">
-                      <i class="fa fa-chevron-left"></i>
-                    </button>
-                  </li>
-
-                  <!-- Numéros de pages -->
-                  <li
-                    class="page-item"
-                    *ngFor="
-                        let page of paginationService.getPageNumbers();
-                        let i = index
-                      "
-                    [class.active]="paginationService.currentPage === page"
-                  >
-                    <button class="page-link" (click)="goToPage(page)">
-                      {{ page }}
-                    </button>
-                  </li>
-
-                  <!-- Suivant -->
-                  <li
-                    class="page-item"
-                    [class.disabled]="paginationService.currentPage === paginationService.totalPages"
-                  >
-                    <button class="page-link" (click)="nextPage()">
-                      <i class="fa fa-chevron-right"></i>
-                    </button>
-                  </li>
-
-                  <!-- Fin -->
-                  <li
-                    class="page-item"
-                    [class.disabled]="paginationService.currentPage === paginationService.totalPages"
-                  >
-                    <button class="page-link" (click)="lastPage()">
-                      <i class="fa fa-forward"></i>
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
         </div>
       </div>
     </div>

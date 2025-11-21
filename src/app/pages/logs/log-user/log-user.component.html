@@ -7,7 +7,7 @@
         >
           <div>
             <h4 class="fw-semibold text-primary mb-sm-0 h3">
-              Liste des logs utilisateurs
+              Liste des logs d'activitées utilisateurs
             </h4>
           </div>
         </div>
@@ -87,7 +87,7 @@
                     class="btn btn-primary dropdown-toggle"
                     type="button"
                     data-bs-toggle="dropdown"
-                    [disabled]="paginatedLogActiviteUser.length === 0"
+                    [disabled]="logActiviteUsers.length === 0"
                   >
                     <i class="fas fa-download me-1"></i>Exporter
                   </button>
@@ -117,27 +117,29 @@
     <div class="card mt-4">
       <div class="card-body">
         <div class="table-responsive">
-          <table *ngIf="!isLoadingUserLogs && paginatedLogActiviteUser.length > 0"
-                 class="table table-hover table-striped">
+          <table *ngIf="!isLoadingUserLogs && logActiviteUsers.length > 0"
+                 appDataTable
+                 class="table table-hover table-striped datatable"
+          >
             <thead class="table-primary">
             <tr class="text-center">
-              <th>ID</th>
-              <th>Date</th>
-              <th>Nom utilisateur</th>
-              <th>Login utilisateur</th>
-              <th>Statut</th>
-              <th>Etat</th>
-              <th>IP</th>
-              <th>Navigateur</th>
-              <th>Application</th>
-              <th>Source</th>
-              <th>Message</th>
-              <th>Actions</th>
+              <th scope="col">ID</th>
+              <th scope="col">Date</th>
+              <th scope="col">Nom utilisateur</th>
+              <th scope="col">Login utilisateur</th>
+              <th scope="col">Statut</th>
+              <th scope="col">Etat</th>
+              <th scope="col">IP</th>
+              <th scope="col">Navigateur</th>
+              <th scope="col">Application</th>
+              <th scope="col">Source</th>
+              <th scope="col">Message</th>
+              <th scope="col">Actions</th>
             </tr>
             </thead>
 
             <tbody>
-            <tr *ngFor="let log of paginatedLogActiviteUser; let i =  index;" id="{i}">
+            <tr *ngFor="let log of logActiviteUsers; let i =  index;" id="{i}">
               <td>{{ i + 1 }}</td>
               <td>{{ log.dtDate | date:'dd/MM/yyyy' }} <br> {{ log.dtDate | date: 'HH:mm:ss' }}</td>
               <td>{{ log.FullName || "Nom inconnu" }}</td>
@@ -145,13 +147,13 @@
               <td>
                 <span class="badge rounded-pill text-bg-{{+log.btEnabled === 1 ? 'success' : 'danger' }}">
                   <i class="fa fa-{{+log.btEnabled === 1 ? 'check' : 'exclamation-triangle'}} "></i>
-                  {{ +log.btEnabled === 1 ? "Active" : "Inactive" }}
+                  {{ +log.btEnabled === 1 ? "Actif" : "Inactif" }}
                 </span>
               </td>
               <td>
                 <span class="badge rounded-pill text-bg-{{+log.btBlocked === 1 ? 'danger' : 'success' }}">
                   <i class="fa fa-{{+log.btBlocked === 1 ? 'exclamation-triangle' : 'check'}} "></i>
-                  {{ +log.btBlocked === 1 ? "Compte bloqué" : "Compte non bloqué" }}
+                  {{ +log.btBlocked === 1 ? "Bloqué" : "Non bloqué" }}
                 </span>
               </td>
               <td>{{ log.vcIP }}</td>
@@ -184,7 +186,7 @@
 
         <!-- Si liste des organisations est vide -->
         <div
-          *ngIf="!isLoadingUserLogs && paginatedLogActiviteUser.length === 0"
+          *ngIf="!isLoadingUserLogs && logActiviteUsers.length === 0"
           class="text-center py-5"
         >
           <div class="mb-3">
@@ -194,95 +196,6 @@
           <p class="text-muted">
             Il n'y a pas d'utilisateur enregistrée pour l'instant !
           </p>
-        </div>
-
-        <!-- Pagination -->
-        <div
-          *ngIf="
-              !isLoadingUserLogs && paginatedLogActiviteUser.length > 0
-            "
-          class="card-footer bg-light"
-        >
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <small class="text-muted">
-                Affichage de
-                <span id="startRecord">{{
-                    paginationService.startIndex + 1
-                  }}</span>
-                à
-                <span id="endRecord">{{ paginationService.endIndex }}</span>
-                sur
-                <span id="totalRecords">{{
-                    paginationService.totalItems
-                  }}</span>
-
-              </small>
-            </div>
-            <div class="col-md-6">
-              <!-- <nav *ngIf="totalPages > 1" aria-label="Pagination rapports"> -->
-              <nav
-                *ngIf=" !isLoadingUserLogs && paginatedLogActiviteUser.length > 0 "
-                aria-label="Pagination rapports"
-              >
-                <ul class="pagination pagination-md justify-content-end mb-0">
-                  <!-- Début -->
-                  <li
-                    class="page-item"
-                    [class.disabled]="paginationService.currentPage === 1"
-                  >
-                    <button class="page-link" (click)="firstPage()">
-                      <i class="fa fa-backward"></i>
-                    </button>
-                  </li>
-
-                  <!-- Précédent -->
-                  <li
-                    class="page-item"
-                    [class.disabled]="paginationService.currentPage === 1"
-                  >
-                    <button class="page-link" (click)="previousPage()">
-                      <i class="fa fa-chevron-left"></i>
-                    </button>
-                  </li>
-
-                  <!-- Numéros de pages -->
-                  <li
-                    class="page-item"
-                    *ngFor="
-                        let page of paginationService.getPageNumbers();
-                        let i = index
-                      "
-                    [class.active]="paginationService.currentPage === page"
-                  >
-                    <button class="page-link" (click)="goToPage(page)">
-                      {{ page }}
-                    </button>
-                  </li>
-
-                  <!-- Suivant -->
-                  <li
-                    class="page-item"
-                    [class.disabled]="paginationService.currentPage === paginationService.totalPages"
-                  >
-                    <button class="page-link" (click)="nextPage()">
-                      <i class="fa fa-chevron-right"></i>
-                    </button>
-                  </li>
-
-                  <!-- Fin -->
-                  <li
-                    class="page-item"
-                    [class.disabled]="paginationService.currentPage === paginationService.totalPages"
-                  >
-                    <button class="page-link" (click)="lastPage()">
-                      <i class="fa fa-forward"></i>
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
         </div>
       </div>
     </div>

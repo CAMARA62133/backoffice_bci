@@ -23,95 +23,96 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div class="card-body p-0">
+          <div class="card-body">
             <div class="table-responsive">
               <table
-                *ngIf="!isLoadingOrgs && pagedOrganisations.length > 0"
-                class="table table-hover table-striped mb-0"
+                *ngIf="!isLoadingOrgs && organisations.length > 0"
+                appDataTable
+                class="table table-hover table-striped mb-0 datatable"
                 id="rapportsTable"
               >
                 <thead class="table-primary">
-                  <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Organisations</th>
-                    <th scope="col">Contact</th>
-                    <th scope="col">Téléphone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Ville</th>
-                    <th scope="col">Pays</th>
-                    <th scope="col">Adresse</th>
-                    <th scope="col">Logo</th>
-                    <th scope="col">Business Email</th>
-                    <th scope="col">Statut</th>
-                    <th scope="col">Date Création</th>
-                    <th scope="col" class="text-center">Actions</th>
-                  </tr>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Organisations</th>
+                  <th scope="col">Contact</th>
+                  <th scope="col">Téléphone</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Ville</th>
+                  <th scope="col">Pays</th>
+                  <th scope="col">Adresse</th>
+                  <th scope="col">Logo</th>
+                  <th scope="col">Business Email</th>
+                  <th scope="col">Statut</th>
+                  <th scope="col">Date Création</th>
+                  <th scope="col" class="text-center">Actions</th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let org of pagedOrganisations; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ org.organisationName }}</td>
-                    <td>{{ org.vcContact }}</td>
-                    <td>{{ org.vcPhoneNumber }}</td>
-                    <td>{{ org.vcEmail }}</td>
-                    <td>{{ org.vcCity }}</td>
-                    <td>{{ org.vcCountry }}</td>
-                    <td>{{ org.vcAddress }}</td>
-                    <td>
-                      <!-- <img
-                        [src]="org.vcLogoPath"
-                        [alt]="org.organisationName"
-                      /> -->
-                      <img src="logoBCI.svg" alt="" width="50px" />
-                    </td>
-                    <td>{{ org.vcBusinessEmailDomain }}</td>
-                    <td>
+                <tr *ngFor="let org of organisations; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ org.organisationName }}</td>
+                  <td>{{ org.vcContact }}</td>
+                  <td>{{ org.vcPhoneNumber }}</td>
+                  <td>{{ org.vcEmail }}</td>
+                  <td>{{ org.vcCity }}</td>
+                  <td>{{ org.vcCountry }}</td>
+                  <td>{{ org.vcAddress }}</td>
+                  <td>
+                    <!-- <img
+                      [src]="org.vcLogoPath"
+                      [alt]="org.organisationName"
+                    /> -->
+                    <img src="logoBCI.svg" alt="" width="50px"/>
+                  </td>
+                  <td>{{ org.vcBusinessEmailDomain }}</td>
+                  <td>
                       <span
                         class="badge text-bg-{{
                           +org.btEnabled === 1 ? 'success' : 'danger'
                         }} rounded-pill"
-                        >{{
+                      >{{
                           +org.btEnabled === 1 ? "Active" : "Inactive"
                         }}</span
                       >
-                    </td>
-                    <td>{{ org.dtCreated | date : "dd/MM/yyyy" }}</td>
-                    <td>
-                      <div class="d-flex gap-1 justify-content-center">
-                        <!-- <button
-                          type="button"
-                          class="btn btn-outline-info btn-action btn-sm"
-                          title="Consulter"
-                        >
-                          <i class="fas fa-eye"></i>
-                        </button> -->
-                        <button
-                          type="button"
-                          class="btn btn-outline-warning btn-action btn-sm"
-                          title="Modifier"
-                          (click)="onEdit(org)"
-                        >
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-action btn-sm"
-                          title="{{
+                  </td>
+                  <td>{{ org.dtCreated | date : "dd/MM/yyyy" }}</td>
+                  <td>
+                    <div class="d-flex gap-1 justify-content-center">
+                      <!-- <button
+                        type="button"
+                        class="btn btn-outline-info btn-action btn-sm"
+                        title="Consulter"
+                      >
+                        <i class="fas fa-eye"></i>
+                      </button> -->
+                      <button
+                        type="button"
+                        class="btn btn-outline-warning btn-action btn-sm"
+                        title="Modifier"
+                        (click)="onEdit(org)"
+                      >
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-action btn-sm"
+                        title="{{
                             +org.btEnabled === 1 ? 'Désactiver' : 'Réactiver'
                           }}"
-                          (click)="onToggle(org)"
-                        >
-                          <i
-                            class="fas fa-{{
+                        (click)="onToggle(org)"
+                      >
+                        <i
+                          class="fas fa-{{
                               +org.btEnabled === 1 ? 'lock-open' : 'lock'
                             }} text-{{
                               +org.btEnabled === 1 ? 'success' : 'danger'
                             }}"
-                          ></i>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                        ></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
                 </tbody>
               </table>
             </div>
@@ -120,7 +121,7 @@
             <div *ngIf="isLoadingOrgs" class="text-center my-3">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden"
-                  >Chargement des données en cours...</span
+                >Chargement des données en cours...</span
                 >
               </div>
               <p class="text-muted">
@@ -140,77 +141,6 @@
               <p class="text-muted">
                 Il n'y a pas d'organisations enregistrée pour l'instant !
               </p>
-            </div>
-          </div>
-
-          <div
-            *ngIf="!isLoadingOrgs && pagedOrganisations.length > 0"
-            class="card-footer bg-light"
-          >
-            <div class="row align-items-center">
-              <div class="col-md-6">
-                <small class="text-muted">
-                  Affichage de <span id="startRecord">{{ startRecord }}</span> à
-                  <span id="endRecord">{{ endRecord }}</span> sur
-                  <span id="totalRecords">{{ totalRecords }}</span>
-                  organisation(s)
-                </small>
-              </div>
-              <div class="col-md-6">
-                <nav *ngIf="totalPages > 1" aria-label="Pagination rapports">
-                  <ul class="pagination pagination-sm justify-content-end mb-0">
-                    <!-- Début -->
-                    <li class="page-item" [class.disabled]="currentPage === 1">
-                      <button class="page-link" (click)="goToPage(1)">
-                        <i class="fa fa-backward"></i>
-                      </button>
-                    </li>
-
-                    <!-- Précédent -->
-                    <li class="page-item" [class.disabled]="currentPage === 1">
-                      <button class="page-link" (click)="prevPage()">
-                        <i class="fa fa-chevron-left"></i>
-                        Précédent
-                      </button>
-                    </li>
-
-                    <!-- Numéros de pages -->
-                    <li
-                      class="page-item"
-                      *ngFor="
-                        let page of [].constructor(totalPages);
-                        let i = index
-                      "
-                      [class.active]="currentPage === i + 1"
-                    >
-                      <button class="page-link" (click)="goToPage(i + 1)">
-                        {{ i + 1 }}
-                      </button>
-                    </li>
-
-                    <!-- Suivant -->
-                    <li
-                      class="page-item"
-                      [class.disabled]="currentPage === totalPages"
-                    >
-                      <button class="page-link" (click)="nextPage()">
-                        Suivant
-                        <i class="fa fa-chevron-right"></i>
-                      </button>
-                    </li>
-
-                    <!-- Fin -->
-                    <li
-                      class="page-item"
-                      [class.disabled]="currentPage === totalPages"
-                    >
-                      <button class="page-link" (click)="goToPage(totalPages)">
-                        <i class="fa fa-forward"></i>
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
             </div>
           </div>
         </div>
@@ -293,8 +223,8 @@
               <div class="col-md-6">
                 <label class="form-label">
                   Téléphone<span class="text-danger"
-                    >* ({{ phoneMaxLength }} carractères obligatoire)</span
-                  >
+                >* ({{ phoneMaxLength }} carractères obligatoire)</span
+                >
                 </label>
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1">

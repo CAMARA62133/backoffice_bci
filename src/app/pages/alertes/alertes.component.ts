@@ -22,10 +22,12 @@ import {
   isInvalid,
   isValid,
 } from '../../utils/form-helpers';
+import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+
 
 @Component({
   selector: 'app-alertes',
-  imports: [CommonModule, ReactiveFormsModule, NgClass, NgIf],
+  imports: [CommonModule, ReactiveFormsModule, NgClass, NgIf, DataTableDirective],
   templateUrl: './alertes.component.html',
   styleUrl: './alertes.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -70,7 +72,7 @@ export class AlertesComponent implements OnInit {
     private toastr: ToastrService,
     private alertService: AlertesService,
     private cd: ChangeDetectorRef,
-    public paginationService: PaginationsService
+
   ) {
   }
 
@@ -145,8 +147,8 @@ export class AlertesComponent implements OnInit {
         this.modalsService.closeAllModals();
         this.toastr.success('Alerte créée avec succès !');
 
-        this.paginationService.reset();
-        this.updatePaginatedData();
+        this.loadAlertes();
+
       },
 
       error: (err) => {
@@ -221,8 +223,8 @@ export class AlertesComponent implements OnInit {
           console.log('Modification effectuer avec success : ', res?.message);
           this.toastr.success(res?.message);
 
-          this.paginationService.reset();
-          this.updatePaginatedData();
+          this.loadAlertes();
+
         } else {
           console.log('Erreur lors de la modification : ', res?.message);
           this.toastr.error(res?.message);
@@ -275,7 +277,7 @@ export class AlertesComponent implements OnInit {
           positionClass: 'toast-custom-center',
         });
         this.loadAlertes();
-        this.updatePaginatedData();
+
 
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
@@ -302,13 +304,10 @@ export class AlertesComponent implements OnInit {
       next: (res) => {
         this.alertes = res.data || [];
 
-        this.paginationService.setData(
-          this.alertes,
-          this.paginationService.itemsPerPage
-        );
-        this.paginatedAlertes = this.paginationService.getPaginatedData();
         console.log('Alertes liste : ', this.alertes);
         this.isLoadingAlerte = false;
+
+
       },
 
       error: (err) => {
@@ -370,44 +369,4 @@ export class AlertesComponent implements OnInit {
       },
     });
   }
-
-  // Mise a jour de la pagination
-  updatePaginatedData(): void {
-    this.paginatedAlertes = this.paginationService.getPaginatedData();
-  }
-
-  // Page suivante
-  nextPage(): void {
-    this.paginationService.goToNextPage();
-    this.updatePaginatedData();
-  }
-
-  // Page precedante
-  previousPage(): void {
-    this.paginationService.goToPreviousPage();
-    this.updatePaginatedData();
-  }
-
-  // Premiere page
-  firstPage(): void {
-    this.paginationService.goToFirstPage();
-    this.updatePaginatedData();
-  }
-
-  // Derniere page
-  lastPage(): void {
-    this.paginationService.goToLastPage();
-    this.updatePaginatedData();
-  }
-
-  // Aller a la page
-  goToPage(page: number): void {
-    this.paginationService.currentPage = page;
-    this.updatePaginatedData();
-  }
-
-  // onPageChange(page: number): void {
-  //   this.paginationService.currentPage = page;
-  //   this.updatePaginatedData();
-  // }
 }

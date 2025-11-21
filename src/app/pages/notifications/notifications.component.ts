@@ -23,10 +23,11 @@ import {
   isInvalid,
   isValid,
 } from '../../utils/form-helpers';
+import {DataTableDirective} from '../../directives/data-table/data-table.directive';
 
 @Component({
   selector: 'app-notifications',
-  imports: [ReactiveFormsModule, NgIf, NgClass, NgFor],
+  imports: [ReactiveFormsModule, NgIf, NgClass, NgFor, DataTableDirective],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -142,7 +143,6 @@ export class NotificationsComponent implements OnInit {
         });
 
         this.paginationService.reset();
-        this.updatePaginatedData();
         this.loadNotifications();
 
         console.log('✅ Notification créée :', res);
@@ -218,7 +218,6 @@ export class NotificationsComponent implements OnInit {
         });
 
         this.paginationService.reset();
-        this.updatePaginatedData();
       },
 
       error: (err) => {
@@ -268,7 +267,6 @@ export class NotificationsComponent implements OnInit {
         });
 
         this.loadNotifications();
-        this.updatePaginatedData();
 
         this.modalsService.closeModal('bloquerDebloquerModal');
 
@@ -292,13 +290,6 @@ export class NotificationsComponent implements OnInit {
     this.notifService.getListeNotificationsConfig().subscribe({
       next: (res) => {
         this.notifications = res.data || [];
-
-        this.paginationService.setData(
-          this.notifications,
-          this.paginationService.itemsPerPage
-        );
-
-        this.paginatedNotification = this.paginationService.getPaginatedData();
         console.log('Notification liste : ', this.notifications);
         this.isLoadingNotif = false;
       },
@@ -327,40 +318,5 @@ export class NotificationsComponent implements OnInit {
       error: (err) => console.error('Erreur chargement niveaux : ', err),
       complete: () => (this.isLoadingNiveaux = false),
     });
-  }
-
-  // Mise a jour de la pagination
-  updatePaginatedData(): void {
-    this.paginatedNotification = this.paginationService.getPaginatedData();
-  }
-
-  // Page suivante
-  nextPage(): void {
-    this.paginationService.goToNextPage();
-    this.updatePaginatedData();
-  }
-
-  // Page precedante
-  previousPage(): void {
-    this.paginationService.goToPreviousPage();
-    this.updatePaginatedData();
-  }
-
-  // Premiere page
-  firstPage(): void {
-    this.paginationService.goToFirstPage();
-    this.updatePaginatedData();
-  }
-
-  // Derniere page
-  lastPage(): void {
-    this.paginationService.goToLastPage();
-    this.updatePaginatedData();
-  }
-
-  // Aller a la page
-  goToPage(page: number): void {
-    this.paginationService.currentPage = page;
-    this.updatePaginatedData();
   }
 }

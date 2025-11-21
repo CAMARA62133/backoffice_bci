@@ -10,6 +10,8 @@ import {SearchParams} from '../../../interfaces/search-params.interface';
 import {RouterLink} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {exportToCSV, exportToPDF} from '../../../utils/export.utils';
+import {DataTableDirective} from '../../../directives/data-table/data-table.directive';
+
 
 @Component({
   selector: 'app-log-user',
@@ -18,7 +20,8 @@ import {exportToCSV, exportToPDF} from '../../../utils/export.utils';
     NgForOf,
     ReactiveFormsModule,
     DatePipe,
-    RouterLink
+    RouterLink,
+    DataTableDirective
   ],
   templateUrl: './log-user.component.html',
   styleUrl: './log-user.component.css'
@@ -90,11 +93,9 @@ export class LogUserComponent implements OnInit {
       next: (res) => {
         this.isLoadingUserLogs = false;
         this.logActiviteUsers = res.data;
-
-        this.paginationService.setData(this.logActiviteUsers, 500);
-        this.paginatedLogActiviteUser = this.paginationService.getPaginatedData();
-
         console.log("LAU res : ", res);
+
+
       },
 
       error: (err) => {
@@ -151,11 +152,9 @@ export class LogUserComponent implements OnInit {
 
         this.searchResults = res.data;
         this.logActiviteUsers = this.searchResults;
-
-        this.paginationService.setData(this.logActiviteUsers, 200);
-        this.paginatedLogActiviteUser = this.paginationService.getPaginatedData();
-
         console.log("LAUF res : ", res);
+
+
       },
 
       error: (err) => {
@@ -181,43 +180,6 @@ export class LogUserComponent implements OnInit {
     // La recherche se déclenchera automatiquement grâce au valueChanges
   }
 
-  // ====================== GESTION DE LA PAGINATION ======================
-  // Mise a jour de la pagination
-  updatePaginatedData(): void {
-    this.paginatedLogActiviteUser = this.paginationService.getPaginatedData();
-  }
-
-  // Page suivante
-  nextPage(): void {
-    this.paginationService.goToNextPage();
-    this.updatePaginatedData();
-  }
-
-  // Page precedante
-  previousPage(): void {
-    this.paginationService.goToPreviousPage();
-    this.updatePaginatedData();
-  }
-
-  // Premiere page
-  firstPage(): void {
-    this.paginationService.goToFirstPage();
-    this.updatePaginatedData();
-  }
-
-  // Derniere page
-  lastPage(): void {
-    this.paginationService.goToLastPage();
-    this.updatePaginatedData();
-  }
-
-  // Aller a la page
-  goToPage(page: number): void {
-    this.paginationService.currentPage = page;
-    this.updatePaginatedData();
-  }
-
-
   // ====================== TYPES D'EXPORTATIONS ======================
 
   /**
@@ -228,7 +190,7 @@ export class LogUserComponent implements OnInit {
     event.preventDefault()
 
     // Implementation de la logique d'export
-    exportToPDF(this.paginatedLogActiviteUser, "LogsActivitesUtilisateurs.pdf")
+    exportToPDF(this.paginatedLogActiviteUser, "LogsActivitesUtilisateurs.pdf", "Liste des Logs d'activitées Utilisateurs")
   }
 
 

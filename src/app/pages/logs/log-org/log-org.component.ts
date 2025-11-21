@@ -9,6 +9,10 @@ import {createWebpackLoggingCallback} from '@angular-devkit/build-angular/src/to
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {exportOrgLogToPDF, exportToCSV, exportToPDF} from '../../../utils/export.utils';
+import {UserLogService} from '../../../services/logs/user-log/user-log.service';
+import {DataTableDirective} from '../../../directives/data-table/data-table.directive';
+
+
 
 @Component({
   selector: 'app-log-org',
@@ -17,7 +21,8 @@ import {exportOrgLogToPDF, exportToCSV, exportToPDF} from '../../../utils/export
     NgIf,
     NgForOf,
     DatePipe,
-    RouterLink
+    RouterLink,
+    DataTableDirective
   ],
   templateUrl: './log-org.component.html',
   styleUrl: './log-org.component.css'
@@ -35,10 +40,14 @@ export class LogOrgComponent implements OnInit {
   searchForm: FormGroup;
   searchResults:any = [];
 
+  nomUsers:any[] = [];
+  isLoadingNomUser:boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private orgLogServie: OrgLogService,
-    public paginationService: PaginationsService
+    public paginationService: PaginationsService,
+    private userLogSerive: UserLogService,
   ) {
     this.searchForm = this.createForm();
   }
@@ -48,6 +57,7 @@ export class LogOrgComponent implements OnInit {
     // this.setupRealTimeSearch();
     this.loadLogActiviteOrgs();
     this.loadNomOrgs()
+    this.loadNomUsers()
   }
 
   /**
@@ -59,6 +69,7 @@ export class LogOrgComponent implements OnInit {
       dateFin: [''],
       application: [''],
       organisation: [''],
+      username: [''],
     })
   }
 
@@ -75,7 +86,6 @@ export class LogOrgComponent implements OnInit {
   }
 
 
-
   /**
    * Fonction private pour charger la liste des logs d'activites utilisateurs
    * @private
@@ -88,10 +98,8 @@ export class LogOrgComponent implements OnInit {
         this.isLoadingOrgLogs = false;
         this.logActivitesOrg = res.data;
 
-        this.paginationService.setData(this.logActivitesOrg, 300);
-        this.paginatedLogActivitesOrg = this.paginationService.getPaginatedData();
-
         console.log("LAU res : ", res);
+
       },
 
       error: (err) => {
@@ -125,6 +133,29 @@ export class LogOrgComponent implements OnInit {
   }
 
 
+  /**
+   * Fonction private pour charger le nom des utilisateurs
+   * @private
+   */
+  private loadNomUsers(): void {
+    this.isLoadingNomUser = true;
+
+    this.userLogSerive.getNomUsers().subscribe({
+      next: (res) => {
+        this.isLoadingNomUser = false;
+        this.nomUsers = res.data;
+        console.log("LAU res : ", res);
+      },
+
+      error: (err) => {
+        this.isLoadingNomUser = false;
+        this.nomUsers = [];
+        console.log("LAU err : ", err);
+      }
+    })
+  }
+
+
   // ====================== GESTION DE LA RECHERCHE OU FILTRAGE ======================
   /**
    * Performer la rechercher
@@ -138,6 +169,7 @@ export class LogOrgComponent implements OnInit {
       dateFin: this.searchForm.get('dateFin')?.value,
       application: this.searchForm.get('application')?.value,
       organisation: this.searchForm.get('organisation')?.value,
+      username: this.searchForm.get('username')?.value,
     }
 
     console.log(searchParams);
@@ -171,42 +203,6 @@ export class LogOrgComponent implements OnInit {
     this.searchForm.reset();
   }
 
-  // ====================== GESTION DE LA PAGINATION ======================
-  // Mise a jour de la pagination
-  updatePaginatedData(): void {
-    this.paginatedLogActivitesOrg = this.paginationService.getPaginatedData();
-  }
-
-  // Page suivante
-  nextPage(): void {
-    this.paginationService.goToNextPage();
-    this.updatePaginatedData();
-  }
-
-  // Page precedante
-  previousPage(): void {
-    this.paginationService.goToPreviousPage();
-    this.updatePaginatedData();
-  }
-
-  // Premiere page
-  firstPage(): void {
-    this.paginationService.goToFirstPage();
-    this.updatePaginatedData();
-  }
-
-  // Derniere page
-  lastPage(): void {
-    this.paginationService.goToLastPage();
-    this.updatePaginatedData();
-  }
-
-  // Aller a la page
-  goToPage(page: number): void {
-    this.paginationService.currentPage = page;
-    this.updatePaginatedData();
-  }
-
 // ====================== TYPES D'EXPORTATIONS ======================
 
   /**
@@ -217,7 +213,7 @@ export class LogOrgComponent implements OnInit {
     event.preventDefault()
 
     // Implementation de la logique d'export
-    exportOrgLogToPDF(this.paginatedLogActivitesOrg, "LogsActivitesOrganisations.pdf")
+    exportOrgLogToPDF(this.paginatedLogActivitesOrg, "LogsActivitesOrganisations.pdf",  "Liste des Logs d'activitées Organisations")
   }
 
 

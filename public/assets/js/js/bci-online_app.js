@@ -347,7 +347,7 @@ File: Main Js File
     });
     $(".table-check .form-check-input").change(function () {
       if (
-        $(".table-check .form-check-input:checked").length ==
+        $(".table-check .form-check-input:checked").length ===
         $(".table-check .form-check-input").length
       ) {
         $("#checkAll").prop("checked", true);

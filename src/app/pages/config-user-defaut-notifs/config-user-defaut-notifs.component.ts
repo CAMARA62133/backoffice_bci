@@ -17,10 +17,11 @@ import {
   isInvalid,
   isValid,
 } from '../../utils/form-helpers';
+import {DataTableDirective} from '../../directives/data-table/data-table.directive';
 
 @Component({
   selector: 'app-config-user-defaut-notifs',
-  imports: [NgClass, NgFor, NgIf, ReactiveFormsModule, CommonModule],
+  imports: [NgClass, NgFor, NgIf, ReactiveFormsModule, CommonModule, DataTableDirective],
   templateUrl: './config-user-defaut-notifs.component.html',
   styleUrl: './config-user-defaut-notifs.component.css',
 })
@@ -196,14 +197,6 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
     this.configNotifService.getListeNotiificationUsersDefaut().subscribe({
       next: (res) => {
         this.defaultNotifications = res.data;
-
-        this.paginationService.setData(
-          this.defaultNotifications,
-          this.paginationService.itemsPerPage
-        );
-
-        this.paginatedDefaultNotifications =
-          this.paginationService.getPaginatedData();
         console.log('Default Notifi list : ', this.defaultNotifications);
       },
 
@@ -222,41 +215,5 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
       error: (err) => console.log('Erreur chargement role :', err),
       complete: () => (this.isLoadingRole = false),
     });
-  }
-
-  // Mise a jour de la pagination
-  updatePaginatedData(): void {
-    this.paginatedDefaultNotifications =
-      this.paginationService.getPaginatedData();
-  }
-
-  // Page suivante
-  nextPage(): void {
-    this.paginationService.goToNextPage();
-    this.updatePaginatedData();
-  }
-
-  // Page precedante
-  previousPage(): void {
-    this.paginationService.goToPreviousPage();
-    this.updatePaginatedData();
-  }
-
-  // Premiere page
-  firstPage(): void {
-    this.paginationService.goToFirstPage();
-    this.updatePaginatedData();
-  }
-
-  // Derniere page
-  lastPage(): void {
-    this.paginationService.goToLastPage();
-    this.updatePaginatedData();
-  }
-
-  // Aller a la page
-  goToPage(page: number): void {
-    this.paginationService.currentPage = page;
-    this.updatePaginatedData();
   }
 }

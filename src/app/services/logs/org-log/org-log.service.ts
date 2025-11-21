@@ -55,6 +55,10 @@ export class OrgLogService {
       httpParams = httpParams.set('organisation', params.organisation);
     }
 
+    if(params.username){
+      httpParams = httpParams.set('username', params.username);
+    }
+
     console.log("Params envoyer : ", {httpParams});
 
     return this.http.post(`${this.baseUrl}/getFilteredLogsActiviteOrganisation`, null, {params: httpParams});

@@ -20,13 +20,15 @@ import {
 } from '../../../utils/form-helpers';
 import {PaginationsService} from '../../../services/paginations/paginations.service';
 import {ActivatedRoute} from '@angular/router';
+import {DatatableService} from '../../../services/datatable/datatable.service';
+import {DataTableDirective} from '../../../directives/data-table/data-table.directive';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-utilisteur',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableDirective],
   templateUrl: './utilisteur.component.html',
   styleUrl: './utilisteur.component.css',
 })
@@ -57,8 +59,6 @@ export class UtilisteurComponent implements OnInit {
 
   orgId!: string | number;
 
-  paginatedUsers: any[] = [];
-
   id: number | null = null;
 
   constructor(
@@ -68,8 +68,8 @@ export class UtilisteurComponent implements OnInit {
     private toastr: ToastrService,
     private sharedService: SharedService,
     private authService: AuthService,
-    public paginationService: PaginationsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private datatableService:DatatableService
   ) {
   }
 
@@ -360,6 +360,13 @@ export class UtilisteurComponent implements OnInit {
         console.log('Users filtrés:', this.users);
 
         this.isLoadingUser = false;
+
+        // ⚠️ On attend que la table soit rendue, puis on initialise le DataTable
+        // setTimeout(() => {
+        //   initMyDatatable();
+        // }, 0);
+
+        // this.datatableService.init();
       },
 
       error: (err) => {
@@ -424,42 +431,5 @@ export class UtilisteurComponent implements OnInit {
         console.log(err);
       },
     });
-  }
-
-
-  // Mise a jour de la pagination
-  updatePaginatedData(): void {
-    this.paginatedUsers =
-      this.paginationService.getPaginatedData();
-  }
-
-  // Page suivante
-  nextPage(): void {
-    this.paginationService.goToNextPage();
-    this.updatePaginatedData();
-  }
-
-  // Page precedante
-  previousPage(): void {
-    this.paginationService.goToPreviousPage();
-    this.updatePaginatedData();
-  }
-
-  // Premiere page
-  firstPage(): void {
-    this.paginationService.goToFirstPage();
-    this.updatePaginatedData();
-  }
-
-  // Derniere page
-  lastPage(): void {
-    this.paginationService.goToLastPage();
-    this.updatePaginatedData();
-  }
-
-  // Aller a la page
-  goToPage(page: number): void {
-    this.paginationService.currentPage = page;
-    this.updatePaginatedData();
   }
 }

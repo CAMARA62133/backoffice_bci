@@ -4,12 +4,13 @@ import {FormsModule} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../services/authService/auth.service';
 import {MesNotifsService} from '../../services/mesNotifs/mes-notifs.service';
+import {DataTableDirective} from '../../directives/data-table/data-table.directive';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-mes-notifications',
-  imports: [FormsModule, NgFor, NgIf],
+  imports: [FormsModule, NgFor, NgIf, DataTableDirective],
   templateUrl: './mes-notifications.component.html',
   styleUrl: './mes-notifications.component.css',
 })

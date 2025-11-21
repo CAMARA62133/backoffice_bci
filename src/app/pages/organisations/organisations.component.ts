@@ -20,6 +20,9 @@ import {
   isValid,
 } from '../../utils/form-helpers';
 import {ActivatedRoute, Route, Router, RouterConfigOptions, RouterLinkActive, Routes} from '@angular/router';
+import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+
+
 
 @Component({
   selector: 'app-organisations',
@@ -30,7 +33,7 @@ import {ActivatedRoute, Route, Router, RouterConfigOptions, RouterLinkActive, Ro
     NgIf,
     NgClass,
     DatePipe,
-    // OnlyDigitsDirective,
+    DataTableDirective,
   ],
   templateUrl: './organisations.component.html',
   styleUrl: './organisations.component.css',
@@ -144,6 +147,7 @@ export class OrganisationsComponent implements OnInit {
     this.loadOrganisations();
     this.loadListePays();
   }
+
 
   // Initialiser le formulaire
   initForm() {
@@ -480,7 +484,6 @@ export class OrganisationsComponent implements OnInit {
             positionClass: 'toast-custom-center',
           });
           this.loadOrganisations();
-          this.updatePagination();
         } else {
           this.toastr.error(res?.message, '', {
             positionClass: 'toast-custom-center',
@@ -510,15 +513,7 @@ export class OrganisationsComponent implements OnInit {
       next: (res) => {
         this.organisations = res.data;
         this.isLoadingOrgs = false;
-        this.currentPage = 1;
-        this.updatePagination();
-
-        //
-        if (this.id) {
-          this.org = this.organisations.filter(og => og.id === this.id);
-        } else {
-          this.org = this.organisations;
-        }
+        console.log(res)
       },
 
       error: (err) => {
@@ -564,43 +559,5 @@ export class OrganisationsComponent implements OnInit {
         this.isLoadingCountry = false;
       },
     });
-  }
-
-  // méthode pour calculer la page courante
-  updatePagination() {
-    const start = (this.currentPage - 1) * this.itemsPerPage;
-    const end = start + this.itemsPerPage;
-
-    this.pagedOrganisations = this.organisations.slice(start, end);
-    this.totalPages = Math.ceil(this.organisations.length / this.itemsPerPage);
-  }
-
-  goToPage(page: number) {
-    if (page < 1 || page > this.totalPages) return;
-    this.currentPage = page;
-    this.updatePagination();
-  }
-
-  nextPage() {
-    this.goToPage(this.currentPage + 1);
-  }
-
-  prevPage() {
-    this.goToPage(this.currentPage - 1);
-  }
-
-  // Mes getters
-  get startRecord(): number {
-    if (this.organisations.length === 0) return 0;
-    return (this.currentPage - 1) * this.itemsPerPage + 1;
-  }
-
-  get endRecord(): number {
-    const end = this.currentPage * this.itemsPerPage;
-    return end > this.organisations.length ? this.organisations.length : end;
-  }
-
-  get totalRecords(): number {
-    return this.organisations.length;
   }
 }

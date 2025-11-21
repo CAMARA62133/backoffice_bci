@@ -31,8 +31,9 @@
             <div class="table-responsive">
               <!--  -->
               <table
-                *ngIf="paginatedAlertes.length > 0"
-                class="table table-hover table-striped mb-0"
+                *ngIf="alertes.length > 0"
+                appDataTable
+                class="table table-hover table-striped mb-0 datatable"
               >
                 <thead class="table-primary">
                   <tr>
@@ -49,7 +50,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let alert of paginatedAlertes">
+                  <tr *ngFor="let alert of alertes">
                     <td>{{ alert.id }}</td>
                     <td>{{ alert.messageAlerte }}</td>
                     <td>
@@ -131,97 +132,6 @@
             </div>
           </div>
 
-          <div
-            *ngIf="!isLoadingAlerte && paginatedAlertes.length > 0"
-            class="card-footer bg-light"
-          >
-            <div class="row align-items-center">
-              <div class="col-md-6">
-                <small class="text-muted">
-                  Affichage de
-                  <span id="startRecord">{{
-                    paginationService.startIndex + 1
-                  }}</span>
-                  à
-                  <span id="endRecord">{{ paginationService.endIndex }}</span>
-                  sur
-                  <span id="totalRecords">{{
-                    paginationService.totalItems
-                  }}</span>
-                  alerte(s)
-                </small>
-              </div>
-              <div class="col-md-6">
-                <!-- <nav *ngIf="totalPages > 1" aria-label="Pagination rapports"> -->
-                <nav
-                  *ngIf="!isLoadingAlerte && paginatedAlertes.length > 0"
-                  aria-label="Pagination rapports"
-                >
-                  <ul class="pagination pagination-md justify-content-end mb-0">
-                    <!-- Début -->
-                    <li
-                      class="page-item"
-                      [class.disabled]="paginationService.currentPage === 1"
-                    >
-                      <button class="page-link" (click)="firstPage()">
-                        <i class="fa fa-backward"></i>
-                      </button>
-                    </li>
-
-                    <!-- Précédent -->
-                    <li
-                      class="page-item"
-                      [class.disabled]="paginationService.currentPage === 1"
-                    >
-                      <button class="page-link" (click)="previousPage()">
-                        <i class="fa fa-chevron-left"></i>
-                      </button>
-                    </li>
-
-                    <!-- Numéros de pages -->
-                    <li
-                      class="page-item"
-                      *ngFor="
-                        let page of paginationService.getPageNumbers();
-                        let i = index
-                      "
-                      [class.active]="paginationService.currentPage === page"
-                    >
-                      <button class="page-link" (click)="goToPage(page)">
-                        {{ page }}
-                      </button>
-                    </li>
-
-                    <!-- Suivant -->
-                    <li
-                      class="page-item"
-                      [class.disabled]="
-                        paginationService.currentPage ===
-                        paginationService.totalPages
-                      "
-                    >
-                      <button class="page-link" (click)="nextPage()">
-                        <i class="fa fa-chevron-right"></i>
-                      </button>
-                    </li>
-
-                    <!-- Fin -->
-                    <li
-                      class="page-item"
-                      [class.disabled]="
-                        paginationService.currentPage ===
-                        paginationService.totalPages
-                      "
-                    >
-                      <button class="page-link" (click)="lastPage()">
-                        <i class="fa fa-forward"></i>
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
