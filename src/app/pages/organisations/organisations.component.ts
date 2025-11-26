@@ -23,7 +23,6 @@ import {ActivatedRoute, Route, Router, RouterConfigOptions, RouterLinkActive, Ro
 import {DataTableDirective} from '../../directives/data-table/data-table.directive';
 
 
-
 @Component({
   selector: 'app-organisations',
   imports: [
@@ -154,8 +153,7 @@ export class OrganisationsComponent implements OnInit {
     this.orgForm = this.fb.group({
       vcOrgName: ['', Validators.required],
       vcOrgContact: ['', Validators.required],
-      vcOrgPhoneNumber: [
-        '',
+      vcOrgPhoneNumber: ['',
         [
           Validators.required,
           Validators.pattern(/^[0-9]+$/),
@@ -300,20 +298,26 @@ export class OrganisationsComponent implements OnInit {
     // appel a l'API de creation d'une organisation
     this.orgService.createOrganisation(dataToSend).subscribe({
       next: (res) => {
+        if (res?.status && res?.status === 200) {
+          console.log('Parametres envoyees : ', dataToSend);
+
+          this.toastr.success(res.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+
+          this.loadOrganisations();
+
+          this.orgForm.reset();
+          this.modalsService.closeAllModals();
+
+        } else {
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
+
         this.isLoading = false;
-        console.log('Parametres envoyees : ', dataToSend);
-
-
-        this.toastr.success(res.message, '', {
-          positionClass: 'toast-custom-center',
-        });
-
-        this.loadOrganisations();
-
-        this.orgForm.reset();
-        this.modalsService.closeAllModals();
-
-        console.log('✅ Organisation créée :', res);
+        console.log('✅ Organisation création :', res);
       },
 
       error: (err) => {

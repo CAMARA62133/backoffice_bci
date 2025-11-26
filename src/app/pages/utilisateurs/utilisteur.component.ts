@@ -8,20 +8,20 @@ import {
   Validators,
 } from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../../services/authService/auth.service';
-import {ModalsService} from '../../../services/modals/modals.service';
-import {SharedService} from '../../../services/shared/shared.service';
-import {UsersService} from '../../../services/users/users.service';
+import {AuthService} from '../../services/authService/auth.service';
+import {ModalsService} from '../../services/modals/modals.service';
+import {SharedService} from '../../services/shared/shared.service';
+import {UsersService} from '../../services/users/users.service';
 import {
   getErrorMessage,
   getFormControlClass,
   isInvalid,
   isValid,
-} from '../../../utils/form-helpers';
-import {PaginationsService} from '../../../services/paginations/paginations.service';
+} from '../../utils/form-helpers';
+import {PaginationsService} from '../../services/paginations/paginations.service';
 import {ActivatedRoute} from '@angular/router';
-import {DatatableService} from '../../../services/datatable/datatable.service';
-import {DataTableDirective} from '../../../directives/data-table/data-table.directive';
+import {DatatableService} from '../../services/datatable/datatable.service';
+import {DataTableDirective} from '../../directives/data-table/data-table.directive';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
@@ -69,7 +69,7 @@ export class UtilisteurComponent implements OnInit {
     private sharedService: SharedService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private datatableService:DatatableService
+    private datatableService: DatatableService
   ) {
   }
 
@@ -137,7 +137,14 @@ export class UtilisteurComponent implements OnInit {
       vcFirstname: ['', Validators.required],
       vcEmail: ['', [Validators.required, Validators.email]],
       iRoleID: [null, Validators.required],
-      vcPhoneNumber: ['', Validators.required],
+      vcPhoneNumber: ['',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]+$/),
+          Validators.minLength(this.phoneMaxLength),
+          Validators.maxLength(this.phoneMaxLength),
+        ]
+      ],
       modeOtp: ['', Validators.required],
       idPays: [null, Validators.required],
       vcDescription: ['', Validators.required],
@@ -313,17 +320,22 @@ export class UtilisteurComponent implements OnInit {
 
     this.usersService.toggleUserStatus(params).subscribe({
       next: (res) => {
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
-        this.loadUsers();
-
-        console.log('res api : ', res);
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.loadUsers();
+        } else {
+          this.toastr.error(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
 
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
 
         this.modalsService.closeModal('bloquerDebloquerModal');
+        console.log('res api : ', res);
       },
 
       error: (err) => {
@@ -360,13 +372,6 @@ export class UtilisteurComponent implements OnInit {
         console.log('Users filtrés:', this.users);
 
         this.isLoadingUser = false;
-
-        // ⚠️ On attend que la table soit rendue, puis on initialise le DataTable
-        // setTimeout(() => {
-        //   initMyDatatable();
-        // }, 0);
-
-        // this.datatableService.init();
       },
 
       error: (err) => {

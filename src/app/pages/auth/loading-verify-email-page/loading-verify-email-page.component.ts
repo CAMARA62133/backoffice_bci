@@ -51,9 +51,18 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
         .checkTokenEmailOrganisation(this.token, this.email)
         .subscribe({
           next: (res) => {
-            console.log("DEBUG : After checking organisation's email and token");
-            console.log(res);
-            this.router.navigate(['/valider-otp-email']);
+            if (res?.status && res?.status === 200) {
+
+              console.log("DEBUG : After checking organisation's email and token");
+              console.log(res);
+              this.router.navigate(['/valider-otp-email']);
+            } else {
+              this.toastr.error(res?.message, '', {positionClass: 'toast-custom-center'});
+
+              console.error(res);
+              this.router.navigate(['/lien-expire']);
+              this.isLoading = false;
+            }
           },
 
           error: (err) => {

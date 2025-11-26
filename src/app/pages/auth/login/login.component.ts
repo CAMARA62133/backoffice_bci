@@ -10,8 +10,9 @@ import {
 import {Router, RouterLink} from '@angular/router';
 import {NgxCaptchaModule} from 'ngx-captcha';
 import {ToastrService} from 'ngx-toastr';
-import {environment} from '../../../environnements/environnement';
-import {AuthService} from '../../services/authService/auth.service';
+import {environment} from '../../../../environnements/environnement';
+import {AuthService} from '../../../services/authService/auth.service';
+import {isValid} from '../../../utils/form-helpers';
 
 @Component({
   selector: 'app-login',
@@ -38,6 +39,7 @@ export class LoginComponent implements OnInit {
 
   // siteKey: string = '6LfNstgrAAAAAHnIIdUeCuDyv7IBMWfEOh2uzWhF';
   siteKey: string = '6LfVN9UrAAAAABnkhkRbaBBFeT5P5I7SO9OPXBVp';
+  isRecaptchaChecked = false;
 
   constructor(
     private authService: AuthService,
@@ -53,6 +55,12 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.required],
       password: ['', Validators.required],
       recaptcha: ['', Validators.required],
+    });
+
+    // Surveille les changements du recaptcha
+    this.loginForm.get('recaptcha')?.valueChanges.subscribe((value) => {
+      this.isRecaptchaChecked = !!value; // true si coché, false sinon
+      console.log('Recaptcha checked:', this.isRecaptchaChecked);
     });
   }
 
@@ -119,4 +127,6 @@ export class LoginComponent implements OnInit {
   togglePasswordVisibility(): void {
     this.passwordVisible = !this.passwordVisible;
   }
+
+  protected readonly isValid = isValid;
 }

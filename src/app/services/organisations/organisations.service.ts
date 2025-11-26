@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
-import { environment } from '../../../environnements/environnement';
-import { AuthService } from '../authService/auth.service';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {catchError, Observable, throwError} from 'rxjs';
+import {environment} from '../../../environnements/environnement';
+import {AuthService} from '../authService/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,6 @@ export class OrganisationsService {
   public headers!: HttpHeaders;
 
   constructor(private http: HttpClient, private authServie: AuthService) {
-    this.headers = authServie.setRequestHeaders();
   }
 
   getOrganisations(): Observable<any> {
@@ -28,14 +27,14 @@ export class OrganisationsService {
   // Pour les infos organisation
   createOrganisation(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/addOrganisationAndUser`, data, {
-      headers: this.headers,
+      headers: this.authServie.setRequestHeaders(),
     });
   }
 
   // Mise a jour des infos
   updateOrganisation(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/updateOrganisation`, data, {
-      headers: this.headers,
+      headers: this.authServie.setRequestHeaders(),
     });
   }
 
@@ -57,7 +56,7 @@ export class OrganisationsService {
       .post<any>(
         `${this.baseUrl}/api/resetPasswordOrganisation`,
         {},
-        { params }
+        {params}
       )
       .pipe(
         catchError((err) =>
@@ -75,7 +74,7 @@ export class OrganisationsService {
     return this.http.post(
       `${this.baseUrl}/api/activeOrDesactiveOrganisation`,
       {},
-      { params }
+      {params}
     );
   }
 
@@ -88,7 +87,7 @@ export class OrganisationsService {
     return this.http.post<any>(
       `${this.baseUrl}/api/renvoisEmailValidationAnouveau`,
       {},
-      { params }
+      {params}
     );
   }
 

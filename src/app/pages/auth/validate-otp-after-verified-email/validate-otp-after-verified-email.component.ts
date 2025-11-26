@@ -1,54 +1,41 @@
-import {CommonModule} from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
+import {NgIf} from '@angular/common';
+import {Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../../services/authService/auth.service';
-import {OtpLoginServiceService} from '../../../services/otpLogin/otp-login.service';
+import {OrgOtpLoginService} from '../../../services/orgOtpLogin/org-otp-login.service';
 
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
-  selector: 'app-valider-otp-after-login',
-  imports: [RouterLink, FormsModule, CommonModule, MatSnackBarModule],
-  templateUrl: './valider-otp-after-login.component.html',
-  styleUrls: ['./valider-otp-after-login.component.css'],
+  selector: 'app-validate-otp-after-verified-email',
+  imports: [NgIf, FormsModule],
+  templateUrl: './validate-otp-after-verified-email.component.html',
+  styleUrl: './validate-otp-after-verified-email.component.css',
 })
-export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
+export class ValidateOtpAfterVerifiedEmailComponent {
   @ViewChildren('otp0, otp1, otp2, otp3') otpInputs!: QueryList<ElementRef>;
+
   otpValues: string[] = ['', '', '', ''];
   isLoading = false;
   errorMessage = '';
 
-  // Contrôle des modals
+  // Controles des modals
   showModalSuccess: boolean = false;
   showModalError: boolean = false;
   showModalOTP_expire: boolean = false;
 
-  loginEmail: string | null = '';
-
   constructor(
-    private otpService: OtpLoginServiceService,
+    private otpService: OrgOtpLoginService,
     private router: Router,
     private authService: AuthService,
     private toastr: ToastrService
   ) {
   }
 
-  ngOnInit() {
-    this.loginEmail = localStorage.getItem('loginEmail');
-  }
-
   moveToNext(event: any, index: number) {
     const input = event.target;
     const value = input.value;
+
     if (value.length === 1 && index < this.otpInputs.length - 1) {
       this.otpInputs.toArray()[index + 1].nativeElement.focus();
     } else if (value.length === 0 && index > 0) {
@@ -76,11 +63,12 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
   }
 
   isLoadingReEnvoi: boolean = false;
+  email = localStorage.getItem('validateEmailUrlEmail');
 
-  // message = '';
+  // renvoie de l'OTP
   reEnvoiOtp() {
     this.isLoadingReEnvoi = true;
-    this.otpService.reenvoiOtp(this.loginEmail).subscribe({
+    this.otpService.orgReenvoieOtp().subscribe({
       next: (response) => {
         this.isLoadingReEnvoi = false;
         this.otpValues = ['', '', '', ''];
@@ -88,24 +76,16 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
         this.toastr.success(response.message, '', {
           positionClass: 'toast-custom-center',
         });
-
-        if (this.otpInputs && this.otpInputs.first) {
-          setTimeout(() => {
-            this.otpInputs.first.nativeElement.focus();
-          }, 100);
-        }
-
-        console.log(response);
+        console.log('reponse api : ', response);
       },
 
       error: (err) => {
         this.isLoadingReEnvoi = false;
+        console.log(err);
 
-        this.toastr.success(err, '', {
+        this.toastr.error(err, '', {
           positionClass: 'toast-custom-center',
         });
-
-        console.log(err);
       },
     });
   }
@@ -121,46 +101,44 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
     const otp = this.otpValues.join('');
     this.isLoading = true;
     this.errorMessage = '';
+    console.log('Verification');
 
-    console.log('params envoyer otp : ', otp);
-
-    this.otpService.verifierOtp(otp, this.loginEmail).subscribe({
-      next: (response) => {
-        console.log('all respnse : ', response);
+    this.otpService.orgVerifierOtp(otp).subscribe({
+      next: (res) => {
+        console.log('all responses : ', res);
 
         this.isLoading = false;
-        if (response?.status && response.status === 200) {
-          // Sauvegarde dans AuthService et localStorage
-          this.authService.setUserInfo(response.data);
-          this.authService.setUserInfoConfig(response.config);
-          this.authService.saveToken(response.token);
-
-          console.log('res : ', response);
-
-          this.toastr.success(response?.message, '', {
+        if (res?.status && res?.status === 200) {
+          this.toastr.success('OTP vérifier avec succès', '', {
             positionClass: 'toast-custom-center',
           });
-          this.router.navigate(['/dashboard']);
+          console.log("OTP Organisation Valider : ", res?.status, res?.message);
+          this.router.navigate(['/org-nouveau-mot-de-passe']);
         } else {
           // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
-          if (response?.status === 405 || response?.status === '405') {
+          if (res?.status === 405 || res?.status === '405') {
             this.router.navigate(['/login']);
           }
 
-          this.toastr.error(response.message, '', {
+          this.toastr.error(res.message, '', {
             positionClass: 'toast-custom-center',
           });
         }
-        console.log(response);
+        console.log(res);
       },
+
       error: (err) => {
         this.isLoading = false;
-        console.log({err});
-        this.toastr.error(err?.message, '', {
+        this.toastr.error(err.message, '', {
           positionClass: 'toast-custom-center',
         });
+        console.log('erreur : ', err);
       },
     });
+  }
+
+  resetOTPForm() {
+    this.otpValues = ['', '', '', ''];
   }
 
   closeModalOtpExpire() {

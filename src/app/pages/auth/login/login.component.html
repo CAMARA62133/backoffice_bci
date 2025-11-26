@@ -102,8 +102,8 @@
                     <button
                       class="btn btn-primary w-100 waves-effect waves-light"
                       role="button"
-                      [disabled]="loading"
                       type="submit"
+                      [disabled]="!isRecaptchaChecked || loading"
                     >
                       {{ loading ? "Connexion en cours..." : "Connexion" }}
                     </button>
@@ -181,14 +181,14 @@
             <li></li>
           </ul>
           <p>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
           </p>
         </div>
         <!-- End: Login Background -->
