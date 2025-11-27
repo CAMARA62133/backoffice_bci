@@ -91,16 +91,23 @@ export class LoginComponent implements OnInit {
         .login(email, password, appName, captcha_token)
         .subscribe({
           next: (res) => {
-            console.log('Connexion reussie :', res);
+            if (res?.status && res?.status === 200) {
+              // Si la réponse est un succès, on sauvegarde le token et on redirige
+              this.loading = false;
+              this.success = true;
 
-            // Si la réponse est un succès, on sauvegarde le token et on redirige
-            this.loading = false;
-            this.success = true;
+              localStorage.setItem('loginEmail', email);
+              this.router.navigate(['/valider-otp-login']);
 
-            localStorage.setItem('loginEmail', email);
-            this.router.navigate(['/valider-otp-login']);
-
-            console.log('Login réussi, redirection vers la validation OTP');
+              console.log('Connexion reussie :', res);
+              console.log('Login réussi, redirection vers la validation OTP');
+            } else {
+              this.toastr.error(res?.message, '', {
+                positionClass: 'toast-custom-center',
+              });
+              this.router.navigate(['/login']);
+              console.log('Erreur connexion : ', res);
+            }
           },
 
           error: (err) => {

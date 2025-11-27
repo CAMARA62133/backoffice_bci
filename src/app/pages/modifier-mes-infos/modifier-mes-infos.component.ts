@@ -13,6 +13,10 @@ import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../services/authService/auth.service';
 import {ConfigurationsService} from '../../services/configurations/configurations.service';
 import {OrganisationsService} from '../../services/organisations/organisations.service';
+import {MesNotifsService} from '../../services/mesNotifs/mes-notifs.service';
+import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+
+declare var bootstrap: any;
 
 interface OrganisationItem {
   vcKey: string;
@@ -21,7 +25,7 @@ interface OrganisationItem {
 
 @Component({
   selector: 'app-modifier-mes-infos',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, DataTableDirective],
   templateUrl: './modifier-mes-infos.component.html',
   styleUrl: './modifier-mes-infos.component.css',
 })
@@ -76,6 +80,17 @@ export class ModifierMesInfosComponent {
 
   userEmail: string = '';
 
+  //  Mes notifications variables
+  notifications: any[] = [];
+  currentUser: any = null;
+
+  selectedUserId: number | null = null;
+  btEnabled: boolean = false;
+  errorMessage: string = '';
+  isloadingBloquerDebloquer: boolean = false;
+
+  // ===================================================
+
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
@@ -83,11 +98,15 @@ export class ModifierMesInfosComponent {
     private fb: FormBuilder,
     private configService: ConfigurationsService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private mesNotifsService: MesNotifsService,
   ) {
   }
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getUserInfo();
+
+
     const dataConfig = this.authService.getUserInfoConfig();
     const userInfo = this.authService.getUserInfo();
     this.orgId = userInfo.iOrganisationID;
@@ -136,11 +155,7 @@ export class ModifierMesInfosComponent {
       console.log('phoneFirstNumber : ', this.phoneFirstNumber);
     }
 
-    if (
-      this.timeZonePerUser === 1 ||
-      this.timeZonePerUser === '1' ||
-      this.timeZonePerUser === true
-    ) {
+    if (this.timeZonePerUser === 1 || this.timeZonePerUser === '1' || this.timeZonePerUser === true) {
       this.isChecked = true;
     }
 
@@ -153,6 +168,9 @@ export class ModifierMesInfosComponent {
 
     // Chargement de la liste des pays
     this.loadListePays();
+
+    // Charger les infos
+    this.loadNotifications();
 
     // 🔄 Mettre à jour les champs auto quand le pays change
     this.orgForm.get('Pays')?.valueChanges.subscribe((selectedCountryCode) => {
@@ -179,6 +197,8 @@ export class ModifierMesInfosComponent {
         );
       }
     });
+
+
   }
 
   // ✅ Changer visibilité mot de passe
@@ -496,5 +516,101 @@ export class ModifierMesInfosComponent {
 
   btnClicked() {
     console.log('Bouton cliqué');
+  }
+
+  // ==================================================
+  // ================  mes notifications ==============
+  // ==================================================
+  /**
+   * Chargement des notifications par defaut l'utilisateur connecter
+   * @private
+   */
+  private loadNotifications(): void {
+    this.isLoading = true;
+
+    this.mesNotifsService.mesNotifications(this.currentUser.id).subscribe({
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          this.isLoading = false;
+          this.notifications = res.data;
+        } else {
+          this.toastr.error(res?.message, '', {positionClass: 'toast-custom-center',});
+        }
+        console.log('chargement mes notifs : ', res);
+      },
+
+      error: (err) => {
+        this.toastr.error(err?.message, '', {positionClass: 'toast-custom-center',});
+        console.log('Erreur chargement mes notifs : ', err);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  /**
+   * Ouvrir le modal de confirmation de blocage ou de deblocage
+   * @param notification
+   */
+  openModalBloquerDebloquer(notification: any) {
+    this.selectedUserId = notification.id;
+    this.btEnabled = notification.btEnabled === '0';
+  }
+
+  /**
+   * Fermer le modal de blocage
+   */
+  closeModalBloquerDebloquer() {
+    const modalElement = document.getElementById('bloquerDebloquerModal');
+    if (modalElement) {
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      if (modal) {
+        modal.hide();
+      }
+    }
+
+    if (this.isloadingBloquerDebloquer) return; // 🔒 bloque la fermeture pendant le chargement
+  }
+
+  /**
+   * Bloaquer et Debloquer
+   */
+  bloquerEtDebloquer(): void {
+    if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
+    if (this.selectedUserId === null) {
+      this.toastr.error('Aucune notification sélectionnée.', '', {
+        positionClass: 'toast-custom-center',
+      });
+      return;
+    }
+
+    this.isloadingBloquerDebloquer = true;
+
+    const params = {
+      idNotification: this.selectedUserId,
+      btEnabled: this.btEnabled,
+    };
+
+    this.mesNotifsService.setToggleNotification(params).subscribe({
+      next: (res) => {
+        this.isloadingBloquerDebloquer = false;
+
+        this.toastr.success(res?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+
+        this.loadNotifications();
+        this.closeModalBloquerDebloquer();
+      },
+
+      error: (err) => {
+        this.isloadingBloquerDebloquer = false;
+
+        this.toastr.error(err?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
+
+        this.closeModalBloquerDebloquer();
+      },
+    });
   }
 }

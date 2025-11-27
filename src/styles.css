@@ -2,14 +2,10 @@
 
 @import 'ngx-toastr/toastr';
 
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+/* Désactive les majuscules dans toutes les en-têtes de table */
+.table th {
+  text-transform: none;
+  text-align: center;
 }
 
 .custom-snackbar-otp {

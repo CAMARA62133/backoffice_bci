@@ -6,8 +6,6 @@ declare var initMyDatatable: any;
   selector: '[appDataTable]'
 })
 export class DataTableDirective implements AfterViewInit {
-
-
   ngAfterViewInit() {
     setTimeout(() => {
       initMyDatatable();

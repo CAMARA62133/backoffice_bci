@@ -23,6 +23,8 @@ import { OtpAfterChangeInfoComponent } from './pages/auth/otp-after-change-info/
 import { UtilisteurComponent } from './pages/utilisateurs/utilisteur.component';
 import { VerifyemailAfterchangePageComponent } from './pages/auth/verifyemail-afterchange-page/verifyemail-afterchange-page.component';
 import { AuthGuard } from './guards/auth/auth-guard.guard';
+import {DemandesComponent} from './pages/demande-souscription/demandes/demandes.component';
+import {EntreprisesComponent} from './pages/demande-souscription/entreprises/entreprises.component';
 
 export const routes: Routes = [
   // { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -178,6 +180,22 @@ export const routes: Routes = [
         path: 'mes-notifications',
         title: 'BCI - Online | Mes notifications',
         component: MesNotificationsComponent,
+        canActivate: [AuthGuard],
+        // data: { exclude: [10] },
+      },
+
+      {
+        path: 'liste-demandes',
+        title: 'BCI - Online | Liste des demandes de souscription',
+        component: DemandesComponent,
+        canActivate: [AuthGuard],
+        // data: { exclude: [10] },
+      },
+
+      {
+        path: 'liste-entreprises',
+        title: 'BCI - Online | Liste des entreprises',
+        component: EntreprisesComponent,
         canActivate: [AuthGuard],
         // data: { exclude: [10] },
       },

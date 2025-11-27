@@ -3,6 +3,8 @@ import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../services/authService/auth.service';
+import {UserInterface} from '../../interfaces/user.interface';
+import {UserModel} from '../../models/user.model';
 
 @Component({
   selector: 'app-layout',
@@ -12,7 +14,7 @@ import {AuthService} from '../../services/authService/auth.service';
 })
 export class LayoutComponent implements OnInit {
   // Information de l'utilisateur courrant
-  currentUser: any;
+  currentUser!: UserModel;
   userCurrentTimeZone: string = '';
 
   constructor(
@@ -24,6 +26,7 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getUserInfo();
+    console.log("current user : ", this.currentUser, " => est du type UserModel")
   }
 
   // Méthode de déconnexion et de redirection vers la page de login
