@@ -406,359 +406,303 @@
             <span>Menu</span>
           </li>
 
-
-          @if (currentUser?.vcRoleName === "Administrateur Système (IT)" || currentUser?.vcRoleName === "Admin integrateur") {
-            <!-- Tableau de bord -->
-            <li class="nav-item mm-active">
-              <a class="nav-link" routerLink="dashboard" aria-expanded="false">
-                <i class="icon ion-ios-speedometer active"></i>
-                <span data-key="t-dashboard">Tableau de Bord</span>
-              </a>
-            </li>
-
-            <!-- <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-eye"></i>
-                <span>Pilotage &amp; supervision</span>
-              </a>
-              <ul class="sub-menu mmm-collapse" aria-expanded="false">
-                <li>
-                  <a class="text-truncate align-self-center has-arrow" href="#">
-                    <span>Rapports</span>
-                  </a>
-                  <ul class="sub-menu mmm-collapse" aria-expanded="false">
-                    <li>
-                      <a href="../rapports-periodiques.html">
-                        <span>Rapports périodiques</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <span>Export d’activité filtrée</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <span>Rapports de conformité</span>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center has-arrow" href="#">
-                    <span>Alertes et incidents</span>
-                  </a>
-                  <ul class="sub-menu mmm-collapse" aria-expanded="false">
-                    <li>
-                      <a href="#">
-                        <span>Alertes opérationnelles</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <span>Incidents critiques en cours</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <span>Incidents résolus</span>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li> -->
+          @switch (currentUser?.vcRoleName) {
+            @case ("Administrateur Système (IT)") {
+              <!-- Tableau de bord -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="dashboard" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Tableau de Bord</span>
+                </a>
+              </li>
 
               <!-- Entreprises et organisations -->
-            <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-briefcase"></i>
-                <span>Entreprises clientes</span>
-              </a>
-              <ul class="sub-menu mmm-collapse" aria-expanded="false">
-                <li>
-                  <a
-                    class="text-truncate align-self-center"
-                    routerLink="/organisations"
-                  >
-                    <span>Liste des organisations</span>
-                  </a>
-                </li>
-                <!-- <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Liste des entreprises </span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Nouvelle entreprise </span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Gestion des Modules Activés</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Workflows &amp; validations</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Tickets &amp; Support</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Alertes &amp; Supervision</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Reporting &amp; exports</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Audit &amp; traçabilité</span>
-                  </a>
-                </li> -->
-              </ul>
-            </li>
+              <li class="nav-item">
+                <a class="nav-link has-arrow">
+                  <i class="icon ion-briefcase"></i>
+                  <span>Organisations</span>
+                </a>
+                <ul class="sub-menu mmm-collapse" aria-expanded="false">
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/organisations"
+                    >
+                      <span>Liste des entreprises</span>
+                    </a>
+                  </li>
 
-            <!--Utilisateur internes-->
-            <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-person-stalker"></i>
-                <span>Utilisateurs internes</span>
-              </a>
-              <ul class="sub-menu mmm-collapse" aria-expanded="false">
-                <li>
-                  <a
-                    class="text-truncate align-self-center"
-                    routerLink="/utilisateurs"
-                  >
-                    <span>Liste des utilisateurs </span>
-                  </a>
-                </li>
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/organisations"
+                    >
+                      <span>Repportings et Exports</span>
+                    </a>
+                  </li>
 
-                <!-- <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Créer un utilisateur </span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Gestion Rôles et Profils</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Historique des modifications de droits</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Journal d’audit des accès</span>
-                  </a>
-                </li> -->
-              </ul>
-            </li>
+                  <!-- <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Liste des entreprises </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Nouvelle entreprise </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Gestion des Modules Activés</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Workflows &amp; validations</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Tickets &amp; Support</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Alertes &amp; Supervision</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Reporting &amp; exports</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Audit &amp; traçabilité</span>
+                    </a>
+                  </li> -->
+                </ul>
+              </li>
 
-            <!-- <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-cash"></i>
-                <span data-key="t-apps">Transactions &amp; opérations</span>
-              </a>
-              <ul class="sub-menu mm-collapse" aria-expanded="false">
-                <li>
-                  <a class="text-truncate" href="#">
-                    <span>Vue consolidée</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate" href="#">
-                    <span data-key="t-chat">Transactions sensibles </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span>Validation &amp; Rejet manuel</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span>Historique des opérations</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span>Télécharg. de justificatifs</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
+              <!-- Transactions et Operations -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="transactions-operations" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Transactions &amp; Opérations</span>
+                </a>
+              </li>
 
-            <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-chatboxes"></i>
-                <span data-key="t-apps">Tickets &amp; support</span>
-              </a>
-              <ul class="sub-menu mm-collapse" aria-expanded="false">
-                <li>
-                  <a class="text-truncate" href="#">
-                    <span>Tickets &amp; demandes</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate" href="#">
-                    <span data-key="t-chat">Suivi SLA &amp; délais </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <span>Rapports de satisfaction</span>
-                  </a>
-                </li>
-              </ul>
-            </li> -->
+              <!-- Alertes et Supervisions -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="alertes-supervisions" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
+                </a>
+              </li>
 
-              <!-- Log Activites User et Organisation -->
-            <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-person-stalker"></i>
-                <span>Logs activités &amp; users </span>
-              </a>
-              <ul class="sub-menu mmm-collapse" aria-expanded="false">
-                <li>
-                  <a
-                    class="text-truncate align-self-center"
-                    routerLink="/logs-utilisateurs"
-                  >
-                    <span>Logs activitées user</span>
-                  </a>
-                </li>
+              <!-- Parametres -->
+              <li class="nav-item">
+                <a class="nav-link has-arrow">
+                  <i class="icon ion-android-settings"></i>
+                  <span>Paramétrage &amp; administr...</span>
+                </a>
+                <ul class="sub-menu mm-collapse" aria-expanded="false">
+                  <li>
+                    <a routerLink="configuration-alertes">
+                      <span>Config. Alertes</span>
+                    </a>
+                  </li>
 
-                <li>
-                  <a
-                    class="text-truncate align-self-center"
-                    routerLink="/logs-organisations"
-                  >
-                    <span>Logs activitées organisation</span>
-                  </a>
-                </li>
+                  <li>
+                    <a routerLink="configuration-notifications">
+                      <span>Config. Notifications</span>
+                    </a>
+                  </li>
 
-                <!-- <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Créer un utilisateur </span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Gestion Rôles et Profils</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Historique des modifications de droits</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="text-truncate align-self-center" href="#">
-                    <span>Journal d’audit des accès</span>
-                  </a>
-                </li> -->
-              </ul>
-            </li>
+                  <li>
+                    <a routerLink="configuration-notif-user-defaut">
+                      <span>Config. Notif Défaut User</span>
+                    </a>
+                  </li>
 
-            <!-- Demandes de souscription -->
-            <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-eye"></i>
-                <span>Demandes Souscriptions </span>
-              </a>
-              <ul class="sub-menu mmm-collapse" aria-expanded="false">
-                <li>
-                  <a
-                    class="text-truncate align-self-center"
-                    routerLink="/liste-demandes"
-                  >
-                    <span>Liste des demandes</span>
-                  </a>
-                </li>
+                  <li>
+                    <a routerLink="mes-notifications">
+                      <span>Mes Notifications</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            }
 
-                <li>
-                  <a
-                    class="text-truncate align-self-center"
-                    routerLink="/liste-entreprises"
-                  >
-                    <span>Liste des entreprises</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            @case ("Admin integrateur") {
+              <!-- Tableau de bord -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="dashboard" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Tableau de Bord</span>
+                </a>
+              </li>
+
+              <!-- Entreprises et organisations -->
+              <li class="nav-item">
+                <a class="nav-link has-arrow">
+                  <i class="icon ion-briefcase"></i>
+                  <span>Organisations</span>
+                </a>
+                <ul class="sub-menu mmm-collapse" aria-expanded="false">
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/organisations"
+                    >
+                      <span>Liste des entreprises</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/organisations"
+                    >
+                      <span>Repportings et Exports</span>
+                    </a>
+                  </li>
+
+                  <!-- <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Liste des entreprises </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Nouvelle entreprise </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Gestion des Modules Activés</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Workflows &amp; validations</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Tickets &amp; Support</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Alertes &amp; Supervision</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Reporting &amp; exports</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Audit &amp; traçabilité</span>
+                    </a>
+                  </li> -->
+                </ul>
+              </li>
+
+              <!-- Transactions et Operations -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="transactions-operations" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Transactions &amp; Opérations</span>
+                </a>
+              </li>
+
+              <!-- Alertes et Supervisions -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="alertes-supervisions" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
+                </a>
+              </li>
+
+              <!-- Parametres -->
+              <li class="nav-item">
+                <a class="nav-link has-arrow">
+                  <i class="icon ion-android-settings"></i>
+                  <span>Paramétrage &amp; administr...</span>
+                </a>
+                <ul class="sub-menu mm-collapse" aria-expanded="false">
+                  <li>
+                    <a routerLink="configuration-alertes">
+                      <span>Config. Alertes</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a routerLink="configuration-notifications">
+                      <span>Config. Notifications</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a routerLink="configuration-notif-user-defaut">
+                      <span>Config. Notif Défaut User</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a routerLink="mes-notifications">
+                      <span>Mes Notifications</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            }
+
+            <!-- Pour les agens de conformites -->
+            @case ("Agent Conformité") {
+              <!-- Tableau de bord -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="tableau-de-bord" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Tableau de Bord</span>
+                </a>
+              </li>
 
 
-            <!-- Parametres -->
-            <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-android-settings"></i>
-                <span>Paramétrage &amp; administr...</span>
-              </a>
-              <ul class="sub-menu mm-collapse" aria-expanded="false">
-                <li>
-                  <a routerLink="configuration-alertes">
-                    <span>Config. Alertes</span>
-                  </a>
-                </li>
+              <!-- Demandes de souscription -->
+              <li class="nav-item">
+                <a class="nav-link has-arrow">
+                  <i class="icon ion-eye"></i>
+                  <span>Demandes Souscriptions </span>
+                </a>
+                <ul class="sub-menu mmm-collapse" aria-expanded="false">
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/liste-demandes"
+                    >
+                      <span>Liste des demandes</span>
+                    </a>
+                  </li>
 
-                <li>
-                  <a routerLink="configuration-notifications">
-                    <span>Config. Notifications</span>
-                  </a>
-                </li>
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/liste-entreprises"
+                    >
+                      <span>Liste des entreprises</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            }
 
-                <li>
-                  <a routerLink="configuration-notif-user-defaut">
-                    <span>Config. Notif Défaut User</span>
-                  </a>
-                </li>
-
-                <li>
-                  <a routerLink="mes-notifications">
-                    <span>Mes Notifications</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
-          } @else if (currentUser?.vcRoleName == "Agent Conformité") {
-            <!-- Demandes de souscription -->
-            <li class="nav-item">
-              <a class="nav-link has-arrow">
-                <i class="icon ion-eye"></i>
-                <span>Demandes Souscriptions </span>
-              </a>
-              <ul class="sub-menu mmm-collapse" aria-expanded="false">
-                <li>
-                  <a
-                    class="text-truncate align-self-center"
-                    routerLink="/liste-demandes"
-                  >
-                    <span>Liste des demandes</span>
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    class="text-truncate align-self-center"
-                    routerLink="/liste-entreprises"
-                  >
-                    <span>Liste des entreprises</span>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            <!-- Par defaut -->
+            @default {
+            }
           }
 
         </ul>

@@ -5,6 +5,7 @@ import { provideRouter } from '@angular/router';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { tokenInterceptor } from './interceptors/auth/auth.interceptor';
+import {provideNgDiagram} from 'ng-diagram';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,5 +15,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideHttpClient(withInterceptors([tokenInterceptor])),
+    provideNgDiagram()
   ],
 };

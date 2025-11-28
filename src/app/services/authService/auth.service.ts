@@ -46,6 +46,15 @@ export class AuthService {
   }
 
   /**
+   * Recupere le role de l'utilisateur connecter
+   */
+  getUserRole():string{
+    const user = this.getUser();
+    return user?.vcRoleName || "";
+  }
+
+
+  /**
    * Vérifie si le rôle correspond à un ou plusieurs rôles autorisés
    * @returns
    */
@@ -243,6 +252,13 @@ export class AuthService {
     );
   }
 
+  /**
+   * Mise a jour du mot de passe
+   * @param ancienPassword
+   * @param Nouveaupassword
+   * @param email
+   * @param appName
+   */
   updatePassword(
     ancienPassword: string,
     Nouveaupassword: string,

@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
-
 @import 'ngx-toastr/toastr';
+@import 'ng-diagram/styles.css';
 
 /* Désactive les majuscules dans toutes les en-têtes de table */
 .table th {

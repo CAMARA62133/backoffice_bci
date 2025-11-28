@@ -1,34 +1,49 @@
-import { Routes } from '@angular/router';
-import { LayoutComponent } from './components/layout/layout.component';
-import { Page404NotFoundComponent } from './components/shared/errors/page404-not-found/page404-not-found.component';
-import { Page404Component } from './components/shared/errors/page404/page404.component';
-import { AlertesComponent } from './pages/alertes/alertes.component';
-import { ConfigUserDefautNotifsComponent } from './pages/config-user-defaut-notifs/config-user-defaut-notifs.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { FormNouveauPasswordComponent } from './pages/auth/form-nouveau-password/form-nouveau-password.component';
-import { LoadingPageComponent } from './pages/auth/loading-page/loading-page.component';
-import { LoadingVerifyEmailPageComponent } from './pages/auth/loading-verify-email-page/loading-verify-email-page.component';
-import { LoginComponent } from './pages/auth/login/login.component';
-import { ReinitialiserPasswordComponent } from './pages/auth/reinitialiser-password/reinitialiser-password.component';
-import { ResetOrgPasswordComponent } from './pages/auth/reset-org-password/reset-org-password.component';
-import { ValidateOtpAfterVerifiedEmailComponent } from './pages/auth/validate-otp-after-verified-email/validate-otp-after-verified-email.component';
-import { ValiderOtpAfterLoginComponent } from './pages/auth/valider-otp-after-login/valider-otp-after-login.component';
-import { LogOrgComponent } from './pages/logs/log-org/log-org.component';
-import { LogUserComponent } from './pages/logs/log-user/log-user.component';
-import { MesNotificationsComponent } from './pages/mes-notifications/mes-notifications.component';
-import { ModifierMesInfosComponent } from './pages/modifier-mes-infos/modifier-mes-infos.component';
-import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { OrganisationsComponent } from './pages/organisations/organisations.component';
-import { OtpAfterChangeInfoComponent } from './pages/auth/otp-after-change-info/otp-after-change-info.component';
-import { UtilisteurComponent } from './pages/utilisateurs/utilisteur.component';
-import { VerifyemailAfterchangePageComponent } from './pages/auth/verifyemail-afterchange-page/verifyemail-afterchange-page.component';
-import { AuthGuard } from './guards/auth/auth-guard.guard';
+import {Routes} from '@angular/router';
+import {LayoutComponent} from './components/layout/layout.component';
+import {Page404NotFoundComponent} from './components/shared/errors/page404-not-found/page404-not-found.component';
+import {Page404Component} from './components/shared/errors/page404/page404.component';
+import {AlertesComponent} from './pages/alertes/alertes.component';
+import {ConfigUserDefautNotifsComponent} from './pages/config-user-defaut-notifs/config-user-defaut-notifs.component';
+import {DashboardComponent} from './pages/dashboard/dashboard.component';
+import {FormNouveauPasswordComponent} from './pages/auth/form-nouveau-password/form-nouveau-password.component';
+import {LoadingPageComponent} from './pages/auth/loading-page/loading-page.component';
+import {
+  LoadingVerifyEmailPageComponent
+} from './pages/auth/loading-verify-email-page/loading-verify-email-page.component';
+import {LoginComponent} from './pages/auth/login/login.component';
+import {ReinitialiserPasswordComponent} from './pages/auth/reinitialiser-password/reinitialiser-password.component';
+import {ResetOrgPasswordComponent} from './pages/auth/reset-org-password/reset-org-password.component';
+import {
+  ValidateOtpAfterVerifiedEmailComponent
+} from './pages/auth/validate-otp-after-verified-email/validate-otp-after-verified-email.component';
+import {ValiderOtpAfterLoginComponent} from './pages/auth/valider-otp-after-login/valider-otp-after-login.component';
+import {LogOrgComponent} from './pages/logs/log-org/log-org.component';
+import {LogUserComponent} from './pages/logs/log-user/log-user.component';
+import {MesNotificationsComponent} from './pages/mes-notifications/mes-notifications.component';
+import {ModifierMesInfosComponent} from './pages/modifier-mes-infos/modifier-mes-infos.component';
+import {NotificationsComponent} from './pages/notifications/notifications.component';
+import {OrganisationsComponent} from './pages/organisations/organisations.component';
+import {OtpAfterChangeInfoComponent} from './pages/auth/otp-after-change-info/otp-after-change-info.component';
+import {UtilisteurComponent} from './pages/utilisateurs/utilisteur.component';
+import {
+  VerifyemailAfterchangePageComponent
+} from './pages/auth/verifyemail-afterchange-page/verifyemail-afterchange-page.component';
+import {AuthGuard} from './guards/auth/auth-guard.guard';
 import {DemandesComponent} from './pages/demande-souscription/demandes/demandes.component';
 import {EntreprisesComponent} from './pages/demande-souscription/entreprises/entreprises.component';
+import {MyDiagramComponentComponent} from './components/my-diagram-component/my-diagram-component.component';
+import {TableauDeBordComponent} from './pages/agent-conformite/tableau-de-bord/tableau-de-bord.component';
+import {
+  FicheDetailsDemandesComponent
+} from './pages/demande-souscription/fiche-details-demandes/fiche-details-demandes.component';
+import {
+  FicheDetailsEntreprisesComponent
+} from './pages/demande-souscription/fiche-details-entreprises/fiche-details-entreprises.component';
+import {TestDashboardComponent} from './pages/test-dashboard/test-dashboard.component';
 
 export const routes: Routes = [
-  // { path: '', redirectTo: 'login', pathMatch: 'full' },
 
+  // ============ AUTH ROUTES ================
   {
     path: 'login',
     title: 'BCI - Online | Connexion',
@@ -101,7 +116,13 @@ export const routes: Routes = [
     component: OtpAfterChangeInfoComponent,
   },
 
-  // Layout global
+  {
+    path: 'test-diagram',
+    title: 'BCI - Online | Test Diagram',
+    component: MyDiagramComponentComponent,
+  },
+
+  // ==================== ADMIN section ====================
   {
     path: '',
     component: LayoutComponent,
@@ -181,7 +202,6 @@ export const routes: Routes = [
         title: 'BCI - Online | Mes notifications',
         component: MesNotificationsComponent,
         canActivate: [AuthGuard],
-        // data: { exclude: [10] },
       },
 
       {
@@ -189,7 +209,13 @@ export const routes: Routes = [
         title: 'BCI - Online | Liste des demandes de souscription',
         component: DemandesComponent,
         canActivate: [AuthGuard],
-        // data: { exclude: [10] },
+      },
+
+      {
+        path: 'fiche-demande',
+        title: 'BCI - Online | Fiches détails demandes de souscription',
+        component: FicheDetailsDemandesComponent,
+        canActivate: [AuthGuard],
       },
 
       {
@@ -197,10 +223,76 @@ export const routes: Routes = [
         title: 'BCI - Online | Liste des entreprises',
         component: EntreprisesComponent,
         canActivate: [AuthGuard],
-        // data: { exclude: [10] },
+      },
+
+      {
+        path: 'fiche-entreprise',
+        title: 'BCI - Online | Fiches détails des entreprises',
+        component: FicheDetailsEntreprisesComponent,
+        canActivate: [AuthGuard],
+      },
+
+      {
+        path: 'tableau-de-bord',
+        title: 'BCI - Online | Tableau de bord Agent de conformité',
+        component: TableauDeBordComponent,
+        canActivate: [AuthGuard],
+      },
+
+      // ========================= Organisation sections =========================
+      {
+        path: 'organisation-dashboard',
+        title: 'BCI - Online | Tableau de bord Organisation',
+        component: TestDashboardComponent,
+        canActivate: [AuthGuard],
+      },
+
+      {
+        path: 'organisation-dashboard',
+        title: 'BCI - Online | Tableau de bord Organisation',
+        component: TestDashboardComponent,
+        canActivate: [AuthGuard],
       },
     ],
   },
 
-  { path: '**', redirectTo: 'not-found', pathMatch: 'full' },
+  // ==================== AGENT CONFORMITE section ====================
+  // {
+  //   path: '',
+  //   component: LayoutComponent,
+  //   canActivate: [AuthGuard],
+  //   // data: {role: ['']},
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       title: 'BCI - Online | Tableau de bord Agent de comformité',
+  //       component: TableauDeBordComponent,
+  //     },
+  //
+  //     // ====== Redirection automatique sur le dashboard
+  //     {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+  //   ],
+  // },
+  //
+  //
+  // // ==================== TEST section ====================
+  // {
+  //   path: 'test',
+  //   component: LayoutComponent,
+  //   canActivate: [AuthGuard],
+  //   // data: {role: ['']},
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       title: 'BCI - Online | Tableau de bord Test',
+  //       component: TestDashboardComponent,
+  //     },
+  //
+  //     // ====== Redirection automatique sur le dashboard
+  //     {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+  //   ],
+  // },
+
+  // =================== 404 =====================
+  {path: '**', redirectTo: 'not-found', pathMatch: 'full'},
 ];

@@ -4,11 +4,13 @@ import {BciWorkflow} from '../../../interfaces/workflow.interface';
 import {workflowCanvasSVG} from '../../../models/workflow';
 import {SvgDrawingService} from '../../../services/svg-drawing/svg-drawing.service';
 import {SvgElement} from '../../../models/svg-model';
+import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
   selector: 'app-demandes',
   imports: [
-    // DataTableDirective,
+    DataTableDirective,
+    RouterLink,
   ],
   templateUrl: './demandes.component.html',
   styleUrl: './demandes.component.css',
@@ -47,7 +49,7 @@ export class DemandesComponent implements OnInit {
 
   svgContent = '';
 
-  constructor(private svg: SvgDrawingService) {
+  constructor(private svg: SvgDrawingService, private router: Router) {
   }
 
   //
@@ -91,9 +93,9 @@ export class DemandesComponent implements OnInit {
         fill: '#dc3545',
         label: 'Exécution'
       },
-      { type: 'line', x1:150, y1:100, x2:250, y2:100 },
-      { type: 'line', x1:350, y1:100, x2:450, y2:100 },
-      { type: 'line', x1:550, y1:100, x2:50, y2:250 }
+      {type: 'line', x1: 150, y1: 100, x2: 250, y2: 100},
+      {type: 'line', x1: 350, y1: 100, x2: 450, y2: 100},
+      {type: 'line', x1: 550, y1: 100, x2: 50, y2: 250}
     ];
 
     this.svgContent = this.svg.generateSvg(elements);
@@ -126,6 +128,9 @@ export class DemandesComponent implements OnInit {
     console.log("selectedWorkflowCanvas : ", this.selectedWorkflowCanvas)
 
 
+  }
 
+  goToFichePage() {
+    this.router.navigate(['fiche-demande']);
   }
 }
