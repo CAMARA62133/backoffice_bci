@@ -1,7 +1,9 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
-import { Observable, catchError, tap, throwError } from 'rxjs';
-import { environment } from './../../../environnements/environnement';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Injectable, signal} from '@angular/core';
+import {Observable, catchError, tap, throwError} from 'rxjs';
+import {environment} from './../../../environnements/environnement';
+import {UserInterface} from '../../interfaces/user.interface';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -48,7 +50,7 @@ export class AuthService {
   /**
    * Recupere le role de l'utilisateur connecter
    */
-  getUserRole():string{
+  getUserRole(): string {
     const user = this.getUser();
     return user?.vcRoleName || "";
   }
@@ -87,7 +89,7 @@ export class AuthService {
     appVersion: string = this.appVersion
   ): Observable<any> {
     // captcha_token => a ajouter dans le body si recaptcha est activé
-    const body = { email, password, appName, captcha_token, appVersion };
+    const body = {email, password, appName, captcha_token, appVersion};
     console.log('Login body:', body);
     return this.http.post(`${this.baseUrl}/api/login`, body);
   }
@@ -104,7 +106,7 @@ export class AuthService {
     lienSite: string = environment.lienSite,
     appName: string = this.appName,
   ): Observable<any> {
-    const body = { email, appName, lienSite };
+    const body = {email, appName, lienSite};
     console.log('body:', body);
     return this.http.post(`${this.baseUrl}/api/requestResetPassword`, body);
   }
@@ -130,7 +132,7 @@ export class AuthService {
    * @returns
    */
   isAuthenticated(): boolean {
-    return !!this.getToken(); // true si le token existe
+    return !!this.getToken() || !!this.getCurrentUser(); // true si le token existe
   }
 
   /**
@@ -248,7 +250,7 @@ export class AuthService {
     return this.http.post(
       `${this.baseUrl}/api/resetPasswordAfterLogin`,
       {},
-      { headers, params }
+      {headers, params}
     );
   }
 
@@ -277,12 +279,12 @@ export class AuthService {
       .set('Nouveaupassword', Nouveaupassword)
       .set('email', email);
 
-    console.log('Parametre de modification password : ', { params });
+    console.log('Parametre de modification password : ', {params});
 
     return this.http.post(
       `${this.baseUrl}/api/resetPasswordAfterLogin`,
       {},
-      { headers, params }
+      {headers, params}
     );
   }
 
@@ -311,7 +313,7 @@ export class AuthService {
 
     // Appel API de déconnexion
     return this.http
-      .post(`${this.baseUrl}/api/logout`, {}, { headers, params })
+      .post(`${this.baseUrl}/api/logout`, {}, {headers, params})
       .pipe(
         tap(() => {
           // localStorage.clear();
@@ -383,7 +385,7 @@ export class AuthService {
     const previous = this._userInfo();
     console.log('%c[AuthService] Ancienne valeur :', 'color: gray;', previous);
 
-    this._userInfo.set({ ...userInfo }); // clone → force la réactivité
+    this._userInfo.set({...userInfo}); // clone → force la réactivité
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
     console.log(
@@ -434,7 +436,7 @@ export class AuthService {
     const previous = this._userInfoConfig();
     console.log('%c[AuthService] Ancienne valeur :', 'color: gray;', previous);
 
-    this._userInfoConfig.set({ ...config });
+    this._userInfoConfig.set({...config});
     localStorage.setItem('userInfoConfig', JSON.stringify(config));
 
     console.log(
@@ -476,5 +478,11 @@ export class AuthService {
       'color: orange;'
     );
     return null;
+  }
+
+  getCurrentUser() {
+    // Exemple : récupérer depuis localStorage ou une variable
+    const userJson = localStorage.getItem('userInfo');
+    return userJson ? JSON.parse(userJson) : null;
   }
 }

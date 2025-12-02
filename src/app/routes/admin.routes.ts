@@ -12,7 +12,7 @@ import {AlertesComponent} from '../pages/alertes/alertes.component';
 import {ConfigUserDefautNotifsComponent} from '../pages/config-user-defaut-notifs/config-user-defaut-notifs.component';
 import {MesNotificationsComponent} from '../pages/mes-notifications/mes-notifications.component';
 
-export const routes: Routes = [
+export default [
 
   {
     path: '',
@@ -57,7 +57,6 @@ export const routes: Routes = [
         title: 'BCI - Online | Listes des Utilisateurs',
         component: UtilisteurComponent,
         canActivate: [AuthGuard],
-        // data: { exclude: [10] },
       },
 
       {
@@ -96,4 +95,4 @@ export const routes: Routes = [
       },
     ],
   },
-];
+] satisfies Routes;

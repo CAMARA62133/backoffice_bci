@@ -33,6 +33,7 @@
             ],
             "scripts": [
               "public/assets/webcomponents/webcomponents-bundle.umd.cjs",
+              "node_modules/apexcharts/dist/apexcharts.min.js"
             ]
           },
           "configurations": {

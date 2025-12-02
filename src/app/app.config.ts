@@ -6,6 +6,7 @@ import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { tokenInterceptor } from './interceptors/auth/auth.interceptor';
 import {provideNgDiagram} from 'ng-diagram';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     provideHttpClient(withInterceptors([tokenInterceptor])),
-    provideNgDiagram()
+    provideNgDiagram(), provideCharts(withDefaultRegisterables()),
+    provideCharts(withDefaultRegisterables())
   ],
 };

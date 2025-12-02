@@ -7,7 +7,7 @@
             <span class="logo-sm">
               <img
                 class="img-fluid"
-                src="assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking.svg?h=7e87f9d72e96197b57f9b69046cee031"
+                src="../../../assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking.svg?h=7e87f9d72e96197b57f9b69046cee031"
                 alt
                 height="100"
                 width="100"
@@ -16,7 +16,7 @@
             <span class="logo-lg">
               <img
                 class="img-fluid"
-                src="assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking%20-%202-W-2.svg?h=c746ea9e25952b9505731b7d644e74e9"
+                src="../../../assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking%20-%202-W-2.svg?h=c746ea9e25952b9505731b7d644e74e9"
                 alt
                 height="200"
                 width="200"
@@ -27,7 +27,7 @@
             <span class="logo-sm">
               <img
                 class="img-fluid"
-                src="assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking.svg?h=7e87f9d72e96197b57f9b69046cee031"
+                src="../../../assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking.svg?h=7e87f9d72e96197b57f9b69046cee031"
                 alt
                 width="100"
                 height="100"
@@ -36,7 +36,7 @@
             <span class="logo-lg">
               <img
                 class="img-fluid"
-                src="assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking%20-%202-W-2.svg?h=c746ea9e25952b9505731b7d644e74e9"
+                src="../../../assets/img/logos/LOGO%20BCI%20-%20Internet%20Banking%20-%202-W-2.svg?h=c746ea9e25952b9505731b7d644e74e9"
                 alt
                 height="200"
                 width="200"
@@ -406,11 +406,11 @@
             <span>Menu</span>
           </li>
 
-          @switch (currentUser?.vcRoleName) {
+          @switch (currentUser.vcRoleName) {
             @case ("Administrateur Système (IT)") {
               <!-- Tableau de bord -->
               <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="dashboard" aria-expanded="false">
+                <a class="nav-link" routerLink="org-dashboard" aria-expanded="false">
                   <i class="icon ion-ios-speedometer active"></i>
                   <span data-key="t-dashboard">Tableau de Bord</span>
                 </a>
@@ -426,7 +426,7 @@
                   <li>
                     <a
                       class="text-truncate align-self-center"
-                      routerLink="/organisations"
+                      routerLink="org-entreprise"
                     >
                       <span>Liste des entreprises</span>
                     </a>
@@ -435,7 +435,7 @@
                   <li>
                     <a
                       class="text-truncate align-self-center"
-                      routerLink="/organisations"
+                      routerLink="repporting-export"
                     >
                       <span>Repportings et Exports</span>
                     </a>
@@ -484,6 +484,14 @@
                 </ul>
               </li>
 
+              <!-- utilisateurs -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="org-utilisateur" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Liste des utilisateurs</span>
+                </a>
+              </li>
+
               <!-- Transactions et Operations -->
               <li class="nav-item mm-active">
                 <a class="nav-link" routerLink="transactions-operations" aria-expanded="false">
@@ -494,43 +502,10 @@
 
               <!-- Alertes et Supervisions -->
               <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="alertes-supervisions" aria-expanded="false">
+                <a class="nav-link" routerLink="alertes-supervision" aria-expanded="false">
                   <i class="icon ion-ios-speedometer active"></i>
                   <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
                 </a>
-              </li>
-
-              <!-- Parametres -->
-              <li class="nav-item">
-                <a class="nav-link has-arrow">
-                  <i class="icon ion-android-settings"></i>
-                  <span>Paramétrage &amp; administr...</span>
-                </a>
-                <ul class="sub-menu mm-collapse" aria-expanded="false">
-                  <li>
-                    <a routerLink="configuration-alertes">
-                      <span>Config. Alertes</span>
-                    </a>
-                  </li>
-
-                  <li>
-                    <a routerLink="configuration-notifications">
-                      <span>Config. Notifications</span>
-                    </a>
-                  </li>
-
-                  <li>
-                    <a routerLink="configuration-notif-user-defaut">
-                      <span>Config. Notif Défaut User</span>
-                    </a>
-                  </li>
-
-                  <li>
-                    <a routerLink="mes-notifications">
-                      <span>Mes Notifications</span>
-                    </a>
-                  </li>
-                </ul>
               </li>
             }
 
@@ -547,7 +522,7 @@
               <li class="nav-item">
                 <a class="nav-link has-arrow">
                   <i class="icon ion-briefcase"></i>
-                  <span>Organisations</span>
+                  <span>Entreprises clientes</span>
                 </a>
                 <ul class="sub-menu mmm-collapse" aria-expanded="false">
                   <li>
@@ -555,7 +530,7 @@
                       class="text-truncate align-self-center"
                       routerLink="/organisations"
                     >
-                      <span>Liste des entreprises</span>
+                      <span>Liste des organisations</span>
                     </a>
                   </li>
 
@@ -568,7 +543,8 @@
                     </a>
                   </li>
 
-                  <!-- <li>
+                  <!--
+                  <li>
                     <a class="text-truncate align-self-center" href="#">
                       <span>Liste des entreprises </span>
                     </a>
@@ -665,7 +641,7 @@
             @case ("Agent Conformité") {
               <!-- Tableau de bord -->
               <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="tableau-de-bord" aria-expanded="false">
+                <a class="nav-link" routerLink="agent-dashboard" aria-expanded="false">
                   <i class="icon ion-ios-speedometer active"></i>
                   <span data-key="t-dashboard">Tableau de Bord</span>
                 </a>
@@ -682,7 +658,7 @@
                   <li>
                     <a
                       class="text-truncate align-self-center"
-                      routerLink="/liste-demandes"
+                      routerLink="/agent-demandes"
                     >
                       <span>Liste des demandes</span>
                     </a>
@@ -691,7 +667,7 @@
                   <li>
                     <a
                       class="text-truncate align-self-center"
-                      routerLink="/liste-entreprises"
+                      routerLink="/agent-entreprise"
                     >
                       <span>Liste des entreprises</span>
                     </a>

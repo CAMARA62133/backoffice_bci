@@ -1,0 +1,15 @@
+.card-metric:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.metric-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing);
+  transition: all var(--transition-normal);
+}
+
+.card-metric:hover .metric-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+

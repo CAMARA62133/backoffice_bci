@@ -140,7 +140,16 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
           this.toastr.success(response?.message, '', {
             positionClass: 'toast-custom-center',
           });
-          this.router.navigate(['/dashboard']);
+
+          // Redirection en fonction du role
+          if (response?.data?.vcRoleName === "Agent Conformité") {
+            this.router.navigate(['/agent-dashboard']);
+          } else if (response?.data?.vcRoleName === "Administrateur Système (IT)") {
+            this.router.navigate(['/org-dashboard']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
+
         } else {
           // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
           if (response?.status === 405 || response?.status === '405') {

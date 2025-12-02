@@ -19,7 +19,15 @@ import {
   isInvalid,
   isValid,
 } from '../../utils/form-helpers';
-import {ActivatedRoute, Route, Router, RouterConfigOptions, RouterLinkActive, Routes} from '@angular/router';
+import {
+  ActivatedRoute,
+  Route,
+  Router,
+  RouterConfigOptions,
+  RouterLink,
+  RouterLinkActive,
+  Routes
+} from '@angular/router';
 import {DataTableDirective} from '../../directives/data-table/data-table.directive';
 
 
@@ -33,6 +41,7 @@ import {DataTableDirective} from '../../directives/data-table/data-table.directi
     NgClass,
     DatePipe,
     DataTableDirective,
+    RouterLink,
   ],
   templateUrl: './organisations.component.html',
   styleUrl: './organisations.component.css',

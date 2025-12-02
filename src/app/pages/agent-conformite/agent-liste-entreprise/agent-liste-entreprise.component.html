@@ -1,1 +1,116 @@
-<p>agent-liste-entreprise works!</p>
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+          <div>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">Liste des Entreprises</h4>
+            <p class="text-secondary mb-sm-0 font-size-13">Gestion, consultation et supervision du portefeuille
+              entreprises</p>
+          </div>
+
+          <!--          <div class="page-title-right">-->
+          <!--            <ol class="breadcrumb m-0">-->
+          <!--              <li class="breadcrumb-item"><a><span>Entreprises Clientes</span></a></li>-->
+          <!--              <li class="breadcrumb-item"><a href=""><span>Tableau de Bord</span></a></li>-->
+          <!--              <li class="breadcrumb-item"><a href="#"><span>Liste des Entreprises</span></a></li>-->
+          <!--            </ol><span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>-->
+          <!--          </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid py-4">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h1 class="text-primary mb-1 h4"><i class="fas fa-building me-2"></i> Liste des Entreprises Clientes</h1>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" type="button" id="btnExport"><i class="fas fa-download me-1"></i>
+              Exporter
+            </button>
+            <button class="btn btn-primary" type="button" id="btnNouvelleEntreprise"><i class="fas fa-plus me-1"></i>
+              Nouvelle Entreprise
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card border-0 shadow-sm" id="tableView">
+      <div class="card-body p-2">
+        <div class="table-responsive">
+          <table appDataTable class="table table-hover mb-0 datatable">
+            <thead class="table-primary">
+            <tr>
+              <th class="sortable" data-sort="raisonSociale" scope="col">
+                <div class="d-flex align-items-center justify-content-between"> Raison Sociale</div>
+              </th>
+              <th class="sortable" data-sort="nif" scope="col">
+                <div class="d-flex align-items-center justify-content-between"> NIF</div>
+              </th>
+              <th class="sortable" data-sort="segment" scope="col">
+                <div class="d-flex align-items-center justify-content-between"> Segment</div>
+              </th>
+              <th class="sortable" data-sort="secteurActivite" scope="col">
+                <div class="d-flex align-items-center justify-content-between"> Secteur</div>
+              </th>
+              <th class="sortable" data-sort="statutKYC" scope="col">
+                <div class="d-flex align-items-center justify-content-between"> Statut KYC</div>
+              </th>
+              <th class="sortable" data-sort="statutActif" scope="col">
+                <div class="d-flex align-items-center justify-content-between"> Statut</div>
+              </th>
+              <th class="sortable" data-sort="dateCreation" scope="col">
+                <div class="d-flex align-items-center justify-content-between"> Date Création</div>
+              </th>
+              <th class="text-center" scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody id="entreprisesTableBody">
+            <tr data-entreprise-id="ENT000001" class="table-row-hover fade-in">
+              <td>
+                <div class="d-flex align-items-center">
+                  <strong>TRANSPORT GUINEE EXPRESS 1</strong>
+                </div>
+              </td>
+              <td><span class="font-monospace">GN484462234</span></td>
+              <td><span class="badge badge-segment">PME</span></td>
+              <td>Services</td>
+              <td><span class="badge badge-kyc-en_cours"><i class="fas fa-clock me-1"></i>En cours</span></td>
+              <td><span class="badge badge-status-actif"><i class="fas fa-check-circle me-1"></i>Actif</span></td>
+              <td>10/08/2020</td>
+              <td>
+                <div class="d-flex gap-1">
+                  <a routerLink="/agent-entreprise/1" class="btn btn-outline-info btn-action btn-sm"
+                     title="Consulter la fiche">
+                    <i class="fas fa-eye"></i>
+                  </a>
+
+                  <button type="button" class="btn btn-outline-warning btn-action btn-sm"
+                          onclick="listeManager.editEntreprise('ENT000001')" title="Modifier">
+                    <i class="fas fa-edit"></i>
+                  </button>
+
+                  <button type="button" class="btn btn-outline-danger btn-action btn-sm"
+                          onclick="listeManager.archiveEntreprise('ENT000001')" title="Archiver">
+                    <i class="fas fa-archive"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

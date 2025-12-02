@@ -3,7 +3,6 @@ import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../services/authService/auth.service';
-import {UserInterface} from '../../interfaces/user.interface';
 import {UserModel} from '../../models/user.model';
 
 @Component({

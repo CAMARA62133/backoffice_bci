@@ -1,0 +1,406 @@
+/* ================================
+   STYLES CSS - LISTE DES ENTREPRISES CLIENTES
+   BCI - Banque pour le Commerce et l'Industrie
+   ================================ */
+
+/* Tableau des entreprises */
+
+.table-responsive {
+  border-radius: var(--bs-border-radius);
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table-light {
+  background-color: var(--bs-light);
+  border-bottom: 2px solid var(--bs-primary);
+}
+
+.table th {
+  border-bottom: 1px solid var(--bs-border);
+  font-weight: 600;
+  color: var(--bs-dark);
+  white-space: nowrap;
+  vertical-align: middle;
+  padding: 1rem 0.75rem;
+}
+
+.table td {
+  vertical-align: middle;
+  padding: 0.75rem;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+/* En-têtes triables */
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: var(--bs-transition);
+}
+
+.sortable:hover {
+  background-color: rgba(52, 52, 115, 0.05);
+}
+
+.sortable.sort-asc .fas.fa-sort:before {
+  content: "\f0de";
+  color: var(--bs-primary);
+}
+
+.sortable.sort-desc .fas.fa-sort:before {
+  content: "\f0dd";
+  color: var(--bs-primary);
+}
+
+/* Badges de statut */
+
+.badge {
+  font-weight: 500;
+  border-radius: 0.25rem;
+  padding: 0.5em 0.75em;
+}
+
+.badge-status-actif {
+  background-color: var(--bs-success);
+  color: white;
+}
+
+.badge-status-archive {
+  background-color: var(--bs-secondary);
+  color: white;
+}
+
+.badge-kyc-complet {
+  background-color: var(--bs-success);
+  color: white;
+}
+
+.badge-kyc-incomplet {
+  background-color: var(--bs-warning);
+  color: white;
+}
+
+.badge-kyc-en_cours {
+  background-color: var(--bs-info);
+  color: white;
+}
+
+.badge-kyc-bloque {
+  background-color: var(--bs-danger);
+  color: white;
+}
+
+.badge-segment {
+  background-color: var(--bs-primary);
+  color: white;
+}
+
+/* Boutons d'action dans le tableau */
+
+.btn-action {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+  margin: 0 0.125rem;
+  transition: var(--bs-transition);
+}
+
+.btn-action:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--bs-box-shadow);
+}
+
+/* Vue en cartes */
+
+.card-entreprise {
+  transition: var(--bs-transition);
+  cursor: pointer;
+  border: 1px solid var(--bs-border);
+}
+
+.card-entreprise:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--bs-box-shadow-lg);
+  border-color: var(--bs-primary);
+}
+
+.card-entreprise .card-header {
+  background: linear-gradient(135deg, var(--bs-primary), var(--bs-primary-light));
+  color: white;
+  border-bottom: none;
+}
+
+.card-entreprise .card-body {
+  padding: 1.25rem;
+}
+
+.card-entreprise .enterprise-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-entreprise .enterprise-meta {
+  font-size: 0.875rem;
+  color: var(--bs-secondary);
+}
+
+/* Pagination personnalisée */
+
+.pagination {
+  margin-bottom: 0;
+}
+
+.page-link {
+  color: var(--bs-primary);
+  border-color: var(--bs-border);
+  padding: 0.5rem 0.75rem;
+  transition: var(--bs-transition);
+}
+
+.page-link:hover {
+  color: var(--bs-primary-dark);
+  background-color: var(--bs-light);
+  border-color: var(--bs-primary);
+}
+
+.page-item.active .page-link {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* Modales */
+
+.modal-content {
+  border-radius: var(--bs-border-radius);
+  border: none;
+  box-shadow: var(--bs-box-shadow-lg);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--bs-primary), var(--bs-primary-light));
+  color: white;
+  border-bottom: none;
+  border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+}
+
+.modal-header .btn-close {
+  filter: invert(1);
+}
+
+.modal-title {
+  font-weight: 600;
+}
+
+/* Indicateurs de chargement */
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  border-radius: var(--bs-border-radius);
+}
+
+.spinner-border-primary {
+  color: var(--bs-primary);
+}
+
+/* Messages d'état */
+
+.alert-custom {
+  border-radius: var(--bs-border-radius);
+  border: none;
+  box-shadow: var(--bs-box-shadow);
+}
+
+.alert-success {
+  background-color: #f1f3f4;
+  color: var(--bs-success);
+  border-left: 4px solid var(--bs-success);
+}
+
+.alert-warning {
+  background-color: #f1f3f4;
+  color: var(--bs-warning);
+  border-left: 4px solid var(--bs-warning);
+}
+
+.alert-danger {
+  background-color: #f1f3f4;
+  color: var(--bs-danger);
+  border-left: 4px solid var(--bs-danger);
+}
+
+.alert-info {
+  background-color: #f1f3f4;
+  color: var(--bs-info);
+  border-left: 4px solid var(--bs-info);
+}
+
+/* Configuration des colonnes */
+
+.column-config-item {
+  padding: 0.75rem;
+  border: 1px solid var(--bs-border);
+  border-radius: var(--bs-border-radius);
+  margin-bottom: 0.5rem;
+  background-color: white;
+  transition: var(--bs-transition);
+}
+
+.column-config-item:hover {
+  background-color: var(--bs-light);
+}
+
+.column-config-item.sortable-ghost {
+  opacity: 0.4;
+}
+
+/* Toggle des filtres */
+
+#toggleFilters {
+  transition: var(--bs-transition);
+}
+
+#toggleFilters.collapsed .fa-chevron-up:before {
+  content: "\f078";
+}
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-responsive {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-action {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-entreprise {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .btn-group {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .table td, .table th {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.3em 0.5em;
+  }
+}
+
+/* Animations */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* États de survol pour les lignes du tableau */
+
+.table-hover tbody tr:hover {
+  background-color: rgba(52, 52, 115, 0.05);
+  cursor: pointer;
+}
+
+/* Style pour les lignes sélectionnées */
+
+.table tbody tr.selected {
+  background-color: rgba(52, 52, 115, 0.1);
+  border-left: 3px solid var(--bs-primary);
+}
+
+/* Tooltips personnalisés */
+
+.tooltip-inner {
+  background-color: var(--bs-dark);
+  color: white;
+  border-radius: var(--bs-border-radius);
+}
+
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-top-color: var(--bs-dark);
+}
+
+/* Styles pour l'accessibilité */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Styles d'impression */
+

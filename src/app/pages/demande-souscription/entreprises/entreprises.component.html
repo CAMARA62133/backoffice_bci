@@ -5,23 +5,24 @@
       <div class="col-12">
         <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">Liste des Entreprises Clientes</h4>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">Liste des Entreprises de l'organisations</h4>
             <p class="text-secondary mb-sm-0 font-size-13">Gestion, consultation et supervision du portefeuille
               entreprises</p>
           </div>
-          <div class="page-title-right">
-            <ol class="breadcrumb m-0">
-              <li class="breadcrumb-item"><a><span>Entreprises Clientes</span></a></li>
-              <li class="breadcrumb-item"><a href="dashboard-entreprises-clientes.html"><span>Tableau de Bord</span></a>
-              </li>
-              <li class="breadcrumb-item"><a href="#"><span>Liste des Entreprises</span></a></li>
-            </ol>
-            <span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>
-          </div>
+          <!--          <div class="page-title-right">-->
+          <!--            <ol class="breadcrumb m-0">-->
+          <!--              <li class="breadcrumb-item"><a><span>Entreprises Clientes</span></a></li>-->
+          <!--              <li class="breadcrumb-item"><a href="dashboard-entreprises-clientes.html"><span>Tableau de Bord</span></a>-->
+          <!--              </li>-->
+          <!--              <li class="breadcrumb-item"><a href="#"><span>Liste des Entreprises</span></a></li>-->
+          <!--            </ol>-->
+          <!--            <span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>-->
+          <!--          </div>-->
         </div>
       </div>
     </div>
   </div>
+
   <div class="container-fluid py-4">
     <div class="row mb-4">
       <div class="col-md-6 col-lg-3 mb-3">
@@ -77,70 +78,7 @@
         </div>
       </div>
     </div>
-    <div class="card border-0 shadow-sm mb-4">
-      <div class="card-header bg-light border-0 d-flex align-items-center">
-        <h6 class="text-primary mb-0"><i class="fas fa-filter me-2"></i> Filtres et Recherche </h6>
-        <button class="btn btn-link btn-sm p-0 ms-auto" type="button" id="toggleFilters"><i
-          class="fas fa-chevron-up"></i></button>
-      </div>
-      <div class="card-body" id="filtersSection">
-        <div class="row">
-          <div class="col-md-6 col-lg-4 mb-3"><label class="fw-semibold form-label" for="searchGlobal"> Recherche
-            globale </label>
-            <div class="input-group"><span class="input-group-text input-group-text"><i
-              class="fas fa-search"></i></span><input class="form-control form-control" type="text" id="searchGlobal"
-                                                      placeholder="Raison sociale, NIF, secteur..."></div>
-          </div>
-          <div class="col-md-6 col-lg-2 mb-3"><label class="fw-semibold form-label" for="filterStatut">
-            Statut </label><select class="form-select" id="filterStatut">
-            <option value="">Tous</option>
-            <option value="actif">Actif</option>
-            <option value="archive">Archivé</option>
-          </select></div>
-          <div class="col-md-6 col-lg-2 mb-3"><label class="fw-semibold form-label" for="filterKYC"> Statut KYC </label><select
-            class="form-select" id="filterKYC">
-            <option value="">Tous</option>
-            <option value="complet">Complet</option>
-            <option value="incomplet">Incomplet</option>
-            <option value="en_cours">En cours</option>
-            <option value="bloque">Bloqué</option>
-          </select></div>
-          <div class="col-md-6 col-lg-2 mb-3"><label class="fw-semibold form-label" for="filterSegment">
-            Segment </label><select class="form-select" id="filterSegment">
-            <option value="">Tous</option>
-            <option value="PME">PME</option>
-            <option value="ONG">ONG</option>
-            <option value="Groupe">Groupe</option>
-            <option value="Particulier">Particulier</option>
-          </select></div>
-          <div class="col-md-6 col-lg-2 mb-3"><label class="fw-semibold form-label" for="filterSecteur">
-            Secteur </label><select class="form-select" id="filterSecteur">
-            <option value="">Tous</option>
-            <option value="Commerce">Commerce</option>
-            <option value="Services">Services</option>
-            <option value="Industrie">Industrie</option>
-            <option value="Agriculture">Agriculture</option>
-            <option value="BTP">BTP</option>
-            <option value="Transport">Transport</option>
-          </select></div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="d-flex flex-wrap gap-2">
-              <button class="btn btn-primary btn-sm" type="button" id="btnAppliquerFiltres"><i
-                class="fas fa-filter me-1"></i> Appliquer les filtres
-              </button>
-              <button class="btn btn-outline-secondary btn-sm" type="button" id="btnReinitialiserFiltres"><i
-                class="fas fa-undo me-1"></i> Réinitialiser
-              </button>
-              <button class="btn btn-outline-info btn-sm" type="button" id="btnSauvegarderFiltre"><i
-                class="fas fa-bookmark me-1"></i> Sauvegarder ce filtre
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <div class="card">
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
@@ -199,11 +137,11 @@
               <td>Ligne 6</td>
               <td>Ligne 7</td>
               <td class="d-flex justify-content-center gap-2">
-                <a  class="btn btn-sm btn-outline-primary" (click)="goToFicheEntreprise()">
+                <a class="btn btn-sm btn-outline-primary" (click)="goToFicheEntreprise()">
                   <i class="fa fa-eye"></i>
                 </a>
 
-                <a  class="btn btn-sm btn-outline-danger">
+                <a class="btn btn-sm btn-outline-danger">
                   <i class="fa fa-trash-alt"></i>
                 </a>
               </td>

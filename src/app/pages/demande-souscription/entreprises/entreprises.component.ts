@@ -5,8 +5,7 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 @Component({
   selector: 'app-entreprises',
   imports: [
-    DataTableDirective,
-    RouterLink
+    DataTableDirective
   ],
   templateUrl: './entreprises.component.html',
   styleUrl: './entreprises.component.css'

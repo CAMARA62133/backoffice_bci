@@ -79,13 +79,14 @@
                   <td>{{ org.dtCreated | date : "dd/MM/yyyy" }}</td>
                   <td>
                     <div class="d-flex gap-1 justify-content-center">
-                      <!-- <button
+                      <a routerLink="/organisations/{{org.id}}/liste-entreprise"
                         type="button"
                         class="btn btn-outline-info btn-action btn-sm"
                         title="Consulter"
                       >
                         <i class="fas fa-eye"></i>
-                      </button> -->
+                      </a>
+
                       <button
                         type="button"
                         class="btn btn-outline-warning btn-action btn-sm"
@@ -94,6 +95,7 @@
                       >
                         <i class="fas fa-edit"></i>
                       </button>
+
                       <button
                         type="button"
                         class="btn btn-action btn-sm"

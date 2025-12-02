@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
           '/org-nouveau-mot-de-passe',
           '/not-found',
           '/valider-otp',
+          '/unauthorized',
         ];
         const currentUrl = this.router.url;
         if (excluseArray.includes(currentUrl)) {

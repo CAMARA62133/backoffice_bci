@@ -15,7 +15,7 @@ import {
   AgentFicheEntrepriseComponent
 } from '../pages/agent-conformite/agent-fiche-entreprise/agent-fiche-entreprise.component';
 
-export const AGENT_CONFORMITE_ROUTES: Routes = [
+export default [
   {
     path: '',
     component: LayoutComponent,
@@ -58,4 +58,4 @@ export const AGENT_CONFORMITE_ROUTES: Routes = [
       },
     ],
   },
-];
+] satisfies Routes;
