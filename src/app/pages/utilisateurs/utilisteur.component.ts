@@ -1,24 +1,12 @@
 import {CommonModule} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../services/authService/auth.service';
 import {ModalsService} from '../../services/modals/modals.service';
 import {SharedService} from '../../services/shared/shared.service';
 import {UsersService} from '../../services/users/users.service';
-import {
-  getErrorMessage,
-  getFormControlClass,
-  isInvalid,
-  isValid,
-} from '../../utils/form-helpers';
-import {PaginationsService} from '../../services/paginations/paginations.service';
+import {getErrorMessage, getFormControlClass, isInvalid, isValid,} from '../../utils/form-helpers';
 import {ActivatedRoute} from '@angular/router';
 import {DatatableService} from '../../services/datatable/datatable.service';
 import {DataTableDirective} from '../../directives/data-table/data-table.directive';
@@ -51,6 +39,7 @@ export class UtilisteurComponent implements OnInit {
   selectedUserId: number | null = null;
 
   userInfoConfig: any;
+  userInfo: any;
   phoneCode: number = 0;
   phoneFormat: string = '';
 
@@ -82,11 +71,11 @@ export class UtilisteurComponent implements OnInit {
 
   ngOnInit(): void {
     const dataConfig = this.authService.getUserInfoConfig();
-    const userInfo = this.authService.getUserInfo();
-    this.orgId = userInfo.iOrganisationID;
+    this.userInfo = this.authService.getUserInfo();
+    this.orgId = this.userInfo.iOrganisationID;
 
     console.log('dataConfig : ', dataConfig);
-    console.log('userInfo : ', userInfo);
+    console.log('userInfo : ', this.userInfo);
 
     // Recuperer l'ID dans l'url automatiquement
     this.route.queryParamMap.subscribe(params => {
@@ -395,10 +384,19 @@ export class UtilisteurComponent implements OnInit {
         // Liste des IDs à exclure
         const excludedRoleIds = [7, 10];
 
+        if (this.userInfo?.vcRoleName === 'Admin integrateur' || +this.userInfo?.iRoleID === 10) {
+          this.roles = (res?.data || []).filter((role: any) => +role.id === 16)
+        }
+
+        if (this.userInfo?.vcRoleName === 'Admin integrateur banque' || +this?.userInfo?.iRoleID === 16) {
+          this.roles = (res?.data || []).filter((role: any) => +role.id === 7)
+        }
+
         // Filtrage des rôles
-        this.roles = (res?.data || []).filter(
-          (role: any) => !excludedRoleIds.includes(+role.id)
-        );
+        // this.roles = (res?.data || []).filter(
+        //   // (role: any) => !excludedRoleIds.includes(+role.id)
+        //   (role: any) => +role.id === 16
+        // );
 
         // this.roles = res?.data || [];
         console.log('roles:>', this.roles);

@@ -72,7 +72,6 @@ export class AlertesComponent implements OnInit {
     private toastr: ToastrService,
     private alertService: AlertesService,
     private cd: ChangeDetectorRef,
-
   ) {
   }
 
@@ -140,15 +139,20 @@ export class AlertesComponent implements OnInit {
 
     this.alertService.createAlerte(dataToSend).subscribe({
       next: (res) => {
-        this.loadAlertes();
-        console.log('✅ Alertes créée :', res);
+        if (res?.status && res?.status === 200) {
+          this.loadAlertes();
+          console.log('✅ Alertes créée :', res);
+          this.alertForm.reset();
+          this.modalsService.closeAllModals();
+          this.toastr.success('Alerte créée avec succès !');
+
+          this.loadAlertes();
+        } else {
+          this.toastr.error('Erreur lors de la création de l\'alerte !', '', {
+            positionClass: 'toast-top-center',
+          });
+        }
         this.isLoading = false;
-        this.alertForm.reset();
-        this.modalsService.closeAllModals();
-        this.toastr.success('Alerte créée avec succès !');
-
-        this.loadAlertes();
-
       },
 
       error: (err) => {
@@ -273,15 +277,19 @@ export class AlertesComponent implements OnInit {
 
     this.alertService.toggleAlerte(params).subscribe({
       next: (res) => {
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
-        this.loadAlertes();
-
-
-        this.showModalOpenBloquerDebloquer = false;
-        this.isloadingBloquerDebloquer = false;
-        this.modalsService.closeModal('bloquerDebloquerModal');
+        if (res?.status && res?.status === 200) {
+          this.toastr.success(res?.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.loadAlertes();
+          this.showModalOpenBloquerDebloquer = false;
+          this.isloadingBloquerDebloquer = false;
+          this.modalsService.closeModal('bloquerDebloquerModal');
+        } else {
+          this.toastr.error("Erreur lors du bloquage", '', {
+            positionClass: 'toast-custom-center',
+          });
+        }
         console.log('toggle alertes : ', res);
       },
 
@@ -302,12 +310,18 @@ export class AlertesComponent implements OnInit {
 
     this.alertService.getListeAlertesConfig().subscribe({
       next: (res) => {
-        this.alertes = res.data || [];
+        if (res?.status === 200) {
+          this.alertes = res.data || [];
 
+          this.isLoadingAlerte = false;
+        } else {
+          if (res?.status === 401) {
+            this.toastr.error("Votre session a expirée", '', {
+              positionClass: 'toast-custom-center',
+            });
+          }
+        }
         console.log('Alertes liste : ', this.alertes);
-        this.isLoadingAlerte = false;
-
-
       },
 
       error: (err) => {

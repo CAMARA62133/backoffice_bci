@@ -37,20 +37,33 @@ export class LayoutComponent implements OnInit {
   // Méthode de déconnexion et de redirection vers la page de login
   logout(): void {
     this.authService.deconnexion().subscribe({
-      next: (response) => {
-        console.log('Déconnexion réussie :', response);
+      next: (res) => {
+        if (res?.status && res?.status === 200) {
+          console.log('Déconnexion réussie :', res);
 
-        this.toastr.success(response.message, '', {
-          positionClass: 'toast-custom-center',
-        });
-        // Nettoyage déjà fait dans le service, redirection après succès
-        this.router.navigate(['/login']);
+          this.toastr.success(res.message, '', {
+            positionClass: 'toast-custom-center',
+          });
+          // Nettoyage déjà fait dans le service, redirection après succès
+          this.router.navigate(['/login']);
+        } else {
+
+          if (res?.error.error.message === "Unauthenticated.") {
+            this.toastr.success("Votre session a expiré", '', {
+              positionClass: 'toast-custom-center',
+            });
+            // Nettoyage déjà fait dans le service, redirection après succès
+            this.router.navigate(['/login']);
+          }
+
+        }
       },
 
       error: (error) => {
-        this.toastr.error(error.message, '', {
+        this.toastr.error("Erreur lors de la déconnexion", '', {
           positionClass: 'toast-custom-center',
         });
+
         console.error('Erreur lors de la déconnexion :', error);
       },
     });

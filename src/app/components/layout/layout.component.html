@@ -509,6 +509,7 @@
               </li>
             }
 
+            <!-- Admin Integrateur -->
             @case ("Admin integrateur") {
               <!-- Tableau de bord -->
               <li class="nav-item mm-active">
@@ -518,11 +519,19 @@
                 </a>
               </li>
 
+              <!-- utilisateurs -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="utilisateurs" aria-expanded="false">
+                  <i class="icon ion-person"></i>
+                  <span data-key="t-dashboard">Liste des utilisateurs</span>
+                </a>
+              </li>
+
               <!-- Entreprises et organisations -->
               <li class="nav-item">
                 <a class="nav-link has-arrow">
                   <i class="icon ion-briefcase"></i>
-                  <span>Entreprises clientes</span>
+                  <span>Organisations</span>
                 </a>
                 <ul class="sub-menu mmm-collapse" aria-expanded="false">
                   <li>
@@ -590,7 +599,7 @@
               <!-- Transactions et Operations -->
               <li class="nav-item mm-active">
                 <a class="nav-link" routerLink="transactions-operations" aria-expanded="false">
-                  <i class="icon ion-ios-speedometer active"></i>
+                  <i class="icon ion-android-share"></i>
                   <span data-key="t-dashboard">Transactions &amp; Opérations</span>
                 </a>
               </li>
@@ -598,7 +607,7 @@
               <!-- Alertes et Supervisions -->
               <li class="nav-item mm-active">
                 <a class="nav-link" routerLink="alertes-supervisions" aria-expanded="false">
-                  <i class="icon ion-ios-speedometer active"></i>
+                  <i class="icon ion-android-notifications"></i>
                   <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
                 </a>
               </li>
@@ -637,8 +646,146 @@
               </li>
             }
 
-            <!-- Pour les agens de conformites -->
-            @case ("Agent Conformité") {
+
+            <!-- Admin Integrateur Banque -->
+            @case ("Admin integrateur banque") {
+              <!-- Tableau de bord -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="dashboard" aria-expanded="false">
+                  <i class="icon ion-ios-speedometer active"></i>
+                  <span data-key="t-dashboard">Tableau de Bord</span>
+                </a>
+              </li>
+
+              <!-- utilisateurs -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="utilisateurs" aria-expanded="false">
+                  <i class="icon ion-person"></i>
+                  <span data-key="t-dashboard">Liste des utilisateurs</span>
+                </a>
+              </li>
+
+              <!-- Entreprises et organisations -->
+              <li class="nav-item">
+                <a class="nav-link has-arrow">
+                  <i class="icon ion-briefcase"></i>
+                  <span>Organisations</span>
+                </a>
+                <ul class="sub-menu mmm-collapse" aria-expanded="false">
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/organisations"
+                    >
+                      <span>Liste des organisations</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/organisations"
+                    >
+                      <span>Repportings et Exports</span>
+                    </a>
+                  </li>
+
+                  <!--
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Liste des entreprises </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Nouvelle entreprise </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Gestion des Modules Activés</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Workflows &amp; validations</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Tickets &amp; Support</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Alertes &amp; Supervision</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Reporting &amp; exports</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-truncate align-self-center" href="#">
+                      <span>Audit &amp; traçabilité</span>
+                    </a>
+                  </li> -->
+                </ul>
+              </li>
+
+              <!-- Transactions et Operations -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="transactions-operations" aria-expanded="false">
+                  <i class="icon ion-android-share"></i>
+                  <span data-key="t-dashboard">Transactions &amp; Opérations</span>
+                </a>
+              </li>
+
+              <!-- Alertes et Supervisions -->
+              <li class="nav-item mm-active">
+                <a class="nav-link" routerLink="alertes-supervisions" aria-expanded="false">
+                  <i class="icon ion-android-notifications"></i>
+                  <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
+                </a>
+              </li>
+
+              <!-- Parametres -->
+              <li class="nav-item">
+                <a class="nav-link has-arrow">
+                  <i class="icon ion-android-settings"></i>
+                  <span>Paramétrage &amp; administr...</span>
+                </a>
+                <ul class="sub-menu mm-collapse" aria-expanded="false">
+                  <li>
+                    <a routerLink="configuration-alertes">
+                      <span>Config. Alertes</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a routerLink="configuration-notifications">
+                      <span>Config. Notifications</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a routerLink="configuration-notif-user-defaut">
+                      <span>Config. Notif Défaut User</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a routerLink="mes-notifications">
+                      <span>Mes Notifications</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            }
+
+            <!-- Pour l'agent conformite  -->
+            @case ("Admin integrateur banque") {
               <!-- Tableau de bord -->
               <li class="nav-item mm-active">
                 <a class="nav-link" routerLink="agent-dashboard" aria-expanded="false">

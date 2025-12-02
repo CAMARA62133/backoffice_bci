@@ -29,7 +29,8 @@
             "styles": [
               "src/styles.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/ionicons/dist/css/ionicons.min.css"
             ],
             "scripts": [
               "public/assets/webcomponents/webcomponents-bundle.umd.cjs",
