@@ -55,6 +55,7 @@ import {
 } from './pages/agent-conformite/agent-fiche-entreprise/agent-fiche-entreprise.component';
 import {EntreprisesComponent} from './pages/demande-souscription/entreprises/entreprises.component';
 import {UnauthorizedComponent} from './pages/auth/unauthorized/unauthorized.component';
+import {ChartTestComponent} from './pages/chart-test/chart-test.component';
 
 export const routes: Routes = [
 
@@ -160,7 +161,15 @@ export const routes: Routes = [
         title: 'BCI - Online | Tableau de bord',
         component: DashboardComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur"]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
+      },
+
+      {
+        path: 'test-chart',
+        title: 'BCI - Online | Tableau de bord',
+        component: ChartTestComponent,
+        canActivate: [AuthGuard],
+        data: {roles: ["Admin integrateur", "Admin integrateur banque", "Agent Conformité"]}
       },
 
       {
@@ -168,14 +177,14 @@ export const routes: Routes = [
         title: 'BCI - Online | Listes des Organisations',
         component: OrganisationsComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", ""]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
       },
       {
         path: 'organisations/:id/liste-entreprise',
         title: "BCI - Online | Listes des entreprises de l'organisation",
         component: EntreprisesComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", ""]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
       },
 
       {
@@ -183,7 +192,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Logs des Utilisateurs',
         component: LogUserComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", ""]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
       },
 
       {
@@ -191,7 +200,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Logs des Organisations',
         component: LogOrgComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", ""]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
       },
 
       {
@@ -199,7 +208,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Listes des Utilisateurs',
         component: UtilisteurComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", ""]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
       },
 
       {
@@ -207,7 +216,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Modifier mon Profile',
         component: ModifierMesInfosComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", ""]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
       },
 
       {
@@ -215,7 +224,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Configuration Notifications',
         component: NotificationsComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", ""]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
       },
 
       {
@@ -231,7 +240,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Configuration Notification par défaut',
         component: ConfigUserDefautNotifsComponent,
         canActivate: [AuthGuard],
-        data: {roles: ['Admin integrateur']}
+        data: {roles: ['Admin integrateur', ""]}
       },
 
       {

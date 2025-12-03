@@ -5,15 +5,7 @@
         <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
           <div>
             <h4 class="fw-semibold text-primary mb-sm-0 h3">Demandes de souscription</h4>
-            <p class="text-secondary mb-sm-0 font-size-13">Gérez et prenez en charge toutes les requêtes, tickets de
-              support, blocages ou demandes administratives émis par les entreprises clientes.</p>
           </div>
-          <!--          <div class="page-title-right">-->
-          <!--            <ol class="breadcrumb m-0">-->
-          <!--              <li class="breadcrumb-item"><a><span>Entreprises Clientes</span></a></li>-->
-          <!--              <li class="breadcrumb-item"><a href="#"><span>Workflows &amp; validations</span></a></li>-->
-          <!--            </ol><span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>-->
-          <!--          </div>-->
         </div>
       </div>
     </div>
@@ -25,231 +17,133 @@
       <div class="col-12">
         <div class="card bci-card">
           <ul class="nav nav-tabs card-header" role="tablist" id="supportTabs">
-
-            <li class="nav-item active" role="presentation">
-              <a class="nav-link fw-semibold" role="tab" data-bs-toggle="tab" href="#tableauBord" aria-selected="false"
-                 tabindex="-1">
+            <!-- Attentes -->
+            <li class="nav-item" role="presentation">
+              <a class="nav-link fw-semibold"
+                 [ngClass]="{'active' : isActive('attente'), 'bg-primary text-white': isActive('attente')}"
+                 role="tab"
+                 data-bs-toggle="tab"
+                 href="#attente"
+                 (click)="setActiveTab('attente')"
+                 [attr.aria-selected]="isActive('attente')">
                 <i class="fas fa-tachometer-alt me-2"></i>En Attentes
+                <span class="badge bg-warning ms-2">{{ isLoadingDemandes ? '' : demandes.length }}</span>
               </a>
             </li>
 
+            <!-- Traites -->
             <li class="nav-item" role="presentation">
-              <a class="nav-link fw-semibold" role="tab" data-bs-toggle="tab"
-                 href="#mesTickets" aria-selected="false" tabindex="-1">
+              <a class="nav-link fw-semibold"
+                 [ngClass]="{'active' : isActive('traiter'), 'bg-primary text-white': isActive('traiter')}"
+                 role="tab"
+                 data-bs-toggle="tab"
+                 href="#traiter"
+                 (click)="setActiveTab('traiter')"
+                 [attr.aria-selected]="isActive('traiter')">
+
                 <i class="fas fa-user me-2"></i>Traitées
                 <span class="badge bg-warning ms-2" id="mesTicketsCount">12</span>
               </a>
             </li>
 
-            <li class="nav-item" role="presentation">
-              <a class="nav-link fw-semibold" role="tab" data-bs-toggle="tab"
-                 href="#escalades" aria-selected="false" tabindex="-1">
-                <i class="fas fa-arrow-up me-2"></i> Réjétés
-                <span class="badge bg-danger ms-2" id="escaladesCount">3</span>
-              </a>
-            </li>
+            <!-- Rejecter -->
+            <!--            <li class="nav-item" role="presentation">-->
+            <!--              <a class="nav-link fw-semibold"-->
+            <!--                 [ngClass]="{'active' : isActive('rejetes'), 'bg-primary text-white': isActive('rejetes')}"-->
+            <!--                 role="tab" data-bs-toggle="tab"-->
+            <!--                 href="#rejetes" (click)="setActiveTab('rejetes')"-->
+            <!--                 [attr.aria-selected]="isActive('rejetes')">-->
+            <!--                <i class="fas fa-arrow-up me-2"></i> Réjétés-->
+            <!--                <span class="badge bg-danger ms-2" id="escaladesCount">3</span>-->
+            <!--              </a>-->
+            <!--            </li>-->
 
           </ul>
+
           <div class="tab-content card-body">
-            <div class="tab-pane" role="tabpanel" id="tableauBord">
-              <div class="row mb-3">
-                <div class="col-md-10">
-                  <div class="filters-container">
-                    <div class="row g-2">
-                      <div class="col-md-3"><input type="text" class="form-control" id="searchTickets"
-                                                   placeholder="Rechercher tickets..."></div>
-                      <div class="col-md-2"><select class="form-select" id="filterStatut">
-                        <option value="">Tous les statuts</option>
-                        <option value="NOUVEAU">Nouveau</option>
-                        <option value="EN_COURS">En cours</option>
-                        <option value="ATTENTE_CLIENT">Attente client</option>
-                        <option value="RESOLU">Résolu</option>
-                        <option value="FERME">Fermé</option>
-                        <option value="ESCALADE">Escaladé</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterPriorite">
-                        <option value="">Toutes priorités</option>
-                        <option value="CRITIQUE">Critique</option>
-                        <option value="HAUTE">Haute</option>
-                        <option value="NORMALE">Normale</option>
-                        <option value="BASSE">Basse</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterCategorie">
-                        <option value="">Toutes catégories</option>
-                        <option value="INCIDENT_TECHNIQUE">Incident Technique</option>
-                        <option value="DEMANDE_ACCES">Demande Accès</option>
-                        <option value="QUESTION_FONCTIONNELLE">Question Fonctionnelle</option>
-                        <option value="DEMANDE_DOCUMENT">Demande Document</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterAgent">
-                        <option value="">Tous les agents</option>
-                        <option value="MOI">Mes tickets</option>
-                        <option value="NON_ASSIGNE">Non assignés</option>
-                      </select></div>
-                      <div class="col-md-1">
-                        <button class="btn btn-outline-secondary w-100" id="resetFilters"><i class="fas fa-undo"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-2 text-end">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success" id="selectAll"><i class="fas fa-check-square me-1"></i>Tout</button>
-                    <button class="btn btn-outline-primary" id="refreshTickets"><i class="fas fa-sync-alt"></i></button>
-                  </div>
-                </div>
-              </div>
+            <!-- Attentes -->
+            <div
+              class="tab-pane"
+              [ngClass]="{'active': isActive('attente')}"
+              role="tabpanel"
+              id="attente"
+            >
+
               <div class="table-responsive">
-                <table class="table table-hover tickets-table" id="ticketsTable">
+                <table
+                  *ngIf="!isLoadingDemandes" datatable
+                  [dtOptions]="dtOptions[0]"
+                  [dtTrigger]="dtTriggers[0]"
+                  id="table-attente"
+                  class="table table-hover"
+                >
                   <thead class="table-primary">
                   <tr>
-                    <th width="50px"><input type="checkbox" class="form-check-input" id="selectAllCheckbox"></th>
-                    <th>Ticket</th>
-                    <th>Entreprise</th>
-                    <th>Sujet</th>
-                    <th>Priorité</th>
-                    <th>Statut</th>
-                    <th>Assigné à</th>
-                    <th>SLA</th>
-                    <th>Créé</th>
+                    <th>#</th>
+                    <th>Identifiant Client</th>
+                    <th>Nom</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Type Client</th>
+                    <th>Status demandes</th>
+                    <th>Organisation</th>
+                    <th>Tél Org</th>
                     <th>Actions</th>
                   </tr>
                   </thead>
-                  <tbody id="ticketsTableBody">
-                  <tr class="ticket-row priority-danger ">
+                  <tbody>
+                  <tr *ngFor="let demande of demandes; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ demande.vcPersonalID }}</td>
+                    <td>{{ demande.vcPersonalName }}</td>
+                    <td>{{ demande.vcPhoneNumber }}</td>
+                    <td>{{ demande.vcEmail }}</td>
+                    <td>{{ demande.typeClient }}</td>
                     <td>
-                      <input type="checkbox" class="form-check-input ticket-checkbox" value="TKT_003">
+                      <span class="badge bg-{{demande.statutDemande === 'En traitement' ? 'info' : ''}}">
+                        {{ demande.statutDemande }}
+                      </span>
                     </td>
+                    <td>{{ demande.nomOrganisation }}</td>
+                    <td>{{ demande.phoneOrganisation }}</td>
                     <td>
-                      <div class="ticket-number">
-                        <strong>#2025-0003</strong>
-                        <div class="ticket-priority">
-                          <span class="badge bg-danger">CRITIQUE</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="entreprise-info">
-                        <strong>Import Export SA</strong>
-                        <br><small class="text-muted">ENT_003</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="ticket-subject">
-                    <span class="subject-text" title="Virement de 50k€ vers la France bloqué sans raison apparente">
-                        Virement international bloqué
-                    </span>
-                        <br><small class="text-muted">INCIDENT TECHNIQUE</small>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="badge bg-danger">CRITIQUE</span>
-                    </td>
-                    <td>
-                      <span class="badge bg-success">Résolu</span>
-                    </td>
-                    <td>
-                      <div class="agent-info">
-                        <strong>Pierre Martin</strong><br><small>Niveau 2</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="sla-info">
-                        <div class="sla-status text-danger">
-                          <i class="fas fa-exclamation-triangle"></i>
-                          <span>En retard</span>
-                        </div>
-                        <small class="sla-details">3211h de retard</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="date-info">
-                        <strong>Il y a 133j</strong>
-                        <br><small class="text-muted">20/07/2025 14:00:00</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="ticket-actions">
-                        <a routerLink="/agent-demandes/1" class="btn btn-sm btn-outline-primary"
-                                onclick="supportManager.showTicketDetails('TKT_003')" title="Voir détails">
+                      <div class="d-flex justify-content-center gap-2">
+                        <a routerLink="/agent-demandes/{{demande.id}}" class="btn btn-sm btn-outline-primary"
+                           title="Voir détails">
                           <i class="fas fa-eye"></i>
                         </a>
-                        <button class="btn btn-sm btn-outline-success"
-                                onclick="supportManager.openCommunication('TKT_003')" title="Communication">
-                          <i class="fas fa-comments"></i>
-                        </button>
-                        <div class="btn-group">
-                          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                  title="Plus d'actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                          </button>
-                          <ul class="dropdown-menu">
 
-
-                            <li>
-                              <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#" onclick="supportManager.duplicateTicket('TKT_003')">
-                              <i class="fas fa-copy me-2"></i>Dupliquer</a></li>
-                          </ul>
-                        </div>
+                        <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
+                        <!--   <i class="fas fa-comments"></i>-->
+                        <!-- </button>-->
                       </div>
                     </td>
                   </tr>
                   </tbody>
                 </table>
               </div>
-            </div>
-            <div class="tab-pane" role="tabpanel" id="mesTickets">
-              <div class="row mb-3">
-                <div class="col-md-10">
-                  <div class="filters-container">
-                    <div class="row g-2">
-                      <div class="col-md-3"><input type="text" class="form-control" id="searchTickets"
-                                                   placeholder="Rechercher tickets..."></div>
-                      <div class="col-md-2"><select class="form-select" id="filterStatut">
-                        <option value="">Tous les statuts</option>
-                        <option value="NOUVEAU">Nouveau</option>
-                        <option value="EN_COURS">En cours</option>
-                        <option value="ATTENTE_CLIENT">Attente client</option>
-                        <option value="RESOLU">Résolu</option>
-                        <option value="FERME">Fermé</option>
-                        <option value="ESCALADE">Escaladé</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterPriorite">
-                        <option value="">Toutes priorités</option>
-                        <option value="CRITIQUE">Critique</option>
-                        <option value="HAUTE">Haute</option>
-                        <option value="NORMALE">Normale</option>
-                        <option value="BASSE">Basse</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterCategorie">
-                        <option value="">Toutes catégories</option>
-                        <option value="INCIDENT_TECHNIQUE">Incident Technique</option>
-                        <option value="DEMANDE_ACCES">Demande Accès</option>
-                        <option value="QUESTION_FONCTIONNELLE">Question Fonctionnelle</option>
-                        <option value="DEMANDE_DOCUMENT">Demande Document</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterAgent">
-                        <option value="">Tous les agents</option>
-                        <option value="MOI">Mes tickets</option>
-                        <option value="NON_ASSIGNE">Non assignés</option>
-                      </select></div>
-                      <div class="col-md-1">
-                        <button class="btn btn-outline-secondary w-100" id="resetFilters"><i class="fas fa-undo"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+
+              <!-- au chargement des donnne -->
+              <div *ngIf="isLoadingDemandes" class="text-center my-3">
+                <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden"
+                >Chargement des données en cours...</span
+                >
                 </div>
-                <div class="col-md-2 text-end">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success" id="selectAll"><i class="fas fa-check-square me-1"></i>Tout</button>
-                    <button class="btn btn-outline-primary" id="refreshTickets"><i class="fas fa-sync-alt"></i></button>
-                  </div>
-                </div>
+                <p class="text-muted">
+                  Veuillez patientez pendant que les données se chargent.
+                </p>
               </div>
+
+            </div>
+
+            <!-- Traites -->
+            <div
+              class="tab-pane"
+              [ngClass]="{'active': isActive('traiter')}"
+              role="tabpanel"
+              id="traiter"
+            >
               <div class="table-responsive">
                 <table class="table table-hover tickets-table" id="ticketsTable">
                   <thead class="table-primary">
@@ -437,156 +331,115 @@
                 </table>
               </div>
             </div>
-            <div class="tab-pane" role="tabpanel" id="escalades">
-              <div class="row mb-3">
-                <div class="col-md-10">
-                  <div class="filters-container">
-                    <div class="row g-2">
-                      <div class="col-md-3"><input type="text" class="form-control" id="searchTickets"
-                                                   placeholder="Rechercher tickets..."></div>
-                      <div class="col-md-2"><select class="form-select" id="filterStatut">
-                        <option value="">Tous les statuts</option>
-                        <option value="NOUVEAU">Nouveau</option>
-                        <option value="EN_COURS">En cours</option>
-                        <option value="ATTENTE_CLIENT">Attente client</option>
-                        <option value="RESOLU">Résolu</option>
-                        <option value="FERME">Fermé</option>
-                        <option value="ESCALADE">Escaladé</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterPriorite">
-                        <option value="">Toutes priorités</option>
-                        <option value="CRITIQUE">Critique</option>
-                        <option value="HAUTE">Haute</option>
-                        <option value="NORMALE">Normale</option>
-                        <option value="BASSE">Basse</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterCategorie">
-                        <option value="">Toutes catégories</option>
-                        <option value="INCIDENT_TECHNIQUE">Incident Technique</option>
-                        <option value="DEMANDE_ACCES">Demande Accès</option>
-                        <option value="QUESTION_FONCTIONNELLE">Question Fonctionnelle</option>
-                        <option value="DEMANDE_DOCUMENT">Demande Document</option>
-                      </select></div>
-                      <div class="col-md-2"><select class="form-select" id="filterAgent">
-                        <option value="">Tous les agents</option>
-                        <option value="MOI">Mes tickets</option>
-                        <option value="NON_ASSIGNE">Non assignés</option>
-                      </select></div>
-                      <div class="col-md-1">
-                        <button class="btn btn-outline-secondary w-100" id="resetFilters"><i class="fas fa-undo"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-2 text-end">
-                  <div class="btn-group" role="group">
-                    <button class="btn btn-success" id="selectAll"><i class="fas fa-check-square me-1"></i>Tout</button>
-                    <button class="btn btn-outline-primary" id="refreshTickets"><i class="fas fa-sync-alt"></i></button>
-                  </div>
-                </div>
-              </div>
-              <div class="table-responsive">
-                <table class="table table-hover tickets-table" id="ticketsTable">
-                  <thead class="table-primary">
-                  <tr>
-                    <th width="50px"><input type="checkbox" class="form-check-input" id="selectAllCheckbox"></th>
-                    <th>Ticket</th>
-                    <th>Entreprise</th>
-                    <th>Sujet</th>
-                    <th>Priorité</th>
-                    <th>Statut</th>
-                    <th>Assigné à</th>
-                    <th>SLA</th>
-                    <th>Créé</th>
-                    <th>Actions</th>
-                  </tr>
-                  </thead>
-                  <tbody id="ticketsTableBody">
-                  <tr class="ticket-row priority-danger ">
-                    <td>
-                      <input type="checkbox" class="form-check-input ticket-checkbox" value="TKT_003">
-                    </td>
-                    <td>
-                      <div class="ticket-number">
-                        <strong>#2025-0003</strong>
-                        <div class="ticket-priority">
-                          <span class="badge bg-danger">CRITIQUE</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="entreprise-info">
-                        <strong>Import Export SA</strong>
-                        <br><small class="text-muted">ENT_003</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="ticket-subject">
-                    <span class="subject-text" title="Virement de 50k€ vers la France bloqué sans raison apparente">
-                        Virement international bloqué
-                    </span>
-                        <br><small class="text-muted">INCIDENT TECHNIQUE</small>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="badge bg-danger">CRITIQUE</span>
-                    </td>
-                    <td>
-                      <span class="badge bg-success">Résolu</span>
-                    </td>
-                    <td>
-                      <div class="agent-info">
-                        <strong>Pierre Martin</strong><br><small>Niveau 2</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="sla-info">
-                        <div class="sla-status text-danger">
-                          <i class="fas fa-exclamation-triangle"></i>
-                          <span>En retard</span>
-                        </div>
-                        <small class="sla-details">3211h de retard</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="date-info">
-                        <strong>Il y a 133j</strong>
-                        <br><small class="text-muted">20/07/2025 14:00:00</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="ticket-actions">
-                        <button class="btn btn-sm btn-outline-primary"
-                                onclick="supportManager.showTicketDetails('TKT_003')" title="Voir détails">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-success"
-                                onclick="supportManager.openCommunication('TKT_003')" title="Communication">
-                          <i class="fas fa-comments"></i>
-                        </button>
-                        <div class="btn-group">
-                          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                  title="Plus d'actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                          </button>
-                          <ul class="dropdown-menu">
+
+            <!-- Rejecter -->
+            <!--            <div-->
+            <!--              class="tab-pane"-->
+            <!--              [ngClass]="{'active': isActive('rejetes')}"-->
+            <!--              role="tabpanel"-->
+            <!--              id="rejetes"-->
+            <!--            >-->
+            <!--              <div class="table-responsive">-->
+            <!--                <table class="table table-hover tickets-table" id="ticketsTable">-->
+            <!--                  <thead class="table-primary">-->
+            <!--                  <tr>-->
+            <!--                    <th width="50px"><input type="checkbox" class="form-check-input" id="selectAllCheckbox"></th>-->
+            <!--                    <th>Ticket</th>-->
+            <!--                    <th>Entreprise</th>-->
+            <!--                    <th>Sujet</th>-->
+            <!--                    <th>Priorité</th>-->
+            <!--                    <th>Statut</th>-->
+            <!--                    <th>Assigné à</th>-->
+            <!--                    <th>SLA</th>-->
+            <!--                    <th>Créé</th>-->
+            <!--                    <th>Actions</th>-->
+            <!--                  </tr>-->
+            <!--                  </thead>-->
+            <!--                  <tbody id="ticketsTableBody">-->
+            <!--                  <tr class="ticket-row priority-danger ">-->
+            <!--                    <td>-->
+            <!--                      <input type="checkbox" class="form-check-input ticket-checkbox" value="TKT_003">-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <div class="ticket-number">-->
+            <!--                        <strong>#2025-0003</strong>-->
+            <!--                        <div class="ticket-priority">-->
+            <!--                          <span class="badge bg-danger">CRITIQUE</span>-->
+            <!--                        </div>-->
+            <!--                      </div>-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <div class="entreprise-info">-->
+            <!--                        <strong>Import Export SA</strong>-->
+            <!--                        <br><small class="text-muted">ENT_003</small>-->
+            <!--                      </div>-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <div class="ticket-subject">-->
+            <!--                    <span class="subject-text" title="Virement de 50k€ vers la France bloqué sans raison apparente">-->
+            <!--                        Virement international bloqué-->
+            <!--                    </span>-->
+            <!--                        <br><small class="text-muted">INCIDENT TECHNIQUE</small>-->
+            <!--                      </div>-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <span class="badge bg-danger">CRITIQUE</span>-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <span class="badge bg-success">Résolu</span>-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <div class="agent-info">-->
+            <!--                        <strong>Pierre Martin</strong><br><small>Niveau 2</small>-->
+            <!--                      </div>-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <div class="sla-info">-->
+            <!--                        <div class="sla-status text-danger">-->
+            <!--                          <i class="fas fa-exclamation-triangle"></i>-->
+            <!--                          <span>En retard</span>-->
+            <!--                        </div>-->
+            <!--                        <small class="sla-details">3211h de retard</small>-->
+            <!--                      </div>-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <div class="date-info">-->
+            <!--                        <strong>Il y a 133j</strong>-->
+            <!--                        <br><small class="text-muted">20/07/2025 14:00:00</small>-->
+            <!--                      </div>-->
+            <!--                    </td>-->
+            <!--                    <td>-->
+            <!--                      <div class="ticket-actions">-->
+            <!--                        <button class="btn btn-sm btn-outline-primary"-->
+            <!--                                onclick="supportManager.showTicketDetails('TKT_003')" title="Voir détails">-->
+            <!--                          <i class="fas fa-eye"></i>-->
+            <!--                        </button>-->
+            <!--                        <button class="btn btn-sm btn-outline-success"-->
+            <!--                                onclick="supportManager.openCommunication('TKT_003')" title="Communication">-->
+            <!--                          <i class="fas fa-comments"></i>-->
+            <!--                        </button>-->
+            <!--                        <div class="btn-group">-->
+            <!--                          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"-->
+            <!--                                  title="Plus d'actions">-->
+            <!--                            <i class="fas fa-ellipsis-v"></i>-->
+            <!--                          </button>-->
+            <!--                          <ul class="dropdown-menu">-->
 
 
-                            <li>
-                              <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#" onclick="supportManager.duplicateTicket('TKT_003')">
-                              <i class="fas fa-copy me-2"></i>Dupliquer</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <!--                            <li>-->
+            <!--                              <hr class="dropdown-divider">-->
+            <!--                            </li>-->
+            <!--                            <li><a class="dropdown-item" href="#" onclick="supportManager.duplicateTicket('TKT_003')">-->
+            <!--                              <i class="fas fa-copy me-2"></i>Dupliquer</a></li>-->
+            <!--                          </ul>-->
+            <!--                        </div>-->
+            <!--                      </div>-->
+            <!--                    </td>-->
+            <!--                  </tr>-->
+            <!--                  </tbody>-->
+            <!--                </table>-->
+            <!--              </div>-->
+            <!--            </div>-->
           </div>
         </div>
       </div>

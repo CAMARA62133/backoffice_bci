@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Chart} from 'chart.js';
+import {ChartService} from '../../services/charts/chart.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,6 +8,13 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  chart!: Chart;
 
+  constructor(private chartService: ChartService) {
+  }
+
+  ngOnInit() {
+    // this.loadAreaChart();
+  }
 }
