@@ -235,11 +235,21 @@
         <p>
           Êtes-vous sûr de vouloir lever le blocage pour cette opération ?
         </p>
+
         <div class="alert alert-warning" role="alert">
           <i class="me-2 bi bi-exclamation-triangle"></i>
           <strong>Opération :</strong>
           <span> Virement de 87 M GNF - Orange Guinée </span>
         </div>
+
+        <div class="mb-3">
+          <label class="form-label">Raison du réjet</label>
+          <select name="rejectReason" id="rejectReason" class="form-select">
+            <option value="">Sélectionnez une raison</option>
+            <option value=""></option>
+          </select>
+        </div>
+
         <div class="mb-3">
           <label class="form-label">Justification</label>
           <textarea

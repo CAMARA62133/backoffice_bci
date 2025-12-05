@@ -8,9 +8,10 @@ export const environment = {
   lienSite2: 'http://localhost:4200',
 
   // Le liens des apis avec node
-  nodeApiUrl: {
+  nodeApi: {
     userLogUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api/user_activity',
     orgLogUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api/org_logs',
+    baseUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api',
   },
 
   appVersion: {
