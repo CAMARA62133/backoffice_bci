@@ -178,71 +178,71 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onLogin() {
-    this.loading = true;
-
-    if (this.loginForm.valid) {
-      const email = this.loginForm.get('email')?.value;
-      const password = this.loginForm.get('password')?.value;
-      const appName = environment.appName;
-      const captcha_token = this.loginForm.get('recaptcha')?.value;
-
-      console.log('Tentative de connexion avec :', {
-        email,
-        password,
-        appName,
-        captcha_token,
-      });
-
-      // 1️⃣ Charger le CSRF avant login (obligatoire)
-      this.authService.getCsrfCookie().subscribe({
-        next: () => {
-
-          // 2️⃣ POST login
-          this.authService.loginTest(email, password, captcha_token, appName).subscribe({
-            next: (res) => {
-              this.message = res.message;
-
-              if (res.status === 200) {
-                console.log('Statut login :', res.status);
-                console.log('Cookie après login :', this.authService.getCookieValue('bci_banking_session'));
-
-                // 3️⃣ Appel direct /api/user (NE JAMAIS rappeler csrf-cookie ici)
-                this.authService.recupUserInfo().subscribe({
-                  next: (data) => {
-                    console.log('User:', data.user);
-                    this.user = data.user;
-                    this.loading = false;
-                  },
-
-                  error: (err) => {
-                    console.log('User API error:', err);
-                    this.user = null;
-                    this.loading = false;
-                  }
-                });
-
-              } else {
-                this.user = null;
-                this.loading = false;
-              }
-            },
-
-            error: (err) => {
-              this.message = err.error?.message ?? 'Erreur login';
-              this.user = null;
-              this.loading = false;
-            }
-          })
-        },
-
-        error: () => {
-          this.message = 'Erreur lors du chargement du cookie CSRF';
-          this.loading = false;
-        }
-      })
-    }
-  }
+  // onLogin() {
+  //   this.loading = true;
+  //
+  //   if (this.loginForm.valid) {
+  //     const email = this.loginForm.get('email')?.value;
+  //     const password = this.loginForm.get('password')?.value;
+  //     const appName = environment.appName;
+  //     const captcha_token = this.loginForm.get('recaptcha')?.value;
+  //
+  //     console.log('Tentative de connexion avec :', {
+  //       email,
+  //       password,
+  //       appName,
+  //       captcha_token,
+  //     });
+  //
+  //     // 1️⃣ Charger le CSRF avant login (obligatoire)
+  //     this.authService.getCsrfCookie().subscribe({
+  //       next: () => {
+  //
+  //         // 2️⃣ POST login
+  //         this.authService.loginTest(email, password, captcha_token, appName).subscribe({
+  //           next: (res) => {
+  //             this.message = res.message;
+  //
+  //             if (res.status === 200) {
+  //               console.log('Statut login :', res.status);
+  //               console.log('Cookie après login :', this.authService.getCookieValue('bci_banking_session'));
+  //
+  //               // 3️⃣ Appel direct /api/user (NE JAMAIS rappeler csrf-cookie ici)
+  //               this.authService.recupUserInfo().subscribe({
+  //                 next: (data) => {
+  //                   console.log('User:', data.user);
+  //                   this.user = data.user;
+  //                   this.loading = false;
+  //                 },
+  //
+  //                 error: (err) => {
+  //                   console.log('User API error:', err);
+  //                   this.user = null;
+  //                   this.loading = false;
+  //                 }
+  //               });
+  //
+  //             } else {
+  //               this.user = null;
+  //               this.loading = false;
+  //             }
+  //           },
+  //
+  //           error: (err) => {
+  //             this.message = err.error?.message ?? 'Erreur login';
+  //             this.user = null;
+  //             this.loading = false;
+  //           }
+  //         })
+  //       },
+  //
+  //       error: () => {
+  //         this.message = 'Erreur lors du chargement du cookie CSRF';
+  //         this.loading = false;
+  //       }
+  //     })
+  //   }
+  // }
 
   // bascule visibilité
   togglePasswordVisibility(): void {
