@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environnements/environnement';
-import { AuthService } from '../authService/auth.service';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environnements/environnement';
+import {AuthService} from '../auth/authService/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,16 +11,17 @@ export class UsersService {
   appName = environment.appName;
   apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+  }
 
   // Headers avec le token d'authentification
-  private getHeaders(): HttpHeaders {
-    const token = this.authService.getToken();
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    });
-  }
+  // private getHeaders(): HttpHeaders {
+  //   const token = this.authService.getToken();
+  //   return new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //     Authorization: `Bearer ${token}`,
+  //   });
+  // }
 
   /**
    * Créer un nouvel utilisateur
@@ -28,13 +29,14 @@ export class UsersService {
    * @returns
    */
   createUser(payload: any): Observable<any> {
-    console.log('Create user payload : ', { payload });
+    console.log('Create user payload : ', {payload});
 
-    const body = { ...payload, appName: environment.appName };
-    console.log('Create user body : ', { body });
+    const body = {...payload, appName: environment.appName};
+    console.log('Create user body : ', {body});
 
     return this.http.post(`${this.apiUrl}/api/addUsers`, body, {
-      headers: this.getHeaders(),
+      // headers: this.getHeaders(),
+      withCredentials: true
     });
   }
 
@@ -44,7 +46,8 @@ export class UsersService {
    */
   getAllUsers(): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/getListeUsers`, {
-      headers: this.getHeaders(),
+      // headers: this.getHeaders(),
+      withCredentials: true
     });
   }
 
@@ -62,8 +65,9 @@ export class UsersService {
       `${this.apiUrl}/api/activeOrDesactiveUsers`,
       {},
       {
-        headers: this.getHeaders(),
+        // headers: this.getHeaders(),
         params: currentParams,
+        withCredentials: true
       }
     );
   }

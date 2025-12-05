@@ -28,7 +28,7 @@ import {UtilisteurComponent} from './pages/utilisateurs/utilisteur.component';
 import {
   VerifyemailAfterchangePageComponent
 } from './pages/auth/verifyemail-afterchange-page/verifyemail-afterchange-page.component';
-import {AuthGuard} from './guards/auth/auth-guard.guard';
+import {AuthGuard} from './core/guards/auth/auth-guard.guard';
 import {MyDiagramComponentComponent} from './components/my-diagram-component/my-diagram-component.component';
 
 //  Organisation import components
@@ -216,7 +216,7 @@ export const routes: Routes = [
         title: 'BCI - Online | Modifier mon Profile',
         component: ModifierMesInfosComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
+        data: {roles: ["Admin integrateur", "Admin integrateur banque", "Agent Conformité", "Administrateur Système (IT)"]}
       },
 
       {
@@ -263,7 +263,7 @@ export const routes: Routes = [
       {
         path: 'org-utilisateur',
         title: 'BCI - Online | Liste des utilisateurs',
-        component: OrgListUtilisateurComponent,
+        component: UtilisteurComponent,
         canActivate: [AuthGuard],
         data: {roles: ["Administrateur Système (IT)"]}
       },

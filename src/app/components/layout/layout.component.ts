@@ -2,8 +2,8 @@ import {DatePipe, NgIf, UpperCasePipe} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../services/authService/auth.service';
-import {UserModel} from '../../models/user.model';
+import {AuthService} from '../../services/auth/authService/auth.service';
+import {UserModel} from '../../core/models/user.model';
 
 @Component({
   selector: 'app-layout',
@@ -38,17 +38,16 @@ export class LayoutComponent implements OnInit {
   logout(): void {
     this.authService.deconnexion().subscribe({
       next: (res) => {
-        if (res?.status && res?.status === 200) {
+        if (res.status && res.status === 200) {
           console.log('Déconnexion réussie :', res);
 
-          this.toastr.success(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.toastr.success(res.message, '', {positionClass: 'toast-custom-center',});
+
           // Nettoyage déjà fait dans le service, redirection après succès
           this.router.navigate(['/login']);
         } else {
 
-          if (res?.error.error.message === "Unauthenticated.") {
+          if (res.error.error.message === "Unauthenticated.") {
             this.toastr.success("Votre session a expiré", '', {
               positionClass: 'toast-custom-center',
             });

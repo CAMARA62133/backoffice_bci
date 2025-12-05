@@ -10,14 +10,14 @@ import { ToastrService } from 'ngx-toastr';
 import { ConfigNotificationService } from '../../services/configNotification/config-notification.service';
 import { ModalsService } from '../../services/modals/modals.service';
 import { PaginationsService } from '../../services/paginations/paginations.service';
-import { RolesService } from '../../services/roles/roles.service';
+import { RolesService } from '../../services/auth/roles/roles.service';
 import {
   getErrorMessage,
   getFormControlClass,
   isInvalid,
   isValid,
-} from '../../utils/form-helpers';
-import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+} from '../../core/utils/form-helpers';
+import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
 
 @Component({
   selector: 'app-config-user-defaut-notifs',

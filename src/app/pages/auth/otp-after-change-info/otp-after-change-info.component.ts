@@ -4,8 +4,8 @@ import {FormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {Router, RouterLink} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../../services/authService/auth.service';
-import {OtpAfterChangeInfoService} from '../../../services/otp-after-change-info/otp-after-change-info.service';
+import {AuthService} from '../../../services/auth/authService/auth.service';
+import {OtpAfterChangeInfoService} from '../../../services/auth/otp-after-change-info/otp-after-change-info.service';
 
 @Component({
   selector: 'app-otp-after-change-info',

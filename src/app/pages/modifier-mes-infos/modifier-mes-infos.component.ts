@@ -10,11 +10,11 @@ import {
 } from '@angular/forms';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../services/authService/auth.service';
+import {AuthService} from '../../services/auth/authService/auth.service';
 import {ConfigurationsService} from '../../services/configurations/configurations.service';
 import {OrganisationsService} from '../../services/organisations/organisations.service';
 import {MesNotifsService} from '../../services/mesNotifs/mes-notifs.service';
-import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
 
 declare var bootstrap: any;
 

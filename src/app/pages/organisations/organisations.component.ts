@@ -9,16 +9,16 @@ import {
 } from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {environment} from '../../../environnements/environnement';
-import {AuthService} from '../../services/authService/auth.service';
+import {AuthService} from '../../services/auth/authService/auth.service';
 import {ModalsService} from '../../services/modals/modals.service';
 import {OrganisationsService} from '../../services/organisations/organisations.service';
-import {RolesService} from '../../services/roles/roles.service';
+import {RolesService} from '../../services/auth/roles/roles.service';
 import {
   getErrorMessage,
   getFormControlClass,
   isInvalid,
   isValid,
-} from '../../utils/form-helpers';
+} from '../../core/utils/form-helpers';
 import {
   ActivatedRoute,
   Route,
@@ -28,7 +28,7 @@ import {
   RouterLinkActive,
   Routes
 } from '@angular/router';
-import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
 
 
 @Component({

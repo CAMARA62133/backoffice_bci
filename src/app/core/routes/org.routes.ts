@@ -1,14 +1,14 @@
-import {LayoutComponent} from '../components/layout/layout.component';
+import {LayoutComponent} from '../../components/layout/layout.component';
 import {AuthGuard} from '../guards/auth/auth-guard.guard';
 import {Routes} from '@angular/router';
-import {OrgDashboardComponent} from '../pages/orgs/org-dashboard/org-dashboard.component';
-import {RepportingExportComponent} from '../pages/orgs/repporting-export/repporting-export.component';
-import {TransactionsOperationsComponent} from '../pages/orgs/transactions-operations/transactions-operations.component';
-import {AlertesSupervisionsComponent} from '../pages/orgs/alertes-supervisions/alertes-supervisions.component';
-import {OrgListEntrepriseComponent} from '../pages/orgs/org-list-entreprise/org-list-entreprise.component';
-import {OrgListUtilisateurComponent} from '../pages/orgs/org-list-utilisateur/org-list-utilisateur.component';
-import {OrgFicheEntrepriseComponent} from '../pages/orgs/org-fiche-entreprise/org-fiche-entreprise.component';
-import {OrgFicheUtilisateurComponent} from '../pages/orgs/org-fiche-utilisateur/org-fiche-utilisateur.component';
+import {OrgDashboardComponent} from '../../pages/orgs/org-dashboard/org-dashboard.component';
+import {RepportingExportComponent} from '../../pages/orgs/repporting-export/repporting-export.component';
+import {TransactionsOperationsComponent} from '../../pages/orgs/transactions-operations/transactions-operations.component';
+import {AlertesSupervisionsComponent} from '../../pages/orgs/alertes-supervisions/alertes-supervisions.component';
+import {OrgListEntrepriseComponent} from '../../pages/orgs/org-list-entreprise/org-list-entreprise.component';
+import {OrgListUtilisateurComponent} from '../../pages/orgs/org-list-utilisateur/org-list-utilisateur.component';
+import {OrgFicheEntrepriseComponent} from '../../pages/orgs/org-fiche-entreprise/org-fiche-entreprise.component';
+import {OrgFicheUtilisateurComponent} from '../../pages/orgs/org-fiche-utilisateur/org-fiche-utilisateur.component';
 
 export const orgRoutes: Routes = [
   {

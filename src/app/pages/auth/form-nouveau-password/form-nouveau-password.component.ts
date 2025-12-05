@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { FormNouveauPasswordService } from '../../../services/formNouveauPassword/form-nouveau-password.service';
+import { FormNouveauPasswordService } from '../../../services/auth/formNouveauPassword/form-nouveau-password.service';
 
 @Component({
   selector: 'app-form-nouveau-password',

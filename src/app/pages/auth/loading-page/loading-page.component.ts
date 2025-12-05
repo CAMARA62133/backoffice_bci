@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { LoadingService } from '../../../services/loading/loading.service';
+import { LoadingService } from '../../../services/auth/loading/loading.service';
 
 @Component({
   selector: 'app-loading-page',

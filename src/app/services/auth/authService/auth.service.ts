@@ -1,8 +1,8 @@
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable, signal} from '@angular/core';
-import {Observable, catchError, tap, throwError} from 'rxjs';
-import {environment} from './../../../environnements/environnement';
-import {UserInterface} from '../../interfaces/user.interface';
+import {Observable, catchError, tap, throwError, map, of} from 'rxjs';
+import {environment} from '../../../../environnements/environnement';
+import {UserInterface} from '../../../core/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,7 @@ export class AuthService {
   private appName = environment.appName;
   private appVersion = environment.appVersion.vcVersion;
   private user: any = null;
+  private _isAuthenticated = false;
 
   // ✅ Signals
   private _userInfo = signal<any | null>(null);
@@ -24,11 +25,47 @@ export class AuthService {
   userInfo = this._userInfo.asReadonly();
   userInfoConfig = this._userInfoConfig.asReadonly();
 
+
   // Injection de HttpClient pour les requêtes HTTP
   constructor(private http: HttpClient) {
     const storedUser = localStorage.getItem('userInfo');
     if (storedUser) this.user = JSON.parse(storedUser);
     this.restoreFromLocalStorage();
+  }
+
+  /** Charge le cookie CSRF avant login */
+  getCsrfCookie(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/csrf-cookie`, {withCredentials: true});
+  }
+
+  /** Envoie les identifiants au backend */
+  loginTest(
+    email: string,
+    password: string,
+    captcha_token: string,
+    appName: string,
+    appVersion: string = this.appVersion
+  ): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/api/auth/loginTest`,
+      {email, password, captcha_token, appName, appVersion},
+      {withCredentials: true}
+    ).pipe(
+      tap(() => (this._isAuthenticated = true))
+    );
+  }
+
+  /** Récupère l'utilisateur connecté (avec cookie de session) */
+  recupUserInfo(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/user`, {
+      withCredentials: true
+    });
+  }
+
+  /** Helper lecture cookie JS */
+  public getCookieValue(name: string): string {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : '';
   }
 
   /**
@@ -131,9 +168,36 @@ export class AuthService {
    * Savoir si l'utilisateur est connecté (True si le token existe)
    * @returns
    */
+  // isAuthenticated(): boolean {
+  //   return !!this.getToken() || !!this.getCurrentUser(); // true si le token existe
+  // }
+
+  // Vérifier si l’utilisateur est connecté
   isAuthenticated(): boolean {
-    return !!this.getToken() || !!this.getCurrentUser(); // true si le token existe
+    // :coche_blanche: côté client : état connu grâce aux login/logout
+    console.log(
+      '%c[AuthService] :cadenas: isAuthenticated() =>',
+      'color: cyan;',
+      this._isAuthenticated
+    );
+    return this._isAuthenticated;
   }
+
+  //
+  checkSession(): Observable<boolean> {
+    return this.http.get(`${this.baseUrl}/api/user`, {withCredentials: true}).pipe(
+      map(user => {
+        // si la requête réussit, l'utilisateur est connecté
+        this._isAuthenticated = true;
+        return true; // <-- retourne un boolean
+      }),
+      catchError(() => {
+        this._isAuthenticated = false;
+        return of(false); // <-- retourne aussi un boolean
+      })
+    );
+  }
+
 
   /**
    * Sauvegarde le token dans le localStorage
@@ -210,22 +274,20 @@ export class AuthService {
       .set('phoneNumber', phoneNumber)
       .set('userId', userId)
       .set('appName', appName);
+
     console.log('Paramètres envoyés:', params.toString());
     // Requête POST avec params au lieu de body
     return this.http
-      .post<any>(`${this.baseUrl}/api/updateUserInfo`, null, {
-        headers: this.getAuthHeaders(),
-        params, // envoie en query string
-      })
+      .post<any>(`${this.baseUrl}/api/updateUserInfo`, null, {withCredentials: true, params})
       .pipe(catchError(this.handleError));
   }
 
   /**
    * Modification du mot de passe
-   * @param appName : le nom de l'application
-   * @param oldPassword : l'ancien mot de passe
-   * @param newPassword : le nouveau de mot de passe
-   * @param email : l'adresse email
+   * @param appName  le nom de l'application
+   * @param oldPassword  l'ancien mot de passe
+   * @param newPassword le nouveau de mot de passe
+   * @param email  l'adresse email
    * @returns
    */
   modifierPassword(
@@ -235,10 +297,10 @@ export class AuthService {
     email: string
   ): Observable<any> {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
+    // const headers = new HttpHeaders({
+    //   Authorization: `Bearer ${token}`,
+    //   'Content-Type': 'application/json',
+    // });
 
     const params = new HttpParams()
       .set('appName', appName)
@@ -250,7 +312,7 @@ export class AuthService {
     return this.http.post(
       `${this.baseUrl}/api/resetPasswordAfterLogin`,
       {},
-      {headers, params}
+      {withCredentials: true, params}
     );
   }
 
@@ -268,10 +330,10 @@ export class AuthService {
     appName: string = this.appName
   ): Observable<any> {
     const token = localStorage.getItem('token'); // Récupérer le token JWT
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
+    // const headers = new HttpHeaders({
+    //   Authorization: `Bearer ${token}`,
+    //   'Content-Type': 'application/json',
+    // });
 
     const params = new HttpParams()
       .set('appName', appName)
@@ -284,47 +346,51 @@ export class AuthService {
     return this.http.post(
       `${this.baseUrl}/api/resetPasswordAfterLogin`,
       {},
-      {headers, params}
+      {withCredentials: true, params}
     );
   }
 
   /**
    * Deconnexion de l'utilisateur
-   * @param appName : le nom de l'application
+   * @param appName le nom de l'application
    * @returns
    */
   deconnexion(appName: string = this.appName): Observable<any> {
-    // Recuperer le token avant toutes suppressions
-    const token = this.getToken();
-    if (!token) {
-      return throwError(
-        () => new Error('Token non trouvé. Veuillez vous connecter.')
-      );
-    }
+    // // Recuperer le token avant toutes suppressions
+    // const token = this.getToken();
+    // if (!token) {
+    //   return throwError(
+    //     () => new Error('Token non trouvé. Veuillez vous connecter.')
+    //   );
+    // }
 
     // Prépare les en-têtes d'authentification
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
+    // const headers = new HttpHeaders({
+    //   Authorization: `Bearer ${token}`,
+    //   'Content-Type': 'application/json',
+    // });
 
     // Prépare les paramètres de requête
     const params = new HttpParams().set('appName', appName);
 
     // Appel API de déconnexion
     return this.http
-      .post(`${this.baseUrl}/api/logout`, {}, {headers, params})
+      .post(`${this.baseUrl}/api/logout`, {}, {params, withCredentials: true})
       .pipe(
         tap(() => {
           // localStorage.clear();
 
-          localStorage.removeItem('loginEmail');
-          localStorage.removeItem('token');
-          localStorage.removeItem('userInfo');
-          localStorage.removeItem('userInfoConfig');
+          // localStorage.removeItem('loginEmail');
+          // localStorage.removeItem('token');
+          // localStorage.removeItem('userInfo');
+          // localStorage.removeItem('userInfoConfig');
 
-          console.log('Dexonnexion reussi !');
-          console.clear();
+          // console.log('Dexonnexion reussi !');
+          // console.clear();
+
+          localStorage.clear();
+          this._userInfo.set(null);
+          this._userInfoConfig.set(null);
         }),
         catchError((error) => {
           console.error('Erreur lors de la déconnexion :', error);

@@ -4,7 +4,7 @@ import {provideAnimations} from '@angular/platform-browser/animations';
 import {provideRouter} from '@angular/router';
 import {provideToastr} from 'ngx-toastr';
 import {routes} from './app.routes';
-import {tokenInterceptor} from './interceptors/auth/auth.interceptor';
+import {tokenInterceptor} from './core/interceptors/auth/auth.interceptor';
 import {provideNgDiagram} from 'ng-diagram';
 import {provideCharts, withDefaultRegisterables} from 'ng2-charts';
 

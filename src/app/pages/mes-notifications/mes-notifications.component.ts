@@ -2,9 +2,9 @@ import {NgFor, NgIf} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../services/authService/auth.service';
+import {AuthService} from '../../services/auth/authService/auth.service';
 import {MesNotifsService} from '../../services/mesNotifs/mes-notifs.service';
-import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
 
 declare var bootstrap: any;
 

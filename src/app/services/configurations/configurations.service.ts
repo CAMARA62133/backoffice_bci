@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environnements/environnement';
-import { Config } from '../../interfaces/config';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environnements/environnement';
+import {Config} from '../../core/interfaces/config';
 
 @Injectable({
   providedIn: 'root',
@@ -10,20 +10,17 @@ import { Config } from '../../interfaces/config';
 export class ConfigurationsService {
   private baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   // Modification des informations de configurations
   updateMultipleConfigs(
     iOrganisationID: number,
     configs: Config[]
   ): Observable<any> {
-    const body = {
-      iOrganisationID,
-      configs,
-    };
-
+    const body = {iOrganisationID, configs,};
     console.log('body api : ', body);
 
-    return this.http.post(`${this.baseUrl}/api/UpdateOrganisationConfig`, body);
+    return this.http.post(`${this.baseUrl}/api/UpdateOrganisationConfig`, body, {withCredentials: true});
   }
 }

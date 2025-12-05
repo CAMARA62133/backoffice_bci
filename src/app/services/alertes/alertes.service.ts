@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environnements/environnement';
-import { AuthService } from '../authService/auth.service';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environnements/environnement';
+import {AuthService} from '../auth/authService/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +11,15 @@ export class AlertesService {
   baseUrl = environment.apiUrl;
   appName = environment.appName;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+  }
 
   /**
    * Liste des modules
    * @returns Observable<any>
    */
   getListeModules(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListeModule`);
+    return this.http.get(`${this.baseUrl}/api/getListeModule`, {withCredentials: true});
   }
 
   /**
@@ -26,7 +27,7 @@ export class AlertesService {
    * @returns
    */
   getListeNiveauUrgence(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListNieauDurgence`);
+    return this.http.get(`${this.baseUrl}/api/getListNieauDurgence`, {withCredentials: true});
   }
 
   /**
@@ -34,7 +35,7 @@ export class AlertesService {
    * @returns
    */
   getListeGroupeConcerner(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListeGroupeAlert`);
+    return this.http.get(`${this.baseUrl}/api/getListeGroupeAlert`, {withCredentials: true});
   }
 
   /**
@@ -42,7 +43,7 @@ export class AlertesService {
    * @returns
    */
   getListeAlertesConfig(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListeAlerteConfig`);
+    return this.http.get(`${this.baseUrl}/api/getListeAlerteConfig`, {withCredentials: true});
   }
 
   /**
@@ -51,10 +52,7 @@ export class AlertesService {
    * @returns
    */
   createAlerte(data: any): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
-    return this.http.post(`${this.baseUrl}/api/addAlerteConfig`, data, {
-      headers,
-    });
+    return this.http.post(`${this.baseUrl}/api/addAlerteConfig`, data, {withCredentials: true});
   }
 
   /**
@@ -63,21 +61,16 @@ export class AlertesService {
    * @returns
    */
   uppdateAlerte(data: any): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
-    return this.http.post(`${this.baseUrl}/api/UpdateAlerteConfig`, data, {
-      headers,
-    });
+    return this.http.post(`${this.baseUrl}/api/UpdateAlerteConfig`, data, {withCredentials: true});
   }
 
   toggleAlerte(data: any): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
-    const params = new HttpParams()
-      .set('idAlert', data.idAlert.toString())
+    const params = new HttpParams().set('idAlert', data.idAlert.toString())
       .set('btEnableAlert', data.btEnableAlert);
 
     return this.http.post(`${this.baseUrl}/api/activeOrDesactiveAlert`, null, {
       params: params,
-      headers: headers,
+      withCredentials: true
     });
   }
 }

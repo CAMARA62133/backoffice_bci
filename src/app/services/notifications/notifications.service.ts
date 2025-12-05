@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environnements/environnement';
-import { AuthService } from '../authService/auth.service';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environnements/environnement';
+import {AuthService} from '../auth/authService/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,26 +10,27 @@ import { AuthService } from '../authService/auth.service';
 export class NotificationsService {
   baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+  }
 
   //
   getListeModules(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListeModule`);
+    return this.http.get(`${this.baseUrl}/api/getListeModule`, {withCredentials: true});
   }
 
   //
   getListeNiveauUrgence(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListNieauDurgence`);
+    return this.http.get(`${this.baseUrl}/api/getListNieauDurgence`, {withCredentials: true});
   }
 
   //
   getListeGroupeConcerner(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListeGroupeAlert`);
+    return this.http.get(`${this.baseUrl}/api/getListeGroupeAlert`, {withCredentials: true});
   }
 
   //
   getListeNotificationsConfig(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListeNotiifcationConfig`);
+    return this.http.get(`${this.baseUrl}/api/getListeNotiifcationConfig`, {withCredentials: true});
   }
 
   /**
@@ -38,11 +39,12 @@ export class NotificationsService {
    * @returns
    */
   createNotification(data: any): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
+    // const headers = this.authService.setRequestHeaders();
 
     // https://dev-api-bcibank.ecash-guinee.com/api/addNotificationConfig?message=ass&idNiveauUrgence=2&typeAlerte=INFO&description=cc&limiteDeclenchement=5&idModule=1
     return this.http.post(`${this.baseUrl}/api/addNotificationConfig`, data, {
-      headers,
+      // headers,
+      withCredentials: true
     });
   }
 
@@ -52,12 +54,13 @@ export class NotificationsService {
    * @returns
    */
   uppdateNotification(data: any): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
+    // const headers = this.authService.setRequestHeaders();
     return this.http.post(
       `${this.baseUrl}/api/UpdateNotificationConfig`,
       data,
       {
-        headers,
+        // headers,
+        withCredentials: true
       }
     );
   }
@@ -68,7 +71,7 @@ export class NotificationsService {
    * @returns
    */
   toggleNotification(params: any): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
+    // const headers = this.authService.setRequestHeaders();
     const httpParams = new HttpParams()
       .set('idNotification', params.idNotification.toString())
       .set('btEnabled', params.btEnabled);
@@ -78,7 +81,8 @@ export class NotificationsService {
       null,
       {
         params: httpParams,
-        headers: headers,
+        withCredentials: true
+        // headers: headers,
       }
     );
   }

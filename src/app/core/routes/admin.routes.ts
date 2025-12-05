@@ -1,16 +1,16 @@
 import {Routes} from '@angular/router';
-import {LayoutComponent} from '../components/layout/layout.component';
-import {DashboardComponent} from '../pages/dashboard/dashboard.component';
+import {LayoutComponent} from '../../components/layout/layout.component';
+import {DashboardComponent} from '../../pages/dashboard/dashboard.component';
 import {AuthGuard} from '../guards/auth/auth-guard.guard';
-import {OrganisationsComponent} from '../pages/organisations/organisations.component';
-import {LogUserComponent} from '../pages/logs/log-user/log-user.component';
-import {LogOrgComponent} from '../pages/logs/log-org/log-org.component';
-import {UtilisteurComponent} from '../pages/utilisateurs/utilisteur.component';
-import {ModifierMesInfosComponent} from '../pages/modifier-mes-infos/modifier-mes-infos.component';
-import {NotificationsComponent} from '../pages/notifications/notifications.component';
-import {AlertesComponent} from '../pages/alertes/alertes.component';
-import {ConfigUserDefautNotifsComponent} from '../pages/config-user-defaut-notifs/config-user-defaut-notifs.component';
-import {MesNotificationsComponent} from '../pages/mes-notifications/mes-notifications.component';
+import {OrganisationsComponent} from '../../pages/organisations/organisations.component';
+import {LogUserComponent} from '../../pages/logs/log-user/log-user.component';
+import {LogOrgComponent} from '../../pages/logs/log-org/log-org.component';
+import {UtilisteurComponent} from '../../pages/utilisateurs/utilisteur.component';
+import {ModifierMesInfosComponent} from '../../pages/modifier-mes-infos/modifier-mes-infos.component';
+import {NotificationsComponent} from '../../pages/notifications/notifications.component';
+import {AlertesComponent} from '../../pages/alertes/alertes.component';
+import {ConfigUserDefautNotifsComponent} from '../../pages/config-user-defaut-notifs/config-user-defaut-notifs.component';
+import {MesNotificationsComponent} from '../../pages/mes-notifications/mes-notifications.component';
 
 export default [
 

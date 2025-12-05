@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
-import { environment } from '../../../environnements/environnement';
+import { environment } from '../../../../environnements/environnement';
 import { InactivityService } from '../inactivity/inactivity.service';
 @Injectable({
   providedIn: 'root',
@@ -31,11 +31,11 @@ export class OtpLoginServiceService {
     return this.http.post<any>(`${this.baseUrl}/api/verify-otp`, body).pipe(
       tap((response: any) => {
         // ✅ Si la vérification est réussie
-        if (response && response.token) {
+        if (response) {
           console.log('✅ OTP validé avec succès.');
 
           // 🔐 Sauvegarde du token pour la session
-          localStorage.setItem('token', response.token);
+          // localStorage.setItem('token', response.token);
 
           // 🚀 Démarrage automatique de la surveillance d'inactivité
           this.inactivityService.startWatching();

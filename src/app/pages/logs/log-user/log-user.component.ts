@@ -6,11 +6,11 @@ import {PaginationsService} from '../../../services/paginations/paginations.serv
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {debounce, debounceTime, distinctUntilChanged} from 'rxjs';
-import {SearchParams} from '../../../interfaces/search-params.interface';
+import {SearchParams} from '../../../core/interfaces/search-params.interface';
 import {RouterLink} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {exportToCSV, exportToPDF} from '../../../utils/export.utils';
-import {DataTableDirective} from '../../../directives/data-table/data-table.directive';
+import {exportToCSV, exportToPDF} from '../../../core/utils/export.utils';
+import {DataTableDirective} from '../../../core/directives/data-table/data-table.directive';
 
 
 @Component({

@@ -11,8 +11,8 @@ import {FormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {Router, RouterLink} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../../services/authService/auth.service';
-import {OtpLoginServiceService} from '../../../services/otpLogin/otp-login.service';
+import {AuthService} from '../../../services/auth/authService/auth.service';
+import {OtpLoginServiceService} from '../../../services/auth/otpLogin/otp-login.service';
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
@@ -122,18 +122,16 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    console.log('params envoyer otp : ', otp);
-
     this.otpService.verifierOtp(otp, this.loginEmail).subscribe({
       next: (response) => {
         console.log('all respnse : ', response);
-
         this.isLoading = false;
+
         if (response?.status && response.status === 200) {
           // Sauvegarde dans AuthService et localStorage
           this.authService.setUserInfo(response.data);
           this.authService.setUserInfoConfig(response.config);
-          this.authService.saveToken(response.token);
+          // this.authService.saveToken(response.token);
 
           console.log('res : ', response);
 

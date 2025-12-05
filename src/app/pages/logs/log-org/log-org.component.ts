@@ -4,13 +4,13 @@ import {HttpClient} from '@angular/common/http';
 import {OrgLogService} from '../../../services/logs/org-log/org-log.service';
 import {PaginationsService} from '../../../services/paginations/paginations.service';
 import {debounceTime, distinctUntilChanged} from 'rxjs';
-import {SearchOrgParams} from '../../../interfaces/search-params.interface';
+import {SearchOrgParams} from '../../../core/interfaces/search-params.interface';
 import {createWebpackLoggingCallback} from '@angular-devkit/build-angular/src/tools/webpack/utils/stats';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {exportOrgLogToPDF, exportToCSV, exportToPDF} from '../../../utils/export.utils';
+import {exportOrgLogToPDF, exportToCSV, exportToPDF} from '../../../core/utils/export.utils';
 import {UserLogService} from '../../../services/logs/user-log/user-log.service';
-import {DataTableDirective} from '../../../directives/data-table/data-table.directive';
+import {DataTableDirective} from '../../../core/directives/data-table/data-table.directive';
 
 
 

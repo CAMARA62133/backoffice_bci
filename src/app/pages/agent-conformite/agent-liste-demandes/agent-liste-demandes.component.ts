@@ -94,6 +94,7 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
             this.router.navigate(['/login']);
           }
         }
+
         this.isLoadingDemandes = false;
         console.log("res demandes:", this.demandes);
       },

@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environnements/environnement';
-import { AuthService } from '../authService/auth.service';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environnements/environnement';
+import {AuthService} from '../auth/authService/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,38 +10,22 @@ import { AuthService } from '../authService/auth.service';
 export class ConfigNotificationService {
   baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+  }
 
   createNotificationDefaut(data: any): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
-    return this.http.post<any>(
-      `${this.baseUrl}/api/addNotificationDefaut`,
-      data,
-      {
-        headers,
-      }
-    );
+    return this.http.post<any>(`${this.baseUrl}/api/addNotificationDefaut`, data, {withCredentials: true});
   }
 
   updateNotificationDefaut(data: any): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
-    return this.http.post<any>(
-      `${this.baseUrl}/api/modificationNotificationDefaut`,
-      data,
-      { headers }
-    );
+    return this.http.post<any>(`${this.baseUrl}/api/modificationNotificationDefaut`, data, {withCredentials: true});
   }
 
   getListeNotification(): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
     return this.http.get(`${this.baseUrl}/api/getListeNotiification`);
   }
 
   getListeNotiificationUsersDefaut(): Observable<any> {
-    const headers = this.authService.setRequestHeaders();
-    return this.http.get(
-      `${this.baseUrl}/api/getListeNotiificationUsersDefaut`,
-      { headers }
-    );
+    return this.http.get(`${this.baseUrl}/api/getListeNotiificationUsersDefaut`, {withCredentials: true});
   }
 }

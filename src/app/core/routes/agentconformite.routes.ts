@@ -1,19 +1,19 @@
-import {LayoutComponent} from '../components/layout/layout.component';
+import {LayoutComponent} from '../../components/layout/layout.component';
 import {AuthGuard} from '../guards/auth/auth-guard.guard';
 import {Routes} from '@angular/router';
-import {AgentDashboardComponent} from '../pages/agent-conformite/agent-dashboard/agent-dashboard.component';
+import {AgentDashboardComponent} from '../../pages/agent-conformite/agent-dashboard/agent-dashboard.component';
 import {
   AgentListeDemandesComponent
-} from '../pages/agent-conformite/agent-liste-demandes/agent-liste-demandes.component';
+} from '../../pages/agent-conformite/agent-liste-demandes/agent-liste-demandes.component';
 import {
   AgentListeEntrepriseComponent
-} from '../pages/agent-conformite/agent-liste-entreprise/agent-liste-entreprise.component';
+} from '../../pages/agent-conformite/agent-liste-entreprise/agent-liste-entreprise.component';
 import {
   AgentFicheDemandesComponent
-} from '../pages/agent-conformite/agent-fiche-demandes/agent-fiche-demandes.component';
+} from '../../pages/agent-conformite/agent-fiche-demandes/agent-fiche-demandes.component';
 import {
   AgentFicheEntrepriseComponent
-} from '../pages/agent-conformite/agent-fiche-entreprise/agent-fiche-entreprise.component';
+} from '../../pages/agent-conformite/agent-fiche-entreprise/agent-fiche-entreprise.component';
 
 export default [
   {

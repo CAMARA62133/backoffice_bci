@@ -2,14 +2,14 @@ import {CommonModule} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../services/authService/auth.service';
+import {AuthService} from '../../services/auth/authService/auth.service';
 import {ModalsService} from '../../services/modals/modals.service';
 import {SharedService} from '../../services/shared/shared.service';
 import {UsersService} from '../../services/users/users.service';
-import {getErrorMessage, getFormControlClass, isInvalid, isValid,} from '../../utils/form-helpers';
+import {getErrorMessage, getFormControlClass, isInvalid, isValid,} from '../../core/utils/form-helpers';
 import {ActivatedRoute} from '@angular/router';
 import {DatatableService} from '../../services/datatable/datatable.service';
-import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;

@@ -12,7 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
-import {AlerteType} from '../../interfaces/alertes';
+import {AlerteType} from '../../core/interfaces/alertes';
 import {AlertesService} from '../../services/alertes/alertes.service';
 import {ModalsService} from '../../services/modals/modals.service';
 import {PaginationsService} from '../../services/paginations/paginations.service';
@@ -21,8 +21,8 @@ import {
   getFormControlClass,
   isInvalid,
   isValid,
-} from '../../utils/form-helpers';
-import {DataTableDirective} from '../../directives/data-table/data-table.directive';
+} from '../../core/utils/form-helpers';
+import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
 
 
 @Component({

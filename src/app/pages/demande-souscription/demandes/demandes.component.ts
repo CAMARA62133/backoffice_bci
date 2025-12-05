@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, ElementRef, Injector, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {DataTableDirective} from '../../../directives/data-table/data-table.directive';
-import {BciWorkflow} from '../../../interfaces/workflow.interface';
-import {workflowCanvasSVG} from '../../../models/workflow';
+import {DataTableDirective} from '../../../core/directives/data-table/data-table.directive';
+import {BciWorkflow} from '../../../core/interfaces/workflow.interface';
+import {workflowCanvasSVG} from '../../../core/models/workflow';
 import {SvgDrawingService} from '../../../services/svg-drawing/svg-drawing.service';
-import {SvgElement} from '../../../models/svg-model';
+import {SvgElement} from '../../../core/models/svg-model';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({

@@ -3,6 +3,11 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {DemandeService} from '../../../services/agent-conformite/demande/demande.service';
 import {ToastrService} from 'ngx-toastr';
 import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {ModalsService} from '../../../services/modals/modals.service';
+
+// Déclarer bootstrap pour TypeScript
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-agent-fiche-demandes',
@@ -19,13 +24,18 @@ export class AgentFicheDemandesComponent implements OnInit {
   demande!: any;
   isLoading: boolean = false;
 
+  bloqueForm!: FormGroup;
+
   constructor(
     private route: ActivatedRoute,
     private demandeService: DemandeService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder,
+    private modalsService: ModalsService
   ) {
   }
+
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -35,6 +45,32 @@ export class AgentFicheDemandesComponent implements OnInit {
     })
   }
 
+  initForm(): void {
+    this.bloqueForm = this.fb.group({})
+  }
+
+  openModal(modalId: string) {
+    const isModalOpen = this.modalsService.isModalOpen(modalId);
+    if (!isModalOpen) {
+      this.modalsService.openModal(modalId);
+      //  reset du formulaire
+    }
+    this.modalsService.openModal(modalId);
+    // reset du formulaire
+  }
+
+  closeModal(modalId: string) {
+    const isModalOpen = this.modalsService.isModalOpen(modalId);
+    if (isModalOpen) {
+      this.modalsService.closeModal(modalId)
+      // reset() reset du formulaire
+    }
+  }
+
+  // Au rejet de la memande
+  onRejectAsk(){
+    this.openModal("unblockModal");
+  }
 
   // Private function to load the subscription liste
   private loadDemande(id: string) {

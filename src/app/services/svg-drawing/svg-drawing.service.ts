@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {SvgCircle, SvgElement, SvgLine, SvgRect} from '../../models/svg-model';
+import {SvgCircle, SvgElement, SvgLine, SvgRect} from '../../core/models/svg-model';
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {catchError, Observable, throwError} from 'rxjs';
 import {environment} from '../../../environnements/environnement';
-import {AuthService} from '../authService/auth.service';
+import {AuthService} from '../auth/authService/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,25 +16,25 @@ export class OrganisationsService {
   }
 
   getOrganisations(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListeOrganisation`);
+    return this.http.get(`${this.baseUrl}/api/getListeOrganisation`, {withCredentials: true});
   }
 
   getListePays(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/getListePays`);
+    return this.http.get(`${this.baseUrl}/api/getListePays`, {withCredentials: true});
   }
 
 
   // Pour les infos organisation
   createOrganisation(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/addOrganisationAndUser`, data, {
-      headers: this.authServie.setRequestHeaders(),
+      withCredentials: true
     });
   }
 
   // Mise a jour des infos
   updateOrganisation(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/updateOrganisation`, data, {
-      headers: this.authServie.setRequestHeaders(),
+      withCredentials: true
     });
   }
 
@@ -72,9 +72,8 @@ export class OrganisationsService {
       .set('btEnabled', data.btEnabled);
 
     return this.http.post(
-      `${this.baseUrl}/api/activeOrDesactiveOrganisation`,
-      {},
-      {params}
+      `${this.baseUrl}/api/activeOrDesactiveOrganisation`, {},
+      {params, withCredentials: true}
     );
   }
 

@@ -3,8 +3,8 @@ import {Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../../services/authService/auth.service';
-import {OrgOtpLoginService} from '../../../services/orgOtpLogin/org-otp-login.service';
+import {AuthService} from '../../../services/auth/authService/auth.service';
+import {OrgOtpLoginService} from '../../../services/auth/orgOtpLogin/org-otp-login.service';
 
 @Component({
   selector: 'app-validate-otp-after-verified-email',

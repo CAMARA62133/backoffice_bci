@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../../environnements/environnement';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {SearchOrgParams} from '../../../interfaces/search-params.interface';
+import {SearchOrgParams} from '../../../core/interfaces/search-params.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +17,14 @@ export class OrgLogService {
    * Get All Organizations Activities Logs
    */
   getLogActiviteOrganisation(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getLogActiviteOrganisation`);
+    return this.http.get(`${this.baseUrl}/getLogActiviteOrganisation`, {withCredentials: true});
   }
 
   /**
    * Get All Organizations Names
    */
   getNomOrganisation(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getNomOrganisation`);
+    return this.http.get(`${this.baseUrl}/getNomOrganisation`, {withCredentials: true});
   }
 
   /**
@@ -55,12 +55,14 @@ export class OrgLogService {
       httpParams = httpParams.set('organisation', params.organisation);
     }
 
-    if(params.username){
+    if (params.username) {
       httpParams = httpParams.set('username', params.username);
     }
 
     console.log("Params envoyer : ", {httpParams});
 
-    return this.http.post(`${this.baseUrl}/getFilteredLogsActiviteOrganisation`, null, {params: httpParams});
+    return this.http.post(`${this.baseUrl}/getFilteredLogsActiviteOrganisation`, null,
+      {params: httpParams, withCredentials: true}
+    );
   }
 }

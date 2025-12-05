@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {DataTableDirective} from '../../../directives/data-table/data-table.directive';
+import {DataTableDirective} from '../../../core/directives/data-table/data-table.directive';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 
 @Component({

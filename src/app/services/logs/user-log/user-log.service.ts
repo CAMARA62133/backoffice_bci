@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../environnements/environnement';
-import {SearchParams} from '../../../interfaces/search-params.interface';
+import {SearchParams} from '../../../core/interfaces/search-params.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +18,14 @@ export class UserLogService {
    * Get all user logs
    */
   getAllUserLogs(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getLogActiviteUsers`)
+    return this.http.get(`${this.baseUrl}/getLogActiviteUsers`, {withCredentials: true})
   }
 
   /**
    * Get all usernames
    */
   getNomUsers(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getNomUsers`)
+    return this.http.get(`${this.baseUrl}/getNomUsers`, {withCredentials: true})
   }
 
 
@@ -59,6 +59,8 @@ export class UserLogService {
 
     console.log("params envoyer : ", {httpParams});
 
-    return this.http.post(`${this.baseUrl}/getFilteredLogsActiviteUsers`, null, {params: httpParams})
+    return this.http.post(`${this.baseUrl}/getFilteredLogsActiviteUsers`, null,
+      {params: httpParams, withCredentials: true}
+    )
   }
 }
