@@ -22,8 +22,8 @@ export class DemandeService {
   }
 
   // Retourne la liste des demades de souscriptions en attentes
-  oneDemandeSouscription(data: any): Observable<any> {
-    const myParams = new HttpParams().set('id', data.id);
+  oneDemandeSouscription(id:number): Observable<any> {
+    const myParams = new HttpParams().set('id', id);
 
     return this.http.get<any>(`${this.baseUrl}/api/getListeDemandeSouscriptionAttente`, {
       params: myParams,

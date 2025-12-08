@@ -2,9 +2,13 @@
   <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">Demandes de souscription</h4>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Demandes de souscription
+            </h4>
           </div>
         </div>
       </div>
@@ -12,113 +16,134 @@
   </div>
 
   <div class="container-fluid mt-4">
-
     <div class="row">
       <div class="col-12">
         <div class="card bci-card">
           <ul class="nav nav-tabs card-header" role="tablist" id="supportTabs">
             <!-- Attentes -->
             <li class="nav-item" role="presentation">
-              <a class="nav-link fw-semibold"
-                 [ngClass]="{'active' : isActive('attente'), 'bg-primary text-white': isActive('attente')}"
-                 role="tab"
-                 data-bs-toggle="tab"
-                 href="#attente"
-                 (click)="setActiveTab('attente')"
-                 [attr.aria-selected]="isActive('attente')">
+              <a
+                class="nav-link fw-semibold"
+                [ngClass]="{
+                  active: isActive('attente'),
+                  'bg-primary text-white': isActive('attente')
+                }"
+                role="tab"
+                data-bs-toggle="tab"
+                (click)="setActiveTab('attente')"
+                [attr.aria-selected]="isActive('attente')"
+              >
                 <i class="fas fa-tachometer-alt me-2"></i>En Attentes
-                <span class="badge bg-warning ms-2">{{ isLoadingDemandes ? '' : demandes.length }}</span>
+                <span class="badge bg-warning ms-2">{{
+                  isLoadingDemandes ? "" : demandes.length
+                }}</span>
               </a>
             </li>
 
             <!-- Traites -->
             <li class="nav-item" role="presentation">
-              <a class="nav-link fw-semibold"
-                 [ngClass]="{'active' : isActive('traiter'), 'bg-primary text-white': isActive('traiter')}"
-                 role="tab"
-                 data-bs-toggle="tab"
-                 href="#traiter"
-                 (click)="setActiveTab('traiter')"
-                 [attr.aria-selected]="isActive('traiter')">
-
+              <a
+                class="nav-link fw-semibold"
+                [ngClass]="{
+                  active: isActive('traiter'),
+                  'bg-primary text-white': isActive('traiter')
+                }"
+                role="tab"
+                data-bs-toggle="tab"
+                (click)="setActiveTab('traiter')"
+                [attr.aria-selected]="isActive('traiter')"
+              >
                 <i class="fas fa-user me-2"></i>Traitées
-                <span class="badge bg-warning ms-2" id="mesTicketsCount">12</span>
+                <span class="badge bg-success ms-2">{{
+                  isLoadingDemandes ? "" : traitedDemandes.length
+                }}</span>
               </a>
             </li>
 
             <!-- Rejecter -->
-            <!--            <li class="nav-item" role="presentation">-->
-            <!--              <a class="nav-link fw-semibold"-->
-            <!--                 [ngClass]="{'active' : isActive('rejetes'), 'bg-primary text-white': isActive('rejetes')}"-->
-            <!--                 role="tab" data-bs-toggle="tab"-->
-            <!--                 href="#rejetes" (click)="setActiveTab('rejetes')"-->
-            <!--                 [attr.aria-selected]="isActive('rejetes')">-->
-            <!--                <i class="fas fa-arrow-up me-2"></i> Réjétés-->
-            <!--                <span class="badge bg-danger ms-2" id="escaladesCount">3</span>-->
-            <!--              </a>-->
-            <!--            </li>-->
-
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link fw-semibold"
+                [ngClass]="{
+                  active: isActive('rejetes'),
+                  'bg-primary text-white': isActive('rejetes')
+                }"
+                role="tab"
+                data-bs-toggle="tab"
+                href="#rejetes"
+                (click)="setActiveTab('rejetes')"
+                [attr.aria-selected]="isActive('rejetes')"
+              >
+                <i class="fas fa-arrow-up me-2"></i> Réjétés
+                <span class="badge bg-danger ms-2">{{
+                  isLoadingDemandes ? "" : rejectedDemandes.length
+                }}</span>
+              </a>
+            </li>
           </ul>
 
           <div class="tab-content card-body">
             <!-- Attentes -->
             <div
               class="tab-pane"
-              [ngClass]="{'active': isActive('attente')}"
+              [ngClass]="{ active: isActive('attente') }"
               role="tabpanel"
               id="attente"
             >
-
               <div class="table-responsive">
                 <table
-                  *ngIf="!isLoadingDemandes" datatable
+                  *ngIf="!isLoadingDemandes"
+                  datatable
                   [dtOptions]="dtOptions[0]"
                   [dtTrigger]="dtTriggers[0]"
                   id="table-attente"
                   class="table table-hover"
                 >
                   <thead class="table-primary">
-                  <tr>
-                    <th>#</th>
-                    <th>Identifiant Client</th>
-                    <th>Nom</th>
-                    <th>Téléphone</th>
-                    <th>Email</th>
-                    <th>Type Client</th>
-                    <th>Status demandes</th>
-                    <th>Organisation</th>
-                    <th>Tél Org</th>
-                    <th>Actions</th>
-                  </tr>
+                    <tr>
+                      <th>#</th>
+                      <th>Identifiant Client</th>
+                      <th>Nom</th>
+                      <th>Téléphone</th>
+                      <th>Email</th>
+                      <th>Type Client</th>
+                      <th>Status demandes</th>
+                      <th>Organisation</th>
+                      <th>Tél Org</th>
+                      <th>Actions</th>
+                    </tr>
                   </thead>
                   <tbody>
-                  <tr *ngFor="let demande of demandes; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ demande.vcPersonalID }}</td>
-                    <td>{{ demande.vcPersonalName }}</td>
-                    <td>{{ demande.vcPhoneNumber }}</td>
-                    <td>{{ demande.vcEmail }}</td>
-                    <td>{{ demande.typeClient }}</td>
-                    <td>
-                      <span class="badge bg-{{demande.statutDemande === 'En traitement' ? 'info' : ''}}">
-                        {{ demande.statutDemande }}
-                      </span>
-                    </td>
-                    <td>{{ demande.nomOrganisation }}</td>
-                    <td>{{ demande.phoneOrganisation }}</td>
-                    <td>
-                      <div class="d-flex justify-content-center gap-2">
-                        <a routerLink="/agent-demandes/{{demande.id}}" class="btn btn-sm btn-outline-primary"
-                           title="Voir détails">
-                          <i class="fas fa-eye"></i>
-                        </a>
+                    <tr *ngFor="let demande of demandes; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ demande.vcPersonalID }}</td>
+                      <td>{{ demande.vcPersonalName }}</td>
+                      <td>{{ demande.vcPhoneNumber }}</td>
+                      <td>{{ demande.vcEmail }}</td>
+                      <td>{{ demande.typeClient }}</td>
+                      <td>
+                        <span class="badge bg-warning">
+                          {{ demande.statutDemande }}
+                        </span>
+                      </td>
+                      <td>{{ demande.nomOrganisation }}</td>
+                      <td>{{ demande.phoneOrganisation }}</td>
+                      <td>
+                        <div class="d-flex justify-content-center gap-2">
+                          <a
+                            routerLink="/agent-demandes/{{ demande.id }}"
+                            class="btn btn-sm btn-outline-primary"
+                            title="Voir détails"
+                          >
+                            <i class="fas fa-eye"></i>
+                          </a>
 
-                        <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
-                        <!--   <i class="fas fa-comments"></i>-->
-                        <!-- </button>-->
-                      </div>
-                    </td>
-                  </tr>
+                          <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
+                          <!--   <i class="fas fa-comments"></i>-->
+                          <!-- </button>-->
+                        </div>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -126,320 +151,214 @@
               <!-- au chargement des donnne -->
               <div *ngIf="isLoadingDemandes" class="text-center my-3">
                 <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden"
-                >Chargement des données en cours...</span
-                >
+                  <span class="visually-hidden"
+                    >Chargement des données en cours...</span
+                  >
                 </div>
                 <p class="text-muted">
                   Veuillez patientez pendant que les données se chargent.
                 </p>
               </div>
 
+              <!-- Si liste est vide -->
+              <div
+                *ngIf="!isLoadingDemandes && demandes.length === 0"
+                class="text-center py-5"
+              >
+                <div class="mb-3">
+                  <i class="text-muted bi bi-inbox display-1"></i>
+                </div>
+                <h5 class="text-muted">Aucune demandes trouvée....</h5>
+                <p class="text-muted">
+                  Il n'y a pas de demandes en attentes pour l'instant !
+                </p>
+              </div>
             </div>
 
             <!-- Traites -->
             <div
               class="tab-pane"
-              [ngClass]="{'active': isActive('traiter')}"
+              [ngClass]="{ active: isActive('traiter') }"
               role="tabpanel"
               id="traiter"
             >
               <div class="table-responsive">
-                <table class="table table-hover tickets-table" id="ticketsTable">
+                <table
+                  *ngIf="!isLoadingDemandes"
+                  datatable
+                  [dtOptions]="dtOptions[0]"
+                  [dtTrigger]="dtTriggers[0]"
+                  id="table-attente"
+                  class="table table-hover"
+                >
                   <thead class="table-primary">
-                  <tr>
-                    <th width="50px"><input type="checkbox" class="form-check-input" id="selectAllCheckbox"></th>
-                    <th>Ticket</th>
-                    <th>Entreprise</th>
-                    <th>Sujet</th>
-                    <th>Priorité</th>
-                    <th>Statut</th>
-                    <th>Assigné à</th>
-                    <th>SLA</th>
-                    <th>Créé</th>
-                    <th>Actions</th>
-                  </tr>
+                    <tr>
+                      <th>#</th>
+                      <th>Identifiant Client</th>
+                      <th>Nom</th>
+                      <th>Téléphone</th>
+                      <th>Email</th>
+                      <th>Type Client</th>
+                      <th>Status demandes</th>
+                      <th>Organisation</th>
+                      <th>Tél Org</th>
+                      <th>Actions</th>
+                    </tr>
                   </thead>
-                  <tbody id="ticketsTableBody">
-                  <tr class="ticket-row priority-danger ">
-                    <td>
-                      <input type="checkbox" class="form-check-input ticket-checkbox" value="TKT_003">
-                    </td>
-                    <td>
-                      <div class="ticket-number">
-                        <strong>#2025-0003</strong>
-                        <div class="ticket-priority">
-                          <span class="badge bg-danger">CRITIQUE</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="entreprise-info">
-                        <strong>Import Export SA</strong>
-                        <br><small class="text-muted">ENT_003</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="ticket-subject">
-                    <span class="subject-text" title="Virement de 50k€ vers la France bloqué sans raison apparente">
-                        Virement international bloqué
-                    </span>
-                        <br><small class="text-muted">INCIDENT TECHNIQUE</small>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="badge bg-danger">CRITIQUE</span>
-                    </td>
-                    <td>
-                      <span class="badge bg-success">Résolu</span>
-                    </td>
-                    <td>
-                      <div class="agent-info">
-                        <strong>Pierre Martin</strong><br><small>Niveau 2</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="sla-info">
-                        <div class="sla-status text-danger">
-                          <i class="fas fa-exclamation-triangle"></i>
-                          <span>En retard</span>
-                        </div>
-                        <small class="sla-details">3211h de retard</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="date-info">
-                        <strong>Il y a 133j</strong>
-                        <br><small class="text-muted">20/07/2025 14:00:00</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="ticket-actions">
-                        <button class="btn btn-sm btn-outline-primary"
-                                onclick="supportManager.showTicketDetails('TKT_003')" title="Voir détails">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-success"
-                                onclick="supportManager.openCommunication('TKT_003')" title="Communication">
-                          <i class="fas fa-comments"></i>
-                        </button>
-                        <div class="btn-group">
-                          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                  title="Plus d'actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                          </button>
-                          <ul class="dropdown-menu">
+                  <tbody>
+                    <tr *ngFor="let demande of traitedDemandes; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ demande.vcPersonalID }}</td>
+                      <td>{{ demande.vcPersonalName }}</td>
+                      <td>{{ demande.vcPhoneNumber }}</td>
+                      <td>{{ demande.vcEmail }}</td>
+                      <td>{{ demande.typeClient }}</td>
+                      <td>
+                        <span class="badge bg-success">
+                          @if( demande.statutDemande == 'Valide' ){ Validée }
+                          <!-- {{ demande.statutDemande }} -->
+                        </span>
+                      </td>
+                      <td>{{ demande.nomOrganisation }}</td>
+                      <td>{{ demande.phoneOrganisation }}</td>
+                      <td>
+                        <div class="d-flex justify-content-center gap-2">
+                          <a
+                            routerLink="/agent-demandes/{{ demande.id }}"
+                            class="btn btn-sm btn-outline-primary"
+                            title="Voir détails"
+                          >
+                            <i class="fas fa-eye"></i>
+                          </a>
 
-
-                            <li>
-                              <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#" onclick="supportManager.duplicateTicket('TKT_003')">
-                              <i class="fas fa-copy me-2"></i>Dupliquer</a></li>
-                          </ul>
+                          <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
+                          <!--   <i class="fas fa-comments"></i>-->
+                          <!-- </button>-->
                         </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr class="ticket-row priority-warning ">
-                    <td>
-                      <input type="checkbox" class="form-check-input ticket-checkbox" value="TKT_001">
-                    </td>
-                    <td>
-                      <div class="ticket-number">
-                        <strong>#2025-0001</strong>
-                        <div class="ticket-priority">
-                          <span class="badge bg-warning">HAUTE</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="entreprise-info">
-                        <strong>Tech Solutions SARL</strong>
-                        <br><small class="text-muted">ENT_001</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="ticket-subject">
-                    <span class="subject-text"
-                          title="L'utilisateur ne peut pas se connecter depuis ce matin, erreur 'Identifiants invalides'">
-                        Problème de connexion à la plateforme
-                    </span>
-                        <br><small class="text-muted">INCIDENT TECHNIQUE</small>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="badge bg-warning">HAUTE</span>
-                    </td>
-                    <td>
-                      <span class="badge bg-warning">En cours</span>
-                    </td>
-                    <td>
-                      <div class="agent-info">
-                        <strong>Marie Dupont</strong><br><small>Niveau 2</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="sla-info">
-                        <div class="sla-status text-danger">
-                          <i class="fas fa-exclamation-triangle"></i>
-                          <span>En retard</span>
-                        </div>
-                        <small class="sla-details">3172h de retard</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="date-info">
-                        <strong>Il y a 133j</strong>
-                        <br><small class="text-muted">21/07/2025 09:00:00</small>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="ticket-actions">
-                        <button class="btn btn-sm btn-outline-primary"
-                                onclick="supportManager.showTicketDetails('TKT_001')" title="Voir détails">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-success"
-                                onclick="supportManager.openCommunication('TKT_001')" title="Communication">
-                          <i class="fas fa-comments"></i>
-                        </button>
-                        <div class="btn-group">
-                          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                  title="Plus d'actions">
-                            <i class="fas fa-ellipsis-v"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-
-                            <li><a class="dropdown-item" href="#" onclick="supportManager.escaladeTicket('TKT_001')">
-                              <i class="fas fa-arrow-up me-2"></i>Escalader</a></li>
-                            <li><a class="dropdown-item text-success" href="#"
-                                   onclick="supportManager.quickResolve('TKT_001')">
-                              <i class="fas fa-check me-2"></i>Résoudre</a></li>
-                            <li>
-                              <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#" onclick="supportManager.duplicateTicket('TKT_001')">
-                              <i class="fas fa-copy me-2"></i>Dupliquer</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
+              </div>
+
+              <!-- au chargement des donnne -->
+              <div *ngIf="isLoadingDemandes" class="text-center my-3">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden"
+                    >Chargement des données en cours...</span
+                  >
+                </div>
+                <p class="text-muted">
+                  Veuillez patientez pendant que les données se chargent.
+                </p>
+              </div>
+
+              <!-- Si liste est vide -->
+              <div
+                *ngIf="!isLoadingDemandes && traitedDemandes.length === 0"
+                class="text-center py-5"
+              >
+                <div class="mb-3">
+                  <i class="text-muted bi bi-inbox display-1"></i>
+                </div>
+                <h5 class="text-muted">Aucune demandes trouvée....</h5>
+                <p class="text-muted">
+                  Il n'y a pas de demandes traitées pour l'instant !
+                </p>
               </div>
             </div>
 
             <!-- Rejecter -->
-            <!--            <div-->
-            <!--              class="tab-pane"-->
-            <!--              [ngClass]="{'active': isActive('rejetes')}"-->
-            <!--              role="tabpanel"-->
-            <!--              id="rejetes"-->
-            <!--            >-->
-            <!--              <div class="table-responsive">-->
-            <!--                <table class="table table-hover tickets-table" id="ticketsTable">-->
-            <!--                  <thead class="table-primary">-->
-            <!--                  <tr>-->
-            <!--                    <th width="50px"><input type="checkbox" class="form-check-input" id="selectAllCheckbox"></th>-->
-            <!--                    <th>Ticket</th>-->
-            <!--                    <th>Entreprise</th>-->
-            <!--                    <th>Sujet</th>-->
-            <!--                    <th>Priorité</th>-->
-            <!--                    <th>Statut</th>-->
-            <!--                    <th>Assigné à</th>-->
-            <!--                    <th>SLA</th>-->
-            <!--                    <th>Créé</th>-->
-            <!--                    <th>Actions</th>-->
-            <!--                  </tr>-->
-            <!--                  </thead>-->
-            <!--                  <tbody id="ticketsTableBody">-->
-            <!--                  <tr class="ticket-row priority-danger ">-->
-            <!--                    <td>-->
-            <!--                      <input type="checkbox" class="form-check-input ticket-checkbox" value="TKT_003">-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <div class="ticket-number">-->
-            <!--                        <strong>#2025-0003</strong>-->
-            <!--                        <div class="ticket-priority">-->
-            <!--                          <span class="badge bg-danger">CRITIQUE</span>-->
-            <!--                        </div>-->
-            <!--                      </div>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <div class="entreprise-info">-->
-            <!--                        <strong>Import Export SA</strong>-->
-            <!--                        <br><small class="text-muted">ENT_003</small>-->
-            <!--                      </div>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <div class="ticket-subject">-->
-            <!--                    <span class="subject-text" title="Virement de 50k€ vers la France bloqué sans raison apparente">-->
-            <!--                        Virement international bloqué-->
-            <!--                    </span>-->
-            <!--                        <br><small class="text-muted">INCIDENT TECHNIQUE</small>-->
-            <!--                      </div>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <span class="badge bg-danger">CRITIQUE</span>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <span class="badge bg-success">Résolu</span>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <div class="agent-info">-->
-            <!--                        <strong>Pierre Martin</strong><br><small>Niveau 2</small>-->
-            <!--                      </div>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <div class="sla-info">-->
-            <!--                        <div class="sla-status text-danger">-->
-            <!--                          <i class="fas fa-exclamation-triangle"></i>-->
-            <!--                          <span>En retard</span>-->
-            <!--                        </div>-->
-            <!--                        <small class="sla-details">3211h de retard</small>-->
-            <!--                      </div>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <div class="date-info">-->
-            <!--                        <strong>Il y a 133j</strong>-->
-            <!--                        <br><small class="text-muted">20/07/2025 14:00:00</small>-->
-            <!--                      </div>-->
-            <!--                    </td>-->
-            <!--                    <td>-->
-            <!--                      <div class="ticket-actions">-->
-            <!--                        <button class="btn btn-sm btn-outline-primary"-->
-            <!--                                onclick="supportManager.showTicketDetails('TKT_003')" title="Voir détails">-->
-            <!--                          <i class="fas fa-eye"></i>-->
-            <!--                        </button>-->
-            <!--                        <button class="btn btn-sm btn-outline-success"-->
-            <!--                                onclick="supportManager.openCommunication('TKT_003')" title="Communication">-->
-            <!--                          <i class="fas fa-comments"></i>-->
-            <!--                        </button>-->
-            <!--                        <div class="btn-group">-->
-            <!--                          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"-->
-            <!--                                  title="Plus d'actions">-->
-            <!--                            <i class="fas fa-ellipsis-v"></i>-->
-            <!--                          </button>-->
-            <!--                          <ul class="dropdown-menu">-->
+            <div
+              class="tab-pane"
+              [ngClass]="{ active: isActive('rejetes') }"
+              role="tabpanel"
+              id="rejetes"
+            >
+              <div class="table-responsive">
+                <table
+                  *ngIf="!isLoadingDemandes"
+                  datatable
+                  [dtOptions]="dtOptions[0]"
+                  [dtTrigger]="dtTriggers[0]"
+                  id="table-attente"
+                  class="table table-hover"
+                >
+                  <thead class="table-primary">
+                    <tr>
+                      <th>#</th>
+                      <th>Identifiant Client</th>
+                      <th>Nom</th>
+                      <th>Téléphone</th>
+                      <th>Email</th>
+                      <th>Type Client</th>
+                      <th>Status demandes</th>
+                      <th>Organisation</th>
+                      <th>Tél Org</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let demande of rejectedDemandes; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ demande.vcPersonalID }}</td>
+                      <td>{{ demande.vcPersonalName }}</td>
+                      <td>{{ demande.vcPhoneNumber }}</td>
+                      <td>{{ demande.vcEmail }}</td>
+                      <td>{{ demande.typeClient }}</td>
+                      <td>
+                        <span class="badge bg-danger">
+                          @if( demande.statutDemande == 'Rejete' ){ Réjétée }
+                        </span>
+                      </td>
+                      <td>{{ demande.nomOrganisation }}</td>
+                      <td>{{ demande.phoneOrganisation }}</td>
+                      <td>
+                        <div class="d-flex justify-content-center gap-2">
+                          <a
+                            routerLink="/agent-demandes/{{ demande.id }}"
+                            class="btn btn-sm btn-outline-primary"
+                            title="Voir détails"
+                          >
+                            <i class="fas fa-eye"></i>
+                          </a>
 
+                          <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
+                          <!--   <i class="fas fa-comments"></i>-->
+                          <!-- </button>-->
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-            <!--                            <li>-->
-            <!--                              <hr class="dropdown-divider">-->
-            <!--                            </li>-->
-            <!--                            <li><a class="dropdown-item" href="#" onclick="supportManager.duplicateTicket('TKT_003')">-->
-            <!--                              <i class="fas fa-copy me-2"></i>Dupliquer</a></li>-->
-            <!--                          </ul>-->
-            <!--                        </div>-->
-            <!--                      </div>-->
-            <!--                    </td>-->
-            <!--                  </tr>-->
-            <!--                  </tbody>-->
-            <!--                </table>-->
-            <!--              </div>-->
-            <!--            </div>-->
+              <!-- au chargement des donnne -->
+              <div *ngIf="isLoadingDemandes" class="text-center my-3">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden"
+                    >Chargement des données en cours...</span
+                  >
+                </div>
+                <p class="text-muted">
+                  Veuillez patientez pendant que les données se chargent.
+                </p>
+              </div>
+
+              <!-- Si liste est vide -->
+              <div
+                *ngIf="!isLoadingDemandes && rejectedDemandes.length === 0"
+                class="text-center py-5"
+              >
+                <div class="mb-3">
+                  <i class="text-muted bi bi-inbox display-1"></i>
+                </div>
+                <h5 class="text-muted">Aucune demandes trouvée....</h5>
+                <p class="text-muted">
+                  Il n'y a pas de demandes réjétées pour l'instant !
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

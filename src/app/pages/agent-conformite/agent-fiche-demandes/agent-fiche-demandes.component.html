@@ -2,9 +2,13 @@
   <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">Fiche Détail Demande</h4>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Fiche Détail Demande
+            </h4>
           </div>
         </div>
       </div>
@@ -32,15 +36,30 @@
 
                     <div class="d-flex flex-wrap gap-2 text-white">
                       <p>
-                        Type Client : <span
-                        class="badge bg-success fw-semibold">{{ isLoading ? "Chargement..." : demande.typeClient }} </span>
+                        Type Client :
+                        <span class="badge bg-success fw-semibold"
+                          >{{
+                            isLoading ? "Chargement..." : demande.typeClient
+                          }}
+                        </span>
                       </p>
 
                       <p>
                         Statut :
                         <span
-                          class="badge fw-semibold text-white {{demande.statutDemande === 'Valide' ? 'bg-success' : 'bg-warning'}} ">
-                        {{ isLoading ? "Chargement..." : demande.statutDemande }}
+                          class="badge fw-semibold text-white"
+                          [ngClass]="{
+                            'bg-warning':
+                              demande.statutDemande === 'En traitement',
+                            'bg-success': demande.statutDemande === 'Valide',
+                            'bg-danger': demande.statutDemande === 'Rejete'
+                          }"
+                        >
+                          @if (isLoading) { Chargement... } @switch
+                          (demande.statutDemande) { @case ('En traitement') { En
+                          traitement } @case ('Valide') { Validée } @case
+                          ('Rejete') { Réjétée } @default {
+                          demande.statutDemande } }
                         </span>
                       </p>
                     </div>
@@ -68,38 +87,35 @@
               <div class="col-md-6">
                 <div class="info-group">
                   <label class="form-label fw-bold text-muted"
-                  >Identifiant Client</label>
-                  <p class="info-value"
-                     id="detailRaisonSociale">{{ isLoading ? "Chargement..." : demande.vcPersonalID }}
+                    >Identifiant Client</label
+                  >
+                  <p class="info-value" id="detailRaisonSociale">
+                    {{ isLoading ? "Chargement..." : demande.vcPersonalID }}
                   </p>
                 </div>
                 <div class="info-group">
                   <label class="form-label fw-bold text-muted"
-                  >Nom Client</label
+                    >Nom Client</label
                   >
-                  <p class="info-value">{{ isLoading ? "Chargement..." : demande.vcPersonalName }}</p>
+                  <p class="info-value">
+                    {{ isLoading ? "Chargement..." : demande.vcPersonalName }}
+                  </p>
                 </div>
                 <div class="info-group">
-                  <label class="form-label fw-bold text-muted"
-                  >Téléphone</label
-                  >
+                  <label class="form-label fw-bold text-muted">Téléphone</label>
                   <p class="info-value" id="detailSecteur">
                     {{ isLoading ? "Chargement..." : demande.vcPhoneNumber }}
                   </p>
                 </div>
                 <div class="info-group">
-                  <label class="form-label fw-bold text-muted"
-                  >Email</label
-                  >
+                  <label class="form-label fw-bold text-muted">Email</label>
                   <p class="info-value" id="detailSegment">
                     {{ isLoading ? "Chargement..." : demande.vcEmail }}
                   </p>
                 </div>
 
                 <div class="info-group">
-                  <label class="form-label fw-bold text-muted"
-                  >Adresse</label
-                  >
+                  <label class="form-label fw-bold text-muted">Adresse</label>
                   <p class="info-value" id="detailAdresse">
                     {{ isLoading ? "Chargement..." : demande.vcAddress }}
                   </p>
@@ -109,7 +125,7 @@
               <div class="col-md-6">
                 <div class="info-group">
                   <label class="form-label fw-bold text-muted"
-                  >Nom Organisation</label
+                    >Nom Organisation</label
                   >
                   <p class="info-value" id="detailAdresse">
                     {{ isLoading ? "Chargement..." : demande.nomOrganisation }}
@@ -117,34 +133,34 @@
                 </div>
                 <div class="info-group">
                   <label class="form-label fw-bold text-muted"
-                  >Téléphone Organisation</label
+                    >Téléphone Organisation</label
                   >
                   <p class="info-value" id="detailTelephone">
-                    {{ isLoading ? "Chargement..." : demande.phoneOrganisation }}
+                    {{
+                      isLoading ? "Chargement..." : demande.phoneOrganisation
+                    }}
                   </p>
                 </div>
                 <div class="info-group">
                   <label class="form-label fw-bold text-muted"
-                  >Email Organisation</label
+                    >Email Organisation</label
                   >
                   <p class="info-value" id="detailEmail">
-                    {{ isLoading ? "Chargement..." : demande.emailOrganisation }}
+                    {{
+                      isLoading ? "Chargement..." : demande.emailOrganisation
+                    }}
                   </p>
                 </div>
 
                 <div class="info-group">
-                  <label class="form-label fw-bold text-muted"
-                  >Pays</label
-                  >
+                  <label class="form-label fw-bold text-muted">Pays</label>
                   <p class="info-value" id="detailDateCreation">
                     {{ isLoading ? "Chargement..." : demande.vcCountry }}
                   </p>
                 </div>
 
                 <div class="info-group">
-                  <label class="form-label fw-bold text-muted"
-                  >Mère</label
-                  >
+                  <label class="form-label fw-bold text-muted">Mère</label>
                   <p class="info-value" id="detailDateCreation">
                     {{ isLoading ? "Chargement..." : demande.vcMotherName }}
                   </p>
@@ -169,29 +185,42 @@
                 aria-label="Liste des comptes bancaires"
               >
                 <thead class="table-primary">
-                <tr class="text-center">
-                  <th scope="col">#</th>
-                  <th scope="col">Numero Compte</th>
-                  <th scope="col">Type Compte</th>
-                  <th class="text-end" scope="col">Solde</th>
-                  <th scope="col">Dévise</th>
-                </tr>
+                  <tr class="text-center">
+                    <th scope="col">#</th>
+                    <th scope="col">Numero Compte</th>
+                    <th scope="col">Type Compte</th>
+                    <th class="text-end" scope="col">Solde</th>
+                    <th scope="col">Dévise</th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr *ngIf="demande?.comptes.length === 0">
-                  <td class="text-center text-muted py-4" colspan="5">
-                    <i class="fas fa-credit-card fs-4 mb-2"></i>
-                    <p class="mb-0">Aucun compte bancaire</p>
-                  </td>
-                </tr>
+                  <tr *ngIf="demande?.comptes.length === 0">
+                    <td class="text-center text-muted py-4" colspan="5">
+                      <i class="fas fa-credit-card fs-4 mb-2"></i>
+                      <p class="mb-0">Aucun compte bancaire</p>
+                    </td>
+                  </tr>
 
-                <tr *ngFor="let compte of demande?.comptes, let i=index">
-                  <td>{{ isLoading ? "Chargement..." : i + 1 }}</td>
-                  <td>{{ isLoading ? "Chargement..." : compte.vcAccountNumber }}</td>
-                  <td>{{ isLoading ? "Chargement..." : compte.vcAccountType }}</td>
-                  <td>{{ isLoading ? "Chargement..." : compte.mBalance | currency: compte.vcCurrency:'code':'1.2-2' }}</td>
-                  <td>{{ isLoading ? "Chargement..." : compte.vcCurrency }}</td>
-                </tr>
+                  <tr *ngFor="let compte of demande?.comptes; let i = index">
+                    <td>{{ isLoading ? "Chargement..." : i + 1 }}</td>
+                    <td>
+                      {{ isLoading ? "Chargement..." : compte.vcAccountNumber }}
+                    </td>
+                    <td>
+                      {{ isLoading ? "Chargement..." : compte.vcAccountType }}
+                    </td>
+                    <td>
+                      {{
+                        isLoading
+                          ? "Chargement..."
+                          : (compte.mBalance
+                            | currency : compte.vcCurrency : "code" : "1.2-2")
+                      }}
+                    </td>
+                    <td>
+                      {{ isLoading ? "Chargement..." : compte.vcCurrency }}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -199,7 +228,7 @@
         </div>
 
         <div class="d-flex gap-2">
-          <button class="btn btn-primary">
+          <button class="btn btn-primary" (click)="openModal('valideModal')">
             <i class="fa fa-check-circle"></i>
             Valider la demande
           </button>
@@ -214,7 +243,6 @@
   </div>
 </div>
 
-
 <!--
 ===========================================================
 ================== Les differents modals ==================
@@ -224,59 +252,127 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Lever le blocage</h5>
+        <h5 class="modal-title">Réjet de demande de soumission</h5>
         <button
-          class="btn-close btn-close-white"
+          class="btn-close btn-close-dark"
           data-bs-dismiss="modal"
           type="button"
         ></button>
       </div>
-      <div class="modal-body">
-        <p>
-          Êtes-vous sûr de vouloir lever le blocage pour cette opération ?
-        </p>
 
-        <div class="alert alert-warning" role="alert">
-          <i class="me-2 bi bi-exclamation-triangle"></i>
-          <strong>Opération :</strong>
-          <span> Virement de 87 M GNF - Orange Guinée </span>
-        </div>
+      <form [formGroup]="bloqueForm" (ngSubmit)="onRejectAsk()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Raison du réjet</label>
+            <select
+              formControlName="rejectReason"
+              id="rejectReason"
+              class="form-select"
+            >
+              <option value="">Sélectionnez une raison</option>
+              @for (reason of reasons; track reason.id) {
+              <option [value]="reason.vcReason">{{ reason.vcReason }}</option>
+              }
+            </select>
+          </div>
 
-        <div class="mb-3">
-          <label class="form-label">Raison du réjet</label>
-          <select name="rejectReason" id="rejectReason" class="form-select">
-            <option value="">Sélectionnez une raison</option>
-            @for (reason of reasons; track reason.id) {
-              <option [value]="reason.id">{{ reason.vcReason }}</option>
+          @if (!bloqueForm.get('rejectReason')?.value) {
+          <div class="mb-3">
+            <label class="form-label">Commentaire</label>
+            <textarea
+              formControlName="vcNotes"
+              class="form-control"
+              placeholder="Indiquez la raison..."
+              required=""
+              rows="3"
+            ></textarea>
+
+            @if (bloqueForm.hasError('atLeastOneRequired') &&
+            (bloqueForm.touched || bloqueForm.dirty)) {
+            <div class="alert alert-danger">
+              Vous devez renseigner au moins une raison ou un commentaire.
+            </div>
             }
-          </select>
+          </div>
+          } @else {
+          {{ bloqueForm.get("vcNotes")?.reset() }}
+          }
         </div>
 
-        <div class="mb-3">
-          <label class="form-label">Justification</label>
-          <textarea
-            class="form-control"
-            placeholder="Indiquez la raison..."
-            required=""
-            rows="3"
-          ></textarea>
-        </div>
-      </div>
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            type="button"
+            (click)="closeModal('unblockModal')"
+          >
+            Annuler
+          </button>
 
-      <div class="modal-footer">
+          <button
+            class="btn btn-danger"
+            type="submit"
+            [disabled]="bloqueForm.invalid"
+          >
+            Réjeter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" role="dialog" tabindex="-1" id="valideModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Validation de la demande de soumission</h5>
         <button
-          class="btn btn-secondary"
+          class="btn-close btn-close-dark"
           data-bs-dismiss="modal"
           type="button"
-          (click)="closeModal('unblockModal')"
-        >
-          Annuler
-        </button
-        >
-        <button class="btn btn-danger" type="button">
-          Lever le blocage
-        </button>
+        ></button>
       </div>
+
+      <form [formGroup]="valideForm" (ngSubmit)="onValidateAsk()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Commentaire</label>
+            <textarea
+              formControlName="vcNotes"
+              class="form-control"
+              placeholder="Indiquez la raison..."
+              required=""
+              rows="3"
+            ></textarea>
+
+            @if (valideForm.hasError('required') &&  (bloqueForm.touched || bloqueForm.dirty)) {
+              <div class="alert alert-danger mt-2">
+                Vous devez renseigner un commentaire.
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            type="button"
+            (click)="closeModal('valideModal')"
+          >
+            Annuler
+          </button>
+
+          <button
+            class="btn btn-success"
+            type="submit"
+            [disabled]="valideForm.invalid"
+          >
+            Valider la demande
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

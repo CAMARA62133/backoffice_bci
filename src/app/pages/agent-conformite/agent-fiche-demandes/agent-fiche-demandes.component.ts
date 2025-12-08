@@ -1,36 +1,42 @@
+import {CurrencyPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {Component, OnInit} from '@angular/core';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors, Validators,
+} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DemandeService} from '../../../services/agent-conformite/demande/demande.service';
 import {ToastrService} from 'ngx-toastr';
-import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {ModalsService} from '../../../services/modals/modals.service';
+import {RejectionReason} from '../../../core/interfaces/reject-raison.interface';
 import {AuthService} from '../../../core/node/services/auth/auth.service';
 import {RejectRaisonService} from '../../../core/node/services/reject-raison/reject-raison.service';
-import {RejectionReason} from '../../../core/interfaces/reject-raison.interface';
+import {DemandeService} from '../../../services/agent-conformite/demande/demande.service';
+import {AuthService as LaraAuthService} from '../../../services/auth/authService/auth.service';
+import {ModalsService} from '../../../services/modals/modals.service';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-agent-fiche-demandes',
-  imports: [
-    NgIf,
-    NgForOf,
-    CurrencyPipe
-  ],
+  imports: [NgIf, NgForOf, CurrencyPipe, NgClass, ReactiveFormsModule],
   templateUrl: './agent-fiche-demandes.component.html',
-  styleUrl: './agent-fiche-demandes.component.css'
+  styleUrl: './agent-fiche-demandes.component.css',
 })
 export class AgentFicheDemandesComponent implements OnInit {
-  id!: string;
+  id!: number;
   demande!: any;
   isLoading: boolean = false;
 
   bloqueForm!: FormGroup;
+  valideForm!: FormGroup;
 
   isLoadingReasons!: boolean;
   reasons!: RejectionReason[];
+
+  currentUser: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,83 +46,225 @@ export class AgentFicheDemandesComponent implements OnInit {
     private fb: FormBuilder,
     private modalsService: ModalsService,
     private nodeAuthServie: AuthService,
-    private rejectRaisonService: RejectRaisonService
+    private rejectRaisonService: RejectRaisonService,
+    private laravAuthService: LaraAuthService
   ) {
   }
 
-
   ngOnInit() {
+    const user = this.laravAuthService.getCurrentUser();
+    if (user) {
+      this.currentUser = user;
+      console.log('current user', this.currentUser);
+    }
+
     const email = localStorage.getItem('loginEmail');
-    console.log(`loginEmail: ${email}`);
+    if (!email) {
+      this.router.navigate(['/login']);
+      return;
+    }
 
+    // Recuperation de l'id dans l'url a chaque changement
+    // this.route.paramMap.subscribe(params => {
+    //   this.id = params.get('id');
+    //   console.log("recuperation de l'id dans les params : ", this.id);
+    //   this.loadDemande();
+    // })
+
+    // S’assurer que la session NodeJS est active
     this.nodeAuthServie.login(email).subscribe({
-      next: (res) => (console.log("res node api: ", res)),
-      error: (err) => (console.log("err node api: ", err))
-    })
+      next: () => {
+        // Maintenant que NodeJS est connecté, charger les données
+        this.loadRejectRaisons();
 
+        this.route.paramMap.subscribe((params) => {
+          this.id = Number(params.get('id'));
+          this.loadDemande();
+        });
+      },
+      error: (err) => {
+        console.error('Erreur login NodeJS', err);
+        this.toastr.error('Impossible de se connecter au backend NodeJS', '', {
+          positionClass: 'toast-custom-center',
+        });
+      },
+    });
 
-    this.route.paramMap.subscribe(params => {
-      this.id = params.get('id') || '';
-      console.log(this.id);
-      this.loadDemande(this.id);
-    })
-
-    this.loadRejectRaisons();
+    this.initForm();
+    this.initValidForm();
   }
 
   initForm(): void {
-    this.bloqueForm = this.fb.group({})
+    this.bloqueForm = this.fb.group(
+      {
+        rejectReason: [''],
+        vcNotes: [''],
+      },
+      {
+        validators: [this.atLeastOneRequiredValidator()],
+      }
+    );
+  }
+
+  initValidForm(): void {
+    this.valideForm =this.fb.group({
+      vcNotes: ['', Validators.required]
+    })
   }
 
   openModal(modalId: string) {
-    const isModalOpen = this.modalsService.isModalOpen(modalId);
-    if (!isModalOpen) {
+    if (!this.modalsService.isModalOpen(modalId)) {
       this.modalsService.openModal(modalId);
-      //  reset du formulaire
     }
-    this.modalsService.openModal(modalId);
-    // reset du formulaire
   }
 
   closeModal(modalId: string) {
     const isModalOpen = this.modalsService.isModalOpen(modalId);
     if (isModalOpen) {
-      this.modalsService.closeModal(modalId)
-      // reset() reset du formulaire
+      this.modalsService.closeModal(modalId);
+      this.bloqueForm.reset();
     }
   }
 
   // Au rejet de la memande
   onRejectAsk() {
-    this.openModal("unblockModal");
+    if (this.bloqueForm.invalid) {
+      this.bloqueForm.markAllAsTouched();
+      console.log(
+        "Formulaire invalide voici l'erreur : ",
+        this.bloqueForm.value
+      );
+      return;
+    }
+
+    console.log('params form : ', this.bloqueForm.value);
+    const newVcNotes = this.bloqueForm.get('rejectReason')?.value
+      ? this.bloqueForm.get('rejectReason')?.value
+      : this.bloqueForm.get('vcNotes')?.value;
+
+    const payload = {
+      idDemande: this.id,
+      vcNotes: newVcNotes,
+      iValidatorID: this.currentUser.id,
+    };
+
+    console.log({payload});
+    this.rejectRaisonService.rejectedDemande(payload).subscribe({
+      next: (res) => {
+        if (res?.status === 200) {
+          this.toastr.success('La demande a été rejetée avec succès.', '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.closeModal('rejectModal');
+          this.router.navigate(['/agent-demandes']);
+          this.closeModal('unblockModal');
+        } else {
+          this.toastr.error(
+            'Une erreur est survenue lors du rejet de la demande.',
+            '',
+            {positionClass: 'toast-custom-center'}
+          );
+          console.log('Erreur rejet demande:', res);
+        }
+        console.log('res rejet demande:', res);
+      },
+
+      error: (err) => {
+        this.toastr.error('Une erreur interne est survenue.', '', {
+          positionClass: 'toast-custom-center',
+        });
+        console.log('err rejet demande:', err);
+      },
+    });
+  }
+
+  onValidateAsk() {
+    if(this.valideForm.invalid){
+      this.valideForm.markAllAsTouched()
+      console.log("Formulaire invalide voici l'erreur: ")
+      return;
+    }
+
+    console.log("Formulaire soumis", this.valideForm.value)
+    const payload = {
+      idDemande: this.id,
+      vcNotes: this.valideForm.get('vcNotes')?.value,
+      iValidatorID: this.currentUser.id,
+    };
+
+    console.log({payload});
+
+    this.rejectRaisonService.validateDemande(payload).subscribe({
+      next: (res) => {
+        if (res?.status === 200) {
+          this.toastr.success('La demande a été validée avec succès.', '', {
+            positionClass: 'toast-custom-center',
+          });
+          this.closeModal('valideModal');
+          this.router.navigate(['/agent-demandes']);
+          this.closeModal('valideModal');
+        } else {
+          this.toastr.error(
+            'Une erreur est survenue lors de la validation de la demande.',
+            '',
+            {positionClass: 'toast-custom-center'}
+          );
+          console.log('Erreur validation demande:', res);
+        }
+        console.log('res validation demande:', res);
+      },
+
+      error: (err) => {
+        this.toastr.error('Une erreur interne est survenue.', '', {
+          positionClass: 'toast-custom-center',
+        });
+        console.log('err rejet demande:', err);
+      },
+    })
+  }
+
+  private atLeastOneRequiredValidator() {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const rejectReason = formGroup.get('rejectReason')?.value;
+      const vcNotes = formGroup.get('vcNotes')?.value;
+
+      if (!rejectReason && !vcNotes) {
+        return {atLeastOneRequired: true};
+      }
+
+      return null;
+    };
   }
 
   // Private function to load the subscription liste
-  private loadDemande(id: string) {
+  private loadDemande() {
     this.isLoading = true;
-    this.demandeService.oneDemandeSouscription(id).subscribe({
+    this.demandeService.oneDemandeSouscription(this.id).subscribe({
       next: (res) => {
         if (res?.status === 200) {
-          this.demande = res?.data[0]
-          console.log("ID:", this.id);
-          console.log("Detail: ", this.demande);
+          this.demande = res?.data[0];
+          console.log('ID:', this.id);
+          console.log('Detail: ', this.demande);
         } else {
-          if (res?.error?.message === "Unauthenticated.") {
-            this.toastr.error("Votre session a expirée", '', {positionClass: 'toast-top-right'});
+          if (res?.error?.message === 'Unauthenticated.') {
+            this.toastr.error('Votre session a expirée', '', {
+              positionClass: 'toast-custom-center',
+            });
             this.router.navigate(['/login']);
           }
         }
         this.isLoading = false;
-        console.log("res", res)
+        console.log('res', res);
       },
 
-
       error: (err) => {
-        this.toastr.error("Une erreur interne est survenue.", '', {positionClass: 'toast-top-right'});
-        console.log("err demandes:", err);
+        this.toastr.error('Une erreur interne est survenue.', '', {
+          positionClass: 'toast-custom-center',
+        });
+        console.log('err demandes:', err);
         this.isLoading = false;
-      }
-    })
+      },
+    });
   }
 
   private loadRejectRaisons() {
@@ -125,16 +273,16 @@ export class AgentFicheDemandesComponent implements OnInit {
       next: (res) => {
         if (res.status === 200) {
           this.reasons = res.data.reasons;
-          console.log("reasons:", this.reasons);
+          console.log('reasons:', this.reasons);
         } else {
-          console.log("err demandes:", this.reasons);
+          console.log('err demandes:', this.reasons);
         }
-        console.log("res load reject reasons", res);
+        console.log('res load reject reasons', res);
       },
 
       error: (err) => {
-        console.log("err load reject reasons :", err);
-      }
-    })
+        console.log('err load reject reasons :', err);
+      },
+    });
   }
 }

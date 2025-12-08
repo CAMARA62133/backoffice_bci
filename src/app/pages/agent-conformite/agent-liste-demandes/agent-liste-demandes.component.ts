@@ -44,6 +44,8 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
   // ========================================
   isLoadingDemandes: boolean = false;
   demandes: any[] = [];
+  traitedDemandes: any[] = [];
+  rejectedDemandes: any[] = [];
 
 
   // constructeur
@@ -84,7 +86,9 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
     this.demandeService.allDemandesSouscriptions().subscribe({
       next: (res) => {
         if (res?.status === 200) {
-          this.demandes = res?.data;
+          this.demandes = res?.data.filter((d: any) => d.statutDemande === "En traitement");
+          this.traitedDemandes = res?.data.filter((d: any) => d.statutDemande === "Valide");
+          this.rejectedDemandes = res?.data.filter((d: any) => d.statutDemande === "Rejete");
 
           // Initialiser toutes les tables après chargement
           this.dtTriggers.forEach(t => t.next(null));
@@ -96,7 +100,8 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
         }
 
         this.isLoadingDemandes = false;
-        console.log("res demandes:", this.demandes);
+        console.log("demande attentes:", this.demandes);
+        console.log("demandes traited:", this.traitedDemandes);
       },
 
       error: (err) => {

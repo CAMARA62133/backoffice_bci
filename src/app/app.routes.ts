@@ -56,6 +56,7 @@ import {
 import {EntreprisesComponent} from './pages/demande-souscription/entreprises/entreprises.component';
 import {UnauthorizedComponent} from './pages/auth/unauthorized/unauthorized.component';
 import {ChartTestComponent} from './pages/chart-test/chart-test.component';
+import {nodeSessionGuard} from './core/node/guards/node-session/node-session.guard';
 
 export const routes: Routes = [
 
@@ -320,8 +321,6 @@ export const routes: Routes = [
       {
         path: "agent-dashboard",
         title: 'BCI - Online | Tableau de bord Agent',
-        // loadComponent: () => import("./pages/agent-conformite/agent-dashboard/agent-dashboard.component")
-        //   .then(m => m.AgentDashboardComponent),
         component: AgentDashboardComponent,
         canActivate: [AuthGuard],
         data: {roles: ["Agent Conformité"]}
@@ -339,7 +338,7 @@ export const routes: Routes = [
         path: "agent-demandes/:id",
         title: 'BCI - Online | Fiche demandes de souscriptions',
         component: AgentFicheDemandesComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, nodeSessionGuard],
         data: {roles: ["Agent Conformité"]}
       },
 
