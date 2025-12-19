@@ -31,3 +31,11 @@ export interface ApiResponse {
   message?: string;
   data?: Demande[];
 }
+
+
+export interface ValidDemandePayload {
+  idDemande: number,
+  vcNotes: string,
+  iValidatorID: number
+  lienSiteClient: string
+}

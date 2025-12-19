@@ -13,6 +13,7 @@ import {Router, RouterLink} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../../services/auth/authService/auth.service';
 import {OtpLoginServiceService} from '../../../services/auth/otpLogin/otp-login.service';
+import {AuthService as NodeAuthService} from "../../../core/node/services/auth/auth.service";
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
@@ -38,12 +39,22 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
     private otpService: OtpLoginServiceService,
     private router: Router,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private nodeAuthService: NodeAuthService,
   ) {
   }
 
   ngOnInit() {
     this.loginEmail = localStorage.getItem('loginEmail');
+
+    this.nodeAuthService.login(this.loginEmail).subscribe({
+      next: (res) => {
+        console.log("res appel api node ", res)
+      },
+      error: (err) => {
+        console.log("err appel api node ", err)
+      }
+    })
   }
 
   moveToNext(event: any, index: number) {

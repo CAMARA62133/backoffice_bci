@@ -100,8 +100,9 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
         }
 
         this.isLoadingDemandes = false;
-        console.log("demande attentes:", this.demandes);
-        console.log("demandes traited:", this.traitedDemandes);
+        console.log("dmd attentes:", this.demandes);
+        console.log("dmd traited:", this.traitedDemandes);
+        console.log("dmd rejected:", this.rejectedDemandes);
       },
 
       error: (err) => {

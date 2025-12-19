@@ -44,48 +44,34 @@
     <div class="card border-0 shadow-sm" id="tableView">
       <div class="card-body p-2">
         <div class="table-responsive">
-          <table appDataTable class="table table-hover mb-0 datatable">
-            <thead class="table-primary">
+          <table appDataTable class="table table-hover mb-0 datatable text-center">
+            <thead class="table-primary text-center">
             <tr>
-              <th class="sortable" data-sort="raisonSociale" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Raison Sociale</div>
-              </th>
-              <th class="sortable" data-sort="nif" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> NIF</div>
-              </th>
-              <th class="sortable" data-sort="segment" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Segment</div>
-              </th>
-              <th class="sortable" data-sort="secteurActivite" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Secteur</div>
-              </th>
-              <th class="sortable" data-sort="statutKYC" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Statut KYC</div>
-              </th>
-              <th class="sortable" data-sort="statutActif" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Statut</div>
-              </th>
-              <th class="sortable" data-sort="dateCreation" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Date Création</div>
-              </th>
-              <th class="text-center" scope="col">Actions</th>
+              <th>#</th>
+              <th>Identifiant Client</th>
+              <th>Nom</th>
+              <th>Téléphone</th>
+              <th>Email</th>
+              <th>Type Client</th>
+              <th>Status demandes</th>
+              <th>Organisation</th>
+              <th>Tél Org</th>
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody id="entreprisesTableBody">
             <tr data-entreprise-id="ENT000001" class="table-row-hover fade-in">
+              <td>Data 1</td>
+              <td>Data 2</td>
+              <td>Data 3</td>
+              <td>Data 4</td>
+              <td>Data 5</td>
+              <td>Data 6</td>
+              <td>Data 7</td>
+              <td>Data 8</td>
+              <td>Data 9</td>
               <td>
-                <div class="d-flex align-items-center">
-                  <strong>TRANSPORT GUINEE EXPRESS 1</strong>
-                </div>
-              </td>
-              <td><span class="font-monospace">GN484462234</span></td>
-              <td><span class="badge badge-segment">PME</span></td>
-              <td>Services</td>
-              <td><span class="badge badge-kyc-en_cours"><i class="fas fa-clock me-1"></i>En cours</span></td>
-              <td><span class="badge badge-status-actif"><i class="fas fa-check-circle me-1"></i>Actif</span></td>
-              <td>10/08/2020</td>
-              <td>
-                <div class="d-flex gap-1">
+                <div class="d-flex gap-1 justify-content-center">
                   <a routerLink="/agent-entreprise/1" class="btn btn-outline-info btn-action btn-sm"
                      title="Consulter la fiche">
                     <i class="fas fa-eye"></i>

@@ -382,15 +382,19 @@ export class UtilisteurComponent implements OnInit {
     this.sharedService.getAllRoles().subscribe({
       next: (res) => {
         // Liste des IDs à exclure
-        const excludedRoleIds = [7, 10];
+        // const excludedRoleIds = [7, 10];
 
         if (this.userInfo?.vcRoleName === 'Admin integrateur' || +this.userInfo?.iRoleID === 10) {
           this.roles = (res?.data || []).filter((role: any) => +role.id === 16)
         }
 
         if (this.userInfo?.vcRoleName === 'Admin integrateur banque' || +this?.userInfo?.iRoleID === 16) {
-          this.roles = (res?.data || []).filter((role: any) => +role.id === 7)
+          this.roles = (res?.data || []).filter((role: any) => +role.id === 7 || +role.id === 3)
         }
+
+        // if (this.userInfo?.vcRoleName === 'Administrateur Système (IT)' || +this?.userInfo?.iRoleID === 7) {
+        //   this.roles = (res?.data || []).filter((role: any) => +role.id === 3)
+        // }
 
         // Filtrage des rôles
         // this.roles = (res?.data || []).filter(

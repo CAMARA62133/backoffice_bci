@@ -57,6 +57,7 @@ import {EntreprisesComponent} from './pages/demande-souscription/entreprises/ent
 import {UnauthorizedComponent} from './pages/auth/unauthorized/unauthorized.component';
 import {ChartTestComponent} from './pages/chart-test/chart-test.component';
 import {nodeSessionGuard} from './core/node/guards/node-session/node-session.guard';
+import {BeneficiaireComponent} from './pages/orgs/beneficiaire/beneficiaire.component';
 
 export const routes: Routes = [
 
@@ -313,6 +314,14 @@ export const routes: Routes = [
         path: 'alertes-supervision',
         title: 'BCI - Online | Alertes et supervisions',
         component: AlertesSupervisionsComponent,
+        canActivate: [AuthGuard],
+        data: {roles: ["Administrateur Système (IT)"]}
+      },
+
+      {
+        path: 'beneficiaires',
+        title: 'BCI - Online | Liste des beneficiaires',
+        component: BeneficiaireComponent,
         canActivate: [AuthGuard],
         data: {roles: ["Administrateur Système (IT)"]}
       },

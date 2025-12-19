@@ -35,8 +35,8 @@
               >
                 <i class="fas fa-tachometer-alt me-2"></i>En Attentes
                 <span class="badge bg-warning ms-2">{{
-                  isLoadingDemandes ? "" : demandes.length
-                }}</span>
+                    isLoadingDemandes ? "" : demandes.length
+                  }}</span>
               </a>
             </li>
 
@@ -55,8 +55,8 @@
               >
                 <i class="fas fa-user me-2"></i>Traitées
                 <span class="badge bg-success ms-2">{{
-                  isLoadingDemandes ? "" : traitedDemandes.length
-                }}</span>
+                    isLoadingDemandes ? "" : traitedDemandes.length
+                  }}</span>
               </a>
             </li>
 
@@ -76,8 +76,8 @@
               >
                 <i class="fas fa-arrow-up me-2"></i> Réjétés
                 <span class="badge bg-danger ms-2">{{
-                  isLoadingDemandes ? "" : rejectedDemandes.length
-                }}</span>
+                    isLoadingDemandes ? "" : rejectedDemandes.length
+                  }}</span>
               </a>
             </li>
           </ul>
@@ -97,53 +97,53 @@
                   [dtOptions]="dtOptions[0]"
                   [dtTrigger]="dtTriggers[0]"
                   id="table-attente"
-                  class="table table-hover"
+                  class="table table-hover text-center"
                 >
                   <thead class="table-primary">
-                    <tr>
-                      <th>#</th>
-                      <th>Identifiant Client</th>
-                      <th>Nom</th>
-                      <th>Téléphone</th>
-                      <th>Email</th>
-                      <th>Type Client</th>
-                      <th>Status demandes</th>
-                      <th>Organisation</th>
-                      <th>Tél Org</th>
-                      <th>Actions</th>
-                    </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>Identifiant Client</th>
+                    <th>Nom</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Type Client</th>
+                    <th>Status demandes</th>
+                    <th>Organisation</th>
+                    <th>Tél Org</th>
+                    <th>Actions</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let demande of demandes; let i = index">
-                      <td>{{ i + 1 }}</td>
-                      <td>{{ demande.vcPersonalID }}</td>
-                      <td>{{ demande.vcPersonalName }}</td>
-                      <td>{{ demande.vcPhoneNumber }}</td>
-                      <td>{{ demande.vcEmail }}</td>
-                      <td>{{ demande.typeClient }}</td>
-                      <td>
+                  <tr *ngFor="let demande of demandes; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ demande.vcPersonalID }}</td>
+                    <td>{{ demande.vcPersonalName }}</td>
+                    <td>{{ demande.vcPhoneNumber }}</td>
+                    <td>{{ demande.vcEmail }}</td>
+                    <td>{{ demande.typeClient }}</td>
+                    <td>
                         <span class="badge bg-warning">
                           {{ demande.statutDemande }}
                         </span>
-                      </td>
-                      <td>{{ demande.nomOrganisation }}</td>
-                      <td>{{ demande.phoneOrganisation }}</td>
-                      <td>
-                        <div class="d-flex justify-content-center gap-2">
-                          <a
-                            routerLink="/agent-demandes/{{ demande.id }}"
-                            class="btn btn-sm btn-outline-primary"
-                            title="Voir détails"
-                          >
-                            <i class="fas fa-eye"></i>
-                          </a>
+                    </td>
+                    <td>{{ demande.nomOrganisation }}</td>
+                    <td>{{ demande.phoneOrganisation }}</td>
+                    <td>
+                      <div class="d-flex justify-content-center gap-2">
+                        <a
+                          routerLink="/agent-demandes/{{ demande.id }}"
+                          class="btn btn-sm btn-outline-primary"
+                          title="Voir détails"
+                        >
+                          <i class="fas fa-eye"></i>
+                        </a>
 
-                          <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
-                          <!--   <i class="fas fa-comments"></i>-->
-                          <!-- </button>-->
-                        </div>
-                      </td>
-                    </tr>
+                        <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
+                        <!--   <i class="fas fa-comments"></i>-->
+                        <!-- </button>-->
+                      </div>
+                    </td>
+                  </tr>
                   </tbody>
                 </table>
               </div>
@@ -152,7 +152,7 @@
               <div *ngIf="isLoadingDemandes" class="text-center my-3">
                 <div class="spinner-border text-primary" role="status">
                   <span class="visually-hidden"
-                    >Chargement des données en cours...</span
+                  >Chargement des données en cours...</span
                   >
                 </div>
                 <p class="text-muted">
@@ -189,54 +189,40 @@
                   [dtOptions]="dtOptions[0]"
                   [dtTrigger]="dtTriggers[0]"
                   id="table-attente"
-                  class="table table-hover"
+                  class="table table-hover text-center"
                 >
                   <thead class="table-primary">
-                    <tr>
-                      <th>#</th>
-                      <th>Identifiant Client</th>
-                      <th>Nom</th>
-                      <th>Téléphone</th>
-                      <th>Email</th>
-                      <th>Type Client</th>
-                      <th>Status demandes</th>
-                      <th>Organisation</th>
-                      <th>Tél Org</th>
-                      <th>Actions</th>
-                    </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>Identifiant Client</th>
+                    <th>Nom</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Type Client</th>
+                    <th>Status demandes</th>
+                    <th>Organisation</th>
+                    <th>Tél Org</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let demande of traitedDemandes; let i = index">
-                      <td>{{ i + 1 }}</td>
-                      <td>{{ demande.vcPersonalID }}</td>
-                      <td>{{ demande.vcPersonalName }}</td>
-                      <td>{{ demande.vcPhoneNumber }}</td>
-                      <td>{{ demande.vcEmail }}</td>
-                      <td>{{ demande.typeClient }}</td>
-                      <td>
+                  <tr *ngFor="let demande of traitedDemandes; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ demande.vcPersonalID }}</td>
+                    <td>{{ demande.vcPersonalName }}</td>
+                    <td>{{ demande.vcPhoneNumber }}</td>
+                    <td>{{ demande.vcEmail }}</td>
+                    <td>{{ demande.typeClient }}</td>
+                    <td>
                         <span class="badge bg-success">
-                          @if( demande.statutDemande == 'Valide' ){ Validée }
+                          @if (demande.statutDemande == 'Valide') {
+                            Validée
+                          }
                           <!-- {{ demande.statutDemande }} -->
                         </span>
-                      </td>
-                      <td>{{ demande.nomOrganisation }}</td>
-                      <td>{{ demande.phoneOrganisation }}</td>
-                      <td>
-                        <div class="d-flex justify-content-center gap-2">
-                          <a
-                            routerLink="/agent-demandes/{{ demande.id }}"
-                            class="btn btn-sm btn-outline-primary"
-                            title="Voir détails"
-                          >
-                            <i class="fas fa-eye"></i>
-                          </a>
-
-                          <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
-                          <!--   <i class="fas fa-comments"></i>-->
-                          <!-- </button>-->
-                        </div>
-                      </td>
-                    </tr>
+                    </td>
+                    <td>{{ demande.nomOrganisation }}</td>
+                    <td>{{ demande.phoneOrganisation }}</td>
+                  </tr>
                   </tbody>
                 </table>
               </div>
@@ -245,7 +231,7 @@
               <div *ngIf="isLoadingDemandes" class="text-center my-3">
                 <div class="spinner-border text-primary" role="status">
                   <span class="visually-hidden"
-                    >Chargement des données en cours...</span
+                  >Chargement des données en cours...</span
                   >
                 </div>
                 <p class="text-muted">
@@ -282,53 +268,39 @@
                   [dtOptions]="dtOptions[0]"
                   [dtTrigger]="dtTriggers[0]"
                   id="table-attente"
-                  class="table table-hover"
+                  class="table table-hover text-center"
                 >
                   <thead class="table-primary">
-                    <tr>
-                      <th>#</th>
-                      <th>Identifiant Client</th>
-                      <th>Nom</th>
-                      <th>Téléphone</th>
-                      <th>Email</th>
-                      <th>Type Client</th>
-                      <th>Status demandes</th>
-                      <th>Organisation</th>
-                      <th>Tél Org</th>
-                      <th>Actions</th>
-                    </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>Identifiant Client</th>
+                    <th>Nom</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
+                    <th>Type Client</th>
+                    <th>Status demandes</th>
+                    <th>Organisation</th>
+                    <th>Tél Org</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let demande of rejectedDemandes; let i = index">
-                      <td>{{ i + 1 }}</td>
-                      <td>{{ demande.vcPersonalID }}</td>
-                      <td>{{ demande.vcPersonalName }}</td>
-                      <td>{{ demande.vcPhoneNumber }}</td>
-                      <td>{{ demande.vcEmail }}</td>
-                      <td>{{ demande.typeClient }}</td>
-                      <td>
+                  <tr *ngFor="let demande of rejectedDemandes; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ demande.vcPersonalID }}</td>
+                    <td>{{ demande.vcPersonalName }}</td>
+                    <td>{{ demande.vcPhoneNumber }}</td>
+                    <td>{{ demande.vcEmail }}</td>
+                    <td>{{ demande.typeClient }}</td>
+                    <td>
                         <span class="badge bg-danger">
-                          @if( demande.statutDemande == 'Rejete' ){ Réjétée }
+                          @if (demande.statutDemande == 'Rejete') {
+                            Réjétée
+                          }
                         </span>
-                      </td>
-                      <td>{{ demande.nomOrganisation }}</td>
-                      <td>{{ demande.phoneOrganisation }}</td>
-                      <td>
-                        <div class="d-flex justify-content-center gap-2">
-                          <a
-                            routerLink="/agent-demandes/{{ demande.id }}"
-                            class="btn btn-sm btn-outline-primary"
-                            title="Voir détails"
-                          >
-                            <i class="fas fa-eye"></i>
-                          </a>
-
-                          <!-- <button class="btn btn-sm btn-outline-success" title="Communication">-->
-                          <!--   <i class="fas fa-comments"></i>-->
-                          <!-- </button>-->
-                        </div>
-                      </td>
-                    </tr>
+                    </td>
+                    <td>{{ demande.nomOrganisation }}</td>
+                    <td>{{ demande.phoneOrganisation }}</td>
+                  </tr>
                   </tbody>
                 </table>
               </div>
@@ -337,7 +309,7 @@
               <div *ngIf="isLoadingDemandes" class="text-center my-3">
                 <div class="spinner-border text-primary" role="status">
                   <span class="visually-hidden"
-                    >Chargement des données en cours...</span
+                  >Chargement des données en cours...</span
                   >
                 </div>
                 <p class="text-muted">

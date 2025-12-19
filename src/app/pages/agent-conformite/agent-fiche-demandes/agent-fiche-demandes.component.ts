@@ -15,6 +15,7 @@ import {RejectRaisonService} from '../../../core/node/services/reject-raison/rej
 import {DemandeService} from '../../../services/agent-conformite/demande/demande.service';
 import {AuthService as LaraAuthService} from '../../../services/auth/authService/auth.service';
 import {ModalsService} from '../../../services/modals/modals.service';
+import {ValidDemandePayload} from '../../../core/interfaces/demande.interface';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
@@ -38,6 +39,8 @@ export class AgentFicheDemandesComponent implements OnInit {
 
   currentUser: any;
 
+  private clientSitelink: string = "http://localhost:4201";
+
   constructor(
     private route: ActivatedRoute,
     private demandeService: DemandeService,
@@ -58,11 +61,6 @@ export class AgentFicheDemandesComponent implements OnInit {
       console.log('current user', this.currentUser);
     }
 
-    const email = localStorage.getItem('loginEmail');
-    if (!email) {
-      this.router.navigate(['/login']);
-      return;
-    }
 
     // Recuperation de l'id dans l'url a chaque changement
     // this.route.paramMap.subscribe(params => {
@@ -71,27 +69,12 @@ export class AgentFicheDemandesComponent implements OnInit {
     //   this.loadDemande();
     // })
 
-    // S’assurer que la session NodeJS est active
-    this.nodeAuthServie.login(email).subscribe({
-      next: () => {
-        // Maintenant que NodeJS est connecté, charger les données
-        this.loadRejectRaisons();
-
-        this.route.paramMap.subscribe((params) => {
-          this.id = Number(params.get('id'));
-          this.loadDemande();
-        });
-      },
-      error: (err) => {
-        console.error('Erreur login NodeJS', err);
-        this.toastr.error('Impossible de se connecter au backend NodeJS', '', {
-          positionClass: 'toast-custom-center',
-        });
-      },
-    });
 
     this.initForm();
     this.initValidForm();
+
+    this.loadRejectRaisons();
+    this.loadDemande();
   }
 
   initForm(): void {
@@ -107,7 +90,7 @@ export class AgentFicheDemandesComponent implements OnInit {
   }
 
   initValidForm(): void {
-    this.valideForm =this.fb.group({
+    this.valideForm = this.fb.group({
       vcNotes: ['', Validators.required]
     })
   }
@@ -179,35 +162,33 @@ export class AgentFicheDemandesComponent implements OnInit {
   }
 
   onValidateAsk() {
-    if(this.valideForm.invalid){
+    if (this.valideForm.invalid) {
       this.valideForm.markAllAsTouched()
       console.log("Formulaire invalide voici l'erreur: ")
       return;
     }
 
     console.log("Formulaire soumis", this.valideForm.value)
-    const payload = {
-      idDemande: this.id,
+    const payload: ValidDemandePayload = {
+      idDemande: Number(this.id),
       vcNotes: this.valideForm.get('vcNotes')?.value,
-      iValidatorID: this.currentUser.id,
+      iValidatorID: Number(this.currentUser.id),
+      lienSiteClient: this.clientSitelink
     };
 
     console.log({payload});
 
-    this.rejectRaisonService.validateDemande(payload).subscribe({
+    this.demandeService.validDemandeSouscription(payload).subscribe({
       next: (res) => {
         if (res?.status === 200) {
-          this.toastr.success('La demande a été validée avec succès.', '', {
+          this.toastr.success(res.message, '', {
             positionClass: 'toast-custom-center',
           });
           this.closeModal('valideModal');
           this.router.navigate(['/agent-demandes']);
-          this.closeModal('valideModal');
         } else {
-          this.toastr.error(
-            'Une erreur est survenue lors de la validation de la demande.',
-            '',
-            {positionClass: 'toast-custom-center'}
+          this.toastr.error('Une erreur est survenue lors de la validation de la demande.',
+            '', {positionClass: 'toast-custom-center'}
           );
           console.log('Erreur validation demande:', res);
         }
@@ -220,6 +201,29 @@ export class AgentFicheDemandesComponent implements OnInit {
         });
         console.log('err rejet demande:', err);
       },
+
+      // next: (res) => {
+      //   if (res?.status === 200) {
+      //     this.toastr.success('La demande a été validée avec succès.', '', {
+      //       positionClass: 'toast-custom-center',
+      //     });
+      //     this.closeModal('valideModal');
+      //     this.router.navigate(['/agent-demandes']);
+      //   } else {
+      //     this.toastr.error('Une erreur est survenue lors de la validation de la demande.',
+      //       '', {positionClass: 'toast-custom-center'}
+      //     );
+      //     console.log('Erreur validation demande:', res);
+      //   }
+      //   console.log('res validation demande:', res);
+      // },
+      //
+      // error: (err) => {
+      //   this.toastr.error('Une erreur interne est survenue.', '', {
+      //     positionClass: 'toast-custom-center',
+      //   });
+      //   console.log('err rejet demande:', err);
+      // },
     })
   }
 
