@@ -213,9 +213,6 @@ export class UtilisteurComponent implements OnInit {
     console.log(this.selectedUserId, this.btEnabled);
   }
 
-  refreshUsers() {
-    this.loadUsers();
-  }
 
   // Ouverture de modal
   openModal(modalId: string) {

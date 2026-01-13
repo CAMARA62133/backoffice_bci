@@ -65,6 +65,9 @@ export class AlertesComponent implements OnInit {
   errorMessage: string = '';
   isloadingBloquerDebloquer: boolean = false;
 
+    //
+    
+
   // Constructeur
   constructor(
     private fb: FormBuilder,

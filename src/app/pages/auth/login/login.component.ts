@@ -92,6 +92,7 @@ export class LoginComponent implements OnInit {
       // 1️⃣ Charger le CSRF avant login (obligatoire)
       this.authService.getCsrfCookie().subscribe({
         next: () => {
+          this.loading = false;
 
           // 2️⃣ POST login
           this.authService.loginTest(email, password, captcha_token, appName).subscribe({
@@ -125,6 +126,7 @@ export class LoginComponent implements OnInit {
               console.error('Erreur lors de la connexion dans le "error" :', err);
               // this.toastr.error(err?.error?.message, '', {positionClass: 'toast-custom-center'});
               this.toastr.error("Une erreur est survenue", '', {positionClass: 'toast-custom-center'});
+              this.loading=false;
             }
           })
         },
@@ -175,6 +177,7 @@ export class LoginComponent implements OnInit {
         }
       );
       console.log('Formulaire invalide');
+      this.loading = false;
     }
   }
 

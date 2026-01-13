@@ -311,11 +311,11 @@ export const routes: Routes = [
       },
 
       {
-        path: 'alertes-supervision',
+        path: 'alertes-supervisions',
         title: 'BCI - Online | Alertes et supervisions',
         component: AlertesSupervisionsComponent,
         canActivate: [AuthGuard],
-        data: {roles: ["Administrateur Système (IT)"]}
+        data: {roles: ["Administrateur Système (IT)", "Admin integrateur"]}
       },
 
       {

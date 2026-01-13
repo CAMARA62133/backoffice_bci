@@ -11,4 +11,10 @@ import {RouterLink} from '@angular/router';
 })
 export class OrgListEntrepriseComponent {
 
+
+  // Creation d'une entreprise
+  openModal(params: string){
+    console.log("addEntreprise modal !")
+    alert("addEntreprise modal !");
+  }
 }

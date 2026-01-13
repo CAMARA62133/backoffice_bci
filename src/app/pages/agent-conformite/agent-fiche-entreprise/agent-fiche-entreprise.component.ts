@@ -5,9 +5,9 @@ import {ReactiveFormsModule} from "@angular/forms";
 @Component({
   selector: 'app-agent-fiche-entreprise',
     imports: [
-        CurrencyPipe,
-        NgForOf,
-        NgIf,
+        // CurrencyPipe,
+        // NgForOf,
+        // NgIf,
         ReactiveFormsModule
     ],
   templateUrl: './agent-fiche-entreprise.component.html',

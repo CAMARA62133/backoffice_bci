@@ -7,13 +7,13 @@ import {RouterLink} from '@angular/router';
 @Component({
   selector: 'app-beneficiaire',
   imports: [
-    CurrencyPipe,
+    // CurrencyPipe,
     FormsModule,
-    NgForOf,
-    NgIf,
+    // NgForOf,
+    // NgIf,
     ReactiveFormsModule,
     DataTablesModule,
-    RouterLink
+    // RouterLink
   ],
   templateUrl: './beneficiaire.component.html',
   styleUrl: './beneficiaire.component.css'

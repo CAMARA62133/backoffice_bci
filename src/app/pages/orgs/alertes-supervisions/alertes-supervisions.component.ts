@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, } from '@angular/core';
+import {LineChartComponent} from '../../../components/charts/line-chart/line-chart.component';
 
 @Component({
   selector: 'app-alertes-supervisions',
-  imports: [],
+  imports: [LineChartComponent],
   templateUrl: './alertes-supervisions.component.html',
   styleUrl: './alertes-supervisions.component.css'
 })
