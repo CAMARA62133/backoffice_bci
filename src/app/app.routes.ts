@@ -55,7 +55,6 @@ import {
 } from './pages/agent-conformite/agent-fiche-entreprise/agent-fiche-entreprise.component';
 import {EntreprisesComponent} from './pages/demande-souscription/entreprises/entreprises.component';
 import {UnauthorizedComponent} from './pages/auth/unauthorized/unauthorized.component';
-import {ChartTestComponent} from './pages/chart-test/chart-test.component';
 import {nodeSessionGuard} from './core/node/guards/node-session/node-session.guard';
 import {BeneficiaireComponent} from './pages/orgs/beneficiaire/beneficiaire.component';
 
@@ -164,14 +163,6 @@ export const routes: Routes = [
         component: DashboardComponent,
         canActivate: [AuthGuard],
         data: {roles: ["Admin integrateur", "Admin integrateur banque"]}
-      },
-
-      {
-        path: 'test-chart',
-        title: 'BCI - Online | Tableau de bord',
-        component: ChartTestComponent,
-        canActivate: [AuthGuard],
-        data: {roles: ["Admin integrateur", "Admin integrateur banque", "Agent Conformité"]}
       },
 
       {

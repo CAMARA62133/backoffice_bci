@@ -3,9 +3,11 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import {DataTablesModule} from 'angular-datatables';
 
+import { NgApexchartsModule } from "ng-apexcharts";
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, NgApexchartsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
