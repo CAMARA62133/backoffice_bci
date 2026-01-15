@@ -2,21 +2,35 @@
   <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">Alertes et supervisions</h4>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Alertes et supervisions
+            </h4>
             <p class="text-secondary mb-sm-0 font-size-13">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, fuga.
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Adipisci, fuga.
             </p>
           </div>
           <div class="page-title-right">
             <ol class="breadcrumb m-0">
-              <li class="breadcrumb-item"><a><span>Rapports &amp; exportations</span></a></li>
-              <li class="breadcrumb-item"><a href="#"><span>Rapports Périodiques</span></a></li>
+              <li class="breadcrumb-item">
+                <a><span>Rapports &amp; exportations</span></a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#"><span>Rapports Périodiques</span></a>
+              </li>
             </ol>
-            <div class="float-end small" id="systemStatus-1"><span class="badge bg-success me-2"><i
-              class="icon ion-android-checkmark-circle"></i> Système opérationnel </span><small class="text-muted">Dernière
-              synchro : <span id="lastSync">10:14 UTC</span></small></div>
+            <div class="float-end small" id="systemStatus-1">
+              <span class="badge bg-success me-2"
+                ><i class="icon ion-android-checkmark-circle"></i> Système
+                opérationnel </span
+              ><small class="text-muted"
+                >Dernière synchro : <span id="lastSync">10:14 UTC</span></small
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -25,14 +39,51 @@
 
   <div class="container-fluid mt-4">
     <div class="row">
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header bg-primary">
-            <h2 class="text-white-50">Area Chart</h2>
+      <div class="col-md-8">
+        <div class="card workflow-list-card card-h-100">
+          <div class="card-header bg-light">
+            <h5 class="fw-semibold text-primary mb-0">
+              <i class="fas fa-chart-line me-2"></i>Évolution des Alertes (24h)
+            </h5>
           </div>
+          <div class="card-body chart-container">
+            <div id="alertChart" style="height: 300px; min-height: 315px">
+              <apx-chart
+                [series]="chartOptions.series"
+                [chart]="chartOptions.chart"
+                [xaxis]="chartOptions.xaxis"
+                [yaxis]="chartOptions.yaxis"
+                [stroke]="chartOptions.stroke"
+                [tooltip]="chartOptions.tooltip"
+                [dataLabels]="chartOptions.dataLabels"
+                [fill]="chartOptions.fill"
+                [legend]="chartOptions.legend"
+                [grid]="chartOptions.grid"
+              ></apx-chart>
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div class="card-body">
-            <app-test/>
+      <div class="col-md-4">
+        <div class="card workflow-list-card card-h-100">
+          <div class="card-header bg-light">
+            <h5 class="fw-semibold text-primary mb-0">
+              <i class="fas fa-chart-pie me-2"></i>Répartition par Type
+            </h5>
+          </div>
+          <div class="card-body chart-container">
+            <div id="typeChart" style="height: 300px; min-height: 267.7px">
+              <div id="chart2">
+                <apx-chart
+                  [series]="AreaChartOptions.series"
+                  [chart]="AreaChartOptions.chart"
+                  [responsive]="AreaChartOptions.responsive"
+                  [labels]="AreaChartOptions.labels"
+                  [legend]="AreaChartOptions.legend"
+                ></apx-chart>
+              </div>
+            </div>
           </div>
         </div>
       </div>
