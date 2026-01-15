@@ -25,11 +25,11 @@
             </ol>
             <div class="float-end small" id="systemStatus-1">
               <span class="badge bg-success me-2"
-                ><i class="icon ion-android-checkmark-circle"></i> Système
+              ><i class="icon ion-android-checkmark-circle"></i> Système
                 opérationnel </span
               ><small class="text-muted"
-                >Dernière synchro : <span id="lastSync">10:14 UTC</span></small
-              >
+            >Dernière synchro : <span id="lastSync">10:14 UTC</span></small
+            >
             </div>
           </div>
         </div>
@@ -82,6 +82,26 @@
                   [labels]="AreaChartOptions.labels"
                   [legend]="AreaChartOptions.legend"
                 ></apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card workflow-list-card card-h-100">
+          <div class="card-header bg-light">
+            <h5 class="fw-semibold text-primary mb-0">
+              <i class="fas fa-chart-pie me-2"></i>Répartition par Type
+            </h5>
+          </div>
+          <div class="card-body chart-container">
+            <div id="typeChart">
+              <div>
+                <app-ui-chart [options]="lineChartOptions" />
               </div>
             </div>
           </div>
