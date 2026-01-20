@@ -328,7 +328,7 @@
               Bienvenue
               {{ user!.vcFirstname + " " + user!.vcLastname | uppercase }}
               !
-              <br/>
+              <br />
               <span
                 class="fw-semibold me-2 my-sm-2 font-size-11"
                 id="user-role"
@@ -339,7 +339,7 @@
                 - &nbsp; Dernière connexion
                 {{
                   user.dtLastSuccessfulLogin
-                    | date : "dd/MM/yyyy ' à ' HH:mm:ss" : userCurrentTimeZone
+                    | date: "dd/MM/yyyy ' à ' HH:mm:ss" : userCurrentTimeZone
                 }}
               </span>
             </span>
@@ -410,7 +410,11 @@
             @case ("Administrateur Système (IT)") {
               <!-- Tableau de bord -->
               <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="org-dashboard" aria-expanded="false">
+                <a
+                  class="nav-link"
+                  routerLink="org-dashboard"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-ios-speedometer active"></i>
                   <span data-key="t-dashboard">Tableau de Bord</span>
                 </a>
@@ -486,42 +490,60 @@
 
               <!-- utilisateurs -->
               <li class="nav-item">
-                <a class="nav-link" routerLink="org-utilisateur" aria-expanded="false">
+                <a
+                  class="nav-link"
+                  routerLink="org-utilisateur"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-person"></i>
                   <span data-key="t-dashboard">Liste des utilisateurs</span>
                 </a>
               </li>
 
               <!-- Transactions et Operations -->
-              <li class="nav-item ">
-                <a class="nav-link" routerLink="transactions-operations" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="transactions-operations"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-android-share"></i>
-                  <span data-key="t-dashboard">Transactions &amp; Opérations</span>
+                  <span data-key="t-dashboard"
+                    >Transactions &amp; Opérations</span
+                  >
                 </a>
               </li>
 
               <!-- Alertes et Supervisions -->
-              <li class="nav-item ">
-                <a class="nav-link" routerLink="alertes-supervision" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="alertes-supervision"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-android-notifications"></i>
                   <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
                 </a>
               </li>
 
               <!-- Beneficiaires -->
-                <!--              <li class="nav-item">-->
-                <!--                <a class="nav-link" routerLink="beneficiaires" aria-expanded="false">-->
-                <!--                  <i class="icon ion-android-list"></i>-->
-                <!--                  <span data-key="t-dashboard">Bénéficiaires</span>-->
-                <!--                </a>-->
-                <!--              </li>-->
+              <!--              <li class="nav-item">-->
+              <!--                <a class="nav-link" routerLink="beneficiaires" aria-expanded="false">-->
+              <!--                  <i class="icon ion-android-list"></i>-->
+              <!--                  <span data-key="t-dashboard">Bénéficiaires</span>-->
+              <!--                </a>-->
+              <!--              </li>-->
             }
 
             <!-- Admin Integrateur -->
             @case ("Admin integrateur") {
               <!-- Tableau de bord -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="dashboard" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="dashboard"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-ios-speedometer active"></i>
                   <span data-key="t-dashboard">Tableau de Bord</span>
                 </a>
@@ -537,7 +559,7 @@
                   <li>
                     <a
                       class="text-truncate align-self-center"
-                      routerLink="/organisations"
+                      routerLink="organisations"
                     >
                       <span>Liste des organisations</span>
                     </a>
@@ -546,7 +568,7 @@
                   <li>
                     <a
                       class="text-truncate align-self-center"
-                      routerLink="/organisations"
+                      routerLink="repporting-export"
                     >
                       <span>Repportings et Exports</span>
                     </a>
@@ -597,24 +619,38 @@
               </li>
 
               <!-- Transactions et Operations -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="transactions-operations" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="transactions-operations"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-android-share"></i>
-                  <span data-key="t-dashboard">Transactions &amp; Opérations</span>
+                  <span data-key="t-dashboard"
+                    >Transactions &amp; Opérations</span
+                  >
                 </a>
               </li>
 
               <!-- Alertes et Supervisions -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="alertes-supervisions" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="alertes-supervisions"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-android-notifications"></i>
                   <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
                 </a>
               </li>
 
               <!-- utilisateurs -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="utilisateurs" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="utilisateurs"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-person"></i>
                   <span data-key="t-dashboard">Liste des utilisateurs</span>
                 </a>
@@ -654,20 +690,27 @@
               </li>
             }
 
-
             <!-- Admin Integrateur Banque -->
             @case ("Admin integrateur banque") {
               <!-- Tableau de bord -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="dashboard" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="dashboard"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-ios-speedometer active"></i>
                   <span data-key="t-dashboard">Tableau de Bord</span>
                 </a>
               </li>
 
               <!-- utilisateurs -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="utilisateurs" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="utilisateurs"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-person"></i>
                   <span data-key="t-dashboard">Liste des utilisateurs</span>
                 </a>
@@ -743,16 +786,26 @@
               </li>
 
               <!-- Transactions et Operations -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="transactions-operations" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="transactions-operations"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-android-share"></i>
-                  <span data-key="t-dashboard">Transactions &amp; Opérations</span>
+                  <span data-key="t-dashboard"
+                    >Transactions &amp; Opérations</span
+                  >
                 </a>
               </li>
 
               <!-- Alertes et Supervisions -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="alertes-supervisions" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="alertes-supervisions"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-android-notifications"></i>
                   <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
                 </a>
@@ -795,13 +848,16 @@
             <!-- Pour l'agent conformite  -->
             @case ("Agent Conformité") {
               <!-- Tableau de bord -->
-              <li class="nav-item mm-active">
-                <a class="nav-link" routerLink="agent-dashboard" aria-expanded="false">
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="agent-dashboard"
+                  aria-expanded="false"
+                >
                   <i class="icon ion-ios-speedometer active"></i>
                   <span data-key="t-dashboard">Tableau de Bord</span>
                 </a>
               </li>
-
 
               <!-- Demandes de souscription -->
               <li class="nav-item">
@@ -832,10 +888,8 @@
             }
 
             <!-- Par defaut -->
-            @default {
-            }
+            @default {}
           }
-
         </ul>
       </div>
     </div>
@@ -861,5 +915,4 @@
   </div>
 
   <!-- End: Main -->
-
 </div>

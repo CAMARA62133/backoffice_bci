@@ -45,7 +45,7 @@
         <div
           class="card card-h-100"
           style="
-            background: url('assets/img/images-bci/bg-chart-BCI-Internet_Banking-3.jpg?h=60704d8652a4d6012af3cf7b9e758808')
+            background: url(&quot;assets/img/images-bci/bg-chart-BCI-Internet_Banking-3.jpg?h=60704d8652a4d6012af3cf7b9e758808&quot;)
               right / cover;
           "
         >
@@ -68,10 +68,14 @@
               </div>
             </div>
           </div>
-          <div
-            class="card-body text-light finance-chart-container"
-          >
-            <canvas id="myAreaChart"></canvas>
+          <div class="card-body text-light finance-chart-container">
+            <apx-chart
+              [series]="volumeChart.series"
+              [chart]="volumeChart.chart"
+              [xaxis]="volumeChart.xaxis"
+              [stroke]="volumeChart.stroke"
+              [fill]="volumeChart.fill"
+            ></apx-chart>
           </div>
         </div>
       </div>
@@ -479,7 +483,11 @@
                 Répartition des incidents
               </h5>
               <div class="ms-auto">
-                <select class="form-select-sm form-select">
+                <select
+                  class="form-select-sm form-select"
+                  [value]="selectedMonth"
+                  (change)="onMonthChange($any($event.target).value)"
+                >
                   <option value="JUIN" selected>Juin</option>
                   <option value="MAI">Mai</option>
                   <option value="AVRIL">Avril</option>
@@ -495,7 +503,17 @@
             <div
               id="incidentsChart"
               class="apex-charts finance-chart-container"
-            ></div>
+            >
+              <apx-chart
+                [series]="incidentChart.series"
+                [chart]="incidentChart.chart"
+                [labels]="incidentChart.labels"
+                [colors]="incidentChart.colors"
+                [legend]="incidentChart.legend"
+                [dataLabels]="incidentChart.dataLabels"
+                [plotOptions]="incidentChart.plotOptions"
+              ></apx-chart>
+            </div>
           </div>
         </div>
       </div>
@@ -521,7 +539,17 @@
                 <div
                   id="heatmapChart"
                   class="apex-charts finance-chart-container"
-                ></div>
+                >
+                  <apx-chart
+                    [series]="heatmapChart.series"
+                    [chart]="heatmapChart.chart"
+                    [labels]="heatmapChart.labels"
+                    [colors]="heatmapChart.colors"
+                    [legend]="heatmapChart.legend"
+                    [dataLabels]="heatmapChart.dataLabels"
+                    [plotOptions]="heatmapChart.plotOptions"
+                  ></apx-chart>
+                </div>
               </div>
             </div>
           </div>

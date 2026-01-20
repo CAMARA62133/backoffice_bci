@@ -1,0 +1,22 @@
+export type ChartOptions = {
+  chart: ApexChart | any;
+  annotations: ApexAnnotations | any;
+  colors: string[] | any;
+  dataLabels: ApexDataLabels | any;
+  series: ApexNonAxisChartSeries | any;
+  stroke: ApexStroke | any;
+  labels: string[] | any;
+  legend: ApexLegend | any;
+  fill: ApexFill | any;
+  tooltip: ApexTooltip | any;
+  plotOptions: ApexPlotOptions | any;
+  responsive: ApexResponsive[] | any;
+  xaxis: ApexXAxis | any;
+  yaxis: ApexYAxis | ApexYAxis[] | any;
+  grid: ApexGrid | any;
+  states: ApexStates | any;
+  title: ApexTitleSubtitle | any;
+  subtitle: ApexTitleSubtitle | any;
+  theme: ApexTheme | any;
+  markers: ApexMarkers | any;
+};

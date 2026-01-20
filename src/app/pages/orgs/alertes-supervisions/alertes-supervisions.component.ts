@@ -1,50 +1,8 @@
-import {Component, ViewChild} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 // import { ApexYAxis, NgApexchartsModule } from 'ng-apexcharts';
-import {
-  ApexAnnotations,
-  ApexChart,
-  ApexDataLabels,
-  ApexFill,
-  ApexGrid,
-  ApexLegend,
-  ApexMarkers,
-  ApexNonAxisChartSeries,
-  ApexPlotOptions,
-  ApexResponsive,
-  ApexStates,
-  ApexStroke,
-  ApexTheme,
-  ApexTitleSubtitle,
-  ApexTooltip,
-  ApexXAxis,
-  ApexYAxis,
-  ChartComponent,
-  NgApexchartsModule
-} from 'ng-apexcharts';
-import {UiChartComponent} from '../../../components/shared/ui-chart/ui-chart.component';
-
-export type ChartOptions = {
-  chart: ApexChart | any;
-  annotations: ApexAnnotations | any;
-  colors: string[] | any;
-  dataLabels: ApexDataLabels | any;
-  series: ApexNonAxisChartSeries | any;
-  stroke: ApexStroke | any;
-  labels: string[] | any;
-  legend: ApexLegend | any;
-  fill: ApexFill | any;
-  tooltip: ApexTooltip | any;
-  plotOptions: ApexPlotOptions | any;
-  responsive: ApexResponsive[] | any;
-  xaxis: ApexXAxis | any;
-  yaxis: ApexYAxis | ApexYAxis[] | any;
-  grid: ApexGrid | any;
-  states: ApexStates | any;
-  title: ApexTitleSubtitle | any;
-  subtitle: ApexTitleSubtitle | any;
-  theme: ApexTheme | any;
-  markers: ApexMarkers | any;
-};
+import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
+import { UiChartComponent } from '../../../components/shared/ui-chart/ui-chart.component';
+import { ChartOptions } from '../../../core/interfaces/apexChartOptions';
 
 @Component({
   selector: 'app-alertes-supervisions',
@@ -58,8 +16,8 @@ export class AlertesSupervisionsComponent {
   public AreaChartOptions: Partial<ChartOptions>;
   public lineChartOptions: Partial<ChartOptions>;
 
-
   constructor() {
+    // Area Chart
     this.chartOptions = {
       series: [
         {
@@ -89,6 +47,9 @@ export class AlertesSupervisionsComponent {
         fontFamily: 'Segoe UI, sans-serif',
         toolbar: {
           show: false,
+        },
+        zoom: {
+          enabled: false,
         },
         animations: {
           enabled: true,
@@ -130,12 +91,16 @@ export class AlertesSupervisionsComponent {
       },
     };
 
+    // Donut Chart
     this.AreaChartOptions = {
       series: [35, 25, 12, 25],
       chart: {
         type: 'donut',
         height: 300,
         fontFamily: 'Segoe UI, sans-serif',
+        toolbar: {
+          show: false,
+        },
       },
       labels: [
         'Modification critique',
@@ -170,68 +135,71 @@ export class AlertesSupervisionsComponent {
       },
     };
 
+    // Line Chart
     this.lineChartOptions = {
       series: [
         {
-          name: "Net Profit",
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+          name: 'Net Profit',
+          data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
         },
         {
-          name: "Revenue",
-          data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+          name: 'Revenue',
+          data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
         },
         {
-          name: "Free Cash Flow",
-          data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-        }
+          name: 'Free Cash Flow',
+          data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
+        },
       ],
       chart: {
-        type: "bar",
-        height: 350
+        type: 'bar',
+        height: 350,
+        fontFamily: 'Segoe UI, sans-serif',
+        toolbar: { show: false },
       },
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: "55%",
-          endingShape: "rounded"
-        }
+          columnWidth: '55%',
+          endingShape: 'rounded',
+        },
       },
       dataLabels: {
-        enabled: false
+        enabled: false,
       },
       stroke: {
         show: true,
         width: 2,
-        colors: ["transparent"]
+        colors: ['transparent'],
       },
       xaxis: {
         categories: [
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct"
-        ]
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+        ],
       },
       yaxis: {
         title: {
-          text: "$ (thousands)"
-        }
+          text: '$ (thousands)',
+        },
       },
       fill: {
-        opacity: 1
+        opacity: 1,
       },
       tooltip: {
         y: {
           formatter: function (val: any) {
-            return "$ " + val + " thousands";
-          }
-        }
-      }
+            return '$ ' + val + ' thousands';
+          },
+        },
+      },
     };
   }
 }
