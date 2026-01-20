@@ -2,9 +2,7 @@
   <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div
-          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
-        >
+        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
           <div>
             <h4 class="fw-semibold text-primary mb-sm-0 h3">Tableau de Bord</h4>
             <p class="text-secondary mb-sm-0 font-size-13">
@@ -26,9 +24,7 @@
     <div class="row mb-5">
       <div class="col-xl-4">
         <div class="card text-white bg-primary card-h-100">
-          <div
-            class="card-header bg-transparent d-flex justify-content-between align-items-center"
-          >
+          <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center flex-wrap">
               <h4 class="card-title">Évolution des Entreprises</h4>
             </div>
@@ -40,14 +36,8 @@
           </div>
           <div class="card-body align-content-center">
             <div id="evolutionChart" style="height: 300px">
-              <h2>dfjalsjfls</h2>
-              <apx-chart
-                [series]="areaChartOptions.series"
-                [chart]="areaChartOptions.chart"
-                [xaxis]="areaChartOptions.xaxis"
-                [stroke]="areaChartOptions.stroke"
-                [fill]="areaChartOptions.fill"
-              >
+              <apx-chart [series]="areaChartOptions.series" [chart]="areaChartOptions.chart"
+                [xaxis]="areaChartOptions.xaxis" [stroke]="areaChartOptions.stroke" [fill]="areaChartOptions.fill">
               </apx-chart>
             </div>
           </div>
@@ -63,59 +53,48 @@
           <div class="card-body finance-chart-container">
             <div class="row text-center d-xxl-flex justify-content-xxl-center">
               <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-ios-list custom-icon-size"></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-ios-list custom-icon-size"></i>
                   <p class="custom-icon-text">Liste des entreprises</p>
                 </a>
               </div>
               <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-person-stalker custom-icon-size"></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-person-stalker custom-icon-size"></i>
                   <p class="custom-icon-text">Gestion utilisateurs</p>
                 </a>
               </div>
               <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-plus-circled custom-icon-size"></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-plus-circled custom-icon-size"></i>
                   <p class="custom-icon-text">Workflows &amp; validations</p>
                 </a>
               </div>
               <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-plus-circled custom-icon-size"></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-plus-circled custom-icon-size"></i>
                   <p class="custom-icon-text">Nouvelle Entreprise</p>
                 </a>
               </div>
               <div class="col-6 col-md-4 mb-4 quick-action-card">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-search custom-icon-size"></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-search custom-icon-size"></i>
                   <p class="custom-icon-text">Recherche Entreprise</p>
                 </a>
               </div>
               <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-android-checkbox custom-icon-size"></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-android-checkbox custom-icon-size"></i>
                   <p class="custom-icon-text">Centre Conformité</p>
                 </a>
               </div>
               <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i
-                    class="icon ion-android-document custom-icon-size"
-                    style="font-size: 41px"
-                  ></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-android-document custom-icon-size"
+                    style="font-size: 41px"></i>
                   <p class="custom-icon-text">Rapport Express</p>
                 </a>
               </div>
               <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-ios-refresh custom-icon-size"></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-ios-refresh custom-icon-size"></i>
                   <p class="custom-icon-text">Actualiser</p>
                 </a>
               </div>
               <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-document-text custom-icon-size"></i>
+                <a class="custom-icon-container" href="#"><i class="icon ion-document-text custom-icon-size"></i>
                   <p class="custom-icon-text">Exporter PDF</p>
                 </a>
               </div>
@@ -126,25 +105,15 @@
       <div class="col-xl-4">
         <div class="card bg-light card-h-100">
           <div
-            class="card-header bg-transparent border-white d-flex justify-content-between align-items-center border-bottom"
-          >
+            class="card-header bg-transparent border-white d-flex justify-content-between align-items-center border-bottom">
             <div class="d-flex align-items-center flex-wrap">
               <h5 class="me-2 card-title">Répartition par Segment</h5>
             </div>
             <button class="btn btn-outline-secondary btn-sm">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
                   d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
-                  fill="currentColor"
-                ></path>
+                  fill="currentColor"></path>
               </svg>
             </button>
           </div>
@@ -172,8 +141,7 @@
               </div>
             </div>
             <div class="mt-2">
-              <small class="text-success"
-                ><i class="bi bi-arrow-up"></i> +12% ce mois
+              <small class="text-success"><i class="bi bi-arrow-up"></i> +12% ce mois
               </small>
             </div>
           </div>
@@ -196,8 +164,7 @@
               </div>
             </div>
             <div class="mt-2">
-              <small class="text-danger"
-                ><i class="bi bi-arrow-up"></i> 3 critiques
+              <small class="text-danger"><i class="bi bi-arrow-up"></i> 3 critiques
               </small>
             </div>
           </div>
@@ -220,8 +187,7 @@
               </div>
             </div>
             <div class="mt-2">
-              <small class="text-info"
-                ><i class="bi bi-clock"></i> 12 prioritaires
+              <small class="text-info"><i class="bi bi-clock"></i> 12 prioritaires
               </small>
             </div>
           </div>
@@ -244,8 +210,7 @@
               </div>
             </div>
             <div class="mt-2">
-              <small class="text-success"
-                ><i class="bi bi-arrow-up"></i> +2% cette semaine
+              <small class="text-success"><i class="bi bi-arrow-up"></i> +2% cette semaine
               </small>
             </div>
           </div>
@@ -255,32 +220,22 @@
     <div class="row mb-4">
       <div class="col-xl-6 mb-4">
         <div class="card">
-          <div
-            class="card-header bg-light-subtle d-flex justify-content-between align-items-center"
-          >
+          <div class="card-header bg-light-subtle d-flex justify-content-between align-items-center">
             <h6 class="fw-bold m-0">Alertes Prioritaires</h6>
             <button class="btn btn-outline-primary btn-sm">Voir tout</button>
           </div>
-          <div
-            class="card-body p-0"
-            style="max-height: 300px; overflow-y: auto"
-          >
+          <div class="card-body p-0" style="max-height: 300px; overflow-y: auto">
             <ul class="list-group list-group-flush" id="alertsList"></ul>
           </div>
         </div>
       </div>
       <div class="col-xl-6 mb-4">
         <div class="card">
-          <div
-            class="card-header bg-light-subtle d-flex justify-content-between align-items-center"
-          >
+          <div class="card-header bg-light-subtle d-flex justify-content-between align-items-center">
             <h6 class="fw-bold m-0">Tâches Assignées</h6>
             <button class="btn btn-outline-success btn-sm">Gérer</button>
           </div>
-          <div
-            class="card-body p-0"
-            style="max-height: 300px; overflow-y: auto"
-          >
+          <div class="card-body p-0" style="max-height: 300px; overflow-y: auto">
             <ul class="list-group list-group-flush" id="tasksList"></ul>
           </div>
         </div>

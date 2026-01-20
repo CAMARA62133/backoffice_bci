@@ -1,267 +1,402 @@
-import {Component, OnInit} from '@angular/core';
-import {ChartService} from '../../../services/charts/chart.service';
-import {Chart} from 'chart.js';
+import { Component, ViewChild } from '@angular/core';
+import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
+import { ChartOptions } from '../../../core/interfaces/apexChartOptions';
+import { ChartService } from '../../../services/charts/chart.service';
 
 @Component({
   selector: 'app-agent-dashboard',
   standalone: true,
-  imports: [],
+  imports: [NgApexchartsModule],
   templateUrl: './agent-dashboard.component.html',
   styleUrl: './agent-dashboard.component.css',
 })
-export class AgentDashboardComponent implements OnInit {
-  chart!: Chart;
+export class AgentDashboardComponent {
+  @ViewChild('chart') chart!: ChartComponent;
+  public chart1: Partial<ChartOptions>;
+  public chart2: Partial<ChartOptions>;
+  public chart3!: Partial<ChartOptions>;
+  public chart4!: Partial<ChartOptions>;
+
+  // chart!: Chart;
 
   constructor(private chartService: ChartService) {
-  }
+    this.chart1 = {
+      chart: { type: 'donut', height: 350 },
+      series: [70, 42, 20],
+      labels: ['Daniel', 'Djoulde', 'Robert'],
+      colors: ['#28a745', '#343473', '#ffc107'],
+      dataLabels: {
+        enabled: true,
+        formatter: (val: any) => Math.floor(val) + '%',
+        style: { colors: ['#fff'] },
+      },
+      title: {
+        text: 'Performances par categorie',
+        align: 'center',
+      },
+      subtitle: {
+        text: 'Categories par categorie',
+        align: 'center',
+        style: { color: 'white' },
+      },
+      legend: {
+        position: 'bottom',
+      },
+    };
 
-  ngOnInit() {
-    this.loadBarChart();
-    this.loadBarChart2();
-    this.loadBarChart3();
-    this.loadHalfDoughnutChart();
-  }
+    this.chart2 = {
+      chart: {
+        type: 'radialBar',
+        offsetY: -20,
+      },
+      series: [95],
+      labels: ['SLA Respecté'],
+      colors: ['#28a745'],
 
-  // Permet de charger les charts
-  loadBarChart() {
-    const labels = ['Jan', 'Fev', 'Mars', 'Avril'];
+      plotOptions: {
+        radialBar: {
+          startAngle: -90,
+          endAngle: 90,
+        },
+      },
+      dataLabels: {
+        name: { show: false },
+        value: {
+          offsetY: -2,
+          fontSize: '22px',
+        },
+        enabled: true,
+        formatter: (val: any) => val + '%',
+        style: { colors: ['#343473'], fontSize: '18px', fontWeight: 500 },
+      },
 
-    const data = {
-      labels,
-      datasets: [{
-        label: 'Performances',
-        data: [70, 55, 35, 20],
-        backgroundColor: 'rgba(52, 52, 115, 0.85)',
-        hoverBackgroundColor: 'rgba(52, 52, 115, 0.50)',
-        borderWidth: 1,
-        datalabels: {
-          display: true,
-          color: "#fff"
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'light',
+          shadeIntensity: 0.4,
+          inverseColors: false,
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [0, 50, 53, 91],
+        },
+      },
+
+      title: {
+        text: 'Respect des SLA',
+        align: 'center',
+        style: { fontSize: '16px' },
+      },
+      legend: { show: false },
+    };
+
+    this.chart3 = {
+      series: [
+        {
+          name: [
+            'Incident Technique',
+            'Demance access',
+            'Question fonctionelle',
+            'Demande document',
+          ],
+          data: [21, 22, 10, 28],
+        },
+      ],
+      chart: {
+        height: 350,
+        type: 'bar',
+        toolbar: {
+          show: false,
+        },
+      },
+      colors: ['#343473', '#343473', '#343473', '#343473'],
+      plotOptions: {
+        bar: {
+          columnWidth: '50%',
+          distributed: true,
+        },
+      },
+
+      dataLabels: {
+        enabled: false,
+      },
+      legend: {
+        show: false,
+      },
+      grid: {
+        show: false,
+      },
+      xaxis: {
+        categories: [
+          'Incident Technique',
+          'Demance access',
+          'Question fonctionelle',
+          'Demande document',
+        ],
+      },
+    };
+
+    const rawData = [
+      { productName: 'iPhone', salesAmount: 120, region: 'North' },
+      { productName: 'Samsung', salesAmount: 100, region: 'South' },
+    ];
+
+    this.chart4 = {
+      series: [{
+        data: rawData,
+        parsing: {
+          x: 'productName',
+          y: 'salesAmount'
         }
       }]
     };
-
-    const options = {
-      scales: {
-        y: {beginAtZero: true}
-      },
-
-      plugins: {
-        title: {
-          display: true,
-          text: 'Performances par categorie',
-          padding: {
-            top: 10,
-            bottom: 10
-          }
-        },
-        subtitle: {
-          display: true,
-          text: 'Categories par categorie',
-          textStyle: {
-            color: 'white'
-          }
-        }
-      }
-    };
-
-    this.chart = this.chartService.createChart(
-      'myChart',
-      'bar',
-      data,
-      options
-    );
   }
 
-  loadBarChart2() {
-    const labels = ['Daniel', 'Djoulde', 'Robert'];
+  // ngOnInit() {
+  //   this.loadBarChart();
+  //   this.loadBarChart2();
+  //   this.loadBarChart3();
+  //   this.loadHalfDoughnutChart();
+  // }
 
-    const data = {
-      labels,
-      datasets: [
-        {
-          label: 'Performances',
-          data: [70, 42, 20],
-          backgroundColor: [
-            'rgba(40, 167, 69, 0.85)',
-            'rgba(52, 52, 115, 0.85)',
-            'rgba(255, 193, 7, 0.85)'
-          ],
-          hoverBackgroundColor: [
-            'rgba(40, 167, 69, 0.50)',
-            'rgba(52, 52, 115, 0.50)',
-            'rgba(255, 193, 7, 0.50)',
-          ],
-          borderWidth: 1,
-          datalabels: {
-            display: true,
-            color: "#fff"
-          }
-        }]
-    };
+  // // Permet de charger les charts
+  // loadBarChart() {
+  //   const labels = ['Jan', 'Fev', 'Mars', 'Avril'];
 
-    const options = {
-      responsive: false,
-      maintainAspectRatio: false,
-      layout: {
-        padding: 0
-      },
-      scales: {
-        y: {beginAtZero: true}
-      },
+  //   const data = {
+  //     labels,
+  //     datasets: [
+  //       {
+  //         label: 'Performances',
+  //         data: [70, 55, 35, 20],
+  //         backgroundColor: 'rgba(52, 52, 115, 0.85)',
+  //         hoverBackgroundColor: 'rgba(52, 52, 115, 0.50)',
+  //         borderWidth: 1,
+  //         datalabels: {
+  //           display: true,
+  //           color: '#fff',
+  //         },
+  //       },
+  //     ],
+  //   };
 
-      plugins: {
-        datalabels: {
-          display: true,
-          color: "#fff",
-          formatter: (value: number) => value + '%'
-        },
+  //   const options = {
+  //     scales: {
+  //       y: { beginAtZero: true },
+  //     },
 
-        title: {
-          display: true,
-          text: 'Performances par categorie',
-          padding: {
-            top: 10,
-            bottom: 10
-          }
-        },
+  //     plugins: {
+  //       title: {
+  //         display: true,
+  //         text: 'Performances par categorie',
+  //         padding: {
+  //           top: 10,
+  //           bottom: 10,
+  //         },
+  //       },
+  //       subtitle: {
+  //         display: true,
+  //         text: 'Categories par categorie',
+  //         textStyle: {
+  //           color: 'white',
+  //         },
+  //       },
+  //     },
+  //   };
 
-        subtitle: {
-          display: true,
-          text: 'Categories par categorie',
-          textStyle: {
-            color: 'white'
-          }
-        },
+  //   this.chart = this.chartService.createChart('myChart', 'bar', data, options);
+  // }
 
-        legend: {
-          display: true
-        }
-      }
-    };
+  // loadBarChart2() {
+  //   const labels = ['Daniel', 'Djoulde', 'Robert'];
 
-    this.chart = this.chartService.createChart(
-      'myChart2',
-      'doughnut',
-      data,
-      options
-    );
-  }
+  //   const data = {
+  //     labels,
+  //     datasets: [
+  //       {
+  //         label: 'Performances',
+  //         data: [70, 42, 20],
+  //         backgroundColor: [
+  //           'rgba(40, 167, 69, 0.85)',
+  //           'rgba(52, 52, 115, 0.85)',
+  //           'rgba(255, 193, 7, 0.85)',
+  //         ],
+  //         hoverBackgroundColor: [
+  //           'rgba(40, 167, 69, 0.50)',
+  //           'rgba(52, 52, 115, 0.50)',
+  //           'rgba(255, 193, 7, 0.50)',
+  //         ],
+  //         borderWidth: 1,
+  //         datalabels: {
+  //           display: true,
+  //           color: '#fff',
+  //         },
+  //       },
+  //     ],
+  //   };
 
-  loadBarChart3() {
-    const labels = ['Daniel', 'Djoulde', 'Robert'];
+  //   const options = {
+  //     responsive: false,
+  //     maintainAspectRatio: false,
+  //     layout: {
+  //       padding: 0,
+  //     },
+  //     scales: {
+  //       y: { beginAtZero: true },
+  //     },
 
-    const data = {
-      labels,
-      datasets: [
-        {
-          label: 'Demandes traitées',
-          data: [65, 42, 20],
-          backgroundColor: 'rgba(52, 52, 115, 0.85)',
-          hoverBackgroundColor: 'rgba(52, 52, 115, 0.50)',
-          datalabels: {
-            color: '#fff',
-          }
-        },
+  //     plugins: {
+  //       datalabels: {
+  //         display: true,
+  //         color: '#fff',
+  //         formatter: (value: number) => value + '%',
+  //       },
 
-        {
-          label: 'Demandes en attente',
-          data: [30, 20, 15],
-          backgroundColor: 'rgba(40, 167, 69, 0.85)',
-          hoverBackgroundColor: 'rgba(40, 167, 69, 0.50)',
-          datalabels: {
-            color: '#fff',
-          }
-        },
-      ]
-    };
+  //       title: {
+  //         display: true,
+  //         text: 'Performances par categorie',
+  //         padding: {
+  //           top: 10,
+  //           bottom: 10,
+  //         },
+  //       },
 
-    const options = {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {font: {size: 12}}
-        },
-        x: {
-          ticks: {font: {size: 12}}
-        }
-      },
+  //       subtitle: {
+  //         display: true,
+  //         text: 'Categories par categorie',
+  //         textStyle: {
+  //           color: 'white',
+  //         },
+  //       },
 
-      plugins: {
-        datalabels: {
-          display: true,
-          color: "#fff",
-          formatter: (value: number) => value + '%'
-        },
+  //       legend: {
+  //         display: true,
+  //       },
+  //     },
+  //   };
 
-        title: {
-          display: true,
-          text: 'Statistiques par agent',
-          padding: {top: 10, bottom: 10},
+  //   this.chart = this.chartService.createChart(
+  //     'myChart2',
+  //     'doughnut',
+  //     data,
+  //     options,
+  //   );
+  // }
 
-        },
+  // loadBarChart3() {
+  //   const labels = ['Daniel', 'Djoulde', 'Robert'];
 
-        legend: {
-          display: true,
-          labels: {
-            font: {size: 13}
-          }
-        }
-      }
-    };
+  //   const data = {
+  //     labels,
+  //     datasets: [
+  //       {
+  //         label: 'Demandes traitées',
+  //         data: [65, 42, 20],
+  //         backgroundColor: 'rgba(52, 52, 115, 0.85)',
+  //         hoverBackgroundColor: 'rgba(52, 52, 115, 0.50)',
+  //         datalabels: {
+  //           color: '#fff',
+  //         },
+  //       },
 
-    this.chart = this.chartService.createChart(
-      'myChart3',
-      'bar',
-      data,
-      options
-    );
-  }
+  //       {
+  //         label: 'Demandes en attente',
+  //         data: [30, 20, 15],
+  //         backgroundColor: 'rgba(40, 167, 69, 0.85)',
+  //         hoverBackgroundColor: 'rgba(40, 167, 69, 0.50)',
+  //         datalabels: {
+  //           color: '#fff',
+  //         },
+  //       },
+  //     ],
+  //   };
 
-  loadHalfDoughnutChart() {
-    const data = {
-      labels: ['SLA Respecté', 'Non Respecté'],
-      datasets: [{
-        data: [75, 25],
-        backgroundColor: [
-          'rgba(40, 167, 69, 0.85)',   // vert
-          'rgba(101, 101, 101, 0.85)'    // rouge léger
-        ],
-        hoverBackgroundColor: [
-          'rgba(40, 167, 69, 0.55)',
-          'rgba(101, 101, 101, 0.55)'
-        ],
-        borderWidth: 0
-      }]
-    };
+  //   const options = {
+  //     responsive: true,
+  //     scales: {
+  //       y: {
+  //         beginAtZero: true,
+  //         ticks: { font: { size: 12 } },
+  //       },
+  //       x: {
+  //         ticks: { font: { size: 12 } },
+  //       },
+  //     },
 
-    const options = {
-      responsive: false,
-      maintainAspectRatio: false,
-      circumference: 180, // demi-cercle
-      rotation: -90,      // orientation du demi-cercle
-      plugins: {
-        legend: {display: false},
-        title: {
-          display: true,
-          text: 'Respect des SLA',
-          font: {size: 16}
-        },
-        datalabels: {
-          color: '#343473',
-          font: {weight: 500, size: 18},
-          formatter: (value: number) => value + '%'
-        }
-      }
-    };
+  //     plugins: {
+  //       datalabels: {
+  //         display: true,
+  //         color: '#fff',
+  //         formatter: (value: number) => value + '%',
+  //       },
 
-    this.chart = this.chartService.createChart(
-      'myHalfChart',
-      'doughnut',
-      data,
-      options
-    );
-  }
+  //       title: {
+  //         display: true,
+  //         text: 'Statistiques par agent',
+  //         padding: { top: 10, bottom: 10 },
+  //       },
 
+  //       legend: {
+  //         display: true,
+  //         labels: {
+  //           font: { size: 13 },
+  //         },
+  //       },
+  //     },
+  //   };
+
+  //   this.chart = this.chartService.createChart(
+  //     'myChart3',
+  //     'bar',
+  //     data,
+  //     options,
+  //   );
+  // }
+
+  // loadHalfDoughnutChart() {
+  //   const data = {
+  //     labels: ['SLA Respecté', 'Non Respecté'],
+  //     datasets: [
+  //       {
+  //         data: [75, 25],
+  //         backgroundColor: [
+  //           'rgba(40, 167, 69, 0.85)', // vert
+  //           'rgba(101, 101, 101, 0.85)', // rouge léger
+  //         ],
+  //         hoverBackgroundColor: [
+  //           'rgba(40, 167, 69, 0.55)',
+  //           'rgba(101, 101, 101, 0.55)',
+  //         ],
+  //         borderWidth: 0,
+  //       },
+  //     ],
+  //   };
+
+  //   const options = {
+  //     responsive: false,
+  //     maintainAspectRatio: false,
+  //     circumference: 180, // demi-cercle
+  //     rotation: -90, // orientation du demi-cercle
+  //     plugins: {
+  //       legend: { display: false },
+  //       title: {
+  //         display: true,
+  //         text: 'Respect des SLA',
+  //         font: { size: 16 },
+  //       },
+  //       datalabels: {
+  //         color: '#343473',
+  //         font: { weight: 500, size: 18 },
+  //         formatter: (value: number) => value + '%',
+  //       },
+  //     },
+  //   };
+
+  //   this.chart = this.chartService.createChart(
+  //     'myHalfChart',
+  //     'doughnut',
+  //     data,
+  //     options,
+  //   );
+  // }
 }
