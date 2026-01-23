@@ -1,21 +1,22 @@
-import {CurrencyPipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
+import { CurrencyPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors, Validators,
+  ValidationErrors,
+  Validators,
 } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
-import {RejectionReason} from '../../../core/interfaces/reject-raison.interface';
-import {AuthService} from '../../../core/node/services/auth/auth.service';
-import {RejectRaisonService} from '../../../core/node/services/reject-raison/reject-raison.service';
-import {DemandeService} from '../../../services/agent-conformite/demande/demande.service';
-import {AuthService as LaraAuthService} from '../../../services/auth/authService/auth.service';
-import {ModalsService} from '../../../services/modals/modals.service';
-import {ValidDemandePayload} from '../../../core/interfaces/demande.interface';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ValidDemandePayload } from '../../../core/interfaces/demande.interface';
+import { RejectionReason } from '../../../core/interfaces/reject-raison.interface';
+import { AuthService } from '../../../core/node/services/auth/auth.service';
+import { RejectRaisonService } from '../../../core/node/services/reject-raison/reject-raison.service';
+import { DemandeService } from '../../../services/agent-conformite/demande/demande.service';
+import { AuthService as LaraAuthService } from '../../../services/auth/authService/auth.service';
+import { ModalsService } from '../../../services/modals/modals.service';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
@@ -27,7 +28,7 @@ declare var bootstrap: any;
   styleUrl: './agent-fiche-demandes.component.css',
 })
 export class AgentFicheDemandesComponent implements OnInit {
-  id!: number;
+  // id!: string;
   demande!: any;
   isLoading: boolean = false;
 
@@ -38,8 +39,9 @@ export class AgentFicheDemandesComponent implements OnInit {
   reasons!: RejectionReason[];
 
   currentUser: any;
+  demandeID!: number;
 
-  private clientSitelink: string = "http://localhost:4201";
+  private clientSitelink: string = 'http://localhost:4201';
 
   constructor(
     private route: ActivatedRoute,
@@ -50,9 +52,8 @@ export class AgentFicheDemandesComponent implements OnInit {
     private modalsService: ModalsService,
     private nodeAuthServie: AuthService,
     private rejectRaisonService: RejectRaisonService,
-    private laravAuthService: LaraAuthService
-  ) {
-  }
+    private laravAuthService: LaraAuthService,
+  ) {}
 
   ngOnInit() {
     const user = this.laravAuthService.getCurrentUser();
@@ -61,20 +62,23 @@ export class AgentFicheDemandesComponent implements OnInit {
       console.log('current user', this.currentUser);
     }
 
-
     // Recuperation de l'id dans l'url a chaque changement
-    // this.route.paramMap.subscribe(params => {
-    //   this.id = params.get('id');
-    //   console.log("recuperation de l'id dans les params : ", this.id);
-    //   this.loadDemande();
-    // })
+    this.route.paramMap.subscribe((params) => {
+      const id = Number(params?.get('id'));
 
+      if (id) {
+        this.demandeID = id;
+        console.log("recuperation de l'id dans les params : ", id);
+      }
+
+      this.loadDemande(id);
+    });
 
     this.initForm();
     this.initValidForm();
 
     this.loadRejectRaisons();
-    this.loadDemande();
+    // this.loadDemande();
   }
 
   initForm(): void {
@@ -85,14 +89,14 @@ export class AgentFicheDemandesComponent implements OnInit {
       },
       {
         validators: [this.atLeastOneRequiredValidator()],
-      }
+      },
     );
   }
 
   initValidForm(): void {
     this.valideForm = this.fb.group({
-      vcNotes: ['', Validators.required]
-    })
+      vcNotes: ['', Validators.required],
+    });
   }
 
   openModal(modalId: string) {
@@ -115,7 +119,7 @@ export class AgentFicheDemandesComponent implements OnInit {
       this.bloqueForm.markAllAsTouched();
       console.log(
         "Formulaire invalide voici l'erreur : ",
-        this.bloqueForm.value
+        this.bloqueForm.value,
       );
       return;
     }
@@ -126,12 +130,12 @@ export class AgentFicheDemandesComponent implements OnInit {
       : this.bloqueForm.get('vcNotes')?.value;
 
     const payload = {
-      idDemande: this.id,
+      idDemande: this.demandeID,
       vcNotes: newVcNotes,
       iValidatorID: this.currentUser.id,
     };
 
-    console.log({payload});
+    console.log({ payload });
     this.rejectRaisonService.rejectedDemande(payload).subscribe({
       next: (res) => {
         if (res?.status === 200) {
@@ -145,7 +149,7 @@ export class AgentFicheDemandesComponent implements OnInit {
           this.toastr.error(
             'Une erreur est survenue lors du rejet de la demande.',
             '',
-            {positionClass: 'toast-custom-center'}
+            { positionClass: 'toast-custom-center' },
           );
           console.log('Erreur rejet demande:', res);
         }
@@ -163,20 +167,20 @@ export class AgentFicheDemandesComponent implements OnInit {
 
   onValidateAsk() {
     if (this.valideForm.invalid) {
-      this.valideForm.markAllAsTouched()
-      console.log("Formulaire invalide voici l'erreur: ")
+      this.valideForm.markAllAsTouched();
+      console.log("Formulaire invalide voici l'erreur: ");
       return;
     }
 
-    console.log("Formulaire soumis", this.valideForm.value)
+    console.log('Formulaire soumis', this.valideForm.value);
     const payload: ValidDemandePayload = {
-      idDemande: Number(this.id),
+      idDemande: Number(this.demandeID),
       vcNotes: this.valideForm.get('vcNotes')?.value,
       iValidatorID: Number(this.currentUser.id),
-      lienSiteClient: this.clientSitelink
+      lienSiteClient: this.clientSitelink,
     };
 
-    console.log({payload});
+    console.log({ payload });
 
     this.demandeService.validDemandeSouscription(payload).subscribe({
       next: (res) => {
@@ -187,8 +191,10 @@ export class AgentFicheDemandesComponent implements OnInit {
           this.closeModal('valideModal');
           this.router.navigate(['/agent-demandes']);
         } else {
-          this.toastr.error('Une erreur est survenue lors de la validation de la demande.',
-            '', {positionClass: 'toast-custom-center'}
+          this.toastr.error(
+            'Une erreur est survenue lors de la validation de la demande.',
+            '',
+            { positionClass: 'toast-custom-center' },
           );
           console.log('Erreur validation demande:', res);
         }
@@ -224,7 +230,7 @@ export class AgentFicheDemandesComponent implements OnInit {
       //   });
       //   console.log('err rejet demande:', err);
       // },
-    })
+    });
   }
 
   private atLeastOneRequiredValidator() {
@@ -233,7 +239,7 @@ export class AgentFicheDemandesComponent implements OnInit {
       const vcNotes = formGroup.get('vcNotes')?.value;
 
       if (!rejectReason && !vcNotes) {
-        return {atLeastOneRequired: true};
+        return { atLeastOneRequired: true };
       }
 
       return null;
@@ -241,13 +247,13 @@ export class AgentFicheDemandesComponent implements OnInit {
   }
 
   // Private function to load the subscription liste
-  private loadDemande() {
+  private loadDemande(id: number) {
     this.isLoading = true;
-    this.demandeService.oneDemandeSouscription(this.id).subscribe({
+    this.demandeService.oneDemandeSouscription(id).subscribe({
       next: (res) => {
         if (res?.status === 200) {
           this.demande = res?.data[0];
-          console.log('ID:', this.id);
+          console.log('ID:', id);
           console.log('Detail: ', this.demande);
         } else {
           if (res?.error?.message === 'Unauthenticated.') {

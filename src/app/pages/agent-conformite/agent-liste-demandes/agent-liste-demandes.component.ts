@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {DemandeService} from '../../../services/agent-conformite/demande/demande.service';
 import {ToastrService} from 'ngx-toastr';
 import {Subject} from 'rxjs';
@@ -17,6 +17,7 @@ import type {Config} from 'datatables.net';
     NgForOf,
     NgIf,
     DataTablesModule,
+    DatePipe
   ],
   templateUrl: './agent-liste-demandes.component.html',
   styleUrl: './agent-liste-demandes.component.css'
