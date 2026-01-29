@@ -42,6 +42,7 @@ import { OrgFicheUtilisateurComponent } from './pages/orgs/org-fiche-utilisateur
 import { OrgListEntrepriseComponent } from './pages/orgs/org-list-entreprise/org-list-entreprise.component';
 import { RepportingExportComponent } from './pages/orgs/repporting-export/repporting-export.component';
 import { TransactionsOperationsComponent } from './pages/orgs/transactions-operations/transactions-operations.component';
+import {FacturiesComponent} from './pages/agent-conformite/facturies/facturies.component';
 
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
@@ -345,6 +346,14 @@ export const routes: Routes = [
         path: 'agent-entreprise/:id',
         title: 'BCI - Online | Fiche entreprise',
         component: AgentFicheEntrepriseComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Agent Conformité'] },
+      },
+
+      {
+        path: 'facturies',
+        title: 'BCI - Online | Liste des facturiés',
+        component: FacturiesComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Agent Conformité'] },
       },

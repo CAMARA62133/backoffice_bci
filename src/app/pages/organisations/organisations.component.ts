@@ -1,5 +1,5 @@
-import {DatePipe, NgClass, NgFor, NgIf} from '@angular/common';
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,29 +7,20 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {ToastrService} from 'ngx-toastr';
-import {environment} from '../../../environnements/environnement';
-import {AuthService} from '../../services/auth/authService/auth.service';
-import {ModalsService} from '../../services/modals/modals.service';
-import {OrganisationsService} from '../../services/organisations/organisations.service';
-import {RolesService} from '../../services/auth/roles/roles.service';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../environnements/environnement';
+import { DataTableDirective } from '../../core/directives/data-table/data-table.directive';
 import {
   getErrorMessage,
   getFormControlClass,
   isInvalid,
   isValid,
 } from '../../core/utils/form-helpers';
-import {
-  ActivatedRoute,
-  Route,
-  Router,
-  RouterConfigOptions,
-  RouterLink,
-  RouterLinkActive,
-  Routes
-} from '@angular/router';
-import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
-
+import { AuthService } from '../../services/auth/authService/auth.service';
+import { RolesService } from '../../services/auth/roles/roles.service';
+import { ModalsService } from '../../services/modals/modals.service';
+import { OrganisationsService } from '../../services/organisations/organisations.service';
 
 @Component({
   selector: 'app-organisations',
@@ -98,9 +89,8 @@ export class OrganisationsComponent implements OnInit {
     private authService: AuthService,
     private toastr: ToastrService,
     private cd: ChangeDetectorRef,
-    private route: ActivatedRoute
-  ) {
-  }
+    private route: ActivatedRoute,
+  ) {}
 
   // Raccourcis pour le template
   isInvalid = (name: string) => isInvalid(this.orgForm, name);
@@ -121,20 +111,20 @@ export class OrganisationsComponent implements OnInit {
     console.log(config);
 
     this.country = config.organisation.find(
-      (c: any) => c.vcKey === 'Pays'
+      (c: any) => c.vcKey === 'Pays',
     )?.vcValue;
 
     this.phoneCode = config.organisation.find(
-      (c: any) => c.vcKey === 'Telephone_Code'
+      (c: any) => c.vcKey === 'Telephone_Code',
     )?.vcValue;
 
     this.phoneFormat = config.organisation.find(
-      (c: any) => c.vcKey === 'Telephone_Format'
+      (c: any) => c.vcKey === 'Telephone_Format',
     )?.vcValue;
     this.phoneMaxLength = this.phoneFormat.length;
 
     this.currency = config.organisation.find(
-      (c: any) => c.vcKey === 'Devise'
+      (c: any) => c.vcKey === 'Devise',
     )?.vcValue;
 
     this.appVersion = config.appVersion;
@@ -156,13 +146,13 @@ export class OrganisationsComponent implements OnInit {
     this.loadListePays();
   }
 
-
   // Initialiser le formulaire
   initForm() {
     this.orgForm = this.fb.group({
       vcOrgName: ['', Validators.required],
       vcOrgContact: ['', Validators.required],
-      vcOrgPhoneNumber: ['',
+      vcOrgPhoneNumber: [
+        '',
         [
           Validators.required,
           Validators.pattern(/^[0-9]+$/),
@@ -318,7 +308,6 @@ export class OrganisationsComponent implements OnInit {
 
           this.orgForm.reset();
           this.modalsService.closeAllModals();
-
         } else {
           this.toastr.error(res?.message, '', {
             positionClass: 'toast-custom-center',
@@ -358,7 +347,7 @@ export class OrganisationsComponent implements OnInit {
     this.initForm();
 
     this.modalsService.openModal('updateOrgModal');
-    this.selectedOrg = {...org};
+    this.selectedOrg = { ...org };
     this.selectedOrgId = this.selectedOrg.id;
 
     this.idUsers = this.selectedOrg.idUsers;
@@ -526,7 +515,7 @@ export class OrganisationsComponent implements OnInit {
       next: (res) => {
         this.organisations = res.data;
         this.isLoadingOrgs = false;
-        console.log(res)
+        console.log(res);
       },
 
       error: (err) => {
