@@ -142,8 +142,8 @@ export class FacturiesComponent implements OnInit {
             positionClass: 'toast-custom-center',
           });
 
-          this.modalsService.closeAllModals();
           this.loadFacturies();
+          this.modalsService.closeAllModals();
         } else {
           this.toastr.error(res?.message, '', {
             positionClass: 'toast-custom-center',
@@ -159,11 +159,10 @@ export class FacturiesComponent implements OnInit {
         });
 
         console.error('❌ Erreur lors de la création :', err);
-        this.isLoading = false;
 
-        this.modalsService.closeAllModals();
         this.loadFacturies();
         this.isLoading = false;
+        this.modalsService.closeAllModals();
       },
     });
   }
@@ -205,14 +204,13 @@ export class FacturiesComponent implements OnInit {
         if (res.status === 200) {
           this.facturies = res.data || [];
           console.log({ facturies: this.facturies });
-          this.isLoadingFacturies = false;
+          // this.isLoadingFacturies = false;
         } else {
           this.toastr.error('Erreur lors du chargement des facturies.', '', {
             positionClass: 'toast-custom-center',
           });
-          this.isLoadingFacturies = false;
         }
-
+        this.isLoadingFacturies = false;
         console.log(res);
       },
 
@@ -221,6 +219,7 @@ export class FacturiesComponent implements OnInit {
           positionClass: 'toast-custom-center',
         });
         console.log('err facturies list:', err);
+        this.isLoadingFacturies = false;
       },
     });
   }
