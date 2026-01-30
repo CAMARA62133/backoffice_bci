@@ -1,4 +1,10 @@
-import { CurrencyPipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import {
+  CurrencyPipe,
+  Location,
+  NgClass,
+  NgForOf,
+  NgIf,
+} from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -53,6 +59,7 @@ export class AgentFicheDemandesComponent implements OnInit {
     private nodeAuthServie: AuthService,
     private rejectRaisonService: RejectRaisonService,
     private laravAuthService: LaraAuthService,
+    private location: Location,
   ) {}
 
   ngOnInit() {
@@ -62,23 +69,29 @@ export class AgentFicheDemandesComponent implements OnInit {
       console.log('current user', this.currentUser);
     }
 
-    // Recuperation de l'id dans l'url a chaque changement
-    this.route.paramMap.subscribe((params) => {
-      const id = Number(params?.get('id'));
-
-      if (id) {
-        this.demandeID = id;
-        console.log("recuperation de l'id dans les params : ", id);
-      }
-
-      this.loadDemande(id);
-    });
-
     this.initForm();
     this.initValidForm();
 
     this.loadRejectRaisons();
     // this.loadDemande();
+
+    // Recuperation de l'id dans l'url a chaque changement
+    this.route.paramMap.subscribe((params) => {
+      const id = Number(params?.get('id'));
+
+      if (!id || isNaN(id)) {
+        this.goBackWithMessage('ID Invalide');
+        return;
+      }
+
+      // if (id) {
+      //   this.demandeID = id;
+      //   console.log("recuperation de l'id dans les params : ", id);
+      // }
+
+      // this.loadDemande(id);
+      this.checkAndLoadDemande(id);
+    });
   }
 
   initForm(): void {
@@ -294,5 +307,39 @@ export class AgentFicheDemandesComponent implements OnInit {
         console.log('err load reject reasons :', err);
       },
     });
+  }
+  // =======================================
+
+  private checkAndLoadDemande(id: number) {
+    this.isLoading = true;
+
+    this.demandeService.oneDemandeSouscription(id).subscribe({
+      next: (res) => {
+        if (res?.status === 200 && res?.data?.length > 0) {
+          this.demande = res.data[0];
+          this.demandeID = id;
+          console.log('Demande trouvée :', this.demande);
+        } else {
+          this.goBackWithMessage("Cette demande n'existe pas");
+        }
+        this.isLoading = false;
+      },
+
+      error: (err) => {
+        console.log('Erreur API:', err);
+        this.goBackWithMessage('Impossible de charger cette demande');
+        this.isLoading = false;
+      },
+    });
+  }
+
+  private goBackWithMessage(message: string) {
+    this.toastr.error(message, '', {
+      positionClass: 'toast-custom-center',
+    });
+
+    // this.location.back();
+    // OU: this.router.navigate(['/agent-demandes']);
+    this.router.navigate(['/agent-demandes']);
   }
 }

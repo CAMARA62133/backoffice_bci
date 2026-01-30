@@ -2,25 +2,3992 @@
   <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">Repporting et exports</h4>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Repporting et exports
+            </h4>
             <p class="text-secondary mb-sm-0 font-size-13">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, fuga.
+              Synthèse consolidée - Juin 2025 | Accès : Manager Conformité
             </p>
           </div>
           <div class="page-title-right">
             <ol class="breadcrumb m-0">
-              <li class="breadcrumb-item"><a><span>Rapports &amp; exportations</span></a></li>
-              <li class="breadcrumb-item"><a href="#"><span>Rapports Périodiques</span></a></li>
+              <li class="breadcrumb-item">
+                <a><span>Rapports &amp; exportations</span></a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#"><span>Rapports Périodiques</span></a>
+              </li>
             </ol>
-            <div class="float-end small" id="systemStatus-1"><span class="badge bg-success me-2"><i
-              class="icon ion-android-checkmark-circle"></i> Système opérationnel </span><small class="text-muted">Dernière
-              synchro : <span id="lastSync">10:14 UTC</span></small></div>
+            <div class="float-end small" id="systemStatus-1">
+              <span class="badge bg-success me-2"
+                ><i class="icon ion-android-checkmark-circle"></i> Système
+                opérationnel </span
+              ><small class="text-muted"
+                >Dernière synchro : <span id="lastSync">10:14 UTC</span></small
+              >
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <div class="container-fluid py-3 border-bottom">
+    <div class="row mt-3">
+      <div class="col-xl-4">
+        <div class="card text-white bg-primary card-h-100">
+          <div class="card-header bg-transparent">
+            <h4 class="card-title">Synthèse des rapports</h4>
+          </div>
+          <div class="card-body align-content-center">
+            <div id="chartContainer" style="height: 300px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4">
+        <div class="card bg-light card-h-100">
+          <div class="card-header bg-transparent border-bottom border-white">
+            <div class="d-flex align-items-center flex-wrap">
+              <h5 class="me-2 card-title">Liens rapides</h5>
+            </div>
+          </div>
+          <div class="card-body finance-chart-container">
+            <div class="row text-center d-xxl-flex justify-content-xxl-center">
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  class="custom-icon-container"
+                  data-bs-target="#generateReportModal"
+                  data-bs-toggle="modal"
+                  ><i class="icon ion-plus-circled custom-icon-size"></i>
+                  <p class="custom-icon-text">Générer un rapport</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  id="exporterTous"
+                  class="custom-icon-container"
+                  data-bs-target="#exportAdvancedModal"
+                  data-bs-toggle="modal"
+                  ><i class="icon ion-ios-download custom-icon-size"></i>
+                  <p class="custom-icon-text">Exporter tous</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a id="relanceMultiple" class="custom-icon-container"
+                  ><i
+                    class="icon ion-reply-all custom-icon-size"
+                    style="font-size: 41px"
+                  ></i>
+                  <p class="custom-icon-text">Relance multiple</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  class="custom-icon-container"
+                  data-bs-target="#planificationModal"
+                  data-bs-toggle="modal"
+                  ><i class="icon ion-android-calendar custom-icon-size"></i>
+                  <p class="custom-icon-text">Planifier un rapport</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-4">
+        <div class="card bg-light card-h-100">
+          <div
+            class="card-header bg-transparent border-white d-flex justify-content-between align-items-center border-bottom"
+          >
+            <div class="d-flex align-items-center flex-wrap">
+              <h5 class="me-2 card-title">Historique des actions</h5>
+            </div>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              onclick="exporterHistorique()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div
+            class="card-body finance-chart-container"
+            style="max-height: 300px; overflow-y: auto"
+          >
+            <div id="historiqueList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- style="display: none" -->
+  <div class="container-fluid text-white py-2" id="incidentsBlock">
+    <div class="alert alert-danger mb-0" role="alert">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="fw-semibold mb-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  class="fs-4"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.25706 3.09882C9.02167 1.73952 10.9788 1.73952 11.7434 3.09882L17.3237 13.0194C18.0736 14.3526 17.1102 15.9999 15.5805 15.9999H4.4199C2.89025 15.9999 1.92682 14.3526 2.67675 13.0194L8.25706 3.09882ZM11.0001 13C11.0001 13.5523 10.5524 14 10.0001 14C9.44784 14 9.00012 13.5523 9.00012 13C9.00012 12.4477 9.44784 12 10.0001 12C10.5524 12 11.0001 12.4477 11.0001 13ZM10.0001 5C9.44784 5 9.00012 5.44772 9.00012 6V9C9.00012 9.55228 9.44784 10 10.0001 10C10.5524 10 11.0001 9.55228 11.0001 9V6C11.0001 5.44772 10.5524 5 10.0001 5Z"
+                    fill="currentColor"
+                  ></path></svg
+                ><span id="incidentCount">3</span> incident(s) critique(s)
+                détecté(s)
+              </h5>
+              <small id="lastIncident"
+                >Dernier : SLA Juin 2025 à 12:23 - Niveau critique</small
+              >
+            </div>
+            <div>
+              <button
+                class="btn btn-primary mx-2"
+                onclick="afficherIncidents()"
+                type="button"
+              >
+                <i class="bi bi-eye"></i> Voir détails</button
+              ><button
+                class="btn btn-outline-light btn-sm"
+                onclick="masquerIncidents()"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M4.29289 4.29289C4.68342 3.90237 5.31658 3.90237 5.70711 4.29289L10 8.58579L14.2929 4.29289C14.6834 3.90237 15.3166 3.90237 15.7071 4.29289C16.0976 4.68342 16.0976 5.31658 15.7071 5.70711L11.4142 10L15.7071 14.2929C16.0976 14.6834 16.0976 15.3166 15.7071 15.7071C15.3166 16.0976 14.6834 16.0976 14.2929 15.7071L10 11.4142L5.70711 15.7071C5.31658 16.0976 4.68342 16.0976 4.29289 15.7071C3.90237 15.3166 3.90237 14.6834 4.29289 14.2929L8.58579 10L4.29289 5.70711C3.90237 5.31658 3.90237 4.68342 4.29289 4.29289Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid py-3 border-bottom">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div
+            class="card-header bg-light"
+            data-bs-toggle="collapse"
+            data-bs-target="#filtresCollapse"
+          >
+            <h5 class="fw-semibold mb-0 card-title">
+              <i
+                class="icon ion-android-funnel me-2 font-size-18 align-middle"
+              ></i>
+              Filtres de recherche
+              <button
+                class="btn btn-outline-primary btn-sm border ms-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#filtresCollapse"
+              >
+                <i class="icon ion-chevron-down"></i>
+              </button>
+            </h5>
+          </div>
+          <div class="collapse show" id="filtresCollapse">
+            <div class="card-body">
+              <form id="filtresForm">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Période</label
+                    ><select class="form-select form-select" id="filtrePeriode">
+                      <option value="">Toutes</option>
+                      <option value="2025-06">Juin 2025</option>
+                      <option value="2025-05">Mai 2025</option>
+                      <option value="2025-04">Avril 2025</option>
+                      <option value="2025-03">Mars 2025</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Type de rapport</label
+                    ><select class="form-select form-select" id="filtreType">
+                      <option value="">Tous types</option>
+                      <option value="SLA">SLA</option>
+                      <option value="Synthèse">Synthèse</option>
+                      <option value="Incidents">Incidents</option>
+                      <option value="Conformité">Conformité</option>
+                      <option value="Transactions">Transactions</option>
+                      <option value="KYC/AML">KYC/AML</option>
+                      <option value="Audit">Audit</option>
+                      <option value="Technique">Technique</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Entreprise</label
+                    ><input
+                      class="form-control form-control"
+                      type="text"
+                      id="filtreEntreprise"
+                      placeholder="Rechercher..."
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Statut</label
+                    ><select class="form-select form-select" id="filtreStatut">
+                      <option value="">Tous statuts</option>
+                      <option value="OK">✅ OK</option>
+                      <option value="NOK">❌ NOK</option>
+                      <option value="En cours">⏳ En cours</option>
+                      <option value="En attente">🔵 En attente</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mt-2 g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">Utilisateur</label
+                    ><input
+                      class="form-control form-control"
+                      type="text"
+                      id="filtreUtilisateur"
+                      placeholder="Nom ou matricule"
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Montant (GNF)</label>
+                    <div class="input-group">
+                      <input
+                        class="form-control form-control"
+                        type="number"
+                        id="montantMin"
+                        placeholder="Min"
+                      /><span class="input-group-text input-group-text">-</span
+                      ><input
+                        class="form-control form-control"
+                        type="number"
+                        id="montantMax"
+                        placeholder="Max"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Nombre de transactions</label
+                    ><select
+                      class="form-select form-select"
+                      id="filtreTransactions"
+                    >
+                      <option value="">Tous volumes</option>
+                      <option value="0-100">&lt; 100</option>
+                      <option value="100-1000">100 - 1000</option>
+                      <option value="1000+">+ 1000</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Formats disponibles</label>
+                    <div class="d-flex gap-2">
+                      <div class="form-check form-check-inline">
+                        <input
+                          type="checkbox"
+                          class="form-check-input"
+                          id="formatPDF"
+                          value="PDF"
+                        /><label class="form-check-label" for="formatPDF"
+                          >PDF</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          type="checkbox"
+                          class="form-check-input"
+                          id="formatExcel"
+                          value="Excel"
+                        /><label class="form-check-label" for="formatExcel"
+                          >Excel</label
+                        >
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input
+                          type="checkbox"
+                          class="form-check-input"
+                          id="formatCSV"
+                          value="CSV"
+                        /><label class="form-check-label" for="formatCSV"
+                          >CSV</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col d-flex align-items-center flex-wrap gap-3">
+                <label class="fw-semibold form-label">Actions :</label>
+                <div class="btn-group gap-3" role="group">
+                  <button
+                    class="btn btn-primary rounded"
+                    type="button"
+                    id="appliquerFiltres"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4ZM2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8C14 9.29583 13.5892 10.4957 12.8907 11.4765L17.7071 16.2929C18.0976 16.6834 18.0976 17.3166 17.7071 17.7071C17.3166 18.0976 16.6834 18.0976 16.2929 17.7071L11.4765 12.8907C10.4957 13.5892 9.29583 14 8 14C4.68629 14 2 11.3137 2 8Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                    Appliquer</button
+                  ><button
+                    class="btn btn-outline-secondary rounded-1"
+                    type="button"
+                    id="reinitialiserFiltres"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M4 2C4.55228 2 5 2.44772 5 3V5.10125C6.27009 3.80489 8.04052 3 10 3C13.0494 3 15.641 4.94932 16.6014 7.66675C16.7855 8.18747 16.5126 8.75879 15.9918 8.94284C15.4711 9.12689 14.8998 8.85396 14.7157 8.33325C14.0289 6.38991 12.1755 5 10 5C8.36507 5 6.91204 5.78502 5.99935 7H9C9.55228 7 10 7.44772 10 8C10 8.55228 9.55228 9 9 9H4C3.44772 9 3 8.55228 3 8V3C3 2.44772 3.44772 2 4 2ZM4.00817 11.0572C4.52888 10.8731 5.1002 11.146 5.28425 11.6668C5.97112 13.6101 7.82453 15 10 15C11.6349 15 13.088 14.215 14.0006 13L11 13C10.4477 13 10 12.5523 10 12C10 11.4477 10.4477 11 11 11H16C16.2652 11 16.5196 11.1054 16.7071 11.2929C16.8946 11.4804 17 11.7348 17 12V17C17 17.5523 16.5523 18 16 18C15.4477 18 15 17.5523 15 17V14.8987C13.7299 16.1951 11.9595 17 10 17C6.95059 17 4.35905 15.0507 3.39857 12.3332C3.21452 11.8125 3.48745 11.2412 4.00817 11.0572Z"
+                        fill="currentColor"
+                      ></path>
+                    </svg>
+                    Réinitialiser</button
+                  ><button
+                    class="btn btn-outline-info rounded"
+                    type="button"
+                    id="sauvegarderFiltres"
+                  >
+                    <i class="icon ion-android-cloud-done"></i> Sauvegarder
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid" id="alertContainer"></div>
+  <div class="container-fluid py-3">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div
+            class="card-header bg-light d-flex justify-content-between align-items-center"
+          >
+            <div>
+              <h5 class="fw-semibold mb-0 card-title">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                  class="bi bi-table"
+                >
+                  <path
+                    d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm15 2h-4v3h4zm0 4h-4v3h4zm0 4h-4v3h3a1 1 0 0 0 1-1zm-5 3v-3H6v3zm-5 0v-3H1v2a1 1 0 0 0 1 1zm-4-4h4V8H1zm0-4h4V4H1zm5-3v3h4V4zm4 4H6v3h4z"
+                  ></path>
+                </svg>
+                Rapports disponibles
+                <span class="badge bg-primary ms-2" id="rapportCount">0</span>
+              </h5>
+            </div>
+            <div class="d-flex gap-2">
+              <button
+                class="btn btn-outline-secondary btn-sm"
+                onclick="toggleColumns()"
+              >
+                <i class="icon ion-grid"></i> Colonnes
+              </button>
+              <div class="dropdown">
+                <button
+                  class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M3 3C2.44772 3 2 3.44772 2 4C2 4.55228 2.44772 5 3 5H14C14.5523 5 15 4.55228 15 4C15 3.44772 14.5523 3 14 3H3Z"
+                      fill="currentColor"
+                    ></path>
+                    <path
+                      d="M3 7C2.44772 7 2 7.44772 2 8C2 8.55228 2.44772 9 3 9H10C10.5523 9 11 8.55228 11 8C11 7.44772 10.5523 7 10 7H3Z"
+                      fill="currentColor"
+                    ></path>
+                    <path
+                      d="M3 11C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13H7C7.55228 13 8 12.5523 8 12C8 11.4477 7.55228 11 7 11H3Z"
+                      fill="currentColor"
+                    ></path>
+                    <path
+                      d="M15 8C15 7.44772 14.5523 7 14 7C13.4477 7 13 7.44771 13 8L13 13.5858L11.7071 12.2929C11.3166 11.9024 10.6834 11.9024 10.2929 12.2929C9.90237 12.6834 9.90237 13.3166 10.2929 13.7071L13.2929 16.7071C13.4804 16.8946 13.7348 17 14 17C14.2652 17 14.5196 16.8946 14.7071 16.7071L17.7071 13.7071C18.0976 13.3166 18.0976 12.6834 17.7071 12.2929C17.3166 11.9024 16.6834 11.9024 16.2929 12.2929L15 13.5858L15 8Z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                  Tri
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="#">Par période</a>
+                    <!-- onclick="trierTableau(&#39;periode&#39;)" -->
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">Par type</a>
+                    <!-- onclick="trierTableau(&#39;type&#39;)" -->
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">Par statut</a>
+                    <!-- onclick="trierTableau(&#39;statut&#39;)" -->
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">Par montant</a>
+                    <!-- onclick="trierTableau(&#39;montant&#39;)" -->
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tableau 1 -->
+          <div class="card-body p-0">
+            <div class="table-responsive" style="display: block">
+              <table class="table table-hover mb-0" id="rapportsTable">
+                <thead class="table-primary">
+                  <tr>
+                    <th scope="col">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          id="selectAll"
+                          type="checkbox"
+                        />
+                      </div>
+                    </th>
+                    <th scope="col">Période</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Généré le</th>
+                    <th scope="col">Transactions</th>
+                    <th scope="col">Montant (GNF)</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Formats</th>
+                    <th scope="col">Dernier accès</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="rapportsTableBody">
+                  <tr class="">
+                    <td>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="RPT_SLA_0625_001"
+                          onchange="mettreAJourSelection()"
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-medium">Jun 2025</span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge font-size-13 badge-soft-light text-dark border"
+                        >SLA</span
+                      >
+                    </td>
+                    <td>01/07/2025 09:30</td>
+                    <td class="text-end">
+                      <span class="fw-medium">1 250</span>
+                    </td>
+                    <td class="text-end">
+                      <span class="fw-medium">85.0M GNF</span>
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-success"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM13.7071 8.70711C14.0976 8.31658 14.0976 7.68342 13.7071 7.29289C13.3166 6.90237 12.6834 6.90237 12.2929 7.29289L9 10.5858L7.70711 9.29289C7.31658 8.90237 6.68342 8.90237 6.29289 9.29289C5.90237 9.68342 5.90237 10.3166 6.29289 10.7071L8.29289 12.7071C8.68342 13.0976 9.31658 13.0976 9.70711 12.7071L13.7071 8.70711Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                        OK</span
+                      >
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-secondary me-1"
+                        >PDF</span
+                      ><span
+                        class="badge font-size-13 badge-soft-secondary me-1"
+                        >Excel</span
+                      >
+                    </td>
+                    <td>03/07/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button
+                          class="btn btn-outline-primary"
+                          type="button"
+                          onclick="voirRapport('RPT_SLA_0625_001')"
+                          title="Voir"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M10 12C11.1046 12 12 11.1046 12 10C12 8.89543 11.1046 8 10 8C8.89544 8 8.00001 8.89543 8.00001 10C8.00001 11.1046 8.89544 12 10 12Z"
+                              fill="currentColor"
+                            ></path>
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M0.457764 10C1.73202 5.94291 5.52232 3 9.99997 3C14.4776 3 18.2679 5.94288 19.5422 9.99996C18.2679 14.0571 14.4776 17 9.99995 17C5.52232 17 1.73204 14.0571 0.457764 10ZM14 10C14 12.2091 12.2091 14 10 14C7.79087 14 6.00001 12.2091 6.00001 10C6.00001 7.79086 7.79087 6 10 6C12.2091 6 14 7.79086 14 10Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-success"
+                          type="button"
+                          onclick="exporterRapport('RPT_SLA_0625_001')"
+                          title="Exporter"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-info"
+                          type="button"
+                          onclick="partagerRapport('RPT_SLA_0625_001')"
+                          title="Partager"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M15 8C16.6569 8 18 6.65685 18 5C18 3.34315 16.6569 2 15 2C13.3431 2 12 3.34315 12 5C12 5.12548 12.0077 5.24917 12.0227 5.37061L7.08259 7.84064C6.54303 7.32015 5.8089 7 5 7C3.34315 7 2 8.34315 2 10C2 11.6569 3.34315 13 5 13C5.80892 13 6.54306 12.6798 7.08263 12.1593L12.0227 14.6293C12.0077 14.7508 12 14.8745 12 15C12 16.6569 13.3431 18 15 18C16.6569 18 18 16.6569 18 15C18 13.3431 16.6569 12 15 12C14.1911 12 13.457 12.3201 12.9174 12.8406L7.97733 10.3706C7.9923 10.2492 8 10.1255 8 10C8 9.8745 7.99229 9.7508 7.97733 9.62934L12.9174 7.15932C13.4569 7.67984 14.1911 8 15 8Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="">
+                    <td>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="RPT_SYNT_0625_002"
+                          onchange="mettreAJourSelection()"
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-medium">Jun 2025</span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge font-size-13 badge-soft-light text-dark border"
+                        >Synthèse</span
+                      >
+                    </td>
+                    <td>01/07/2025 10:15</td>
+                    <td class="text-end">
+                      <span class="fw-medium">980</span>
+                    </td>
+                    <td class="text-end">
+                      <span class="fw-medium">73.0M GNF</span>
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-success"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM13.7071 8.70711C14.0976 8.31658 14.0976 7.68342 13.7071 7.29289C13.3166 6.90237 12.6834 6.90237 12.2929 7.29289L9 10.5858L7.70711 9.29289C7.31658 8.90237 6.68342 8.90237 6.29289 9.29289C5.90237 9.68342 5.90237 10.3166 6.29289 10.7071L8.29289 12.7071C8.68342 13.0976 9.31658 13.0976 9.70711 12.7071L13.7071 8.70711Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                        OK</span
+                      >
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-secondary me-1"
+                        >PDF</span
+                      ><span
+                        class="badge font-size-13 badge-soft-secondary me-1"
+                        >CSV</span
+                      >
+                    </td>
+                    <td>02/07/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button
+                          class="btn btn-outline-primary"
+                          type="button"
+                          onclick="voirRapport('RPT_SYNT_0625_002')"
+                          title="Voir"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M10 12C11.1046 12 12 11.1046 12 10C12 8.89543 11.1046 8 10 8C8.89544 8 8.00001 8.89543 8.00001 10C8.00001 11.1046 8.89544 12 10 12Z"
+                              fill="currentColor"
+                            ></path>
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M0.457764 10C1.73202 5.94291 5.52232 3 9.99997 3C14.4776 3 18.2679 5.94288 19.5422 9.99996C18.2679 14.0571 14.4776 17 9.99995 17C5.52232 17 1.73204 14.0571 0.457764 10ZM14 10C14 12.2091 12.2091 14 10 14C7.79087 14 6.00001 12.2091 6.00001 10C6.00001 7.79086 7.79087 6 10 6C12.2091 6 14 7.79086 14 10Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-success"
+                          type="button"
+                          onclick="exporterRapport('RPT_SYNT_0625_002')"
+                          title="Exporter"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-info"
+                          type="button"
+                          onclick="partagerRapport('RPT_SYNT_0625_002')"
+                          title="Partager"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M15 8C16.6569 8 18 6.65685 18 5C18 3.34315 16.6569 2 15 2C13.3431 2 12 3.34315 12 5C12 5.12548 12.0077 5.24917 12.0227 5.37061L7.08259 7.84064C6.54303 7.32015 5.8089 7 5 7C3.34315 7 2 8.34315 2 10C2 11.6569 3.34315 13 5 13C5.80892 13 6.54306 12.6798 7.08263 12.1593L12.0227 14.6293C12.0077 14.7508 12 14.8745 12 15C12 16.6569 13.3431 18 15 18C16.6569 18 18 16.6569 18 15C18 13.3431 16.6569 12 15 12C14.1911 12 13.457 12.3201 12.9174 12.8406L7.97733 10.3706C7.9923 10.2492 8 10.1255 8 10C8 9.8745 7.99229 9.7508 7.97733 9.62934L12.9174 7.15932C13.4569 7.67984 14.1911 8 15 8Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="table-danger">
+                    <td>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="RPT_INC_0625_003"
+                          onchange="mettreAJourSelection()"
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-medium">Jun 2025</span>
+                      <svg
+                        class="text-primary"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M5 9V7C5 4.23858 7.23858 2 10 2C12.7614 2 15 4.23858 15 7V9C16.1046 9 17 9.89543 17 11V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V11C3 9.89543 3.89543 9 5 9ZM13 7V9H7V7C7 5.34315 8.34315 4 10 4C11.6569 4 13 5.34315 13 7Z"
+                          fill="currentColor"
+                        ></path>
+                      </svg>
+                    </td>
+                    <td>
+                      <span
+                        class="badge font-size-13 badge-soft-light text-dark border"
+                        >Incidents</span
+                      >
+                    </td>
+                    <td>01/07/2025 12:45</td>
+                    <td class="text-end">
+                      <span class="fw-medium">45</span>
+                    </td>
+                    <td class="text-end">
+                      <span class="fw-medium">12.0M GNF</span>
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-danger"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM8.70711 7.29289C8.31658 6.90237 7.68342 6.90237 7.29289 7.29289C6.90237 7.68342 6.90237 8.31658 7.29289 8.70711L8.58579 10L7.29289 11.2929C6.90237 11.6834 6.90237 12.3166 7.29289 12.7071C7.68342 13.0976 8.31658 13.0976 8.70711 12.7071L10 11.4142L11.2929 12.7071C11.6834 13.0976 12.3166 13.0976 12.7071 12.7071C13.0976 12.3166 13.0976 11.6834 12.7071 11.2929L11.4142 10L12.7071 8.70711C13.0976 8.31658 13.0976 7.68342 12.7071 7.29289C12.3166 6.90237 11.6834 6.90237 11.2929 7.29289L10 8.58579L8.70711 7.29289Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                        NOK</span
+                      >
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-secondary me-1"
+                        >PDF</span
+                      >
+                    </td>
+                    <td>01/07/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button
+                          class="btn btn-outline-primary"
+                          type="button"
+                          onclick="voirRapport('RPT_INC_0625_003')"
+                          title="Voir"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M10 12C11.1046 12 12 11.1046 12 10C12 8.89543 11.1046 8 10 8C8.89544 8 8.00001 8.89543 8.00001 10C8.00001 11.1046 8.89544 12 10 12Z"
+                              fill="currentColor"
+                            ></path>
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M0.457764 10C1.73202 5.94291 5.52232 3 9.99997 3C14.4776 3 18.2679 5.94288 19.5422 9.99996C18.2679 14.0571 14.4776 17 9.99995 17C5.52232 17 1.73204 14.0571 0.457764 10ZM14 10C14 12.2091 12.2091 14 10 14C7.79087 14 6.00001 12.2091 6.00001 10C6.00001 7.79086 7.79087 6 10 6C12.2091 6 14 7.79086 14 10Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-success"
+                          type="button"
+                          onclick="exporterRapport('RPT_INC_0625_003')"
+                          title="Exporter"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-info"
+                          type="button"
+                          onclick="partagerRapport('RPT_INC_0625_003')"
+                          title="Partager"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M15 8C16.6569 8 18 6.65685 18 5C18 3.34315 16.6569 2 15 2C13.3431 2 12 3.34315 12 5C12 5.12548 12.0077 5.24917 12.0227 5.37061L7.08259 7.84064C6.54303 7.32015 5.8089 7 5 7C3.34315 7 2 8.34315 2 10C2 11.6569 3.34315 13 5 13C5.80892 13 6.54306 12.6798 7.08263 12.1593L12.0227 14.6293C12.0077 14.7508 12 14.8745 12 15C12 16.6569 13.3431 18 15 18C16.6569 18 18 16.6569 18 15C18 13.3431 16.6569 12 15 12C14.1911 12 13.457 12.3201 12.9174 12.8406L7.97733 10.3706C7.9923 10.2492 8 10.1255 8 10C8 9.8745 7.99229 9.7508 7.97733 9.62934L12.9174 7.15932C13.4569 7.67984 14.1911 8 15 8Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-warning"
+                          type="button"
+                          onclick="voirLogs('RPT_INC_0625_003')"
+                          title="Logs"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10 1.94446C7.91528 3.81033 5.17437 4.95809 2.16611 4.99891C2.05686 5.64968 2 6.31821 2 7.00003C2 12.2249 5.33923 16.6698 10 18.3172C14.6608 16.6698 18 12.2249 18 7.00003C18 6.31821 17.9431 5.64968 17.8339 4.99891C14.8256 4.95809 12.0847 3.81033 10 1.94446ZM11 14C11 14.5523 10.5523 15 10 15C9.44771 15 9 14.5523 9 14C9 13.4477 9.44771 13 10 13C10.5523 13 11 13.4477 11 14ZM11 7C11 6.44772 10.5523 6 10 6C9.44771 6 9 6.44772 9 7V10C9 10.5523 9.44771 11 10 11C10.5523 11 11 10.5523 11 10V7Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="">
+                    <td>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="RPT_CONF_0525_004"
+                          onchange="mettreAJourSelection()"
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-medium">Mai 2025</span>
+                      <svg
+                        class="text-primary"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M5 9V7C5 4.23858 7.23858 2 10 2C12.7614 2 15 4.23858 15 7V9C16.1046 9 17 9.89543 17 11V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V11C3 9.89543 3.89543 9 5 9ZM13 7V9H7V7C7 5.34315 8.34315 4 10 4C11.6569 4 13 5.34315 13 7Z"
+                          fill="currentColor"
+                        ></path>
+                      </svg>
+                    </td>
+                    <td>
+                      <span
+                        class="badge font-size-13 badge-soft-light text-dark border"
+                        >Conformité</span
+                      >
+                    </td>
+                    <td>01/06/2025 08:00</td>
+                    <td class="text-end">
+                      <span class="fw-medium">2 150</span>
+                    </td>
+                    <td class="text-end">
+                      <span class="fw-medium">156.0M GNF</span>
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-success"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM13.7071 8.70711C14.0976 8.31658 14.0976 7.68342 13.7071 7.29289C13.3166 6.90237 12.6834 6.90237 12.2929 7.29289L9 10.5858L7.70711 9.29289C7.31658 8.90237 6.68342 8.90237 6.29289 9.29289C5.90237 9.68342 5.90237 10.3166 6.29289 10.7071L8.29289 12.7071C8.68342 13.0976 9.31658 13.0976 9.70711 12.7071L13.7071 8.70711Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                        OK</span
+                      >
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-secondary me-1"
+                        >PDF</span
+                      ><span
+                        class="badge font-size-13 badge-soft-secondary me-1"
+                        >Excel</span
+                      ><span
+                        class="badge font-size-13 badge-soft-secondary me-1"
+                        >CSV</span
+                      >
+                    </td>
+                    <td>15/06/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button
+                          class="btn btn-outline-primary"
+                          type="button"
+                          onclick="voirRapport('RPT_CONF_0525_004')"
+                          title="Voir"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M10 12C11.1046 12 12 11.1046 12 10C12 8.89543 11.1046 8 10 8C8.89544 8 8.00001 8.89543 8.00001 10C8.00001 11.1046 8.89544 12 10 12Z"
+                              fill="currentColor"
+                            ></path>
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M0.457764 10C1.73202 5.94291 5.52232 3 9.99997 3C14.4776 3 18.2679 5.94288 19.5422 9.99996C18.2679 14.0571 14.4776 17 9.99995 17C5.52232 17 1.73204 14.0571 0.457764 10ZM14 10C14 12.2091 12.2091 14 10 14C7.79087 14 6.00001 12.2091 6.00001 10C6.00001 7.79086 7.79087 6 10 6C12.2091 6 14 7.79086 14 10Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-success"
+                          type="button"
+                          onclick="exporterRapport('RPT_CONF_0525_004')"
+                          title="Exporter"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-info"
+                          type="button"
+                          onclick="partagerRapport('RPT_CONF_0525_004')"
+                          title="Partager"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M15 8C16.6569 8 18 6.65685 18 5C18 3.34315 16.6569 2 15 2C13.3431 2 12 3.34315 12 5C12 5.12548 12.0077 5.24917 12.0227 5.37061L7.08259 7.84064C6.54303 7.32015 5.8089 7 5 7C3.34315 7 2 8.34315 2 10C2 11.6569 3.34315 13 5 13C5.80892 13 6.54306 12.6798 7.08263 12.1593L12.0227 14.6293C12.0077 14.7508 12 14.8745 12 15C12 16.6569 13.3431 18 15 18C16.6569 18 18 16.6569 18 15C18 13.3431 16.6569 12 15 12C14.1911 12 13.457 12.3201 12.9174 12.8406L7.97733 10.3706C7.9923 10.2492 8 10.1255 8 10C8 9.8745 7.99229 9.7508 7.97733 9.62934L12.9174 7.15932C13.4569 7.67984 14.1911 8 15 8Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="table-warning">
+                    <td>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="RPT_KYC_0525_005"
+                          onchange="mettreAJourSelection()"
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-medium">Mai 2025</span>
+                      <svg
+                        class="text-primary"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M5 9V7C5 4.23858 7.23858 2 10 2C12.7614 2 15 4.23858 15 7V9C16.1046 9 17 9.89543 17 11V16C17 17.1046 16.1046 18 15 18H5C3.89543 18 3 17.1046 3 16V11C3 9.89543 3.89543 9 5 9ZM13 7V9H7V7C7 5.34315 8.34315 4 10 4C11.6569 4 13 5.34315 13 7Z"
+                          fill="currentColor"
+                        ></path>
+                      </svg>
+                    </td>
+                    <td>
+                      <span
+                        class="badge font-size-13 badge-soft-light text-dark border"
+                        >KYC/AML</span
+                      >
+                    </td>
+                    <td>01/06/2025 14:30</td>
+                    <td class="text-end">
+                      <span class="fw-medium">67</span>
+                    </td>
+                    <td class="text-end">
+                      <span class="fw-medium">890.0M GNF</span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge font-size-13 badge-soft-warning text-dark"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 6C11 5.44772 10.5523 5 10 5C9.44771 5 9 5.44772 9 6V10C9 10.2652 9.10536 10.5196 9.29289 10.7071L12.1213 13.5355C12.5118 13.9261 13.145 13.9261 13.5355 13.5355C13.9261 13.145 13.9261 12.5118 13.5355 12.1213L11 9.58579V6Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                        En cours</span
+                      >
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-secondary me-1"
+                        >PDF</span
+                      >
+                    </td>
+                    <td><span class="text-muted">Jamais</span></td>
+                    <td>
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button
+                          class="btn btn-outline-primary"
+                          type="button"
+                          onclick="voirRapport('RPT_KYC_0525_005')"
+                          title="Voir"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M10 12C11.1046 12 12 11.1046 12 10C12 8.89543 11.1046 8 10 8C8.89544 8 8.00001 8.89543 8.00001 10C8.00001 11.1046 8.89544 12 10 12Z"
+                              fill="currentColor"
+                            ></path>
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M0.457764 10C1.73202 5.94291 5.52232 3 9.99997 3C14.4776 3 18.2679 5.94288 19.5422 9.99996C18.2679 14.0571 14.4776 17 9.99995 17C5.52232 17 1.73204 14.0571 0.457764 10ZM14 10C14 12.2091 12.2091 14 10 14C7.79087 14 6.00001 12.2091 6.00001 10C6.00001 7.79086 7.79087 6 10 6C12.2091 6 14 7.79086 14 10Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-success"
+                          type="button"
+                          onclick="exporterRapport('RPT_KYC_0525_005')"
+                          title="Exporter"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-info"
+                          type="button"
+                          onclick="partagerRapport('RPT_KYC_0525_005')"
+                          title="Partager"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M15 8C16.6569 8 18 6.65685 18 5C18 3.34315 16.6569 2 15 2C13.3431 2 12 3.34315 12 5C12 5.12548 12.0077 5.24917 12.0227 5.37061L7.08259 7.84064C6.54303 7.32015 5.8089 7 5 7C3.34315 7 2 8.34315 2 10C2 11.6569 3.34315 13 5 13C5.80892 13 6.54306 12.6798 7.08263 12.1593L12.0227 14.6293C12.0077 14.7508 12 14.8745 12 15C12 16.6569 13.3431 18 15 18C16.6569 18 18 16.6569 18 15C18 13.3431 16.6569 12 15 12C14.1911 12 13.457 12.3201 12.9174 12.8406L7.97733 10.3706C7.9923 10.2492 8 10.1255 8 10C8 9.8745 7.99229 9.7508 7.97733 9.62934L12.9174 7.15932C13.4569 7.67984 14.1911 8 15 8Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="">
+                    <td>
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          value="RPT_TECH_0625_006"
+                          onchange="mettreAJourSelection()"
+                        />
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-medium">Jun 2025</span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge font-size-13 badge-soft-light text-dark border"
+                        >Technique</span
+                      >
+                    </td>
+                    <td>01/07/2025 23:00</td>
+                    <td class="text-end">
+                      <span class="fw-medium">0</span>
+                    </td>
+                    <td class="text-end">
+                      <span class="fw-medium">-</span>
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-success"
+                        ><svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM13.7071 8.70711C14.0976 8.31658 14.0976 7.68342 13.7071 7.29289C13.3166 6.90237 12.6834 6.90237 12.2929 7.29289L9 10.5858L7.70711 9.29289C7.31658 8.90237 6.68342 8.90237 6.29289 9.29289C5.90237 9.68342 5.90237 10.3166 6.29289 10.7071L8.29289 12.7071C8.68342 13.0976 9.31658 13.0976 9.70711 12.7071L13.7071 8.70711Z"
+                            fill="currentColor"
+                          ></path>
+                        </svg>
+                        OK</span
+                      >
+                    </td>
+                    <td>
+                      <span class="badge font-size-13 badge-soft-secondary me-1"
+                        >JSON</span
+                      ><span
+                        class="badge font-size-13 badge-soft-secondary me-1"
+                        >CSV</span
+                      >
+                    </td>
+                    <td>02/07/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button
+                          class="btn btn-outline-primary"
+                          type="button"
+                          onclick="voirRapport('RPT_TECH_0625_006')"
+                          title="Voir"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M10 12C11.1046 12 12 11.1046 12 10C12 8.89543 11.1046 8 10 8C8.89544 8 8.00001 8.89543 8.00001 10C8.00001 11.1046 8.89544 12 10 12Z"
+                              fill="currentColor"
+                            ></path>
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M0.457764 10C1.73202 5.94291 5.52232 3 9.99997 3C14.4776 3 18.2679 5.94288 19.5422 9.99996C18.2679 14.0571 14.4776 17 9.99995 17C5.52232 17 1.73204 14.0571 0.457764 10ZM14 10C14 12.2091 12.2091 14 10 14C7.79087 14 6.00001 12.2091 6.00001 10C6.00001 7.79086 7.79087 6 10 6C12.2091 6 14 7.79086 14 10Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-success"
+                          type="button"
+                          onclick="exporterRapport('RPT_TECH_0625_006')"
+                          title="Exporter"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                        <button
+                          class="btn btn-outline-info"
+                          type="button"
+                          onclick="partagerRapport('RPT_TECH_0625_006')"
+                          title="Partager"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="1em"
+                            height="1em"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                          >
+                            <path
+                              d="M15 8C16.6569 8 18 6.65685 18 5C18 3.34315 16.6569 2 15 2C13.3431 2 12 3.34315 12 5C12 5.12548 12.0077 5.24917 12.0227 5.37061L7.08259 7.84064C6.54303 7.32015 5.8089 7 5 7C3.34315 7 2 8.34315 2 10C2 11.6569 3.34315 13 5 13C5.80892 13 6.54306 12.6798 7.08263 12.1593L12.0227 14.6293C12.0077 14.7508 12 14.8745 12 15C12 16.6569 13.3431 18 15 18C16.6569 18 18 16.6569 18 15C18 13.3431 16.6569 12 15 12C14.1911 12 13.457 12.3201 12.9174 12.8406L7.97733 10.3706C7.9923 10.2492 8 10.1255 8 10C8 9.8745 7.99229 9.7508 7.97733 9.62934L12.9174 7.15932C13.4569 7.67984 14.1911 8 15 8Z"
+                              fill="currentColor"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center py-5" id="emptyState" style="display: none">
+              <div class="mb-3">
+                <i class="text-muted bi bi-inbox display-1"></i>
+              </div>
+              <h5 class="text-muted">Aucun rapport trouvé</h5>
+              <p class="text-muted">
+                Modifiez vos critères de recherche ou générez un nouveau
+                rapport.
+              </p>
+              <div class="mt-3">
+                <button
+                  class="btn btn-outline-primary me-2"
+                  onclick="reinitialiserFiltres()"
+                >
+                  <i class="bi bi-arrow-clockwise"></i> Réinitialiser filtres</button
+                ><button
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#generateReportModal"
+                >
+                  <i class="bi bi-plus-circle"></i> Générer rapport
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-light">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <small class="text-muted">
+                  Affichage de <span id="startRecord">1</span> à
+                  <span id="endRecord">10</span> sur
+                  <span id="totalRecords">0</span> rapport(s)
+                </small>
+              </div>
+              <div class="col-md-6">
+                <nav aria-label="Pagination rapports">
+                  <ul
+                    class="pagination pagination-sm justify-content-end mb-0"
+                    id="pagination"
+                  ></ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Les modals -->
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="helpModal"
+  aria-labelledby="helpModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-primary">
+        <h5 class="text-light modal-title" id="helpModalLabel">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM10 7C9.63113 7 9.3076 7.19922 9.13318 7.50073C8.85664 7.97879 8.24491 8.14215 7.76685 7.86561C7.28879 7.58906 7.12543 6.97733 7.40197 6.49927C7.91918 5.60518 8.88833 5 10 5C11.6569 5 13 6.34315 13 8C13 9.30622 12.1652 10.4175 11 10.8293V11C11 11.5523 10.5523 12 10 12C9.44773 12 9.00001 11.5523 9.00001 11V10C9.00001 9.44772 9.44773 9 10 9C10.5523 9 11 8.55228 11 8C11 7.44772 10.5523 7 10 7ZM10 15C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13C9.44772 13 9 13.4477 9 14C9 14.5523 9.44772 15 10 15Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          Aide contextuelle - Module Rapports Périodiques
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <h5 class="fw-semibold text-primary">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM11 6C11 6.55228 10.5523 7 10 7C9.44772 7 9 6.55228 9 6C9 5.44772 9.44772 5 10 5C10.5523 5 11 5.44772 11 6ZM9 9C8.44772 9 8 9.44772 8 10C8 10.5523 8.44772 11 9 11V14C9 14.5523 9.44772 15 10 15H11C11.5523 15 12 14.5523 12 14C12 13.4477 11.5523 13 11 13V10C11 9.44772 10.5523 9 10 9H9Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+              Contexte détecté
+            </h5>
+            <p>
+              <strong>Page active :</strong> Tableau des rapports filtrés par
+              période
+            </p>
+            <p>
+              <strong>Profil identifié :</strong> Superviseur Conformité - Accès
+              critique
+            </p>
+            <h5 class="fw-semibold text-primary mt-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  d="M11 3C11 2.44772 10.5523 2 10 2C9.44771 2 9 2.44772 9 3V4C9 4.55228 9.44771 5 10 5C10.5523 5 11 4.55228 11 4V3Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M15.6568 5.75731C16.0473 5.36678 16.0473 4.73362 15.6568 4.34309C15.2663 3.95257 14.6331 3.95257 14.2426 4.34309L13.5355 5.0502C13.145 5.44072 13.145 6.07389 13.5355 6.46441C13.926 6.85494 14.5592 6.85494 14.9497 6.46441L15.6568 5.75731Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M18 10C18 10.5523 17.5523 11 17 11H16C15.4477 11 15 10.5523 15 10C15 9.44771 15.4477 9 16 9H17C17.5523 9 18 9.44771 18 10Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M5.05019 6.46443C5.44071 6.85496 6.07388 6.85496 6.4644 6.46443C6.85493 6.07391 6.85493 5.44074 6.4644 5.05022L5.7573 4.34311C5.36677 3.95259 4.73361 3.95259 4.34308 4.34311C3.95256 4.73363 3.95256 5.3668 4.34308 5.75732L5.05019 6.46443Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M5 10C5 10.5523 4.55228 11 4 11H3C2.44772 11 2 10.5523 2 10C2 9.44771 2.44772 9 3 9H4C4.55228 9 5 9.44771 5 10Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M8 16V15H12V16C12 17.1046 11.1046 18 10 18C8.89543 18 8 17.1046 8 16Z"
+                  fill="currentColor"
+                ></path>
+                <path
+                  d="M12.0009 14C12.0155 13.6597 12.2076 13.3537 12.4768 13.1411C13.4046 12.4086 14 11.2738 14 10C14 7.79086 12.2091 6 10 6C7.79086 6 6 7.79086 6 10C6 11.2738 6.59545 12.4086 7.52319 13.1411C7.79241 13.3537 7.98451 13.6597 7.99911 14H12.0009Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+              Recommandations contextuelles
+            </h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                • Pour ajuster la période, utilisez les filtres en haut à gauche
+              </li>
+              <li class="mb-2">
+                • Cliquez sur "Logs" pour visualiser les erreurs techniques
+                associées
+              </li>
+              <li class="mb-2">
+                • Le bouton "Exporter tous" génère un lot multi-format
+                instantané
+              </li>
+              <li class="mb-2">
+                • Accédez au profil utilisateur en cliquant sur son nom
+              </li>
+            </ul>
+            <h5 class="fw-semibold text-primary mt-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  d="M5 4C5 2.89543 5.89543 2 7 2H13C14.1046 2 15 2.89543 15 4V18L10 15.5L5 18V4Z"
+                  fill="currentColor"
+                ></path></svg
+              ><i class="bi bi-bookmark"></i> Rubriques connexes
+            </h5>
+            <div class="accordion" role="tablist" id="helpAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header" role="tab">
+                  <button
+                    class="accordion-button fw-semibold collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#help1"
+                    aria-expanded="true"
+                    aria-controls="helpAccordion .item-1"
+                  >
+                    Génération manuelle d'un rapport
+                  </button>
+                </h2>
+                <div
+                  class="accordion-collapse collapse show item-1 fw-semibold"
+                  role="tabpanel"
+                  data-bs-parent="#helpAccordion"
+                  id="help1"
+                >
+                  <div class="accordion-body">
+                    <span class="fw-semibold">
+                      Utilisez le bouton "Générer un rapport" pour créer un
+                      rapport personnalisé avec vos critères spécifiques.
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" role="tab">
+                  <button
+                    class="accordion-button collapsed fw-semibold collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#help2"
+                    aria-expanded="false"
+                    aria-controls="helpAccordion .item-2"
+                  >
+                    Lecture des statuts d'exécution
+                  </button>
+                </h2>
+                <div
+                  class="accordion-collapse collapse item-2"
+                  role="tabpanel"
+                  data-bs-parent="#helpAccordion"
+                  id="help2"
+                >
+                  <div class="accordion-body">
+                    <strong>🟢 OK :</strong
+                    ><span> Rapport généré avec succès</span><br /><strong
+                      >❌ NOK :</strong
+                    ><span> Erreur lors de la génération</span><br /><strong
+                      >⏳ En cours :</strong
+                    ><span> Génération en cours</span><br /><strong
+                      >🔵 En attente :</strong
+                    ><span> Rapport planifié non encore exécuté </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-outline-primary"
+          type="button"
+          onclick="contactSupport()"
+        >
+          <i class="bi bi-envelope"></i> Contacter le support</button
+        ><button
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          type="button"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="generateReportModal"
+  aria-labelledby="generateReportModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-primary">
+        <h5 class="text-white modal-title" id="generateReportModalLabel">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          Génération manuelle d'un rapport
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="generateReportForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label"
+                >Période du rapport <span class="text-danger">*</span></label
+              ><input
+                class="form-control form-control"
+                id="genPeriode"
+                required=""
+                type="month"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label"
+                >Type de rapport <span class="text-danger">*</span></label
+              ><select class="form-select form-select" id="genType" required="">
+                <option value="">Sélectionner...</option>
+                <option value="SLA">SLA - Service Level Agreement</option>
+                <option value="Synthèse">Synthèse - Rapport d'activité</option>
+                <option value="Incidents">
+                  Incidents - Anomalies détectées
+                </option>
+                <option value="Conformité">Conformité et Audit</option>
+                <option value="KYC/AML">KYC/AML - Vigilance client</option>
+                <option value="Transactions">
+                  Transactions - Détail opérations
+                </option>
+                <option value="Technique">
+                  Technique - Métadonnées système
+                </option>
+                <option value="Personnalisé">
+                  Personnalisé - Critères spécifiques
+                </option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Format(s) de sortie</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="genFormatPDF"
+                  /><label class="form-check-label" for="genFormatPDF"
+                    >PDF</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="genFormatExcel"
+                  /><label class="form-check-label" for="genFormatExcel"
+                    >Excel</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="genFormatCSV"
+                  /><label class="form-check-label" for="genFormatCSV"
+                    >CSV</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Entreprise/Client (optionnel)</label
+              ><input
+                class="form-control form-control"
+                type="text"
+                id="genEntreprise"
+                placeholder="Filtrer par entreprise..."
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Livraison</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    checked=""
+                    class="form-check-input"
+                    id="genImmediate"
+                    name="genLivraison"
+                    value="immediate"
+                  /><label class="form-check-label" for="genImmediate"
+                    >Immédiate</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="genPlanifiee"
+                    name="genLivraison"
+                    value="planifiee"
+                  /><label class="form-check-label" for="genPlanifiee"
+                    >Planifiée</label
+                  >
+                </div>
+              </div>
+              <input
+                class="form-control mt-2 form-control"
+                id="genDatePlanifiee"
+                style="display: none"
+                type="datetime-local"
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Niveau de visibilité</label
+              ><select class="form-select form-select" id="genVisibilite">
+                <option value="Standard">Standard</option>
+                <option value="Critique">Critique</option>
+                <option value="Confidentiel">Confidentiel</option>
+                <option value="Audit">Réservé audit</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h6 class="mb-0">
+                    <button
+                      class="btn btn-link text-decoration-none p-0"
+                      data-bs-target="#parametresAvances"
+                      data-bs-toggle="collapse"
+                      type="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M11.4892 3.17094C11.1102 1.60969 8.8898 1.60969 8.51078 3.17094C8.26594 4.17949 7.11045 4.65811 6.22416 4.11809C4.85218 3.28212 3.28212 4.85218 4.11809 6.22416C4.65811 7.11045 4.17949 8.26593 3.17094 8.51078C1.60969 8.8898 1.60969 11.1102 3.17094 11.4892C4.17949 11.7341 4.65811 12.8896 4.11809 13.7758C3.28212 15.1478 4.85218 16.7179 6.22417 15.8819C7.11045 15.3419 8.26594 15.8205 8.51078 16.8291C8.8898 18.3903 11.1102 18.3903 11.4892 16.8291C11.7341 15.8205 12.8896 15.3419 13.7758 15.8819C15.1478 16.7179 16.7179 15.1478 15.8819 13.7758C15.3419 12.8896 15.8205 11.7341 16.8291 11.4892C18.3903 11.1102 18.3903 8.8898 16.8291 8.51078C15.8205 8.26593 15.3419 7.11045 15.8819 6.22416C16.7179 4.85218 15.1478 3.28212 13.7758 4.11809C12.8896 4.65811 11.7341 4.17949 11.4892 3.17094ZM10 13C11.6569 13 13 11.6569 13 10C13 8.34315 11.6569 7 10 7C8.34315 7 7 8.34315 7 10C7 11.6569 8.34315 13 10 13Z"
+                          fill="currentColor"
+                        ></path>
+                      </svg>
+                      Paramètres avancés
+                    </button>
+                  </h6>
+                </div>
+                <div class="collapse" id="parametresAvances">
+                  <div class="card-body">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <div class="form-check">
+                          <input
+                            type="checkbox"
+                            class="form-check-input"
+                            id="genInclurelogs"
+                          /><label class="form-check-label" for="genInclurelogs"
+                            >Inclure logs techniques</label
+                          >
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-check">
+                          <input
+                            type="checkbox"
+                            class="form-check-input"
+                            id="genAnonymiser"
+                          /><label class="form-check-label" for="genAnonymiser"
+                            >Anonymiser données</label
+                          >
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-check">
+                          <input
+                            type="checkbox"
+                            class="form-check-input"
+                            id="genMetadonnees"
+                          /><label class="form-check-label" for="genMetadonnees"
+                            >Ajouter métadonnées XML</label
+                          >
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-check">
+                          <input
+                            type="checkbox"
+                            class="form-check-input"
+                            id="genGraphiques"
+                          /><label class="form-check-label" for="genGraphiques"
+                            >Inclure graphiques dynamiques</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button
+          class="btn btn-primary"
+          type="button"
+          onclick="genererRapport()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          Générer le rapport
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="viewReportModal"
+  aria-labelledby="viewReportModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-info">
+        <h5 class="modal-title" id="viewReportModalLabel">
+          <i class="bi bi-eye"></i> Aperçu du rapport
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="reportPreview"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-primary" type="button">
+          <!-- onclick="exporterRapportActuel(&#39;PDF&#39;)" -->
+          <i class="bi bi-file-pdf"></i> Exporter PDF</button
+        ><button class="btn btn-outline-success" type="button">
+          <!-- onclick="exporterRapportActuel(&#39;Excel&#39;)" -->
+          <i class="bi bi-file-excel"></i> Exporter Excel</button
+        ><button
+          class="btn btn-outline-info"
+          type="button"
+          onclick="partagerRapport()"
+          data-bs-target="#shareModal"
+          data-bs-toggle="modal"
+        >
+          <i class="bi bi-share"></i> Partager</button
+        ><button
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          type="button"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="logsModal"
+  aria-labelledby="logsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-dark bg-warning">
+        <h5 class="modal-title" id="logsModalLabel">
+          <i class="bi bi-bug"></i> Logs techniques du rapport
+        </h5>
+        <button
+          class="btn-close"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <h6>Informations générales</h6>
+          <div class="bg-light rounded p-3" id="logInfo"></div>
+        </div>
+        <div class="mb-3">
+          <h6>Stack Trace détaillé</h6>
+          <div class="d-flex gap-2 mb-2">
+            <div class="form-check form-check-inline">
+              <input
+                type="checkbox"
+                checked=""
+                class="form-check-input"
+                id="filterErrors"
+              /><label class="form-check-label" for="filterErrors"
+                >Erreurs</label
+              >
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                type="checkbox"
+                checked=""
+                class="form-check-input"
+                id="filterWarnings"
+              /><label class="form-check-label" for="filterWarnings"
+                >Avertissements</label
+              >
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="filterInfo"
+              /><label class="form-check-label" for="filterInfo">Infos</label>
+            </div>
+          </div>
+          <div
+            class="text-light bg-dark rounded p-3"
+            id="logDetails"
+            style="height: 300px; overflow-y: auto; font-family: monospace"
+          ></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-outline-primary"
+          type="button"
+          onclick="relancerRapport()"
+        >
+          <i class="bi bi-arrow-repeat"></i> Relancer</button
+        ><button
+          class="btn btn-outline-info"
+          type="button"
+          onclick="exporterLogs()"
+        >
+          <i class="bi bi-download"></i> Exporter logs</button
+        ><button
+          class="btn btn-outline-warning"
+          type="button"
+          onclick="notifierSupport()"
+          data-bs-target="#notifyIncidentModal"
+          data-bs-toggle="modal"
+        >
+          <i class="bi bi-envelope"></i> Notifier support</button
+        ><button
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          type="button"
+        >
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="shareModal"
+  aria-labelledby="shareModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-primary">
+        <h5 class="text-white modal-title" id="shareModalLabel">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+            class="bi bi-share-fill"
+          >
+            <path
+              d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5"
+            ></path>
+          </svg>
+          Partager un rapport sécurisé
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="shareForm">
+          <div class="mb-3">
+            <label class="form-label">Rapport concerné</label
+            ><input
+              class="form-control form-control"
+              type="text"
+              id="shareRapport"
+              readonly=""
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label"
+              >Destinataires (email) <span class="text-danger">*</span></label
+            ><input
+              class="form-control form-control"
+              type="email"
+              id="shareEmails"
+              placeholder="exemple@bci.gn"
+              required=""
+            /><small class="form-text text-muted"
+              >Séparez plusieurs emails par des virgules</small
+            >
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Rôle du destinataire</label
+            ><select class="form-select form-select" id="shareRole">
+              <option value="Interne">Interne</option>
+              <option value="Audit">Audit</option>
+              <option value="Externe autorisé">Externe autorisé</option>
+              <option value="Direction">Direction</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Durée de validité du lien</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input
+                  type="radio"
+                  checked=""
+                  class="form-check-input"
+                  id="share24h"
+                  name="shareDuree"
+                  value="24h"
+                /><label class="form-check-label" for="share24h">24h</label>
+              </div>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  id="share72h"
+                  name="shareDuree"
+                  value="72h"
+                /><label class="form-check-label" for="share72h">72h</label>
+              </div>
+              <div class="form-check">
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  id="share7j"
+                  name="shareDuree"
+                  value="7j"
+                /><label class="form-check-label" for="share7j">7j</label>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Méthode de protection</label>
+            <div class="d-flex gap-3">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  checked=""
+                  class="form-check-input"
+                  id="shareOTP"
+                /><label class="form-check-label" for="shareOTP"
+                  >OTP requis</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="sharePassword"
+                /><label class="form-check-label" for="sharePassword"
+                  >Mot de passe</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Message d'accompagnement</label
+            ><textarea
+              class="form-control form-control"
+              id="shareMessage"
+              placeholder="Message personnalisé (optionnel)"
+              rows="3"
+            ></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button
+          class="btn btn-primary"
+          type="button"
+          onclick="envoyerPartage()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+            class="bi bi-send-fill"
+          >
+            <path
+              d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"
+            ></path>
+          </svg>
+          Générer et partager
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="planificationModal"
+  aria-labelledby="planificationModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-info">
+        <h5 class="text-white modal-title" id="planificationModalLabel">
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 2C5.44772 2 5 2.44772 5 3V4H4C2.89543 4 2 4.89543 2 6V16C2 17.1046 2.89543 18 4 18H16C17.1046 18 18 17.1046 18 16V6C18 4.89543 17.1046 4 16 4H15V3C15 2.44772 14.5523 2 14 2C13.4477 2 13 2.44772 13 3V4H7V3C7 2.44772 6.55228 2 6 2ZM6 7C5.44772 7 5 7.44772 5 8C5 8.55228 5.44772 9 6 9H14C14.5523 9 15 8.55228 15 8C15 7.44772 14.5523 7 14 7H6Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Planification récurrente d'un rapport
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="planificationForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label"
+                >Rapport concerné <span class="text-danger">*</span></label
+              ><select
+                class="form-select form-select"
+                id="planRapport"
+                required=""
+              >
+                <option value="">Sélectionner...</option>
+                <option value="SLA">SLA - Consolidé Entreprises</option>
+                <option value="Synthèse">Synthèse - Activité générale</option>
+                <option value="Conformité">Conformité - RGPD/BCEAO</option>
+                <option value="KYC/AML">KYC/AML - Vigilance client</option>
+                <option value="Incidents">Incidents - Anomalies système</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label"
+                >Fréquence de génération
+                <span class="text-danger">*</span></label
+              ><select
+                class="form-select form-select"
+                id="planFrequence"
+                required=""
+              >
+                <option value="">Sélectionner...</option>
+                <option value="Hebdomadaire">Hebdomadaire</option>
+                <option value="Mensuelle">Mensuelle</option>
+                <option value="Trimestrielle">Trimestrielle</option>
+                <option value="Personnalisée">Personnalisée</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Jour et heure</label>
+              <div class="row">
+                <div class="col-8">
+                  <select class="form-select form-select" id="planJour">
+                    <option value="Lundi">Lundi</option>
+                    <option value="Mardi">Mardi</option>
+                    <option value="Mercredi">Mercredi</option>
+                    <option value="Jeudi">Jeudi</option>
+                    <option value="Vendredi">Vendredi</option>
+                    <option value="Samedi">Samedi</option>
+                    <option value="Dimanche">Dimanche</option>
+                  </select>
+                </div>
+                <div class="col-4">
+                  <input
+                    class="form-control form-control"
+                    id="planHeure"
+                    type="time"
+                    value="08:30"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Période à couvrir</label
+              ><select class="form-select form-select" id="planPeriode">
+                <option value="Semaine précédente">Semaine précédente</option>
+                <option value="Mois précédent">Mois précédent</option>
+                <option value="Intervalle personnalisé">
+                  Intervalle personnalisé
+                </option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Format(s) du rapport</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="planFormatPDF"
+                  /><label class="form-check-label" for="planFormatPDF"
+                    >PDF</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="planFormatExcel"
+                  /><label class="form-check-label" for="planFormatExcel"
+                    >Excel</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="planFormatCSV"
+                  /><label class="form-check-label" for="planFormatCSV"
+                    >CSV</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Visibilité</label
+              ><select class="form-select form-select" id="planVisibilite">
+                <option value="Standard">Standard</option>
+                <option value="Critique">Critique</option>
+                <option value="Confidentiel">Confidentiel</option>
+              </select>
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Destinataires (emails)</label
+              ><input
+                class="form-control form-control"
+                type="email"
+                id="planDestinataires"
+                multiple=""
+                placeholder="audit@bci.gn, conformité@bci.gn"
+              /><small class="form-text text-muted"
+                >Séparez plusieurs emails par des virgules</small
+              >
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Répétition jusqu'au</label
+              ><input
+                class="form-control form-control"
+                id="planFinRepetition"
+                type="date"
+                value="2025-12-31"
+              />
+            </div>
+            <div class="col-md-6">
+              <div class="mt-4 form-check">
+                <input
+                  type="checkbox"
+                  checked=""
+                  class="form-check-input"
+                  id="planRappel"
+                /><label class="form-check-label" for="planRappel">
+                  🔔 Envoyer rappel avant exécution
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button
+          class="btn btn-info"
+          type="button"
+          onclick="enregistrerPlanification()"
+        >
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 2C5.44772 2 5 2.44772 5 3V4H4C2.89543 4 2 4.89543 2 6V16C2 17.1046 2.89543 18 4 18H16C17.1046 18 18 17.1046 18 16V6C18 4.89543 17.1046 4 16 4H15V3C15 2.44772 14.5523 2 14 2C13.4477 2 13 2.44772 13 3V4H7V3C7 2.44772 6.55228 2 6 2ZM6 7C5.44772 7 5 7.44772 5 8C5 8.55228 5.44772 9 6 9H14C14.5523 9 15 8.55228 15 8C15 7.44772 14.5523 7 14 7H6Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Enregistrer la planification
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="deleteConfirmModal"
+  aria-labelledby="deleteConfirmModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-danger">
+        <h5 class="text-white modal-title" id="deleteConfirmModalLabel">
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.25706 3.09882C9.02167 1.73952 10.9788 1.73952 11.7434 3.09882L17.3237 13.0194C18.0736 14.3526 17.1102 15.9999 15.5805 15.9999H4.4199C2.89025 15.9999 1.92682 14.3526 2.67675 13.0194L8.25706 3.09882ZM11.0001 13C11.0001 13.5523 10.5524 14 10.0001 14C9.44784 14 9.00012 13.5523 9.00012 13C9.00012 12.4477 9.44784 12 10.0001 12C10.5524 12 11.0001 12.4477 11.0001 13ZM10.0001 5C9.44784 5 9.00012 5.44772 9.00012 6V9C9.00012 9.55228 9.44784 10 10.0001 10C10.5524 10 11.0001 9.55228 11.0001 9V6C11.0001 5.44772 10.5524 5 10.0001 5Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Confirmation de suppression irréversible
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" role="alert">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8.25706 3.09882C9.02167 1.73952 10.9788 1.73952 11.7434 3.09882L17.3237 13.0194C18.0736 14.3526 17.1102 15.9999 15.5805 15.9999H4.4199C2.89025 15.9999 1.92682 14.3526 2.67675 13.0194L8.25706 3.09882ZM11.0001 13C11.0001 13.5523 10.5524 14 10.0001 14C9.44784 14 9.00012 13.5523 9.00012 13C9.00012 12.4477 9.44784 12 10.0001 12C10.5524 12 11.0001 12.4477 11.0001 13ZM10.0001 5C9.44784 5 9.00012 5.44772 9.00012 6V9C9.00012 9.55228 9.44784 10 10.0001 10C10.5524 10 11.0001 9.55228 11.0001 9V6C11.0001 5.44772 10.5524 5 10.0001 5Z"
+              fill="currentColor"
+            ></path></svg
+          ><strong>Attention !</strong
+          ><span>
+            Cette action supprimera définitivement le rapport ET l'ensemble de
+            ses métadonnées associées. Cette opération ne pourra être annulée.
+          </span>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Rapport à supprimer :</label>
+          <div class="bg-light rounded p-3">
+            <div id="deleteRapportInfo"></div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Motif de suppression (obligatoire)
+            <span class="text-danger">*</span></label
+          ><textarea
+            class="form-control"
+            id="deleteMotif"
+            placeholder="Veuillez préciser la raison de cette suppression..."
+            required=""
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            id="deleteConfirmPassword"
+          /><label class="form-check-label" for="deleteConfirmPassword">
+            Revalider mon mot de passe maintenant (pour rapports critiques)
+          </label>
+        </div>
+        <div class="mt-3">
+          <small class="text-muted"
+            ><strong>ID de suivi automatisé :</strong
+            ><span id="deleteTraceId"></span
+          ></small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button
+          class="btn btn-danger disabled"
+          id="btnConfirmerSuppression"
+          disabled=""
+          type="button"
+          onclick="confirmerSuppression()"
+        >
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9 2C8.62123 2 8.27497 2.214 8.10557 2.55279L7.38197 4H4C3.44772 4 3 4.44772 3 5C3 5.55228 3.44772 6 4 6L4 16C4 17.1046 4.89543 18 6 18H14C15.1046 18 16 17.1046 16 16V6C16.5523 6 17 5.55228 17 5C17 4.44772 16.5523 4 16 4H12.618L11.8944 2.55279C11.725 2.214 11.3788 2 11 2H9ZM7 8C7 7.44772 7.44772 7 8 7C8.55228 7 9 7.44772 9 8V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V8ZM12 7C11.4477 7 11 7.44772 11 8V14C11 14.5523 11.4477 15 12 15C12.5523 15 13 14.5523 13 14V8C13 7.44772 12.5523 7 12 7Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Supprimer définitivement ce rapport
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="notifyIncidentModal"
+  aria-labelledby="notifyIncidentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-dark bg-warning">
+        <h5 class="modal-title" id="notifyIncidentModalLabel">
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM11 14C11 14.5523 10.5523 15 10 15C9.44772 15 9 14.5523 9 14C9 13.4477 9.44772 13 10 13C10.5523 13 11 13.4477 11 14ZM10 5C9.44772 5 9 5.44772 9 6V10C9 10.5523 9.44772 11 10 11C10.5523 11 11 10.5523 11 10V6C11 5.44772 10.5523 5 10 5Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Notification manuelle d'incident
+        </h5>
+        <button
+          class="btn-close"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="notifyIncidentForm">
+          <div class="mb-3">
+            <label class="form-label">Rapport lié</label
+            ><input
+              class="form-control form-control"
+              type="text"
+              id="incidentRapport"
+              readonly=""
+            />
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label"
+                >Type d'incident <span class="text-danger">*</span></label
+              ><select
+                class="form-select form-select"
+                id="incidentType"
+                required=""
+              >
+                <option value="">Sélectionner...</option>
+                <option value="Technique">Technique</option>
+                <option value="Fonctionnel">Fonctionnel</option>
+                <option value="Retard">Retard de traitement</option>
+                <option value="Saisie incorrecte">Saisie incorrecte</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label"
+                >Niveau de gravité <span class="text-danger">*</span></label
+              >
+              <div class="d-flex gap-2">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="graviteMineur"
+                    name="incidentGravite"
+                    value="Mineur"
+                  /><label class="form-check-label" for="graviteMineur"
+                    >🟡 Mineur</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="graviteMajeur"
+                    name="incidentGravite"
+                    value="Majeur"
+                  /><label class="form-check-label" for="graviteMajeur"
+                    >🟠 Majeur</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="graviteCritique"
+                    name="incidentGravite"
+                    value="Critique"
+                  /><label class="form-check-label" for="graviteCritique"
+                    >🔴 Critique</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Horodatage (automatique)</label
+            ><input
+              class="form-control form-control"
+              type="text"
+              id="incidentHorodatage"
+              readonly=""
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label"
+              >Équipe destinataire <span class="text-danger">*</span></label
+            ><select
+              class="form-select form-select"
+              id="incidentEquipe"
+              required=""
+            >
+              <option value="">Sélectionner...</option>
+              <option value="IT Support">IT Support</option>
+              <option value="Conformité">Conformité</option>
+              <option value="MOA">MOA (Maîtrise d'ouvrage)</option>
+              <option value="Supervision">Supervision</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label"
+              >Description de l'incident
+              <span class="text-danger">*</span></label
+            ><textarea
+              class="form-control form-control"
+              id="incidentDescription"
+              placeholder="Décrivez précisément l'incident observé..."
+              required=""
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label"
+              >Joindre un fichier annexe (optionnel)</label
+            ><input
+              class="form-control form-control"
+              type="file"
+              accept=".log,.txt,.png,.pdf,.jpg"
+              data-max-size="5242880"
+              id="incidentFichier"
+            /><small class="form-text text-muted"
+              >Formats acceptés : .log, .txt, .png, .pdf, .jpg - Taille max : 5
+              Mo</small
+            >
+          </div>
+          <div class="alert alert-info" role="alert">
+            <strong>ID de traçabilité (UUID) :</strong
+            ><span id="incidentUUID"></span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button
+          class="btn btn-warning"
+          type="button"
+          onclick="envoyerNotificationIncident()"
+        >
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.8944 2.55279C10.725 2.214 10.3788 2 10 2C9.62124 2 9.27498 2.214 9.10558 2.55279L2.10558 16.5528C1.92823 16.9075 1.97724 17.3335 2.2305 17.6386C2.48376 17.9438 2.89342 18.0705 3.27473 17.9615L8.27472 16.533C8.70402 16.4103 9 16.0179 9 15.5714V11C9 10.4477 9.44772 10 10 10C10.5523 10 11 10.4477 11 11V15.5714C11 16.0179 11.296 16.4103 11.7253 16.533L16.7253 17.9615C17.1066 18.0705 17.5163 17.9438 17.7695 17.6386C18.0228 17.3335 18.0718 16.9075 17.8944 16.5528L10.8944 2.55279Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          Envoyer la notification
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="userProfileModal"
+  aria-labelledby="userProfileModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-primary">
+        <h5 class="text-white modal-title" id="userProfileModalLabel">
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM12 7C12 8.10457 11.1046 9 10 9C8.89543 9 8 8.10457 8 7C8 5.89543 8.89543 5 10 5C11.1046 5 12 5.89543 12 7ZM9.99993 11C7.98239 11 6.24394 12.195 5.45374 13.9157C6.55403 15.192 8.18265 16 9.99998 16C11.8173 16 13.4459 15.1921 14.5462 13.9158C13.756 12.195 12.0175 11 9.99993 11Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Profil utilisateur - Détail complet
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h6>
+              <svg
+                fill="none"
+                height="1em"
+                viewbox="0 0 20 20"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM11 6C11 6.55228 10.5523 7 10 7C9.44772 7 9 6.55228 9 6C9 5.44772 9.44772 5 10 5C10.5523 5 11 5.44772 11 6ZM9 9C8.44772 9 8 9.44772 8 10C8 10.5523 8.44772 11 9 11V14C9 14.5523 9.44772 15 10 15H11C11.5523 15 12 14.5523 12 14C12 13.4477 11.5523 13 11 13V10C11 9.44772 10.5523 9 10 9H9Z"
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                ></path>
+              </svg>
+              Informations générales
+            </h6>
+            <div>
+              <table class="table table-sm">
+                <tbody>
+                  <tr>
+                    <td><strong>Nom complet :</strong></td>
+                    <td id="profileNom">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Email professionnel :</strong></td>
+                    <td id="profileEmail">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Identifiant utilisateur :</strong></td>
+                    <td id="profileId">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Département :</strong></td>
+                    <td id="profileDepartement">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Rôle(s) actif(s) :</strong></td>
+                    <td id="profileRoles">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Niveau de privilège :</strong></td>
+                    <td id="profilePrivilege">-</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6>
+              <svg
+                fill="none"
+                height="1em"
+                viewbox="0 0 20 20"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 6C11 5.44772 10.5523 5 10 5C9.44771 5 9 5.44772 9 6V10C9 10.2652 9.10536 10.5196 9.29289 10.7071L12.1213 13.5355C12.5118 13.9261 13.145 13.9261 13.5355 13.5355C13.9261 13.145 13.9261 12.5118 13.5355 12.1213L11 9.58579V6Z"
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                ></path>
+              </svg>
+              Activité récente
+            </h6>
+            <div>
+              <table class="table table-sm">
+                <tbody>
+                  <tr>
+                    <td><strong>Statut du compte :</strong></td>
+                    <td id="profileStatut">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Dernière connexion :</strong></td>
+                    <td id="profileDerniereConnexion">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Durée session actuelle :</strong></td>
+                    <td id="profileDureeSession">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>IP en cours :</strong></td>
+                    <td id="profileIP">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Poste utilisé :</strong></td>
+                    <td id="profilePoste">-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Localisation :</strong></td>
+                    <td id="profileLocalisation">-</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <h6>
+              <svg
+                class="bi bi-list-task"
+                fill="currentColor"
+                height="1em"
+                viewbox="0 0 16 16"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5zM3 3H2v1h1z"
+                  fill-rule="evenodd"
+                ></path>
+                <path
+                  d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1z"
+                ></path>
+                <path
+                  d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5zM2 7h1v1H2zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm1 .5H2v1h1z"
+                  fill-rule="evenodd"
+                ></path>
+              </svg>
+              Historique récent (dernières 5 actions)
+            </h6>
+            <div class="bg-light rounded p-3">
+              <ul class="list-unstyled mb-0" id="profileHistorique"></ul>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="alert alert-info align-self-center" role="alert">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2.16611 4.99891C5.17437 4.95809 7.91528 3.81033 10 1.94446C12.0847 3.81033 14.8256 4.95809 17.8339 4.99891C17.9431 5.64968 18 6.31821 18 7.00003C18 12.2249 14.6608 16.6698 10 18.3172C5.33923 16.6698 2 12.2249 2 7.00003C2 6.31821 2.05686 5.64968 2.16611 4.99891ZM13.7071 8.70711C14.0976 8.31658 14.0976 7.68342 13.7071 7.29289C13.3166 6.90237 12.6834 6.90237 12.2929 7.29289L9 10.5858L7.70711 9.29289C7.31658 8.90237 6.68342 8.90237 6.29289 9.29289C5.90237 9.68342 5.90237 10.3166 6.29289 10.7071L8.29289 12.7071C8.68342 13.0976 9.31658 13.0976 9.70711 12.7071L13.7071 8.70711Z"
+                  fill="currentColor"
+                ></path></svg
+              ><strong class="ms-2">Audit étendu disponible :</strong
+              ><button
+                class="btn btn-outline-primary ms-3"
+                onclick="accederAuditSecurite()"
+              >
+                <svg
+                  fill="none"
+                  height="1em"
+                  viewbox="0 0 20 20"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M2 6C2 4.89543 2.89543 4 4 4H8L10 6H14C15.1046 6 16 6.89543 16 8V9H8C6.34315 9 5 10.3431 5 12V13.5C5 14.3284 4.32843 15 3.5 15C2.67157 15 2 14.3284 2 13.5V6Z"
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                  ></path>
+                  <path
+                    d="M6 12C6 10.8954 6.89543 10 8 10H16C17.1046 10 18 10.8954 18 12V14C18 15.1046 17.1046 16 16 16H2H4C5.10457 16 6 15.1046 6 14V12Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+                Accéder au module Audit Sécurité
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="commentModal"
+  aria-labelledby="commentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-info">
+        <h5 class="text-white modal-title" id="commentModalLabel">
+          <svg
+            class="bi bi-chat-square-text"
+            fill="currentColor"
+            height="1em"
+            viewbox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"
+            ></path>
+            <path
+              d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"
+            ></path>
+          </svg>
+          Commentaire collaboratif
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-4">
+          <h6>
+            <svg
+              class="bi bi-chat-left-dots"
+              fill="currentColor"
+              height="1em"
+              viewbox="0 0 16 16"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"
+              ></path>
+              <path
+                d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
+              ></path>
+            </svg>
+            Fil de discussion
+          </h6>
+          <div
+            class="border rounded p-3"
+            id="commentaires-existants"
+            style="max-height: 300px; overflow-y: auto"
+          ></div>
+        </div>
+        <form id="commentForm">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label class="form-label">Utilisateur connecté</label
+                ><input
+                  class="form-control form-control"
+                  type="text"
+                  id="commentUtilisateur"
+                  readonly=""
+                  value="Moussa Ndaw (Superviseur - Conformité)"
+                />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label class="form-label">Date / Heure</label
+                ><input
+                  class="form-control form-control"
+                  type="text"
+                  id="commentDateHeure"
+                  readonly=""
+                />
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label"
+              >Saisir votre commentaire
+              <span class="text-danger">*</span></label
+            ><textarea
+              class="form-control form-control"
+              id="commentTexte"
+              placeholder="Votre commentaire..."
+              required=""
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Joindre un fichier (optionnel)</label
+              ><input
+                class="form-control form-control"
+                type="file"
+                accept=".pdf,.docx,.png,.jpg"
+                data-max-size="5242880"
+                id="commentFichier"
+              /><small class="form-text text-muted"
+                >Max 5 Mo - .pdf, .docx, .png, .jpg</small
+              >
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Niveau de visibilité</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    checked=""
+                    class="form-check-input"
+                    id="commentInterne"
+                    name="commentVisibilite"
+                    value="Interne"
+                  /><label class="form-check-label" for="commentInterne"
+                    >Interne uniquement</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="commentPublic"
+                    name="commentVisibilite"
+                    value="Public"
+                  /><label class="form-check-label" for="commentPublic"
+                    >Public aux profils habilités</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-1 g-3">
+            <div class="col-md-6">
+              <label class="form-label">Statut de traitement</label
+              ><select class="form-select form-select" id="commentStatut">
+                <option value="En information">En information</option>
+                <option value="En attente validation">
+                  En attente validation
+                </option>
+                <option value="Accepté">Accepté</option>
+                <option value="Rejeté">Rejeté</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <div class="mt-4 form-check">
+                <input
+                  type="checkbox"
+                  checked=""
+                  class="form-check-input"
+                  id="commentSuivre"
+                /><label class="form-check-label" for="commentSuivre">
+                  🔔 Suivre ce fil de commentaire (notifications par mail)
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button
+          class="btn btn-info"
+          type="button"
+          onclick="enregistrerCommentaire()"
+        >
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.8944 2.55279C10.725 2.214 10.3788 2 10 2C9.62124 2 9.27498 2.214 9.10558 2.55279L2.10558 16.5528C1.92823 16.9075 1.97724 17.3335 2.2305 17.6386C2.48376 17.9438 2.89342 18.0705 3.27473 17.9615L8.27472 16.533C8.70402 16.4103 9 16.0179 9 15.5714V11C9 10.4477 9.44772 10 10 10C10.5523 10 11 10.4477 11 11V15.5714C11 16.0179 11.296 16.4103 11.7253 16.533L16.7253 17.9615C17.1066 18.0705 17.5163 17.9438 17.7695 17.6386C18.0228 17.3335 18.0718 16.9075 17.8944 16.5528L10.8944 2.55279Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+          Enregistrer le commentaire
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="relanceMultipleModal"
+  aria-labelledby="relanceMultipleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-dark bg-warning">
+        <h5 class="modal-title" id="relanceMultipleModalLabel">
+          <svg
+            class="bi bi-arrow-repeat"
+            fill="currentColor"
+            height="1em"
+            viewbox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"
+            ></path>
+            <path
+              d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Centre de relance multiple
+        </h5>
+        <button
+          class="btn-close"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM11 6C11 6.55228 10.5523 7 10 7C9.44772 7 9 6.55228 9 6C9 5.44772 9.44772 5 10 5C10.5523 5 11 5.44772 11 6ZM9 9C8.44772 9 8 9.44772 8 10C8 10.5523 8.44772 11 9 11V14C9 14.5523 9.44772 15 10 15H11C11.5523 15 12 14.5523 12 14C12 13.4477 11.5523 13 11 13V10C11 9.44772 10.5523 9 10 9H9Z"
+              fill="currentColor"
+            ></path></svg
+          ><strong class="ms-1 me-2"
+            >Rapports détectés comme relançables :</strong
+          ><span id="relanceNombreRapports">0</span>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            <h6 class="fw-semibold text-primary mb-0">
+              <svg
+                class="bi bi-funnel"
+                fill="currentColor"
+                height="1em"
+                viewbox="0 0 16 16"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"
+                ></path>
+              </svg>
+              Filtres de sélection disponibles
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-3">
+                <label class="form-label">Période de génération</label
+                ><select class="form-select" id="relanceFiltrePeriode">
+                  <option value="">Toutes</option>
+                  <option value="2025-06">Juin 2025</option>
+                  <option value="2025-05">Mai 2025</option>
+                  <option value="2025-04">Avril 2025</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Type de rapport</label
+                ><select class="form-select" id="relanceFiltreType">
+                  <option value="">Tous types</option>
+                  <option value="SLA">SLA</option>
+                  <option value="Synthèse">Synthèse</option>
+                  <option value="Incidents">Incidents</option>
+                  <option value="Conformité">Conformité</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Statut</label>
+                <div class="d-flex gap-2">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      checked=""
+                      class="form-check-input"
+                      id="relanceStatutEchec"
+                    /><label class="form-check-label" for="relanceStatutEchec"
+                      >❌ Échec</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      checked=""
+                      class="form-check-input"
+                      id="relanceStatutAttente"
+                    /><label class="form-check-label" for="relanceStatutAttente"
+                      >⏳ En attente</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <button
+                  class="btn btn-primary mt-4"
+                  type="button"
+                  onclick="appliquerFiltresRelance()"
+                >
+                  <svg
+                    class="bi bi-search"
+                    fill="currentColor"
+                    height="1em"
+                    viewbox="0 0 16 16"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+                    ></path>
+                  </svg>
+                  Appliquer filtres
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            <h6 class="fw-semibold text-primary mb-0">
+              <svg
+                class="bi bi-list-check"
+                fill="currentColor"
+                height="1em"
+                viewbox="0 0 16 16"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3.854 2.146a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 3.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708L2 7.293l1.146-1.147a.5.5 0 0 1 .708 0m0 4a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"
+                  fill-rule="evenodd"
+                ></path>
+              </svg>
+              Rapports à relancer
+            </h6>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th><input type="checkbox" id="relanceSelectAll" /></th>
+                    <th>Rapport</th>
+                    <th>Statut</th>
+                    <th>Généré le</th>
+                    <th>Erreur</th>
+                  </tr>
+                </thead>
+                <tbody id="relanceTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h6 class="fw-semibold text-primary mb-0">
+              <svg
+                class="bi bi-gear-fill"
+                fill="currentColor"
+                height="1em"
+                viewbox="0 0 16 16"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"
+                ></path>
+              </svg>
+              Paramètres de relance globaux
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="relanceAvecLogs"
+                  /><label class="form-check-label" for="relanceAvecLogs"
+                    >Réexécuter avec logs techniques</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="relanceAvecMetadata"
+                  /><label class="form-check-label" for="relanceAvecMetadata"
+                    >Inclure metadata XML</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="relanceNotifier"
+                  /><label class="form-check-label" for="relanceNotifier"
+                    >Notifier responsables (mail + badge)</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="relanceAnonymiser"
+                  /><label class="form-check-label" for="relanceAnonymiser"
+                    >Appliquer anonymisation</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="relanceLogsAudites"
+                  /><label class="form-check-label" for="relanceLogsAudites"
+                    >Générer logs audités pour relance</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="relanceReporter"
+                  /><label class="form-check-label" for="relanceReporter"
+                    >Reporter en cas de conflit horaire</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 g-3">
+              <div class="col-12">
+                <label class="fw-semibold text-primary form-label"
+                  >Options avancées</label
+                >
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="relanceAutoRetry"
+                  /><label class="form-check-label" for="relanceAutoRetry">
+                    Réessayer automatiquement en cas d'échec temporaire (x3,
+                    intervalle 15 min)
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="relancePreviewLogs"
+                  /><label class="form-check-label" for="relancePreviewLogs">
+                    Afficher l'aperçu des logs d'erreurs avant relance (si
+                    disponibles)
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3">
+              <label class="form-label fw-semibold text-primary"
+                >Motif justificatif global (facultatif)</label
+              ><textarea
+                class="form-control"
+                id="relanceMotif"
+                placeholder="Raison de la relance groupée..."
+                rows="2"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-3">
+          <div class="alert alert-warning" role="alert">
+            <strong
+              >🔁 Relancer maintenant
+              <span id="relanceNombreSelectionnes">0</span> rapport(s)
+              sélectionné(s)</strong
+            >
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button
+          class="btn btn-warning"
+          id="btnRelanceGroupee"
+          type="button"
+          onclick="lancerRelanceGroupee()"
+        >
+          <svg
+            class="bi bi-arrow-repeat"
+            fill="currentColor"
+            height="1em"
+            viewbox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"
+            ></path>
+            <path
+              d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Lancer la relance groupée
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  id="exportAdvancedModal"
+  aria-labelledby="exportAdvancedModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-primary">
+        <h5 class="text-white modal-title" id="exportAdvancedModalLabel">
+          <svg
+            class="bi bi-gear-fill"
+            fill="currentColor"
+            height="1em"
+            viewbox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"
+            ></path>
+          </svg>
+          Configuration avancée des champs à exporter
+        </h5>
+        <button
+          class="btn-close btn-close-white"
+          aria-label="Close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Rapport source</label
+              ><input
+                type="text"
+                class="form-control"
+                id="exportRapportSource"
+                readonly=""
+              />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Format d'export</label>
+              <div class="d-flex gap-3">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    checked=""
+                    class="form-check-input"
+                    id="exportFormatExcel"
+                    name="exportFormat"
+                    value="Excel"
+                  /><label class="form-check-label" for="exportFormatExcel"
+                    >Excel</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="exportFormatPDF"
+                    name="exportFormat"
+                    value="PDF"
+                  /><label class="form-check-label" for="exportFormatPDF"
+                    >PDF</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    id="exportFormatCSV"
+                    name="exportFormat"
+                    value="CSV"
+                  /><label class="form-check-label" for="exportFormatCSV"
+                    >CSV</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            <h6 class="fw-semibold text-primary mb-0">
+              Champs disponibles à inclure
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportChampRef"
+                  /><label class="form-check-label" for="exportChampRef"
+                    >Référence rapport</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportChampDate"
+                  /><label class="form-check-label" for="exportChampDate"
+                    >Date de génération</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportChampStatut"
+                  /><label class="form-check-label" for="exportChampStatut"
+                    >Statut exécution</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exportChampLogs"
+                  /><label class="form-check-label" for="exportChampLogs"
+                    >Logs techniques</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportChampDelai"
+                  /><label class="form-check-label" for="exportChampDelai"
+                    >Délai de traitement</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exportChampMetadata"
+                  /><label class="form-check-label" for="exportChampMetadata"
+                    >Métadonnées XML</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportChampCreateur"
+                  /><label class="form-check-label" for="exportChampCreateur"
+                    >Créateur du rapport</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportChampHabilitation"
+                  /><label
+                    class="form-check-label"
+                    for="exportChampHabilitation"
+                    >Niveau d'habilitation</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exportChampCommentaires"
+                  /><label
+                    class="form-check-label"
+                    for="exportChampCommentaires"
+                    >Commentaires internes</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exportChampHistorique"
+                  /><label class="form-check-label" for="exportChampHistorique"
+                    >Historique des actions</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exportChampErreurs"
+                  /><label class="form-check-label" for="exportChampErreurs"
+                    >Erreurs bloquantes</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exportChampAnnexes"
+                  /><label class="form-check-label" for="exportChampAnnexes"
+                    >Bloc d'annexes</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            <h6 class="fw-semibold text-primary mb-0">
+              Ordre d'apparition personnalisé
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-4">
+                <label class="form-label">1.</label
+                ><select class="form-select-sm form-select" id="exportOrdre1">
+                  <option value="ref">Référence rapport</option>
+                  <option value="statut">Statut exécution</option>
+                  <option value="delai">Délai traitement</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">2.</label
+                ><select class="form-select-sm form-select" id="exportOrdre2">
+                  <option value="statut">Statut exécution</option>
+                  <option value="ref">Référence rapport</option>
+                  <option value="delai">Délai traitement</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">3.</label
+                ><select class="form-select-sm form-select" id="exportOrdre3">
+                  <option value="delai">Délai traitement</option>
+                  <option value="ref">Référence rapport</option>
+                  <option value="statut">Statut exécution</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h6 class="fw-semibold text-primary mb-0">
+              🔐 Options avancées de structuration
+            </h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportPseudonymiser"
+                  /><label class="form-check-label" for="exportPseudonymiser">
+                    Appliquer pseudonymisation des données utilisateurs
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportEntetes"
+                  /><label class="form-check-label" for="exportEntetes">
+                    Intégrer des en-têtes dynamiques par catégorie
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="exportSynthese"
+                  /><label class="form-check-label" for="exportSynthese">
+                    Générer une page de synthèse en ouverture (PDF uniquement)
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    checked=""
+                    class="form-check-input"
+                    id="exportSignature"
+                  /><label class="form-check-label" for="exportSignature">
+                    Ajouter une signature horodatée de l'utilisateur exportateur
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-3">
+          <button class="btn btn-info" type="button" onclick="previewExport()">
+            <svg
+              class="bi bi-eye"
+              fill="currentColor"
+              height="1em"
+              viewbox="0 0 16 16"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"
+              ></path>
+              <path
+                d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"
+              ></path></svg
+            >&nbsp;Aperçu rendu (format sélectionné)
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button
+          class="btn btn-primary"
+          type="button"
+          onclick="genererExportPersonnalise()"
+        >
+          <svg
+            class="bi bi-download"
+            fill="currentColor"
+            height="1em"
+            viewbox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
+            ></path>
+            <path
+              d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"
+            ></path></svg
+          >&nbsp;Générer l'export personnalisé
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  role="dialog"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  id="authCritiqueModal"
+  aria-labelledby="authCritiqueModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-danger">
+        <h5 class="text-white modal-title" id="authCritiqueModalLabel">
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 1.94446C7.91528 3.81033 5.17437 4.95809 2.16611 4.99891C2.05686 5.64968 2 6.31821 2 7.00003C2 12.2249 5.33923 16.6698 10 18.3172C14.6608 16.6698 18 12.2249 18 7.00003C18 6.31821 17.9431 5.64968 17.8339 4.99891C14.8256 4.95809 12.0847 3.81033 10 1.94446ZM11 14C11 14.5523 10.5523 15 10 15C9.44771 15 9 14.5523 9 14C9 13.4477 9.44771 13 10 13C10.5523 13 11 13.4477 11 14ZM11 7C11 6.44772 10.5523 6 10 6C9.44771 6 9 6.44772 9 7V10C9 10.5523 9.44771 11 10 11C10.5523 11 11 10.5523 11 10V7Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Vérification d'identité supplémentaire
+        </h5>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning" role="alert">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8.25706 3.09882C9.02167 1.73952 10.9788 1.73952 11.7434 3.09882L17.3237 13.0194C18.0736 14.3526 17.1102 15.9999 15.5805 15.9999H4.4199C2.89025 15.9999 1.92682 14.3526 2.67675 13.0194L8.25706 3.09882ZM11.0001 13C11.0001 13.5523 10.5524 14 10.0001 14C9.44784 14 9.00012 13.5523 9.00012 13C9.00012 12.4477 9.44784 12 10.0001 12C10.5524 12 11.0001 12.4477 11.0001 13ZM10.0001 5C9.44784 5 9.00012 5.44772 9.00012 6V9C9.00012 9.55228 9.44784 10 10.0001 10C10.5524 10 11.0001 9.55228 11.0001 9V6C11.0001 5.44772 10.5524 5 10.0001 5Z"
+              fill="currentColor"
+            ></path></svg
+          ><strong>Action sensible détectée !</strong
+          ><span>
+            Une authentification renforcée est requise pour continuer.
+          </span>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Action demandée :</label>
+          <div class="bg-light rounded p-2">
+            <span id="authActionDemandee"
+              >Suppression rapport SLA Mai 2025</span
+            >
+          </div>
+        </div>
+        <form id="authCritiqueForm">
+          <div class="mb-3">
+            <label class="form-label"
+              >🔑 Mot de passe BCI <span class="text-danger">*</span></label
+            ><input
+              class="form-control form-control"
+              type="password"
+              id="authMotDePasse"
+              required=""
+            />
+          </div>
+          <div class="mb-3">
+            <label class="form-label"
+              >🚫 Code OTP (email / app mobile)
+              <span class="text-danger">*</span></label
+            >
+            <div class="input-group">
+              <input
+                class="form-control form-control"
+                type="text"
+                id="authOTP"
+                maxlength="6"
+                pattern="[0-9]{6}"
+                required=""
+              /><button
+                class="btn btn-outline-secondary"
+                type="button"
+                onclick="renvoyerOTP()"
+              >
+                <svg
+                  class="bi bi-arrow-clockwise"
+                  fill="currentColor"
+                  height="1em"
+                  viewbox="0 0 16 16"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                    fill-rule="evenodd"
+                  ></path>
+                  <path
+                    d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"
+                  ></path>
+                </svg>
+                Renvoyer code
+              </button>
+            </div>
+            <small class="form-text text-muted"
+              >Code à 6 chiffres valide pendant 5 minutes</small
+            >
+          </div>
+          <div class="mb-3">
+            <label class="form-label"
+              >💬 Motif de l'action (obligatoire)
+              <span class="text-danger">*</span></label
+            ><textarea
+              class="form-control form-control"
+              id="authMotif"
+              placeholder="Justifiez cette action critique..."
+              required=""
+              rows="2"
+            ></textarea>
+          </div>
+          <div class="text-muted small" id="authTentatives">
+            <span> Tentatives restantes : </span
+            ><span id="authNbTentatives">3</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-secondary"
+          type="button"
+          onclick="annulerAuthCritique()"
+        >
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM8.70711 7.29289C8.31658 6.90237 7.68342 6.90237 7.29289 7.29289C6.90237 7.68342 6.90237 8.31658 7.29289 8.70711L8.58579 10L7.29289 11.2929C6.90237 11.6834 6.90237 12.3166 7.29289 12.7071C7.68342 13.0976 8.31658 13.0976 8.70711 12.7071L10 11.4142L11.2929 12.7071C11.6834 13.0976 12.3166 13.0976 12.7071 12.7071C13.0976 12.3166 13.0976 11.6834 12.7071 11.2929L11.4142 10L12.7071 8.70711C13.0976 8.31658 13.0976 7.68342 12.7071 7.29289C12.3166 6.90237 11.6834 6.90237 11.2929 7.29289L10 8.58579L8.70711 7.29289Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Annuler</button
+        ><button
+          class="btn btn-danger"
+          type="button"
+          onclick="validerAuthCritique()"
+        >
+          <svg
+            fill="none"
+            height="1em"
+            viewbox="0 0 20 20"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM13.7071 8.70711C14.0976 8.31658 14.0976 7.68342 13.7071 7.29289C13.3166 6.90237 12.6834 6.90237 12.2929 7.29289L9 10.5858L7.70711 9.29289C7.31658 8.90237 6.68342 8.90237 6.29289 9.29289C5.90237 9.68342 5.90237 10.3166 6.29289 10.7071L8.29289 12.7071C8.68342 13.0976 9.31658 13.0976 9.70711 12.7071L13.7071 8.70711Z"
+              fill="currentColor"
+              fill-rule="evenodd"
+            ></path>
+          </svg>
+          Valider
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

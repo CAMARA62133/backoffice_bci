@@ -1727,10 +1727,10 @@ body[data-layout=horizontal][data-layout-size=boxed] .container-fluid, body[data
 
 /* !
  * Waves v0.7.6
- * http://fian.my.id/Waves 
- * 
- * Copyright 2014-2018 Alfiana E. Sibuea and other contributors 
- * Released under the MIT license 
+ * http://fian.my.id/Waves
+ *
+ * Copyright 2014-2018 Alfiana E. Sibuea and other contributors
+ * Released under the MIT license
  * https://github.com/fians/Waves/blob/master/LICENSE */
 
 .waves-effect {
@@ -4286,7 +4286,7 @@ div.dataTables_wrapper div.dataTables_info {
 }
 
 .auth-bg {
-  background-image: url(../../../assets/img/images-bci/flyers-bci_internet-banking_3.jpg?h=81d6463f975795c60d5fc7a9405ce9e8);
+  background-image: url(../../img/images-bci/flyers-bci_internet-banking_3.jpg?h=81d6463f975795c60d5fc7a9405ce9e8);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -5487,9 +5487,9 @@ body[data-layout=horizontal] .chat-conversation {
 }
 
 /* **********************************************************
- * 
+ *
  * Adding asterisk to required fields
- * 
+ *
 *********************************************************** */
 
 .required:after {

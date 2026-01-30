@@ -2,11 +2,16 @@
   <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">Liste des Entreprises</h4>
-            <p class="text-secondary mb-sm-0 font-size-13">Gestion, consultation et supervision du portefeuille
-              entreprises</p>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Liste des Entreprises
+            </h4>
+            <p class="text-secondary mb-sm-0 font-size-13">
+              Gestion, consultation et supervision du portefeuille entreprises
+            </p>
           </div>
 
           <!--          <div class="page-title-right">-->
@@ -26,13 +31,28 @@
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
           <div>
-            <h1 class="text-primary mb-1 h4"><i class="fas fa-building me-2"></i> Liste des Entreprises Clientes</h1>
+            <h1 class="text-primary mb-1 h4">
+              <i class="fas fa-building me-2"></i> Liste des Entreprises
+              Clientes
+            </h1>
           </div>
           <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary" type="button" id="btnExport"><i class="fas fa-download me-1"></i>
+            <button
+              class="btn btn-outline-primary"
+              type="button"
+              id="btnExport"
+              (click)="openModal('exportModal')"
+            >
+              <i class="fas fa-download me-1"></i>
               Exporter
             </button>
-            <button class="btn btn-primary" type="button" id="btnNouvelleEntreprise"><i class="fas fa-plus me-1"></i>
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="btnNouvelleEntreprise"
+              (click)="goToCreateCompany()"
+            >
+              <i class="fas fa-plus me-1"></i>
               Nouvelle Entreprise
             </button>
           </div>
@@ -40,63 +60,174 @@
       </div>
     </div>
 
-
     <div class="card border-0 shadow-sm" id="tableView">
       <div class="card-body p-2">
         <div class="table-responsive">
-          <table appDataTable class="table table-hover mb-0 datatable text-center">
+          <table
+            appDataTable
+            class="table table-hover mb-0 datatable text-center"
+          >
             <thead class="table-primary text-center">
-            <tr>
-              <th>#</th>
-              <th>Identifiant Client</th>
-              <th>Nom</th>
-              <th>Téléphone</th>
-              <th>Email</th>
-              <th>Type Client</th>
-              <th>Status demandes</th>
-              <th>Organisation</th>
-              <th>Tél Org</th>
-              <th>Actions</th>
-            </tr>
+              <tr>
+                <th>#</th>
+                <th>Identifiant Client</th>
+                <th>Nom</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Type Client</th>
+                <th>Status demandes</th>
+                <th>Organisation</th>
+                <th>Tél Org</th>
+                <th>Actions</th>
+              </tr>
             </thead>
             <tbody id="entreprisesTableBody">
-            <tr data-entreprise-id="ENT000001" class="table-row-hover fade-in">
-              <td>Data 1</td>
-              <td>Data 2</td>
-              <td>Data 3</td>
-              <td>Data 4</td>
-              <td>Data 5</td>
-              <td>Data 6</td>
-              <td>Data 7</td>
-              <td>Data 8</td>
-              <td>Data 9</td>
-              <td>
-                <div class="d-flex gap-1 justify-content-center">
-                  <a routerLink="/agent-entreprise/1" class="btn btn-outline-info btn-action btn-sm"
-                     title="Consulter la fiche">
-                    <i class="fas fa-eye"></i>
-                  </a>
+              <tr
+                data-entreprise-id="ENT000001"
+                class="table-row-hover fade-in"
+              >
+                <td>Data 1</td>
+                <td>Data 2</td>
+                <td>Data 3</td>
+                <td>Data 4</td>
+                <td>Data 5</td>
+                <td>Data 6</td>
+                <td>Data 7</td>
+                <td>Data 8</td>
+                <td>Data 9</td>
+                <td>
+                  <div class="d-flex gap-1 justify-content-center">
+                    <a
+                      routerLink="/agent-entreprise/1"
+                      class="btn btn-outline-info btn-action btn-sm"
+                      title="Consulter la fiche"
+                    >
+                      <i class="fas fa-eye"></i>
+                    </a>
 
-<!--                  <button type="button" class="btn btn-outline-warning btn-action btn-sm"-->
-<!--                          onclick="listeManager.editEntreprise('ENT000001')" title="Modifier">-->
-<!--                    <i class="fas fa-edit"></i>-->
-<!--                  </button>-->
+                    <!--                  <button type="button" class="btn btn-outline-warning btn-action btn-sm"-->
+                    <!--                          onclick="listeManager.editEntreprise('ENT000001')" title="Modifier">-->
+                    <!--                    <i class="fas fa-edit"></i>-->
+                    <!--                  </button>-->
 
-<!--                  <button type="button" class="btn btn-outline-danger btn-action btn-sm"-->
-<!--                          onclick="listeManager.archiveEntreprise('ENT000001')" title="Archiver">-->
-<!--                    <i class="fas fa-archive"></i>-->
-<!--                  </button>-->
-                </div>
-              </td>
-            </tr>
-
+                    <!--                  <button type="button" class="btn btn-outline-danger btn-action btn-sm"-->
+                    <!--                          onclick="listeManager.archiveEntreprise('ENT000001')" title="Archiver">-->
+                    <!--                    <i class="fas fa-archive"></i>-->
+                    <!--                  </button>-->
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-
+<div class="modal fade" role="dialog" tabindex="-1" id="exportModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="text-white modal-title">
+          <i class="fas fa-download me-2"></i> Exporter la Liste
+        </h5>
+        <button
+          class="btn-close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Format d'export :</label>
+          <div class="form-check">
+            <input
+              type="radio"
+              checked=""
+              class="form-check-input"
+              id="exportPDF"
+              name="exportFormat"
+              value="pdf"
+            /><label class="form-check-label" for="exportPDF"
+              ><i class="fas fa-file-pdf text-danger me-2"></i> PDF - Rapport
+              complet avec mise en page
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="form-check-input"
+              id="exportCSV"
+              name="exportFormat"
+              value="csv"
+            /><label class="form-check-label" for="exportCSV"
+              ><i class="fas fa-file-excel text-success me-2"></i> CSV - Pour
+              analyse Excel
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="form-check-input"
+              id="exportJSON"
+              name="exportFormat"
+              value="json"
+            /><label class="form-check-label" for="exportJSON"
+              ><i class="fas fa-file-code text-info me-2"></i> JSON - Format
+              technique
+            </label>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="form-check">
+            <input
+              type="checkbox"
+              checked=""
+              class="form-check-input"
+              id="exportFilteredOnly"
+            /><label class="form-check-label" for="exportFilteredOnly">
+              Exporter uniquement les résultats filtrés
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button class="btn btn-primary" id="btnConfirmExport" type="button">
+          <i class="fas fa-download me-1"></i> Exporter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" role="dialog" tabindex="-1" id="columnsModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="text-white modal-title">
+          <i class="fas fa-columns me-2"></i> Configuration des Colonnes
+        </h5>
+        <button
+          class="btn-close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">
+          Sélectionnez les colonnes à afficher dans le tableau :
+        </p>
+        <div id="columnsConfig"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button class="btn btn-primary" id="btnSaveColumns" type="button">
+          <i class="fas fa-save me-1"></i> Sauvegarder
+        </button>
+      </div>
+    </div>
   </div>
 </div>

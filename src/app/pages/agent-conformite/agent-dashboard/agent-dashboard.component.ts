@@ -22,12 +22,20 @@ export class AgentDashboardComponent {
   constructor(private chartService: ChartService) {
     this.chart1 = {
       chart: { type: 'donut', height: 350 },
-      series: [70, 42, 20],
-      labels: ['Daniel', 'Djoulde', 'Robert'],
-      colors: ['#28a745', '#343473', '#ffc107'],
+      series: [28, 45, 67, 4.2],
+      labels: [
+        'Demandes validées',
+        'Total de demandes',
+        'Demandes en attentes',
+        'Demandes annulées',
+      ],
+      colors: ['#28a745', '#343473', '#ffc107', '#FF0B07'],
       dataLabels: {
         enabled: true,
-        formatter: (val: any) => Math.floor(val) + '%',
+        formatter: (val: number, opts: any) => {
+          // Math.floor(val) + '%'
+          return opts.w.globals.series[opts.seriesIndex];
+        },
         style: { colors: ['#fff'] },
       },
       title: {
@@ -51,7 +59,7 @@ export class AgentDashboardComponent {
       },
       series: [95],
       labels: ['SLA Respecté'],
-      colors: ['#28a745'],
+      colors: ['#fff'],
 
       plotOptions: {
         radialBar: {
@@ -59,26 +67,28 @@ export class AgentDashboardComponent {
           endAngle: 90,
         },
       },
+
       dataLabels: {
-        name: { show: false },
+        name: {
+          show: true,
+          fontSize: '14px',
+          color: '#343473',
+        },
         value: {
-          offsetY: -2,
+          show: true,
           fontSize: '22px',
+          formatter: (val: number) => `${val}%`,
         },
         enabled: true,
         formatter: (val: any) => val + '%',
-        style: { colors: ['#343473'], fontSize: '18px', fontWeight: 500 },
+        style: { colors: ['#fff'] },
+        // style: { colors: ['#343473'], fontSize: '18px', fontWeight: 500 },
       },
 
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'light',
-          shadeIntensity: 0.4,
-          inverseColors: false,
-          opacityFrom: 1,
-          opacityTo: 1,
-          stops: [0, 50, 53, 91],
+      tooltip: {
+        enabled: true,
+        y: {
+          formatter: (val: number) => `${val}%`,
         },
       },
 
@@ -142,13 +152,15 @@ export class AgentDashboardComponent {
     ];
 
     this.chart4 = {
-      series: [{
-        data: rawData,
-        parsing: {
-          x: 'productName',
-          y: 'salesAmount'
-        }
-      }]
+      series: [
+        {
+          data: rawData,
+          parsing: {
+            x: 'productName',
+            y: 'salesAmount',
+          },
+        },
+      ],
     };
   }
 

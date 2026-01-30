@@ -1,3 +1,31 @@
+"src/assets/css/boxicons.css",
+              "src/assets/css/dripicons-v2.css",
+              "src/assets/css/Font%20Awesome%205%20Brands.css",
+              "src/assets/css/Font%20Awesome%205%20Free.css",
+              "src/assets/css/Material%20Design%20Icons.css",
+              "src/assets/fonts/ionicons.min.css",
+              "src/assets/css/animate.min.css",
+              "src/assets/css/libs/choices.js/public/assets/styles/choices.min.css",
+              "src/assets/css/libs/@simonwep/pickr/themes/classic.min.css",
+              "src/assets/css/libs/@simonwep/pickr/themes/monolith.min.css",
+              "src/assets/css/libs/flatpickr/flatpickr.min.css",
+              "src/assets/css/libs/@simonwep/pickr/themes/nano.min.css",
+              "src/assets/css/libs/alertifyjs/build/css/alertify.min.css",
+              "src/assets/css/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css",
+              "src/assets/css/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css",
+              "src/assets/css/libs/alertifyjs/build/css/themes/default.min.css",
+              "src/assets/css/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css",
+              "src/assets/css/libs/dropzone/min/dropzone.min.css",
+              "src/assets/css/libs/glightbox/css/glightbox.min.css",
+              "src/assets/css/libs/twitter-bootstrap-wizard/prettify.css",
+              "src/assets/css/css/preloader.min.css",
+              "src/assets/css/css/bootstrap.min.css",
+              "src/assets/css/css/icons.min.css",
+              "src/assets/css/css/bci-online_app.css",
+              "src/assets/css/css/custom-charts-vue-financiers.css",
+              "src/assets/css/pages/tableau-de-bord-table.css",
+
+
 <div class="h-100" data-simplebar>
       <div class="mt-3" id="sidebar-menu">
         <ul class="nav metismenu list-unstyled" id="side-menu">

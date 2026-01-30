@@ -2,7 +2,9 @@
   <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
           <div>
             <h4 class="fw-semibold text-primary mb-sm-0 h3">Tableau de bord</h4>
             <!--            <p class="text-secondary mb-sm-0 font-size-13">Gérez et prenez en charge toutes les requêtes, tickets de-->
@@ -91,9 +93,17 @@
         <div class="card">
           <div class="card-body border-2 border-primary">
             <div class="chart-container">
-              <apx-chart [title]="chart1.title" [series]="chart1.series" [chart]="chart1.chart" [xaxis]="chart1.xaxis"
-                [dataLabels]="chart1.dataLabels" [plotOptions]="chart1.plotOptions" [fill]="chart1.fill"
-                [tooltip]="chart1.tooltip"></apx-chart>
+              <apx-chart
+                [title]="chart1.title"
+                [series]="chart1.series"
+                [labels]="chart1.labels"
+                [chart]="chart1.chart"
+                [xaxis]="chart1.xaxis"
+                [dataLabels]="chart1.dataLabels"
+                [plotOptions]="chart1.plotOptions"
+                [fill]="chart1.fill"
+                [tooltip]="chart1.tooltip"
+              ></apx-chart>
             </div>
           </div>
         </div>
@@ -103,9 +113,17 @@
         <div class="card">
           <div class="card-body border-2 border-primary">
             <div class="chart-container">
-              <apx-chart [title]="chart2.title" [series]="chart2.series" [chart]="chart2.chart" [xaxis]="chart2.xaxis"
-                [dataLabels]="chart2.dataLabels" [plotOptions]="chart2.plotOptions" [fill]="chart2.fill"
-                [tooltip]="chart2.tooltip"></apx-chart>
+              <apx-chart
+                [title]="chart2.title"
+                [series]="chart2.series"
+                [labels]="chart2.labels"
+                [chart]="chart2.chart"
+                [xaxis]="chart2.xaxis"
+                [dataLabels]="chart2.dataLabels"
+                [plotOptions]="chart2.plotOptions"
+                [fill]="chart2.fill"
+                [tooltip]="chart2.tooltip"
+              ></apx-chart>
             </div>
           </div>
         </div>
@@ -115,9 +133,16 @@
         <div class="card">
           <div class="card-body border-2 border-primary">
             <div class="chart-container">
-              <apx-chart [title]="chart3.title" [series]="chart3.series" [chart]="chart3.chart" [xaxis]="chart3.xaxis"
-                [dataLabels]="chart3.dataLabels" [plotOptions]="chart3.plotOptions" [fill]="chart3.fill"
-                [tooltip]="chart3.tooltip"></apx-chart>
+              <apx-chart
+                [title]="chart3.title"
+                [series]="chart3.series"
+                [chart]="chart3.chart"
+                [xaxis]="chart3.xaxis"
+                [dataLabels]="chart3.dataLabels"
+                [plotOptions]="chart3.plotOptions"
+                [fill]="chart3.fill"
+                [tooltip]="chart3.tooltip"
+              ></apx-chart>
             </div>
           </div>
         </div>

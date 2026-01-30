@@ -1,0 +1,1317 @@
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
+          <div>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Création Nouvelle Entreprise
+            </h4>
+            <p class="text-secondary mb-sm-0 font-size-13">
+              Processus guidé d'intégration client entreprise
+            </p>
+          </div>
+          <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item">
+                <a><span>Entreprises Clientes</span></a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="dashboard-entreprises-clientes.html"
+                  ><span>Tableau de Bord</span></a
+                >
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#"><span>Création Nouvelle Entreprise</span></a>
+              </li>
+            </ol>
+            <span class="badge bg-success ms-2"
+              >🟢 Tous les services opérationnels</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="d-inline-flex d-flex mb-0 card-title">
+              <strong>Progression :</strong>&nbsp;<small
+                class="text-muted ms-2"
+                id="progressText"
+                >Étape 1 sur 7</small
+              >
+            </h4>
+            <div
+              class="d-flex float-md-end justify-content-between align-items-center flex-wrap flex-md-nowrap border-bottom .float-md-end"
+            >
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2" role="group">
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    id="saveDraftBtn"
+                    type="button"
+                    onclick="saveDraft()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-save2-fill"
+                    >
+                      <path
+                        d="M8.5 1.5A1.5 1.5 0 0 1 10 0h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h6c-.314.418-.5.937-.5 1.5v6h-2a.5.5 0 0 0-.354.854l2.5 2.5a.5.5 0 0 0 .708 0l2.5-2.5A.5.5 0 0 0 10.5 7.5h-2z"
+                      ></path>
+                    </svg>
+                    Sauvegarder</button
+                  ><button
+                    class="btn btn-outline-info btn-sm"
+                    type="button"
+                    onclick="exportDraft()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-download"
+                    >
+                      <path
+                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
+                      ></path>
+                      <path
+                        d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"
+                      ></path>
+                    </svg>
+                    Export PDF
+                  </button>
+                </div>
+                <div class="btn-group me-2" role="group">
+                  <button
+                    class="btn btn-outline-info btn-sm"
+                    onclick="previewCompany()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-eye-fill"
+                    >
+                      <path
+                        d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"
+                      ></path>
+                      <path
+                        d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"
+                      ></path>
+                    </svg>
+                    Aperçu</button
+                  ><button
+                    class="btn btn-outline-warning btn-sm"
+                    onclick="resetForm()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="1em"
+                      height="1em"
+                      fill="currentColor"
+                      viewBox="0 0 16 16"
+                      class="bi bi-arrow-clockwise"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                      ></path>
+                      <path
+                        d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"
+                      ></path>
+                    </svg>
+                    Réinitialiser
+                  </button>
+                  <div class="dropdown btn-group" role="group">
+                    <button
+                      class="btn btn-outline-primary btn-sm"
+                      aria-expanded="false"
+                      data-bs-toggle="dropdown"
+                      type="button"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                        class="bi bi-three-dots-vertical"
+                      >
+                        <path
+                          d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"
+                        ></path>
+                      </svg>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a
+                        class="dropdown-item"
+                        href="#"
+                        onclick="loadDraftData()"
+                        >Charger brouillon</a
+                      ><a
+                        class="dropdown-item"
+                        href="#"
+                        onclick="duplicateCompany()"
+                        >Dupliquer entreprise existante</a
+                      ><a class="dropdown-item" href="#" onclick="getHelp()"
+                        >Aide et support</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span
+              class="spinner-border spinner-border-sm text-primary me-2"
+              role="status"
+              id="savingIndicator"
+              aria-hidden="true"
+              style="display: none"
+            ></span
+            ><span
+              class="text-success me-2"
+              id="autoSaveIndicator"
+              style="display: none"
+              ><i class="fas fa-check-circle me-1"></i>Sauvegardé !</span
+            >
+          </div>
+          <div class="card-body">
+            <div id="progrss-wizard" class="twitter-bs-wizard">
+              <ul
+                class="nav nav-pills nav-justified twitter-bs-wizard-nav step-progress"
+                id="stepProgress"
+              >
+                <li class="nav-item">
+                  <a
+                    class="nav-link active step"
+                    data-toggle="tab"
+                    href="#step1"
+                    data-step="1"
+                  >
+                    <div
+                      data-bs-toggle="tooltip"
+                      data-bss-tooltip=""
+                      class="step-icon step-label"
+                      title="Informations légales"
+                    >
+                      <span class="fw-bold step-number">1</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link step"
+                    data-toggle="tab"
+                    href="#step2"
+                    data-step="2"
+                  >
+                    <div
+                      data-bs-toggle="tooltip"
+                      data-bss-tooltip=""
+                      class="step-icon step-label"
+                      title="Contacts"
+                    >
+                      <span class="fw-bold step-number">2</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link step"
+                    data-toggle="tab"
+                    href="#step3"
+                    data-step="3"
+                  >
+                    <div
+                      data-bs-toggle="tooltip"
+                      data-bss-tooltip=""
+                      class="step-icon step-label"
+                      title="Documents KYC"
+                    >
+                      <span class="fw-bold step-number">3</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link step"
+                    data-toggle="tab"
+                    href="#step4"
+                    data-step="4"
+                  >
+                    <div
+                      data-bs-toggle="tooltip"
+                      data-bss-tooltip=""
+                      class="step-icon step-label"
+                      title="Modules &amp; Services"
+                    >
+                      <span class="fw-bold step-number">4</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link step"
+                    data-toggle="tab"
+                    href="#step5"
+                    data-step="5"
+                  >
+                    <div
+                      data-bs-toggle="tooltip"
+                      data-bss-tooltip=""
+                      class="step-icon step-label"
+                      title="Workflows"
+                    >
+                      <span class="fw-bold step-number">5</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link step"
+                    data-toggle="tab"
+                    href="#step6"
+                    data-step="6"
+                  >
+                    <div
+                      data-bs-toggle="tooltip"
+                      data-bss-tooltip=""
+                      class="step-icon step-label"
+                      title="Attribution"
+                    >
+                      <span class="fw-bold step-number">6</span>
+                    </div>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link step"
+                    data-toggle="tab"
+                    href="#step7"
+                    data-step="7"
+                  >
+                    <div
+                      data-bs-toggle="tooltip"
+                      data-bss-tooltip=""
+                      class="step-icon step-label"
+                      title="Validation"
+                    >
+                      <span class="fw-bold step-number">7</span>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+              <div class="mt-4 progress">
+                <div
+                  class="bg-primary progress-bar progress-bar-striped progress-bar-animated"
+                  id="progressBar"
+                ></div>
+              </div>
+              <div class="tab-content twitter-bs-wizard-tab-content">
+                <form id="createCompanyForm" novalidate="">
+                  <div
+                    id="step1"
+                    class="tab-pane step-content active"
+                    role="tabpanel"
+                  >
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="mb-0">
+                          <i class="fas fa-building me-2"></i> Informations
+                          Légales et Identification
+                        </h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label class="form-label required" for="companyName"
+                              >Raison sociale complète</label
+                            ><input
+                              class="form-control form-control"
+                              type="text"
+                              id="companyName"
+                              name="companyName"
+                              required=""
+                            />
+                            <div class="invalid-feedback">
+                              <span>Veuillez saisir la raison sociale</span>
+                            </div>
+                            <div class="form-text">
+                              <span
+                                >Nom complet tel qu'enregistré
+                                officiellement</span
+                              >
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <label class="form-label required" for="companyNIF"
+                              >Numéro d'Identification Fiscale (NIF)</label
+                            ><input
+                              class="form-control form-control"
+                              type="text"
+                              id="companyNIF"
+                              maxlength="20"
+                              name="companyNIF"
+                              required=""
+                            />
+                            <div class="invalid-feedback">
+                              <span>NIF requis et doit être unique</span>
+                            </div>
+                            <div class="form-text">
+                              <span
+                                >Format: 10 à 20 caractères
+                                alphanumériques</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mt-3">
+                          <div class="col-md-4">
+                            <label class="form-label required" for="legalForm"
+                              >Forme juridique</label
+                            ><select
+                              class="form-select form-select"
+                              id="legalForm"
+                              name="legalForm"
+                              required=""
+                            >
+                              <option value="">Sélectionner...</option>
+                              <option value="SARL">SARL</option>
+                              <option value="SA">SA</option>
+                              <option value="SAS">SAS</option>
+                              <option value="ONG">ONG</option>
+                              <option value="ASSOCIATION">Association</option>
+                              <option value="EI">
+                                Entreprise Individuelle
+                              </option>
+                              <option value="GIE">
+                                Groupement d'Intérêt Économique
+                              </option>
+                            </select>
+                            <div class="invalid-feedback">
+                              <span
+                                >Veuillez sélectionner la forme juridique</span
+                              >
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <label class="form-label required" for="segment"
+                              >Segment client</label
+                            ><select
+                              class="form-select form-select"
+                              id="segment"
+                              name="segment"
+                              required=""
+                            >
+                              <option value="">Sélectionner...</option>
+                              <option value="PME">
+                                PME (Petite et Moyenne Entreprise)
+                              </option>
+                              <option value="GRANDE_ENTREPRISE">
+                                Grande Entreprise
+                              </option>
+                              <option value="ONG">ONG / Association</option>
+                              <option value="GROUPE">
+                                Groupe / Multinationale
+                              </option>
+                              <option value="STARTUP">Startup</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              <span>Veuillez sélectionner le segment</span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <label class="form-label required" for="sector"
+                              >Secteur d'activité</label
+                            ><select
+                              class="form-select form-select"
+                              id="sector"
+                              name="sector"
+                              required=""
+                            >
+                              <option value="">Sélectionner...</option>
+                              <option value="AGRICULTURE">Agriculture</option>
+                              <option value="MINES">Mines et Extraction</option>
+                              <option value="INDUSTRIE">
+                                Industrie Manufacturière
+                              </option>
+                              <option value="CONSTRUCTION">
+                                BTP et Construction
+                              </option>
+                              <option value="COMMERCE">Commerce</option>
+                              <option value="TRANSPORT">
+                                Transport et Logistique
+                              </option>
+                              <option value="TELECOMS">
+                                Télécommunications
+                              </option>
+                              <option value="BANQUE">Banque et Finance</option>
+                              <option value="SERVICES">Services</option>
+                              <option value="EDUCATION">Éducation</option>
+                              <option value="SANTE">Santé</option>
+                              <option value="AUTRE">Autre</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              <span>Veuillez sélectionner le secteur</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mt-3">
+                          <div class="col-md-12">
+                            <label
+                              class="form-label required"
+                              for="companyAddress"
+                              >Adresse du siège social</label
+                            ><textarea
+                              class="form-control form-control"
+                              id="companyAddress"
+                              name="companyAddress"
+                              required=""
+                              rows="2"
+                            ></textarea>
+                            <div class="invalid-feedback">
+                              <span>Veuillez saisir l'adresse complète</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mt-3">
+                          <div class="col-md-4">
+                            <label class="form-label required" for="city"
+                              >Ville</label
+                            ><input
+                              class="form-control form-control"
+                              type="text"
+                              id="city"
+                              name="city"
+                              required=""
+                            />
+                            <div class="invalid-feedback">
+                              <span>Veuillez saisir la ville</span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <label class="form-label required" for="country"
+                              >Pays</label
+                            ><select
+                              class="form-select form-select"
+                              id="country"
+                              name="country"
+                              required=""
+                            >
+                              <option value="">Sélectionner...</option>
+                              <option value="GN" selected="">Guinée</option>
+                              <option value="CI">Côte d'Ivoire</option>
+                              <option value="SN">Sénégal</option>
+                              <option value="ML">Mali</option>
+                              <option value="BF">Burkina Faso</option>
+                              <option value="FR">France</option>
+                              <option value="OTHER">Autre</option>
+                            </select>
+                            <div class="invalid-feedback">
+                              <span>Veuillez sélectionner le pays</span>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <label class="form-label" for="creationDate"
+                              >Date de création entreprise</label
+                            ><input
+                              class="form-control form-control"
+                              type="date"
+                              id="creationDate"
+                              name="creationDate"
+                            />
+                            <div class="form-text">
+                              <span>Date officielle d'enregistrement</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mt-3" id="step1Alerts"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="step2" class="tab-pane step-content" role="tabpanel">
+                    <div class="card">
+                      <div
+                        class="card-header d-flex justify-content-between align-items-center"
+                      >
+                        <h5 class="text-primary mb-0">
+                          <i class="fas fa-users me-2"></i> Contacts et
+                          Représentants Légaux
+                        </h5>
+                        <button
+                          class="btn btn-outline-primary btn-sm"
+                          type="button"
+                          onclick="addContact()"
+                        >
+                          <i class="fas fa-plus-circle me-1"></i>Ajouter un
+                          contact
+                        </button>
+                      </div>
+                      <div class="card-body">
+                        <div id="contactsList">
+                          <div
+                            class="border rounded p-3 mb-3 contact-item"
+                            data-contact-index="0"
+                          >
+                            <div
+                              class="d-flex justify-content-between align-items-start mb-3"
+                            >
+                              <h6 class="text-primary mb-0">
+                                Contact Principal (Obligatoire)
+                              </h6>
+                              <span class="badge bg-primary">Principal</span>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <label class="form-label required"
+                                  >Nom complet</label
+                                ><input
+                                  class="form-control form-control"
+                                  type="text"
+                                  name="contacts[0][fullName]"
+                                  required=""
+                                />
+                                <div class="invalid-feedback">
+                                  <span>Nom requis</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label class="form-label required"
+                                  >Fonction</label
+                                ><select
+                                  class="form-select form-select"
+                                  name="contacts[0][role]"
+                                  required=""
+                                >
+                                  <option value="">Sélectionner...</option>
+                                  <option value="PDG">
+                                    Président Directeur Général
+                                  </option>
+                                  <option value="DIRECTEUR">
+                                    Directeur Général
+                                  </option>
+                                  <option value="GERANT">Gérant</option>
+                                  <option value="ADMINISTRATEUR">
+                                    Administrateur
+                                  </option>
+                                  <option value="REPRESENTANT">
+                                    Représentant Légal
+                                  </option>
+                                  <option value="AUTRE">Autre</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                  <span>Fonction requise</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-3">
+                              <div class="col-md-6">
+                                <label class="form-label required">Email</label
+                                ><input
+                                  class="form-control form-control"
+                                  type="email"
+                                  name="contacts[0][email]"
+                                  required=""
+                                />
+                                <div class="invalid-feedback">
+                                  <span>Email valide requis</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <label class="form-label required"
+                                  >Téléphone</label
+                                ><input
+                                  class="form-control form-control"
+                                  type="tel"
+                                  name="contacts[0][phone]"
+                                  required=""
+                                />
+                                <div class="invalid-feedback">
+                                  <span>Téléphone requis</span>
+                                </div>
+                              </div>
+                            </div>
+                            <input
+                              type="hidden"
+                              name="contacts[0][isPrimary]"
+                              value="true"
+                            />
+                          </div>
+                        </div>
+                        <div class="alert alert-info" role="alert">
+                          <i class="fas fa-info-circle me-2"></i
+                          ><strong>Information :</strong
+                          ><span>
+                            Le contact principal sera utilisé pour toutes les
+                            communications officielles. Vous pouvez ajouter des
+                            contacts supplémentaires pour la gestion
+                            opérationnelle.
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="step3" class="tab-pane step-content" role="tabpanel">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="text-primary mb-0">
+                          <i class="fas fa-file-alt me-2"></i> Documents KYC et
+                          Justificatifs
+                        </h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="alert alert-warning" role="alert">
+                              <i class="fas fa-exclamation-triangle me-2"></i
+                              ><strong>Documents obligatoires :</strong
+                              ><span>
+                                Tous les documents marqués comme obligatoires
+                                doivent être fournis pour finaliser la création
+                                de l'entreprise.
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 mb-4">
+                            <div class="document-upload-card">
+                              <div class="document-header">
+                                <h6 class="text-primary mb-1">
+                                  <i class="fas fa-file-alt me-2"></i> Extrait
+                                  du Registre de Commerce
+                                  <span class="badge bg-danger ms-2"
+                                    >Obligatoire</span
+                                  >
+                                </h6>
+                                <small class="text-muted"
+                                  >Document officiel d'enregistrement de
+                                  l'entreprise</small
+                                >
+                              </div>
+                              <div
+                                class="upload-zone"
+                                data-document-type="registre_commerce"
+                              >
+                                <input
+                                  class="d-none upload-input"
+                                  type="file"
+                                  id="registreCommerceUpload"
+                                  accept=".pdf,.jpg,.jpeg,.png"
+                                  hidden=""
+                                />
+                                <!-- onchange="handleFileUpload(this, &#39;registre_commerce&#39;)" -->
+                                <label
+                                  class="upload-label"
+                                  for="registreCommerceUpload"
+                                  ><i
+                                    class="fas fa-cloud-upload-alt fs-1 text-muted"
+                                  ></i>
+                                  <p class="mb-0">Cliquez ou glissez-déposez</p>
+                                  <small class="text-muted"
+                                    >PDF, JPG, PNG - Max 10MB</small
+                                  ></label
+                                >
+                                <div
+                                  class="upload-preview"
+                                  style="display: none"
+                                ></div>
+                              </div>
+                              <div
+                                class="invalid-feedback"
+                                style="display: none"
+                              >
+                                <small
+                                  >Le Registre du Commerce est
+                                  obligatoire.</small
+                                >
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-4">
+                            <div class="document-upload-card">
+                              <div class="document-header">
+                                <h6 class="text-primary mb-1">
+                                  <i class="fas fa-file-alt me-2"></i> Statuts
+                                  de la Société
+                                  <span class="badge bg-danger ms-2"
+                                    >Obligatoire</span
+                                  >
+                                </h6>
+                                <small class="text-muted"
+                                  >Statuts constitutifs de l'entreprise</small
+                                >
+                              </div>
+                              <div
+                                class="upload-zone"
+                                data-document-type="statuts"
+                              >
+                                <input
+                                  class="d-none upload-input"
+                                  type="file"
+                                  id="statutsUpload"
+                                  accept=".pdf,.jpg,.jpeg,.png"
+                                  hidden=""
+                                />
+                                <!-- onchange="handleFileUpload(this, &#39;statuts&#39;)" -->
+                                <label class="upload-label" for="statutsUpload"
+                                  ><i
+                                    class="fas fa-cloud-upload-alt fs-1 text-muted"
+                                  ></i>
+                                  <p class="mb-0">Cliquez ou glissez-déposez</p>
+                                  <small class="text-muted"
+                                    >PDF, JPG, PNG - Max 10MB</small
+                                  ></label
+                                >
+                                <div
+                                  class="upload-preview"
+                                  style="display: none"
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-4">
+                            <div class="document-upload-card">
+                              <div class="document-header">
+                                <h6 class="text-primary mb-1">
+                                  <i class="fas fa-id-badge me-2"></i> Pièces
+                                  d'Identité des Dirigeants
+                                  <span class="badge bg-danger ms-2"
+                                    >Obligatoire</span
+                                  >
+                                </h6>
+                                <small class="text-muted"
+                                  >CNI, Passeport ou équivalent</small
+                                >
+                              </div>
+                              <div
+                                class="upload-zone"
+                                data-document-type="pieces_identite"
+                              >
+                                <input
+                                  class="d-none upload-input"
+                                  type="file"
+                                  id="piecesIdentiteUpload"
+                                  accept=".pdf,.jpg,.jpeg,.png"
+                                  multiple=""
+                                  hidden=""
+                                />
+                                <!-- onchange="handleFileUpload(this, &#39;pieces_identite&#39;)" -->
+                                <label
+                                  class="upload-label"
+                                  for="piecesIdentiteUpload"
+                                  ><i
+                                    class="fas fa-cloud-upload-alt fs-1 text-muted"
+                                  ></i>
+                                  <p class="mb-0">Cliquez ou glissez-déposez</p>
+                                  <small class="text-muted"
+                                    >Plusieurs fichiers acceptés</small
+                                  ></label
+                                >
+                                <div
+                                  class="upload-preview"
+                                  style="display: none"
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-4">
+                            <div class="document-upload-card">
+                              <div class="document-header">
+                                <h6 class="text-primary mb-1">
+                                  <i class="fas fa-map-marker-alt me-2"></i>
+                                  Justificatif d'Adresse du Siège
+                                  <span class="badge bg-warning ms-2"
+                                    >Optionnel</span
+                                  >
+                                </h6>
+                                <small class="text-muted"
+                                  >Facture, bail ou titre de propriété</small
+                                >
+                              </div>
+                              <div
+                                class="upload-zone"
+                                data-document-type="justificatif_adresse"
+                              >
+                                <input
+                                  class="d-none upload-input"
+                                  type="file"
+                                  id="justificatif_adresse"
+                                  accept=".pdf,.jpg,.jpeg,.png"
+                                  multiple=""
+                                  hidden=""
+                                />
+                                <!-- onchange="handleFileUpload(this, &#39;justificatif_adresse&#39;)" -->
+                                <label
+                                  class="upload-label"
+                                  for="justificatif_adresse"
+                                  ><i
+                                    class="fas fa-cloud-upload-alt fs-1 text-muted"
+                                  ></i>
+                                  <p class="mb-0">Cliquez ou glissez-déposez</p>
+                                  <small class="text-muted"
+                                    >PDF, JPG, PNG - Max 10MB</small
+                                  ></label
+                                >
+                                <div
+                                  class="upload-preview"
+                                  style="display: none"
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="mt-4 documents-summary"
+                          id="documentsSummary"
+                          style="display: none"
+                        >
+                          <h6 class="text-success">
+                            <i class="fas fa-check-circle me-2"></i> Documents
+                            uploadés
+                          </h6>
+                          <div id="uploadedDocumentsList"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="step4" class="tab-pane step-content" role="tabpanel">
+                    <div class="card">
+                      <div class="card-header">
+                        <h5 class="mb-0">
+                          <i class="text-primary me-2 bi bi-grid-3x3-gap"></i>
+                          Modules et Services Bancaires
+                        </h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="alert alert-info" role="alert">
+                          <i class="me-2 bi bi-info-circle"></i
+                          ><strong>Configuration par défaut :</strong
+                          ><span>
+                            Les modules sont présélectionnés selon le segment
+                            client choisi. Vous pouvez ajuster cette sélection
+                            selon les besoins spécifiques de l'entreprise.
+                          </span>
+                        </div>
+                        <div class="row" id="modulesGrid">
+                          <div class="col-lg-6 mb-4">
+                            <div class="module-card">
+                              <div class="module-card-header">
+                                <div class="form-check form-switch">
+                                  <input
+                                    type="checkbox"
+                                    checked=""
+                                    class="form-check-input"
+                                    id="module_virements"
+                                    name="modules[virements]"
+                                  /><label
+                                    class="fw-bold form-check-label"
+                                    for="module_virements"
+                                    ><i
+                                      class="text-primary me-2 bi bi-arrow-right-circle"
+                                    ></i>
+                                    Virements Simples
+                                  </label>
+                                </div>
+                                <span class="badge bg-success">Recommandé</span>
+                              </div>
+                              <div class="module-card-body">
+                                <p class="text-muted mb-2">
+                                  Transferts unitaires classiques vers comptes
+                                  internes ou externes
+                                </p>
+                                <ul class="list-unstyled text-muted small">
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Virements domestiques
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Virements UEMOA
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Validation simple ou double
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 mb-4">
+                            <div class="module-card">
+                              <div class="module-card-header">
+                                <div class="form-check form-switch">
+                                  <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="module_bulk"
+                                    name="modules[bulk]"
+                                  /><label
+                                    class="fw-bold form-check-label"
+                                    for="module_bulk"
+                                    ><i
+                                      class="text-primary me-2 bi bi-files"
+                                    ></i>
+                                    Paiements en Masse (Bulk)
+                                  </label>
+                                </div>
+                                <span class="badge bg-info">PME+</span>
+                              </div>
+                              <div class="module-card-body">
+                                <p class="text-muted mb-2">
+                                  Traitement de multiples paiements via fichiers
+                                  Excel/CSV
+                                </p>
+                                <ul class="list-unstyled text-muted small">
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Upload fichiers Excel/CSV
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Validation par lots
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Rapports d'exécution
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 mb-4">
+                            <div class="module-card">
+                              <div class="module-card-header">
+                                <div class="form-check form-switch">
+                                  <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="module_change"
+                                    name="modules[change]"
+                                  /><label
+                                    class="fw-bold form-check-label"
+                                    for="module_change"
+                                    ><i
+                                      class="text-primary me-2 bi bi-currency-exchange"
+                                    ></i>
+                                    Opérations de Change
+                                  </label>
+                                </div>
+                                <span class="badge bg-warning text-dark"
+                                  >Contrôlé</span
+                                >
+                              </div>
+                              <div class="module-card-body">
+                                <p class="text-muted mb-2">
+                                  Achat/vente de devises et comptes
+                                  multi-devises
+                                </p>
+                                <ul class="list-unstyled text-muted small">
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    USD, EUR, autres devises
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Taux préférentiels
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Comptes multi-devises
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 mb-4">
+                            <div class="module-card">
+                              <div class="module-card-header">
+                                <div class="form-check form-switch">
+                                  <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="module_international"
+                                    name="modules[international]"
+                                  /><label
+                                    class="fw-bold form-check-label"
+                                    for="module_international"
+                                    ><i
+                                      class="text-primary me-2 bi bi-globe"
+                                    ></i>
+                                    Paiements Internationaux
+                                  </label>
+                                </div>
+                                <span class="badge bg-danger">Sensible</span>
+                              </div>
+                              <div class="module-card-body">
+                                <p class="text-muted mb-2">
+                                  Virements SWIFT et commerce international
+                                </p>
+                                <ul class="list-unstyled text-muted small">
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Virements SWIFT
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Lettres de crédit
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Garanties bancaires
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 mb-4">
+                            <div class="module-card">
+                              <div class="module-card-header">
+                                <div class="form-check form-switch">
+                                  <input
+                                    type="checkbox"
+                                    checked=""
+                                    class="form-check-input"
+                                    id="module_reporting"
+                                    name="modules[reporting]"
+                                  /><label
+                                    class="fw-bold form-check-label"
+                                    for="module_reporting"
+                                    ><i
+                                      class="text-primary me-2 bi bi-graph-up"
+                                    ></i>
+                                    Reporting Avancé
+                                  </label>
+                                </div>
+                                <span class="badge bg-success">Standard</span>
+                              </div>
+                              <div class="module-card-body">
+                                <p class="text-muted mb-2">
+                                  Rapports détaillés et tableaux de bord
+                                  personnalisés
+                                </p>
+                                <ul class="list-unstyled text-muted small">
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Relevés personnalisés
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Exports Excel/PDF
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Alertes automatiques
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6 mb-4">
+                            <div class="module-card">
+                              <div class="module-card-header">
+                                <div class="form-check form-switch">
+                                  <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="module_cash"
+                                    name="modules[cash]"
+                                  /><label
+                                    class="fw-bold form-check-label"
+                                    for="module_cash"
+                                    ><i
+                                      class="text-primary me-2 bi bi-cash-stack"
+                                    ></i>
+                                    Cash Management
+                                  </label>
+                                </div>
+                                <span class="badge bg-info">Premium</span>
+                              </div>
+                              <div class="module-card-body">
+                                <p class="text-muted mb-2">
+                                  Gestion optimisée de la trésorerie et des
+                                  liquidités
+                                </p>
+                                <ul class="list-unstyled text-muted small">
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Centralisation comptes
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Prévisions trésorerie
+                                  </li>
+                                  <li>
+                                    <i
+                                      class="text-success me-1 bi bi-check"
+                                    ></i>
+                                    Placements automatiques
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="mt-4 selected-modules-summary"
+                          id="selectedModulesSummary"
+                        >
+                          <h6 class="text-primary">
+                            <i class="me-2 bi bi-check-circle"></i> Modules
+                            sélectionnés (<span id="selectedModulesCount"
+                              >2</span
+                            >)
+                          </h6>
+                          <div
+                            class="d-flex flex-wrap gap-2"
+                            id="selectedModulesList"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div class="card mt-4">
+                  <div class="card-body py-3">
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <button
+                        class="btn btn-outline-secondary disabled"
+                        id="prevBtn"
+                        type="button"
+                        disabled=""
+                        onclick="changeStep(-1)"
+                      >
+                        <i class="me-1 bi bi-chevron-left"></i>Précédent
+                      </button>
+                      <div class="text-center step-info">
+                        <small class="text-muted"
+                          >Utilisez Tab pour naviguer entre les champs</small
+                        >
+                      </div>
+                      <button
+                        class="btn btn-primary"
+                        id="nextBtn"
+                        type="button"
+                        onclick="changeStep(1)"
+                      >
+                        Suivant<i class="ms-1 bi bi-chevron-right"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====  Modales ==== -->
+<div class="modal fade" role="dialog" tabindex="-1" id="previewModal">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Prévisualisation - Nouvelle Entreprise</h5>
+        <button
+          class="btn-close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="previewContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Fermer</button
+        ><button
+          class="btn btn-primary"
+          type="button"
+          onclick="exportPreviewPDF()"
+        >
+          Exporter PDF
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" role="dialog" tabindex="-1" id="confirmationModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+        <button
+          class="btn-close"
+          data-bs-dismiss="modal"
+          type="button"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmationMessage">
+          Êtes-vous sûr de vouloir effectuer cette action ?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
+          Annuler</button
+        ><button class="btn btn-primary" id="confirmActionBtn" type="button">
+          Confirmer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

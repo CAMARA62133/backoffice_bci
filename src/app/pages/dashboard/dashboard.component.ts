@@ -1,10 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { ChartOptions } from '../../core/interfaces/apexChartOptions';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgApexchartsModule, ChartComponent],
+  imports: [NgApexchartsModule, ChartComponent, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })

@@ -32,6 +32,7 @@ import { AgentFicheDemandesComponent } from './pages/agent-conformite/agent-fich
 import { AgentFicheEntrepriseComponent } from './pages/agent-conformite/agent-fiche-entreprise/agent-fiche-entreprise.component';
 import { AgentListeDemandesComponent } from './pages/agent-conformite/agent-liste-demandes/agent-liste-demandes.component';
 import { AgentListeEntrepriseComponent } from './pages/agent-conformite/agent-liste-entreprise/agent-liste-entreprise.component';
+import { FacturiesComponent } from './pages/agent-conformite/facturies/facturies.component';
 import { UnauthorizedComponent } from './pages/auth/unauthorized/unauthorized.component';
 import { EntreprisesComponent } from './pages/demande-souscription/entreprises/entreprises.component';
 import { AlertesSupervisionsComponent } from './pages/orgs/alertes-supervisions/alertes-supervisions.component';
@@ -42,7 +43,7 @@ import { OrgFicheUtilisateurComponent } from './pages/orgs/org-fiche-utilisateur
 import { OrgListEntrepriseComponent } from './pages/orgs/org-list-entreprise/org-list-entreprise.component';
 import { RepportingExportComponent } from './pages/orgs/repporting-export/repporting-export.component';
 import { TransactionsOperationsComponent } from './pages/orgs/transactions-operations/transactions-operations.component';
-import {FacturiesComponent} from './pages/agent-conformite/facturies/facturies.component';
+import { CreateEntrepriseComponent } from './pages/agent-conformite/create-entreprise/create-entreprise.component';
 
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
@@ -338,6 +339,14 @@ export const routes: Routes = [
         path: 'agent-entreprise',
         title: 'BCI - Online | Liste des entreprises',
         component: AgentListeEntrepriseComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Agent Conformité'] },
+      },
+
+      {
+        path: 'entreprise/new',
+        title: 'BCI - Online | Crée une entreprise',
+        component: CreateEntrepriseComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Agent Conformité'] },
       },
