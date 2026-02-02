@@ -2,6 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environnements/environnement';
+import {
+  FacturierToggleStatus,
+  FacturierUpdate,
+} from '../../../interfaces/facturies.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +25,20 @@ export class FacturiesService {
   addFacturier(payload: any): Observable<any> {
     console.log('service payload : ', { payload });
     return this.http.post(`${this.nodeApiUrl}/facturiers/add`, payload, {
+      withCredentials: true,
+    });
+  }
+
+  updateFacturier(payload: FacturierUpdate): Observable<any> {
+    console.log('service payload : ', { payload });
+    return this.http.put(`${this.nodeApiUrl}/facturiers/update`, payload, {
+      withCredentials: true,
+    });
+  }
+
+  toggleFacturier(payload: FacturierToggleStatus): Observable<any> {
+    console.log('service payload : ', { payload });
+    return this.http.put(`${this.nodeApiUrl}/facturiers/toggle`, payload, {
       withCredentials: true,
     });
   }

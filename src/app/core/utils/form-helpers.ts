@@ -44,6 +44,9 @@ export function getErrorMessage(
   if (control.hasError('mismatch'))
     return 'Les mots de passe ne correspondent pas.';
 
+  if (control.hasError('boolean01'))
+    return 'Ce champ doit être 0 ou 1.';
+
   return null;
 }
 
