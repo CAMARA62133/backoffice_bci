@@ -30,7 +30,7 @@ export class FacturiesService {
   }
 
   updateFacturier(payload: FacturierUpdate): Observable<any> {
-    console.log('service payload : ', { payload });
+    console.log('service payload : ', payload);
     return this.http.put(`${this.nodeApiUrl}/facturiers/update`, payload, {
       withCredentials: true,
     });
@@ -38,7 +38,7 @@ export class FacturiesService {
 
   toggleFacturier(payload: FacturierToggleStatus): Observable<any> {
     console.log('service payload : ', { payload });
-    return this.http.put(`${this.nodeApiUrl}/facturiers/toggle`, payload, {
+    return this.http.post(`${this.nodeApiUrl}/facturiers/toggle`, payload, {
       withCredentials: true,
     });
   }

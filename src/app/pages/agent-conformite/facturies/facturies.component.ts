@@ -8,7 +8,6 @@ import {
   Validators,
   ɵInternalFormsSharedModule,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DataTableDirective } from '../../../core/directives/data-table/data-table.directive';
 import { FacturierListing } from '../../../core/interfaces/facturies.interface';
@@ -27,7 +26,6 @@ import { ModalsService } from '../../../services/modals/modals.service';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RouterLink,
     DataTableDirective,
     NgForOf,
     NgIf,
@@ -58,10 +56,17 @@ export class FacturiesComponent implements OnInit {
   // Selected Facturie
   selectedFacturier!: FacturierListing;
   idFacturier!: number;
-  btEnabled!: boolean;
-  isloadingBloquerDebloquer: boolean = false;
-  showModalOpenBloquerDebloquer: boolean = false;
+
+  isCheckedFeesIncluded: boolean = false;
+  isCheckedFeesUsePercent: boolean = false;
+  isCheckedFeedsBankUsePercent: boolean = false;
+
   selectedFacturierId: number | null = null;
+  btEnabled: boolean = false;
+  showModalOpenBloquerDebloquer: boolean = false;
+  isloadingBloquerDebloquer: boolean = false;
+
+  isEditMode: boolean = false;
 
   constructor(
     private facturiesService: FacturiesService,
@@ -178,6 +183,7 @@ export class FacturiesComponent implements OnInit {
   }
 
   onEditFacturie(facturier: FacturierListing) {
+    this.isEditMode = true;
     this.openModal('updateFacturieModal');
     this.selectedFacturier = facturier;
     this.idFacturier = this.selectedFacturier.id;
@@ -215,15 +221,31 @@ export class FacturiesComponent implements OnInit {
       return;
     }
 
-    const formData = {
-      ...this.factForm.value,
+    const formData = { ...this.factForm.value };
+    console.log('formData : ', formData);
+
+    const dataToSend = {
+      vcName: formData.vcName,
+      vcContact: formData.vcContact,
+      vcPhoneNumber: formData.vcPhoneNumber,
+      vcEmail: formData.vcEmail,
+      vcCity: formData.vcCity,
+      vcCountry: formData.vcCountry,
+      vcAddress: formData.vcAddress,
+      vcLogoPath: this.selectedFacturier.vcLogoPath,
+      vcAccountName: formData.vcAccountName,
+      vcAccountNumber: formData.vcAccountNumber,
+      nFeesBank: formData.nFeesBank,
+      btFeesBankUsePercent: formData.btFeesBankUsePercent ? 1 : 0,
+      nFees: formData.nFees,
+      btFeesUsePercent: formData.btFeesUsePercent ? 1 : 0,
+      btFeesIncluded: formData.btFeesIncluded ? 1 : 0,
       iMerchandID: this.selectedFacturier.id,
     };
-
-    console.log('Data to send : ', formData);
+    console.log('dataToSend : ', dataToSend);
     this.isLoading = true;
 
-    this.facturiesService.updateFacturier(formData).subscribe({
+    this.facturiesService.updateFacturier(dataToSend).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
           this.toastr.success(res?.message, '', {
@@ -255,9 +277,9 @@ export class FacturiesComponent implements OnInit {
   //
   onToggleFacturier(facturier: any) {
     this.openModal('bloquerDebloquerModal');
+    this.btEnabled = facturier.btEnabled;
     this.selectedFacturierId = facturier.id;
-    this.btEnabled = facturier.btEnabled === '0';
-    console.log('facturier to toggle : ', facturier);
+    console.log('Selected facturier : ', facturier);
   }
 
   bloquerEtDebloquer() {
@@ -271,38 +293,38 @@ export class FacturiesComponent implements OnInit {
 
     this.isloadingBloquerDebloquer = true;
     const params = {
-      iMerchandID: this.idFacturier,
+      iMerchandID: this.selectedFacturierId,
       btEnabled: this.btEnabled === true ? 0 : 1,
     };
     console.log(params);
 
-    // this.facturiesService.toggleFacturier(params).subscribe({
-    //   next: (res) => {
-    //     this.showModalOpenBloquerDebloquer = false;
-    //     this.isloadingBloquerDebloquer = false;
+    this.facturiesService.toggleFacturier(params).subscribe({
+      next: (res) => {
+        this.showModalOpenBloquerDebloquer = false;
+        this.isloadingBloquerDebloquer = false;
 
-    //     this.toastr.success(res?.message, '', {
-    //       positionClass: 'toast-custom-center',
-    //     });
+        this.toastr.success(res?.message, '', {
+          positionClass: 'toast-custom-center',
+        });
 
-    //     this.modalsService.closeModal('bloquerDebloquerModal');
-    //     console.log('res api : ', res);
-    //     this.loadFacturies();
-    //   },
+        this.modalsService.closeModal('bloquerDebloquerModal');
+        console.log('res api : ', res);
+        this.loadFacturies();
+      },
 
-    //   error: (err) => {
-    //     this.toastr.error(
-    //       'Une erreur interne est survenue lors du blocage',
-    //       '',
-    //       {
-    //         positionClass: 'toast-custom-center',
-    //       },
-    //     );
-    //     console.log('err api : ', err);
-    //     this.isloadingBloquerDebloquer = false;
-    //     this.modalsService.closeModal('bloquerDebloquerModal');
-    //   },
-    // });
+      error: (err) => {
+        this.toastr.error(
+          'Une erreur interne est survenue lors du blocage',
+          '',
+          {
+            positionClass: 'toast-custom-center',
+          },
+        );
+        console.log('err api : ', err);
+        this.isloadingBloquerDebloquer = false;
+        this.modalsService.closeModal('bloquerDebloquerModal');
+      },
+    });
   }
 
   // Initialisation du formulaire
@@ -323,23 +345,14 @@ export class FacturiesComponent implements OnInit {
       vcCity: ['', Validators.required],
       vcCountry: ['', Validators.required],
       vcAddress: ['', Validators.required],
-      vcLogoPath: ['', Validators.required],
+      vcLogoPath: ['', this.isEditMode ? [] : Validators.required],
       vcAccountName: ['', Validators.required],
       vcAccountNumber: ['', [Validators.required, Validators.min(0)]],
       nFeesBank: ['', [Validators.required, Validators.min(0)]],
       nFees: ['', [Validators.required, Validators.min(0)]],
-      btFeesBankUsePercent: [
-        '1',
-        [Validators.required, Validators.pattern('^(0|1)$')],
-      ],
-      btFeesUsePercent: [
-        '0',
-        [Validators.required, Validators.pattern('^(0|1)$')],
-      ],
-      btFeesIncluded: [
-        '0',
-        [Validators.required, Validators.pattern('^(0|1)$')],
-      ],
+      btFeesBankUsePercent: [this.isCheckedFeedsBankUsePercent ? true : false],
+      btFeesUsePercent: [this.isCheckedFeesUsePercent ? true : false],
+      btFeesIncluded: [this.isCheckedFeesIncluded ? true : false],
     });
   }
 

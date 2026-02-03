@@ -1,29 +1,4 @@
 <div class="page-content">
-  <div class="container-fluid border-bottom">
-    <div class="row mt-3">
-      <div class="col-12">
-        <div
-          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
-        >
-          <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">
-              Liste des Facturiés
-            </h4>
-            <!--            <p class="text-secondary mb-sm-0 font-size-13"></p>-->
-          </div>
-
-          <!--          <div class="page-title-right">-->
-          <!--            <ol class="breadcrumb m-0">-->
-          <!--              <li class="breadcrumb-item"><a><span>Entreprises Clientes</span></a></li>-->
-          <!--              <li class="breadcrumb-item"><a href=""><span>Tableau de Bord</span></a></li>-->
-          <!--              <li class="breadcrumb-item"><a href="#"><span>Liste des Entreprises</span></a></li>-->
-          <!--            </ol><span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>-->
-          <!--          </div>-->
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="container-fluid py-4">
     <div class="card">
       <div class="card-header">
@@ -69,7 +44,7 @@
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="entreprisesTableBody">
+            <tbody>
               <tr
                 *ngFor="let facturie of facturies; let i = index"
                 class="table-row-hover fade-in"
@@ -181,7 +156,7 @@
               fill="currentColor"
             ></path>
           </svg>
-          Créer un nouveau facturies
+          Créer un nouveau facturier
         </h5>
         <button
           class="btn-close btn-close-white"
@@ -325,7 +300,6 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
                 type="file"
                 formControlName="vcLogoPath"
                 [ngClass]="getFormControlClass('vcLogoPath')"
@@ -358,7 +332,7 @@
               <input
                 class="form-control form-control"
                 required=""
-                type="text"
+                type="number"
                 formControlName="vcAccountNumber"
                 [ngClass]="getFormControlClass('vcAccountNumber')"
               />
@@ -368,92 +342,103 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">
-                FreeBank<span class="text-danger">*</span>
-              </label>
-              <input
-                class="form-control form-control"
-                required=""
-                type="number"
-                min="0"
-                formControlName="nFeesBank"
-                [ngClass]="getFormControlClass('nFeesBank')"
-              />
-              <span class="text-danger" *ngIf="isInvalid('nFeesBank')">
-                {{ getErrorMessage("nFeesBank") }}
-              </span>
+              <!-- Label au-dessus -->
+              <label class="form-label" for="nFeesBank"> Frais Banque </label>
+
+              <!-- Frais banque  -->
+              <div class="input-group">
+                <!-- Input texte -->
+                <input
+                  type="number"
+                  placeholder="Montant"
+                  id="nFeesBank"
+                  class="form-control"
+                  formControlName="nFeesBank"
+                  [ngClass]="getFormControlClass('nFeesBank')"
+                />
+
+                <!-- Pourcentage -->
+                <span class="input-group-text">%</span>
+
+                <!-- Checkbox -->
+                <span class="input-group-text">
+                  <input
+                    type="checkbox"
+                    class="form-check-input m-0"
+                    formControlName="btFeesBankUsePercent"
+                    [ngClass]="getFormControlClass('btFeesBankUsePercent')"
+                  />
+                </span>
+              </div>
+
+              <!-- Messages d'erreur -->
+              <div class="mt-1">
+                <span class="text-danger" *ngIf="isInvalid('nFeesBank')">
+                  {{ getErrorMessage("nFeesBank") }}
+                </span>
+                <span
+                  class="text-danger"
+                  *ngIf="isInvalid('btFeesBankUsePercent')"
+                >
+                  {{ getErrorMessage("btFeesBankUsePercent") }}
+                </span>
+              </div>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">
-                FeesBankUsePercent<span class="text-danger">*</span>
-              </label>
-              <select
-                class="form-select form-select"
-                required
-                formControlName="btFeesBankUsePercent"
-                [ngClass]="getFormControlClass('btFeesBankUsePercent')"
-              >
-                <option [value]="0">Non</option>
-                <option [value]="1">Oui</option>
-              </select>
+              <!-- Label au-dessus -->
+              <label class="form-label" for="nFees">Frais Partenaire</label>
 
-              <span
-                class="text-danger"
-                *ngIf="isInvalid('btFeesBankUsePercent')"
-              >
-                {{ getErrorMessage("btFeesBankUsePercent") }}
-              </span>
+              <!-- Groupe d'inputs sans espace -->
+              <div class="input-group">
+                <!-- Input texte -->
+                <input
+                  type="number"
+                  id="nFees"
+                  class="form-control"
+                  formControlName="nFees"
+                  [ngClass]="getFormControlClass('nFees')"
+                />
+
+                <!-- Pourcentage -->
+                <span class="input-group-text">%</span>
+
+                <!-- Checkbox -->
+                <span class="input-group-text">
+                  <input
+                    type="checkbox"
+                    class="form-check-input m-0"
+                    formControlName="btFeesUsePercent"
+                    [ngClass]="getFormControlClass('btFeesUsePercent')"
+                  />
+                </span>
+              </div>
+
+              <!-- Messages d'erreur -->
+              <div class="mt-1">
+                <span class="text-danger" *ngIf="isInvalid('nFees')">
+                  {{ getErrorMessage("nFees") }}
+                </span>
+                <span class="text-danger" *ngIf="isInvalid('btFeesUsePercent')">
+                  {{ getErrorMessage("btFeesUsePercent") }}
+                </span>
+              </div>
             </div>
 
-            <div class="col-md-6">
-              <label class="form-label">
-                Fees<span class="text-danger">*</span>
-              </label>
-              <input
-                class="form-control form-control"
-                required=""
-                type="number"
-                min="0"
-                formControlName="nFees"
-                [ngClass]="getFormControlClass('nFees')"
-              />
-              <span class="text-danger" *ngIf="isInvalid('nFees')">
-                {{ getErrorMessage("nFees") }}
-              </span>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">
-                FeesUsePercent<span class="text-danger">*</span>
-              </label>
-              <select
-                class="form-select form-select"
-                required
-                formControlName="btFeesUsePercent"
-                [ngClass]="getFormControlClass('btFeesUsePercent')"
-              >
-                <option [value]="0">Non</option>
-                <option [value]="1">Oui</option>
-              </select>
-              <span class="text-danger" *ngIf="isInvalid('btFeesUsePercent')">
-                {{ getErrorMessage("btFeesUsePercent") }}
-              </span>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">
-                FeesIncluded<span class="text-danger">*</span>
-              </label>
-              <select
-                class="form-select form-select"
-                required
-                formControlName="btFeesIncluded"
-                [ngClass]="getFormControlClass('btFeesIncluded')"
-              >
-                <option [value]="0">Non</option>
-                <option [value]="1">Oui</option>
-              </select>
+            <div class="col-md-4">
+              <div class="form-check form-switch">
+                <input
+                  type="checkbox"
+                  class="form-check-input me-2"
+                  id="btFeesIncluded"
+                  required
+                  formControlName="btFeesIncluded"
+                  [ngClass]="getFormControlClass('btFeesIncluded')"
+                />
+                <label class="form-check-label mt-1" for="btFeesIncluded">
+                  Frais inclus
+                </label>
+              </div>
               <span class="text-danger" *ngIf="isInvalid('btFeesIncluded')">
                 {{ getErrorMessage("btFeesIncluded") }}
               </span>
@@ -509,7 +494,7 @@
               fill="currentColor"
             ></path>
           </svg>
-          Modifier un facturier
+          Modification du facturier
         </h5>
         <button
           class="btn-close btn-close-white"
@@ -653,7 +638,6 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
                 type="file"
                 formControlName="vcLogoPath"
                 [ngClass]="getFormControlClass('vcLogoPath')"
@@ -686,7 +670,7 @@
               <input
                 class="form-control form-control"
                 required=""
-                type="text"
+                type="number"
                 formControlName="vcAccountNumber"
                 [ngClass]="getFormControlClass('vcAccountNumber')"
               />
@@ -696,92 +680,103 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">
-                FreeBank<span class="text-danger">*</span>
-              </label>
-              <input
-                class="form-control form-control"
-                required=""
-                type="number"
-                min="0"
-                formControlName="nFeesBank"
-                [ngClass]="getFormControlClass('nFeesBank')"
-              />
-              <span class="text-danger" *ngIf="isInvalid('nFeesBank')">
-                {{ getErrorMessage("nFeesBank") }}
-              </span>
+              <!-- Label au-dessus -->
+              <label class="form-label" for="nFeesBank"> Frais Banque </label>
+
+              <!-- Frais banque  -->
+              <div class="input-group">
+                <!-- Input texte -->
+                <input
+                  type="number"
+                  placeholder="Montant"
+                  id="nFeesBank"
+                  class="form-control"
+                  formControlName="nFeesBank"
+                  [ngClass]="getFormControlClass('nFeesBank')"
+                />
+
+                <!-- Pourcentage -->
+                <span class="input-group-text">%</span>
+
+                <!-- Checkbox -->
+                <span class="input-group-text">
+                  <input
+                    type="checkbox"
+                    class="form-check-input m-0"
+                    formControlName="btFeesBankUsePercent"
+                    [ngClass]="getFormControlClass('btFeesBankUsePercent')"
+                  />
+                </span>
+              </div>
+
+              <!-- Messages d'erreur -->
+              <div class="mt-1">
+                <span class="text-danger" *ngIf="isInvalid('nFeesBank')">
+                  {{ getErrorMessage("nFeesBank") }}
+                </span>
+                <span
+                  class="text-danger"
+                  *ngIf="isInvalid('btFeesBankUsePercent')"
+                >
+                  {{ getErrorMessage("btFeesBankUsePercent") }}
+                </span>
+              </div>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">
-                FeesBankUsePercent<span class="text-danger">*</span>
-              </label>
-              <select
-                class="form-select form-select"
-                required
-                formControlName="btFeesBankUsePercent"
-                [ngClass]="getFormControlClass('btFeesBankUsePercent')"
-              >
-                <option [value]="0">Non</option>
-                <option [value]="1">Oui</option>
-              </select>
+              <!-- Label au-dessus -->
+              <label class="form-label" for="nFees">Frais Partenaire</label>
 
-              <span
-                class="text-danger"
-                *ngIf="isInvalid('btFeesBankUsePercent')"
-              >
-                {{ getErrorMessage("btFeesBankUsePercent") }}
-              </span>
+              <!-- Groupe d'inputs sans espace -->
+              <div class="input-group">
+                <!-- Input texte -->
+                <input
+                  type="number"
+                  id="nFees"
+                  class="form-control"
+                  formControlName="nFees"
+                  [ngClass]="getFormControlClass('nFees')"
+                />
+
+                <!-- Pourcentage -->
+                <span class="input-group-text">%</span>
+
+                <!-- Checkbox -->
+                <span class="input-group-text">
+                  <input
+                    type="checkbox"
+                    class="form-check-input m-0"
+                    formControlName="btFeesUsePercent"
+                    [ngClass]="getFormControlClass('btFeesUsePercent')"
+                  />
+                </span>
+              </div>
+
+              <!-- Messages d'erreur -->
+              <div class="mt-1">
+                <span class="text-danger" *ngIf="isInvalid('nFees')">
+                  {{ getErrorMessage("nFees") }}
+                </span>
+                <span class="text-danger" *ngIf="isInvalid('btFeesUsePercent')">
+                  {{ getErrorMessage("btFeesUsePercent") }}
+                </span>
+              </div>
             </div>
 
-            <div class="col-md-6">
-              <label class="form-label">
-                Fees<span class="text-danger">*</span>
-              </label>
-              <input
-                class="form-control form-control"
-                required=""
-                type="number"
-                min="0"
-                formControlName="nFees"
-                [ngClass]="getFormControlClass('nFees')"
-              />
-              <span class="text-danger" *ngIf="isInvalid('nFees')">
-                {{ getErrorMessage("nFees") }}
-              </span>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">
-                FeesUsePercent<span class="text-danger">*</span>
-              </label>
-              <select
-                class="form-select form-select"
-                required
-                formControlName="btFeesUsePercent"
-                [ngClass]="getFormControlClass('btFeesUsePercent')"
-              >
-                <option [value]="0">Non</option>
-                <option [value]="1">Oui</option>
-              </select>
-              <span class="text-danger" *ngIf="isInvalid('btFeesUsePercent')">
-                {{ getErrorMessage("btFeesUsePercent") }}
-              </span>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">
-                FeesIncluded<span class="text-danger">*</span>
-              </label>
-              <select
-                class="form-select form-select"
-                required
-                formControlName="btFeesIncluded"
-                [ngClass]="getFormControlClass('btFeesIncluded')"
-              >
-                <option [value]="0">Non</option>
-                <option [value]="1">Oui</option>
-              </select>
+            <div class="col-md-4">
+              <div class="form-check form-switch">
+                <input
+                  type="checkbox"
+                  class="form-check-input me-2"
+                  id="btFeesIncluded"
+                  required
+                  formControlName="btFeesIncluded"
+                  [ngClass]="getFormControlClass('btFeesIncluded')"
+                />
+                <label class="form-check-label mt-1" for="btFeesIncluded">
+                  Frais inclus
+                </label>
+              </div>
               <span class="text-danger" *ngIf="isInvalid('btFeesIncluded')">
                 {{ getErrorMessage("btFeesIncluded") }}
               </span>
@@ -795,7 +790,21 @@
           </button>
 
           <button class="btn btn-primary" type="submit">
-            <i class="fas fa-check"></i>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="1em"
+              height="1em"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
+                fill="currentColor"
+              ></path>
+            </svg>
+
             {{ isLoading ? "Modification en cours..." : "Modifier" }}
           </button>
         </div>
@@ -827,8 +836,8 @@
       <div class="modal-body text-center">
         <p>
           Êtes-vous sûr de vouloir
-          <strong class="text-{{ btEnabled ? 'primary' : 'danger' }}">
-            {{ btEnabled ? "activer" : "bloquer" }}
+          <strong class="text-{{ btEnabled === false ? 'primary' : 'danger' }}">
+            {{ btEnabled === false ? "activer" : "bloquer" }}
           </strong>
           ce facturier ?
         </p>

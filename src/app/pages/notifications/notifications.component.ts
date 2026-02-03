@@ -199,7 +199,7 @@ export class NotificationsComponent implements OnInit {
 
     // On construit l'objet a envoyer
     const dataToSend = {
-      message: formData.message,
+      message: formData.mecleqrssage,
       idNiveauUrgence: formData.idNiveauUrgence,
       typeAlerte: formData.typeAlerte,
       description: formData.description,
