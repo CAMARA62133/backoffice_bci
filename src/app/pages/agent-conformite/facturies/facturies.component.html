@@ -40,6 +40,11 @@
                 <th>Ville</th>
                 <th>Nom Compte</th>
                 <th>N° Compte</th>
+                <th>Frais Banque</th>
+                <th>Frais Partenaire</th>
+                <th>% Partenaire</th>
+                <th>% Banque</th>
+                <th>Frais inclus</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -57,7 +62,52 @@
                 <td>{{ facturie.vcCountry }}</td>
                 <td>{{ facturie.vcCity }}</td>
                 <td>{{ facturie.vcAccountName }}</td>
-                <td>{{ facturie.vcAccountName }}</td>
+                <td>{{ facturie.vcAccountNumber }}</td>
+                <td>
+                  {{
+                    facturie.btFeesBankUsePercent
+                      ? facturie.nFeesBank / 100
+                      : facturie.nFeesBank
+                  }}
+                </td>
+                <td>
+                  {{
+                    facturie.btFeesUsePercent
+                      ? facturie.nFees / 100
+                      : facturie.nFees
+                  }}
+                </td>
+
+                <td>
+                  <span
+                    class="badge rounded-pill bg-{{
+                      facturie.btFeesBankUsePercent ? 'primary' : 'warning'
+                    }}"
+                  >
+                    {{ facturie.btFeesBankUsePercent ? "Oui" : "Non" }}
+                  </span>
+                </td>
+
+                <td>
+                  <span
+                    class="badge rounded-pill bg-{{
+                      facturie.btFeesUsePercent ? 'info' : 'warning'
+                    }}"
+                  >
+                    {{ facturie.btFeesUsePercent ? "Oui" : "Non" }}
+                  </span>
+                </td>
+
+                <td>
+                  <span
+                    class="badge rounded-pill bg-{{
+                      facturie.btFeesIncluded ? 'dark' : 'warning'
+                    }}"
+                  >
+                    {{ facturie.btFeesIncluded ? "Oui" : "Non" }}
+                  </span>
+                </td>
+
                 <td>
                   <span
                     class="badge rounded bg-{{
@@ -174,7 +224,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcName"
                 [ngClass]="getFormControlClass('vcName')"
@@ -191,7 +241,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcContact"
                 placeholder="Ex: Service Client, Comptable etc..."
@@ -216,7 +266,7 @@
 
                 <input
                   class="form-control form-control"
-                  required=""
+                  required
                   type="text"
                   formControlName="vcPhoneNumber"
                   [ngClass]="getFormControlClass('vcPhoneNumber')"
@@ -236,7 +286,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="email"
                 formControlName="vcEmail"
                 [ngClass]="getFormControlClass('vcEmail')"
@@ -252,7 +302,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcCity"
                 [ngClass]="getFormControlClass('vcCity')"
@@ -268,7 +318,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcCountry"
                 [ngClass]="getFormControlClass('vcCountry')"
@@ -284,7 +334,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcAddress"
                 [ngClass]="getFormControlClass('vcAddress')"
@@ -315,7 +365,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcAccountName"
                 [ngClass]="getFormControlClass('vcAccountName')"
@@ -331,7 +381,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="number"
                 formControlName="vcAccountNumber"
                 [ngClass]="getFormControlClass('vcAccountNumber')"
@@ -350,7 +400,6 @@
                 <!-- Input texte -->
                 <input
                   type="number"
-                  placeholder="Montant"
                   id="nFeesBank"
                   class="form-control"
                   formControlName="nFeesBank"
@@ -426,18 +475,17 @@
             </div>
 
             <div class="col-md-4">
-              <div class="form-check form-switch">
+              <div class="form-check">
+                <label class="form-check-label mt-1" for="btFeesIncluded">
+                  Frais inclus
+                </label>
                 <input
                   type="checkbox"
                   class="form-check-input me-2"
                   id="btFeesIncluded"
-                  required
                   formControlName="btFeesIncluded"
                   [ngClass]="getFormControlClass('btFeesIncluded')"
                 />
-                <label class="form-check-label mt-1" for="btFeesIncluded">
-                  Frais inclus
-                </label>
               </div>
               <span class="text-danger" *ngIf="isInvalid('btFeesIncluded')">
                 {{ getErrorMessage("btFeesIncluded") }}
@@ -475,6 +523,7 @@
   </div>
 </div>
 
+<!-- Formulaire de modification des facturiers -->
 <div class="modal fade" role="dialog" tabindex="-1" id="updateFacturieModal">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -506,13 +555,44 @@
       <form [formGroup]="factForm" (ngSubmit)="onUpdateFacturie()">
         <div class="modal-body">
           <div class="row g-3">
+            <!-- Affichage du logo existant lors de la modification -->
+            <div class="col-md-6 text-center" width="100" height="100%">
+              <label class="form-label">Logo existant</label>
+              <div *ngIf="isEditMode && existingLogoPath">
+                <img
+                  [src]="existingLogoPath"
+                  alt="Logo existant"
+                  class="img-fluid img-thumbnail mb-3"
+                  style="max-height: 100px"
+                />
+              </div>
+            </div>
+
+            <!-- seleciton de l'image -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label"> Sélectionner un nouveau logo </label>
+                <input
+                  class="form-control form-control"
+                  type="file"
+                  formControlName="vcLogoPath"
+                  [ngClass]="getFormControlClass('vcLogoPath')"
+                />
+                <span class="text-danger" *ngIf="isInvalid('vcLogoPath')">
+                  {{ getErrorMessage("vcLogoPath") }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">
                 Nom <span class="text-danger">*</span>
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcName"
                 [ngClass]="getFormControlClass('vcName')"
@@ -529,7 +609,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcContact"
                 placeholder="Ex: Service Client, Comptable etc..."
@@ -554,7 +634,7 @@
 
                 <input
                   class="form-control form-control"
-                  required=""
+                  required
                   type="text"
                   formControlName="vcPhoneNumber"
                   [ngClass]="getFormControlClass('vcPhoneNumber')"
@@ -574,7 +654,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="email"
                 formControlName="vcEmail"
                 [ngClass]="getFormControlClass('vcEmail')"
@@ -590,7 +670,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcCity"
                 [ngClass]="getFormControlClass('vcCity')"
@@ -606,7 +686,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcCountry"
                 [ngClass]="getFormControlClass('vcCountry')"
@@ -622,7 +702,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcAddress"
                 [ngClass]="getFormControlClass('vcAddress')"
@@ -634,26 +714,11 @@
 
             <div class="col-md-6">
               <label class="form-label">
-                Logo Path<span class="text-danger">*</span>
-              </label>
-              <input
-                class="form-control form-control"
-                type="file"
-                formControlName="vcLogoPath"
-                [ngClass]="getFormControlClass('vcLogoPath')"
-              />
-              <span class="text-danger" *ngIf="isInvalid('vcLogoPath')">
-                {{ getErrorMessage("vcLogoPath") }}
-              </span>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">
                 Nom du compte<span class="text-danger">*</span>
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="text"
                 formControlName="vcAccountName"
                 [ngClass]="getFormControlClass('vcAccountName')"
@@ -669,7 +734,7 @@
               </label>
               <input
                 class="form-control form-control"
-                required=""
+                required
                 type="number"
                 formControlName="vcAccountNumber"
                 [ngClass]="getFormControlClass('vcAccountNumber')"
@@ -688,7 +753,6 @@
                 <!-- Input texte -->
                 <input
                   type="number"
-                  placeholder="Montant"
                   id="nFeesBank"
                   class="form-control"
                   formControlName="nFeesBank"
@@ -764,18 +828,17 @@
             </div>
 
             <div class="col-md-4">
-              <div class="form-check form-switch">
+              <label class="form-label" for="nFees">Frais inclus</label>
+              <div class="form-check">
+                <label class="form-check-label mt-1" for="btFeesIncluded">
+                </label>
                 <input
                   type="checkbox"
                   class="form-check-input me-2"
                   id="btFeesIncluded"
-                  required
                   formControlName="btFeesIncluded"
                   [ngClass]="getFormControlClass('btFeesIncluded')"
                 />
-                <label class="form-check-label mt-1" for="btFeesIncluded">
-                  Frais inclus
-                </label>
               </div>
               <span class="text-danger" *ngIf="isInvalid('btFeesIncluded')">
                 {{ getErrorMessage("btFeesIncluded") }}
@@ -790,21 +853,7 @@
           </button>
 
           <button class="btn btn-primary" type="submit">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              viewBox="0 0 20 20"
-              fill="none"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 7C11 6.44772 10.5523 6 10 6C9.44772 6 9 6.44772 9 7V9H7C6.44772 9 6 9.44771 6 10C6 10.5523 6.44772 11 7 11H9V13C9 13.5523 9.44772 14 10 14C10.5523 14 11 13.5523 11 13V11H13C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9H11V7Z"
-                fill="currentColor"
-              ></path>
-            </svg>
-
+            <i class="fas fa-check"></i>
             {{ isLoading ? "Modification en cours..." : "Modifier" }}
           </button>
         </div>

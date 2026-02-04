@@ -1,4 +1,4 @@
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf, PercentPipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -31,6 +31,7 @@ import { ModalsService } from '../../../services/modals/modals.service';
     NgIf,
     NgClass,
     ɵInternalFormsSharedModule,
+    PercentPipe
   ],
   templateUrl: './facturies.component.html',
   styleUrl: './facturies.component.css',
@@ -67,6 +68,8 @@ export class FacturiesComponent implements OnInit {
   isloadingBloquerDebloquer: boolean = false;
 
   isEditMode: boolean = false;
+  // =================
+  existingLogoPath!: any;
 
   constructor(
     private facturiesService: FacturiesService,
@@ -126,6 +129,42 @@ export class FacturiesComponent implements OnInit {
     this.initForm();
   }
 
+  // Initialisation du formulaire
+  private initForm() {
+    this.factForm = this.fb.group({
+      vcName: ['', Validators.required],
+      vcContact: ['', Validators.required],
+      vcPhoneNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]+$/),
+          Validators.minLength(this.phoneMaxLength),
+          Validators.maxLength(this.phoneMaxLength),
+        ],
+      ],
+      vcEmail: ['', [Validators.required, Validators.email]],
+      vcCity: ['', Validators.required],
+      vcCountry: ['', Validators.required],
+      vcAddress: ['', Validators.required],
+      vcLogoPath: [''],
+      // vcLogoPath: ['', this.isEditMode ? [] : Validators.required],
+      vcAccountName: ['', Validators.required],
+      vcAccountNumber: ['', [Validators.required, Validators.min(0)]],
+
+      // Bank Fees
+      nFeesBank: [null, [Validators.required, Validators.min(0)]],
+      btFeesBankUsePercent: [false],
+
+      // Partner Fees
+      nFees: [null, [Validators.required, Validators.min(0)]],
+      btFeesUsePercent: [false],
+
+      // Fees Included
+      btFeesIncluded: [false],
+    });
+  }
+
   openModal(modalId: string) {
     const isModalOpen = this.modalsService.isModalOpen(modalId);
 
@@ -140,17 +179,47 @@ export class FacturiesComponent implements OnInit {
 
   // A la soumission du formulaire
   onCreateFacturie() {
+    // console.log('Form valid:', this.factForm.valid);
+    // console.log('Errors:', this.factForm.errors);
+
+    // Object.keys(this.factForm.controls).forEach((key) => {
+    //   const control = this.factForm.get(key);
+    //   if (control?.invalid) {
+    //     console.log(key, control.errors);
+    //   }
+    // });
+
+    // if (this.factForm.invalid) return;
+
+    if (!this.isEditMode) {
+      this.factForm.get('vcLogoPath')?.setValidators([Validators.required]);
+      this.factForm.get('vcLogoPath')?.updateValueAndValidity();
+    }
+
     if (this.factForm.invalid) {
       this.factForm.markAllAsTouched();
       return;
     }
 
-    const formData = this.factForm.value;
-    console.log(formData);
+    // const payload = {
+    //   ...this.factForm.value,
+    //   btFeesBankUsePercent: this.factForm.value.btFeesBankUsePercent ? 1 : 0,
+    //   btFeesUsePercent: this.factForm.value.btFeesUsePercent ? 1 : 0,
+    //   btFeesIncluded: this.factForm.value.btFeesIncluded ? 1 : 0,
+    // };
+
+    const payload = {
+      ...this.factForm.value,
+      btFeesIncluded: !!this.factForm.value.btFeesIncluded,
+      btFeesUsePercent: !!this.factForm.value.btFeesUsePercent,
+      btFeesBankUsePercent: !!this.factForm.value.btFeesBankUsePercent,
+    };
+
+    console.log(payload);
 
     this.isLoading = true;
 
-    this.facturiesService.addFacturier(formData).subscribe({
+    this.facturiesService.addFacturier(payload).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
           this.toastr.success(res?.message, '', {
@@ -182,34 +251,15 @@ export class FacturiesComponent implements OnInit {
     });
   }
 
-  onEditFacturie(facturier: FacturierListing) {
+  onEditFacturie(facturier: any) {
     this.isEditMode = true;
     this.openModal('updateFacturieModal');
-    this.selectedFacturier = facturier;
-    this.idFacturier = this.selectedFacturier.id;
+    this.setFormForEdit(facturier);
 
-    console.log('facturie : ', facturier);
-    console.log('Selected facturier : ', this.selectedFacturier);
-    console.log('Selected facturier ID : ', this.idFacturier);
+    console.log(facturier);
+    this.selectedFacturierId = facturier.id;
 
-    this.factForm.patchValue({
-      vcName: this.selectedFacturier.FacturierName,
-      vcContact: this.selectedFacturier.vcContact,
-      vcPhoneNumber: this.selectedFacturier.vcPhoneNumber,
-      vcEmail: this.selectedFacturier.vcEmail,
-      vcCity: this.selectedFacturier.vcCity,
-      vcCountry: this.selectedFacturier.vcCountry,
-      vcAddress: this.selectedFacturier.vcAddress,
-      vcLogoPath: '',
-      vcAccountName: this.selectedFacturier.vcAccountName,
-      vcAccountNumber: this.selectedFacturier.vcAccountNumber,
-      nFeesBank: this.selectedFacturier.nFeesBank,
-      btFeesBankUsePercent: this.selectedFacturier.btFeesBankUsePercent ? 1 : 0,
-      nFees: this.selectedFacturier.nFees,
-      btFeesUsePercent: this.selectedFacturier.btFeesUsePercent ? 1 : 0,
-      btFeesIncluded: this.selectedFacturier.btFeesIncluded ? 1 : 0,
-    });
-
+    this.existingLogoPath = facturier.vcLogoPath;
     this.cd.detectChanges();
   }
 
@@ -221,31 +271,40 @@ export class FacturiesComponent implements OnInit {
       return;
     }
 
-    const formData = { ...this.factForm.value };
-    console.log('formData : ', formData);
-
-    const dataToSend = {
-      vcName: formData.vcName,
-      vcContact: formData.vcContact,
-      vcPhoneNumber: formData.vcPhoneNumber,
-      vcEmail: formData.vcEmail,
-      vcCity: formData.vcCity,
-      vcCountry: formData.vcCountry,
-      vcAddress: formData.vcAddress,
-      vcLogoPath: this.selectedFacturier.vcLogoPath,
-      vcAccountName: formData.vcAccountName,
-      vcAccountNumber: formData.vcAccountNumber,
-      nFeesBank: formData.nFeesBank,
-      btFeesBankUsePercent: formData.btFeesBankUsePercent ? 1 : 0,
-      nFees: formData.nFees,
-      btFeesUsePercent: formData.btFeesUsePercent ? 1 : 0,
-      btFeesIncluded: formData.btFeesIncluded ? 1 : 0,
-      iMerchandID: this.selectedFacturier.id,
+    const payload = {
+      ...this.factForm.value,
+      btFeesIncluded: !!this.factForm.value.btFeesIncluded,
+      btFeesUsePercent: !!this.factForm.value.btFeesUsePercent,
+      btFeesBankUsePercent: !!this.factForm.value.btFeesBankUsePercent,
+      iMerchandID: this.selectedFacturierId,
     };
-    console.log('dataToSend : ', dataToSend);
-    this.isLoading = true;
+    console.log('Payload avant envoi : ', payload);
 
-    this.facturiesService.updateFacturier(dataToSend).subscribe({
+    // const formData = { ...this.factForm.value };
+    // console.log('formData : ', formData);
+
+    // const dataToSend = {
+    //   vcName: formData.vcName,
+    //   vcContact: formData.vcContact,
+    //   vcPhoneNumber: formData.vcPhoneNumber,
+    //   vcEmail: formData.vcEmail,
+    //   vcCity: formData.vcCity,
+    //   vcCountry: formData.vcCountry,
+    //   vcAddress: formData.vcAddress,
+    //   vcLogoPath: this.selectedFacturier.vcLogoPath,
+    //   vcAccountName: formData.vcAccountName,
+    //   vcAccountNumber: formData.vcAccountNumber,
+    //   nFeesBank: formData.nFeesBank,
+    //   btFeesBankUsePercent: formData.btFeesBankUsePercent ? 1 : 0,
+    //   nFees: formData.nFees,
+    //   btFeesUsePercent: formData.btFeesUsePercent ? 1 : 0,
+    //   btFeesIncluded: formData.btFeesIncluded ? 1 : 0,
+    //   iMerchandID: this.selectedFacturier.id,
+    // };
+    // console.log('dataToSend : ', dataToSend);
+    // this.isLoading = true;
+
+    this.facturiesService.updateFacturier(payload).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
           this.toastr.success(res?.message, '', {
@@ -327,35 +386,6 @@ export class FacturiesComponent implements OnInit {
     });
   }
 
-  // Initialisation du formulaire
-  private initForm() {
-    this.factForm = this.fb.group({
-      vcName: ['', Validators.required],
-      vcContact: ['', Validators.required],
-      vcPhoneNumber: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[0-9]+$/),
-          Validators.minLength(this.phoneMaxLength),
-          Validators.maxLength(this.phoneMaxLength),
-        ],
-      ],
-      vcEmail: ['', [Validators.required, Validators.email]],
-      vcCity: ['', Validators.required],
-      vcCountry: ['', Validators.required],
-      vcAddress: ['', Validators.required],
-      vcLogoPath: ['', this.isEditMode ? [] : Validators.required],
-      vcAccountName: ['', Validators.required],
-      vcAccountNumber: ['', [Validators.required, Validators.min(0)]],
-      nFeesBank: ['', [Validators.required, Validators.min(0)]],
-      nFees: ['', [Validators.required, Validators.min(0)]],
-      btFeesBankUsePercent: [this.isCheckedFeedsBankUsePercent ? true : false],
-      btFeesUsePercent: [this.isCheckedFeesUsePercent ? true : false],
-      btFeesIncluded: [this.isCheckedFeesIncluded ? true : false],
-    });
-  }
-
   // Charger les facturies
   private loadFacturies() {
     this.isLoadingFacturies = true;
@@ -382,6 +412,30 @@ export class FacturiesComponent implements OnInit {
         this.isLoadingFacturies = false;
       },
     });
+  }
+
+  private setFormForEdit(facturier: any) {
+    this.factForm.patchValue({
+      vcName: facturier.FacturierName,
+      vcContact: facturier.vcContact,
+      vcPhoneNumber: facturier.vcPhoneNumber,
+      vcEmail: facturier.vcEmail,
+      vcCity: facturier.vcCity,
+      vcCountry: facturier.vcCountry,
+      vcAddress: facturier.vcAddress,
+      vcLogoPath: '', // Laisser vide pour ne pas modifier le logo
+      vcAccountName: facturier.vcAccountName,
+      vcAccountNumber: facturier.vcAccountNumber,
+      nFeesBank: facturier.nFeesBank,
+      nFees: facturier.nFees,
+      btFeesBankUsePercent: facturier.btFeesBankUsePercent,
+      btFeesUsePercent: facturier.btFeesUsePercent,
+      btFeesIncluded: facturier.btFeesIncluded,
+    });
+
+    // Supprimer le required de vcLogoPath si tu es en édition
+    this.factForm.get('vcLogoPath')?.clearValidators();
+    this.factForm.get('vcLogoPath')?.updateValueAndValidity();
   }
 
   // Empêcher la saisie de lettres, caractères spéciaux et espaces
