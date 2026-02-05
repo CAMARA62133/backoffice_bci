@@ -256,6 +256,8 @@ export class UtilisteurComponent implements OnInit {
       vcDescription: raw.vcDescription,
     };
 
+    console.log('payload to send:', payload);
+
     this.isLoading = true;
 
     // Appel a l'API

@@ -12,6 +12,8 @@ export const environment = {
     userLogUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api/user_activity',
     orgLogUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api/org_logs',
     baseUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api',
+    facturierImgUrl:
+      'https://dev-api-bcibankjs.ecash-guinee.com/api/webdav/read-image',
   },
 
   appVersion: {

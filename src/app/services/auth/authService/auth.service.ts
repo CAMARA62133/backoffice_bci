@@ -1,8 +1,7 @@
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Injectable, signal} from '@angular/core';
-import {Observable, catchError, tap, throwError, map, of} from 'rxjs';
-import {environment} from '../../../../environnements/environnement';
-import {UserInterface} from '../../../core/interfaces/user.interface';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
+import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import { environment } from '../../../../environnements/environnement';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +24,6 @@ export class AuthService {
   userInfo = this._userInfo.asReadonly();
   userInfoConfig = this._userInfoConfig.asReadonly();
 
-
   // Injection de HttpClient pour les requêtes HTTP
   constructor(private http: HttpClient) {
     const storedUser = localStorage.getItem('userInfo');
@@ -35,7 +33,9 @@ export class AuthService {
 
   /** Charge le cookie CSRF avant login */
   getCsrfCookie(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/csrf-cookie`, {withCredentials: true});
+    return this.http.get(`${this.baseUrl}/api/csrf-cookie`, {
+      withCredentials: true,
+    });
   }
 
   /** Envoie les identifiants au backend */
@@ -44,27 +44,29 @@ export class AuthService {
     password: string,
     captcha_token: string,
     appName: string,
-    appVersion: string = this.appVersion
+    appVersion: string = this.appVersion,
   ): Observable<any> {
-    return this.http.post(
-      `${this.baseUrl}/api/auth/loginTest`,
-      {email, password, captcha_token, appName, appVersion},
-      {withCredentials: true}
-    ).pipe(
-      tap(() => (this._isAuthenticated = true))
-    );
+    return this.http
+      .post(
+        `${this.baseUrl}/api/auth/loginTest`,
+        { email, password, captcha_token, appName, appVersion },
+        { withCredentials: true },
+      )
+      .pipe(tap(() => (this._isAuthenticated = true)));
   }
 
   /** Récupère l'utilisateur connecté (avec cookie de session) */
-  recupUserInfo(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/api/user`, {
-      withCredentials: true
-    });
-  }
+  // recupUserInfo(): Observable<any> {
+  //   return this.http.get(`${this.baseUrl}/api/user`, {
+  //     withCredentials: true
+  //   });
+  // }
 
   /** Helper lecture cookie JS */
   public getCookieValue(name: string): string {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    const match = document.cookie.match(
+      new RegExp('(^| )' + name + '=([^;]+)'),
+    );
     return match ? decodeURIComponent(match[2]) : '';
   }
 
@@ -89,9 +91,8 @@ export class AuthService {
    */
   getUserRole(): string {
     const user = this.getUser();
-    return user?.vcRoleName || "";
+    return user?.vcRoleName || '';
   }
-
 
   /**
    * Vérifie si le rôle correspond à un ou plusieurs rôles autorisés
@@ -123,10 +124,10 @@ export class AuthService {
     password: string,
     appName: string,
     captcha_token: string,
-    appVersion: string = this.appVersion
+    appVersion: string = this.appVersion,
   ): Observable<any> {
     // captcha_token => a ajouter dans le body si recaptcha est activé
-    const body = {email, password, appName, captcha_token, appVersion};
+    const body = { email, password, appName, captcha_token, appVersion };
     console.log('Login body:', body);
     return this.http.post(`${this.baseUrl}/api/login`, body);
   }
@@ -143,7 +144,7 @@ export class AuthService {
     lienSite: string = environment.lienSite,
     appName: string = this.appName,
   ): Observable<any> {
-    const body = {email, appName, lienSite};
+    const body = { email, appName, lienSite };
     console.log('body:', body);
     return this.http.post(`${this.baseUrl}/api/requestResetPassword`, body);
   }
@@ -178,26 +179,27 @@ export class AuthService {
     console.log(
       '%c[AuthService] :cadenas: isAuthenticated() =>',
       'color: cyan;',
-      this._isAuthenticated
+      this._isAuthenticated,
     );
     return this._isAuthenticated;
   }
 
   //
   checkSession(): Observable<boolean> {
-    return this.http.get(`${this.baseUrl}/api/user`, {withCredentials: true}).pipe(
-      map(user => {
-        // si la requête réussit, l'utilisateur est connecté
-        this._isAuthenticated = true;
-        return true; // <-- retourne un boolean
-      }),
-      catchError(() => {
-        this._isAuthenticated = false;
-        return of(false); // <-- retourne aussi un boolean
-      })
-    );
+    return this.http
+      .get(`${this.baseUrl}/api/user`, { withCredentials: true })
+      .pipe(
+        map((user) => {
+          // si la requête réussit, l'utilisateur est connecté
+          this._isAuthenticated = true;
+          return true; // <-- retourne un boolean
+        }),
+        catchError(() => {
+          this._isAuthenticated = false;
+          return of(false); // <-- retourne aussi un boolean
+        }),
+      );
   }
-
 
   /**
    * Sauvegarde le token dans le localStorage
@@ -264,7 +266,7 @@ export class AuthService {
     email: string,
     phoneNumber: string,
     userId: number,
-    appName: string = this.appName
+    appName: string = this.appName,
   ): Observable<any> {
     // Construction des paramètres
     const params = new HttpParams()
@@ -278,7 +280,10 @@ export class AuthService {
     console.log('Paramètres envoyés:', params.toString());
     // Requête POST avec params au lieu de body
     return this.http
-      .post<any>(`${this.baseUrl}/api/updateUserInfo`, null, {withCredentials: true, params})
+      .post<any>(`${this.baseUrl}/api/updateUserInfo`, null, {
+        withCredentials: true,
+        params,
+      })
       .pipe(catchError(this.handleError));
   }
 
@@ -294,7 +299,7 @@ export class AuthService {
     appName: string = this.appName,
     oldPassword: string,
     newPassword: string,
-    email: string
+    email: string,
   ): Observable<any> {
     const token = localStorage.getItem('token');
     // const headers = new HttpHeaders({
@@ -312,7 +317,7 @@ export class AuthService {
     return this.http.post(
       `${this.baseUrl}/api/resetPasswordAfterLogin`,
       {},
-      {withCredentials: true, params}
+      { withCredentials: true, params },
     );
   }
 
@@ -327,7 +332,7 @@ export class AuthService {
     ancienPassword: string,
     Nouveaupassword: string,
     email: string,
-    appName: string = this.appName
+    appName: string = this.appName,
   ): Observable<any> {
     const token = localStorage.getItem('token'); // Récupérer le token JWT
     // const headers = new HttpHeaders({
@@ -341,12 +346,12 @@ export class AuthService {
       .set('Nouveaupassword', Nouveaupassword)
       .set('email', email);
 
-    console.log('Parametre de modification password : ', {params});
+    console.log('Parametre de modification password : ', { params });
 
     return this.http.post(
       `${this.baseUrl}/api/resetPasswordAfterLogin`,
       {},
-      {withCredentials: true, params}
+      { withCredentials: true, params },
     );
   }
 
@@ -375,7 +380,7 @@ export class AuthService {
 
     // Appel API de déconnexion
     return this.http
-      .post(`${this.baseUrl}/api/logout`, {}, {params, withCredentials: true})
+      .post(`${this.baseUrl}/api/logout`, {}, { params, withCredentials: true })
       .pipe(
         tap(() => {
           // localStorage.clear();
@@ -395,7 +400,7 @@ export class AuthService {
         catchError((error) => {
           console.error('Erreur lors de la déconnexion :', error);
           return throwError(() => error);
-        })
+        }),
       );
   }
 
@@ -413,7 +418,7 @@ export class AuthService {
   restoreFromLocalStorage(): void {
     console.log(
       '%c[AuthService] 🔹 Restauration depuis localStorage...',
-      'color: #999;'
+      'color: #999;',
     );
 
     const storedUser = localStorage.getItem('userInfo');
@@ -425,7 +430,7 @@ export class AuthService {
       console.log(
         '%c[AuthService] 🟢 Utilisateur restauré :',
         'color: #6f6;',
-        parsed
+        parsed,
       );
     } else {
       console.log('%c[AuthService] ⚠️ Aucun userInfo trouvé', 'color: orange;');
@@ -437,7 +442,7 @@ export class AuthService {
       console.log(
         '%c[AuthService] ⚙️ Config restaurée :',
         'color: #0ff;',
-        parsedConfig
+        parsedConfig,
       );
     }
   }
@@ -446,18 +451,18 @@ export class AuthService {
     console.log(
       '%c[AuthService] 🟢 setUserInfo() appelé avec :',
       'color: #6f6;',
-      userInfo
+      userInfo,
     );
     const previous = this._userInfo();
     console.log('%c[AuthService] Ancienne valeur :', 'color: gray;', previous);
 
-    this._userInfo.set({...userInfo}); // clone → force la réactivité
+    this._userInfo.set({ ...userInfo }); // clone → force la réactivité
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
     console.log(
       '%c[AuthService] ✅ Nouvelle valeur signal userInfo :',
       'color: #0f0;',
-      this._userInfo()
+      this._userInfo(),
     );
   }
 
@@ -468,7 +473,7 @@ export class AuthService {
       console.log(
         '%c[AuthService] ↪️ Signal actuel userInfo :',
         'color: #0ff;',
-        user
+        user,
       );
       return user;
     }
@@ -480,14 +485,14 @@ export class AuthService {
       console.log(
         '%c[AuthService] 🔄 Restauré depuis localStorage :',
         'color: #6f6;',
-        parsed
+        parsed,
       );
       return parsed;
     }
 
     console.warn(
       '%c[AuthService] ⚠️ Aucun userInfo disponible',
-      'color: orange;'
+      'color: orange;',
     );
     return null;
   }
@@ -496,33 +501,33 @@ export class AuthService {
     console.log(
       '%c[AuthService] ⚙️ setUserInfoConfig() appelé avec :',
       'color: cyan;',
-      config
+      config,
     );
 
     const previous = this._userInfoConfig();
     console.log('%c[AuthService] Ancienne valeur :', 'color: gray;', previous);
 
-    this._userInfoConfig.set({...config});
+    this._userInfoConfig.set({ ...config });
     localStorage.setItem('userInfoConfig', JSON.stringify(config));
 
     console.log(
       '%c[AuthService] ✅ Nouvelle valeur signal userInfoConfig :',
       'color: #00e;',
-      this._userInfoConfig()
+      this._userInfoConfig(),
     );
   }
 
   getUserInfoConfig(): any {
     console.log(
       '%c[AuthService] 📖 getUserInfoConfig() appelé',
-      'color: #09f;'
+      'color: #09f;',
     );
     const config = this._userInfoConfig();
     if (config) {
       console.log(
         '%c[AuthService] ↪️ Signal actuel config :',
         'color: #0ff;',
-        config
+        config,
       );
       return config;
     }
@@ -534,14 +539,14 @@ export class AuthService {
       console.log(
         '%c[AuthService] 🔄 Restauré depuis localStorage :',
         'color: #6f6;',
-        parsed
+        parsed,
       );
       return parsed;
     }
 
     console.warn(
       '%c[AuthService] ⚠️ Aucun userInfoConfig disponible',
-      'color: orange;'
+      'color: orange;',
     );
     return null;
   }

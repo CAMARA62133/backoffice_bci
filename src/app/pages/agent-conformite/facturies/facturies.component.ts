@@ -1,4 +1,4 @@
-import { NgClass, NgForOf, NgIf, PercentPipe } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -31,7 +31,6 @@ import { ModalsService } from '../../../services/modals/modals.service';
     NgIf,
     NgClass,
     ɵInternalFormsSharedModule,
-    PercentPipe
   ],
   templateUrl: './facturies.component.html',
   styleUrl: './facturies.component.css',
@@ -202,24 +201,93 @@ export class FacturiesComponent implements OnInit {
     }
 
     // const payload = {
-    //   ...this.factForm.value,
-    //   btFeesBankUsePercent: this.factForm.value.btFeesBankUsePercent ? 1 : 0,
-    //   btFeesUsePercent: this.factForm.value.btFeesUsePercent ? 1 : 0,
-    //   btFeesIncluded: this.factForm.value.btFeesIncluded ? 1 : 0,
+    //   logo: this.factForm.value.vcLogoPath,
+    //   vcName: this.factForm.value.vcName,
+    //   vcContact: this.factForm.value.vcContact,
+    //   vcPhoneNumber: this.factForm.value.vcPhoneNumber,
+    //   vcEmail: this.factForm.value.vcEmail,
+    //   vcCity: this.factForm.value.vcCity,
+    //   vcCountry: this.factForm.value.vcCountry,
+    //   vcAddress: this.factForm.value.vcAddress,
+    //   vcAccountName: this.factForm.value.vcAccountName,
+    //   vcAccountNumber: this.factForm.value.vcAccountNumber,
+    //   nFeesBank: this.factForm.value.nFeesBank,
+    //   nFees: this.factForm.value.nFees,
+    //   btFeesIncluded: !!this.factForm.value.btFeesIncluded,
+    //   btFeesUsePercent: !!this.factForm.value.btFeesUsePercent,
+    //   btFeesBankUsePercent: !!this.factForm.value.btFeesBankUsePercent,
     // };
 
-    const payload = {
-      ...this.factForm.value,
-      btFeesIncluded: !!this.factForm.value.btFeesIncluded,
-      btFeesUsePercent: !!this.factForm.value.btFeesUsePercent,
-      btFeesBankUsePercent: !!this.factForm.value.btFeesBankUsePercent,
-    };
+    // console.log(payload);
 
-    console.log(payload);
+    // this.isLoading = true;
+    // this.facturiesService.addFacturier(payload).subscribe({
+    //   next: (res) => {
+    //     if (res?.status && res?.status === 200) {
+    //       this.toastr.success(res?.message, '', {
+    //         positionClass: 'toast-custom-center',
+    //       });
+
+    //       this.loadFacturies();
+    //       this.modalsService.closeAllModals();
+    //     } else {
+    //       this.toastr.error(res?.message, '', {
+    //         positionClass: 'toast-custom-center',
+    //       });
+    //     }
+    //     this.isLoading = false;
+    //     console.log(res);
+    //   },
+
+    //   error: (err) => {
+    //     this.toastr.error('❌ Erreur lors de la création', '', {
+    //       positionClass: 'toast-custom-center',
+    //     });
+
+    //     console.error('❌ Erreur lors de la création :', err?.message);
+
+    //     this.loadFacturies();
+    //     this.isLoading = false;
+    //     this.modalsService.closeAllModals();
+    //   },
+    // });
+
+    // =================================================================================
+    const formData = new FormData();
+    const fileToUpload = this.factForm.get('vcLogoPath')?.value;
+
+    formData.append('logo', fileToUpload);
+    formData.append('vcName', this.factForm.value.vcName);
+    formData.append('vcContact', this.factForm.value.vcContact);
+    formData.append('vcPhoneNumber', this.factForm.value.vcPhoneNumber);
+    formData.append('vcEmail', this.factForm.value.vcEmail);
+    formData.append('vcCity', this.factForm.value.vcCity);
+    formData.append('vcCountry', this.factForm.value.vcCountry);
+    formData.append('vcAddress', this.factForm.value.vcAddress);
+    formData.append('vcAccountName', this.factForm.value.vcAccountName);
+    formData.append('vcAccountNumber', this.factForm.value.vcAccountNumber);
+    formData.append('nFeesBank', this.factForm.value.nFeesBank);
+    formData.append('nFees', this.factForm.value.nFees);
+
+    formData.append(
+      'btFeesIncluded',
+      String(!!this.factForm.value.btFeesIncluded),
+    );
+    formData.append(
+      'btFeesUsePercent',
+      String(!!this.factForm.value.btFeesUsePercent),
+    );
+    formData.append(
+      'btFeesBankUsePercent',
+      String(!!this.factForm.value.btFeesBankUsePercent),
+    );
+
+    formData.forEach((key, value) => {
+      console.log('formData - key:', key, 'value:', value);
+    });
 
     this.isLoading = true;
-
-    this.facturiesService.addFacturier(payload).subscribe({
+    this.facturiesService.addFacturier(formData).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
           this.toastr.success(res?.message, '', {
@@ -242,13 +310,24 @@ export class FacturiesComponent implements OnInit {
           positionClass: 'toast-custom-center',
         });
 
-        console.error('❌ Erreur lors de la création :', err);
+        console.error('❌ Erreur lors de la création :', err?.message);
 
         this.loadFacturies();
         this.isLoading = false;
         this.modalsService.closeAllModals();
       },
     });
+  }
+
+  onFileChange(event: any) {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      this.factForm.patchValue({
+        vcLogoPath: file, // Ici, on injecte l'objet File réel
+      });
+      this.factForm.get('vcLogoPath')?.updateValueAndValidity();
+    }
   }
 
   onEditFacturie(facturier: any) {
@@ -271,40 +350,66 @@ export class FacturiesComponent implements OnInit {
       return;
     }
 
-    const payload = {
-      ...this.factForm.value,
-      btFeesIncluded: !!this.factForm.value.btFeesIncluded,
-      btFeesUsePercent: !!this.factForm.value.btFeesUsePercent,
-      btFeesBankUsePercent: !!this.factForm.value.btFeesBankUsePercent,
-      iMerchandID: this.selectedFacturierId,
-    };
-    console.log('Payload avant envoi : ', payload);
-
-    // const formData = { ...this.factForm.value };
-    // console.log('formData : ', formData);
-
-    // const dataToSend = {
-    //   vcName: formData.vcName,
-    //   vcContact: formData.vcContact,
-    //   vcPhoneNumber: formData.vcPhoneNumber,
-    //   vcEmail: formData.vcEmail,
-    //   vcCity: formData.vcCity,
-    //   vcCountry: formData.vcCountry,
-    //   vcAddress: formData.vcAddress,
-    //   vcLogoPath: this.selectedFacturier.vcLogoPath,
-    //   vcAccountName: formData.vcAccountName,
-    //   vcAccountNumber: formData.vcAccountNumber,
-    //   nFeesBank: formData.nFeesBank,
-    //   btFeesBankUsePercent: formData.btFeesBankUsePercent ? 1 : 0,
-    //   nFees: formData.nFees,
-    //   btFeesUsePercent: formData.btFeesUsePercent ? 1 : 0,
-    //   btFeesIncluded: formData.btFeesIncluded ? 1 : 0,
-    //   iMerchandID: this.selectedFacturier.id,
+    // console.log('on updating:', this.factForm.value);
+    // const payload = {
+    //   logo: this.factForm.value.vcLogoPath,
+    //   vcName: this.factForm.value.vcName,
+    //   vcContact: this.factForm.value.vcContact,
+    //   vcPhoneNumber: this.factForm.value.vcPhoneNumber,
+    //   vcEmail: this.factForm.value.vcEmail,
+    //   vcCity: this.factForm.value.vcCity,
+    //   vcCountry: this.factForm.value.vcCountry,
+    //   vcAddress: this.factForm.value.vcAddress,
+    //   vcAccountName: this.factForm.value.vcAccountName,
+    //   vcAccountNumber: this.factForm.value.vcAccountNumber,
+    //   nFeesBank: this.factForm.value.nFeesBank,
+    //   nFees: this.factForm.value.nFees,
+    //   btFeesUsePercent: !!this.factForm.value.btFeesUsePercent,
+    //   btFeesBankUsePercent: !!this.factForm.value.btFeesBankUsePercent,
+    //   btFeesIncluded: !!this.factForm.value.btFeesIncluded,
+    //   iMerchandID: this.selectedFacturierId,
     // };
-    // console.log('dataToSend : ', dataToSend);
-    // this.isLoading = true;
 
-    this.facturiesService.updateFacturier(payload).subscribe({
+    // console.log('payload to send : ', payload);
+
+    const formData = new FormData();
+    const fileToUpload = this.factForm.get('vcLogoPath')?.value;
+
+    formData.append('logo', fileToUpload);
+    formData.append('vcName', this.factForm.value.vcName);
+    formData.append('vcContact', this.factForm.value.vcContact);
+    formData.append('vcPhoneNumber', this.factForm.value.vcPhoneNumber);
+    formData.append('vcEmail', this.factForm.value.vcEmail);
+    formData.append('vcCity', this.factForm.value.vcCity);
+    formData.append('vcCountry', this.factForm.value.vcCountry);
+    formData.append('vcAddress', this.factForm.value.vcAddress);
+    formData.append('vcAccountName', this.factForm.value.vcAccountName);
+    formData.append('vcAccountNumber', this.factForm.value.vcAccountNumber);
+    formData.append('nFeesBank', this.factForm.value.nFeesBank);
+    formData.append('nFees', this.factForm.value.nFees);
+
+    formData.append(
+      'btFeesIncluded',
+      String(!!this.factForm.value.btFeesIncluded),
+    );
+    formData.append(
+      'btFeesUsePercent',
+      String(!!this.factForm.value.btFeesUsePercent),
+    );
+    formData.append(
+      'btFeesBankUsePercent',
+      String(!!this.factForm.value.btFeesBankUsePercent),
+    );
+
+    formData.append('iMerchandID', String(this.selectedFacturierId));
+
+    formData.forEach((key, value) => {
+      console.log('formData - key:', key, 'value:', value);
+    });
+
+    this.isLoading = true;
+
+    this.facturiesService.updateFacturier(formData).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
           this.toastr.success(res?.message, '', {
@@ -322,9 +427,10 @@ export class FacturiesComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error('❌ Erreur lors de la mise à jour', '', {
+        this.toastr.error('❌ Une erreur interne est survenue', '', {
           positionClass: 'toast-custom-center',
         });
+
         console.log('Erreur update:', err);
         console.log('Erreur update:', err?.message);
         this.isLoading = false;
@@ -394,7 +500,12 @@ export class FacturiesComponent implements OnInit {
         if (res.status === 200) {
           this.facturies = res.data || [];
           console.log({ facturies: this.facturies });
-          // this.isLoadingFacturies = false;
+          // Charger les images pour chaque facturier
+          this.facturies.forEach((f: any) => {
+            if (f.vcLogoPath) {
+              this.loadFacturierImage(f.vcLogoPath, f);
+            }
+          });
         } else {
           this.toastr.error('Erreur lors du chargement des facturies.', '', {
             positionClass: 'toast-custom-center',
@@ -410,6 +521,24 @@ export class FacturiesComponent implements OnInit {
         });
         console.log('err facturies list:', err);
         this.isLoadingFacturies = false;
+      },
+    });
+  }
+
+  // Charger l'image d'un facturier
+  private loadFacturierImage(imageName: string, facturier: any) {
+    if (!facturier.vcLogoPath) {
+      facturier.vcLogoPath = 'assets/defaultFacturierLogo.png';
+      return;
+    }
+    this.facturiesService.getFacturierImage(imageName).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        facturier.vcLogoPath = url; // on stocke l’URL dans l’objet
+      },
+      error: (err) => {
+        console.error('Erreur chargement image', err);
+        facturier.vcLogoPath = 'assets/defaultFacturierLogo.png';
       },
     });
   }

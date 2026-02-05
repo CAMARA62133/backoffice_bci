@@ -51,6 +51,7 @@ export interface FacturierListing extends ContactInfo, FeesConfig {
 export interface FacturierUpdate extends ContactInfo, FeesConfig {
   // Champs spécifiques à la mise à jour
   vcName: string;
+  logo: string;
   btFeesBankUsePercent: number;
   btFeesUsePercent: number;
   btFeesIncluded: number;
