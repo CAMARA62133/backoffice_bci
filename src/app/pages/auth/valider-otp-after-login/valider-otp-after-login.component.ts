@@ -47,14 +47,14 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
   ngOnInit() {
     this.loginEmail = localStorage.getItem('loginEmail');
 
-    this.nodeAuthService.login(this.loginEmail).subscribe({
-      next: (res) => {
-        console.log("res appel api node ", res)
-      },
-      error: (err) => {
-        console.log("err appel api node ", err)
-      }
-    })
+    // this.nodeAuthService.login(this.loginEmail).subscribe({
+    //   next: (res) => {
+    //     console.log("res appel api node ", res)
+    //   },
+    //   error: (err) => {
+    //     console.log("err appel api node ", err)
+    //   }
+    // })
   }
 
   moveToNext(event: any, index: number) {

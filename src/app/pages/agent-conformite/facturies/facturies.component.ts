@@ -70,6 +70,9 @@ export class FacturiesComponent implements OnInit {
   // =================
   existingLogoPath!: any;
 
+  // ===================
+  previewUrl: string | null = null;
+
   constructor(
     private facturiesService: FacturiesService,
     private toastr: ToastrService,
@@ -152,11 +155,11 @@ export class FacturiesComponent implements OnInit {
       vcAccountNumber: ['', [Validators.required, Validators.min(0)]],
 
       // Bank Fees
-      nFeesBank: [null, [Validators.required, Validators.min(0)]],
+      nFeesBank: [0, [Validators.required, Validators.min(0)]],
       btFeesBankUsePercent: [false],
 
       // Partner Fees
-      nFees: [null, [Validators.required, Validators.min(0)]],
+      nFees: [0, [Validators.required, Validators.min(0)]],
       btFeesUsePercent: [false],
 
       // Fees Included
@@ -178,18 +181,6 @@ export class FacturiesComponent implements OnInit {
 
   // A la soumission du formulaire
   onCreateFacturie() {
-    // console.log('Form valid:', this.factForm.valid);
-    // console.log('Errors:', this.factForm.errors);
-
-    // Object.keys(this.factForm.controls).forEach((key) => {
-    //   const control = this.factForm.get(key);
-    //   if (control?.invalid) {
-    //     console.log(key, control.errors);
-    //   }
-    // });
-
-    // if (this.factForm.invalid) return;
-
     if (!this.isEditMode) {
       this.factForm.get('vcLogoPath')?.setValidators([Validators.required]);
       this.factForm.get('vcLogoPath')?.updateValueAndValidity();
@@ -199,58 +190,6 @@ export class FacturiesComponent implements OnInit {
       this.factForm.markAllAsTouched();
       return;
     }
-
-    // const payload = {
-    //   logo: this.factForm.value.vcLogoPath,
-    //   vcName: this.factForm.value.vcName,
-    //   vcContact: this.factForm.value.vcContact,
-    //   vcPhoneNumber: this.factForm.value.vcPhoneNumber,
-    //   vcEmail: this.factForm.value.vcEmail,
-    //   vcCity: this.factForm.value.vcCity,
-    //   vcCountry: this.factForm.value.vcCountry,
-    //   vcAddress: this.factForm.value.vcAddress,
-    //   vcAccountName: this.factForm.value.vcAccountName,
-    //   vcAccountNumber: this.factForm.value.vcAccountNumber,
-    //   nFeesBank: this.factForm.value.nFeesBank,
-    //   nFees: this.factForm.value.nFees,
-    //   btFeesIncluded: !!this.factForm.value.btFeesIncluded,
-    //   btFeesUsePercent: !!this.factForm.value.btFeesUsePercent,
-    //   btFeesBankUsePercent: !!this.factForm.value.btFeesBankUsePercent,
-    // };
-
-    // console.log(payload);
-
-    // this.isLoading = true;
-    // this.facturiesService.addFacturier(payload).subscribe({
-    //   next: (res) => {
-    //     if (res?.status && res?.status === 200) {
-    //       this.toastr.success(res?.message, '', {
-    //         positionClass: 'toast-custom-center',
-    //       });
-
-    //       this.loadFacturies();
-    //       this.modalsService.closeAllModals();
-    //     } else {
-    //       this.toastr.error(res?.message, '', {
-    //         positionClass: 'toast-custom-center',
-    //       });
-    //     }
-    //     this.isLoading = false;
-    //     console.log(res);
-    //   },
-
-    //   error: (err) => {
-    //     this.toastr.error('❌ Erreur lors de la création', '', {
-    //       positionClass: 'toast-custom-center',
-    //     });
-
-    //     console.error('❌ Erreur lors de la création :', err?.message);
-
-    //     this.loadFacturies();
-    //     this.isLoading = false;
-    //     this.modalsService.closeAllModals();
-    //   },
-    // });
 
     // =================================================================================
     const formData = new FormData();
@@ -271,20 +210,31 @@ export class FacturiesComponent implements OnInit {
 
     formData.append(
       'btFeesIncluded',
-      String(!!this.factForm.value.btFeesIncluded),
+      this.factForm.value.btFeesIncluded ? '1' : '0',
     );
+
     formData.append(
       'btFeesUsePercent',
-      String(!!this.factForm.value.btFeesUsePercent),
+      this.factForm.value.btFeesUsePercent ? '1' : '0',
     );
+
     formData.append(
       'btFeesBankUsePercent',
-      String(!!this.factForm.value.btFeesBankUsePercent),
+      this.factForm.value.btFeesBankUsePercent ? '1' : '0',
     );
 
     formData.forEach((key, value) => {
       console.log('formData - key:', key, 'value:', value);
     });
+
+    console.log(this.factForm.value.btFeesBankUsePercent ?? false);
+    console.log(typeof this.factForm.value.btFeesBankUsePercent);
+
+    console.log(this.factForm.value.btFeesIncluded ?? false);
+    console.log(typeof this.factForm.value.btFeesIncluded);
+
+    console.log(this.factForm.value.btFeesUsePercent ?? false);
+    console.log(typeof this.factForm.value.btFeesUsePercent);
 
     this.isLoading = true;
     this.facturiesService.addFacturier(formData).subscribe({
@@ -323,9 +273,18 @@ export class FacturiesComponent implements OnInit {
     const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
-      this.factForm.patchValue({
-        vcLogoPath: file, // Ici, on injecte l'objet File réel
-      });
+
+      // 1. Mettre le fichier dans le formulaire pour l'envoi
+      this.factForm.patchValue({ vcLogoPath: file });
+
+      // 2. Créer l'aperçu visuel (Le fameux BLOB)
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+
+      // Ajouter une validation
       this.factForm.get('vcLogoPath')?.updateValueAndValidity();
     }
   }
@@ -334,11 +293,14 @@ export class FacturiesComponent implements OnInit {
     this.isEditMode = true;
     this.openModal('updateFacturieModal');
     this.setFormForEdit(facturier);
+    this.selectedFacturier = facturier;
 
     console.log(facturier);
     this.selectedFacturierId = facturier.id;
 
     this.existingLogoPath = facturier.vcLogoPath;
+    console.log(this.existingLogoPath);
+    console.log(facturier.vcLogoPath);
     this.cd.detectChanges();
   }
 
@@ -350,32 +312,23 @@ export class FacturiesComponent implements OnInit {
       return;
     }
 
-    // console.log('on updating:', this.factForm.value);
-    // const payload = {
-    //   logo: this.factForm.value.vcLogoPath,
-    //   vcName: this.factForm.value.vcName,
-    //   vcContact: this.factForm.value.vcContact,
-    //   vcPhoneNumber: this.factForm.value.vcPhoneNumber,
-    //   vcEmail: this.factForm.value.vcEmail,
-    //   vcCity: this.factForm.value.vcCity,
-    //   vcCountry: this.factForm.value.vcCountry,
-    //   vcAddress: this.factForm.value.vcAddress,
-    //   vcAccountName: this.factForm.value.vcAccountName,
-    //   vcAccountNumber: this.factForm.value.vcAccountNumber,
-    //   nFeesBank: this.factForm.value.nFeesBank,
-    //   nFees: this.factForm.value.nFees,
-    //   btFeesUsePercent: !!this.factForm.value.btFeesUsePercent,
-    //   btFeesBankUsePercent: !!this.factForm.value.btFeesBankUsePercent,
-    //   btFeesIncluded: !!this.factForm.value.btFeesIncluded,
-    //   iMerchandID: this.selectedFacturierId,
-    // };
-
-    // console.log('payload to send : ', payload);
-
     const formData = new FormData();
+
+    // formData.append('logo', fileToUpload ?? this.selectedFacturier.vcLogoPath);
+    // --- GESTION INTELLIGENTE DU LOGO ---
     const fileToUpload = this.factForm.get('vcLogoPath')?.value;
 
-    formData.append('logo', fileToUpload);
+    if (fileToUpload instanceof File) {
+      // CAS 1 : C'est un nouveau fichier (objet File)
+      formData.append('logo', fileToUpload);
+    } else {
+      // CAS 2 : Pas de nouveau fichier sélectionné
+      // On renvoie l'ancien chemin/nom pour que le backend sache quoi garder
+      // 'existingLogoPath' contient l'URL ou le nom que tu as récupéré au chargement
+      formData.append('logo', this.selectedFacturier.vcLogoPath);
+    }
+
+    // Ajout des autres champs
     formData.append('vcName', this.factForm.value.vcName);
     formData.append('vcContact', this.factForm.value.vcContact);
     formData.append('vcPhoneNumber', this.factForm.value.vcPhoneNumber);
@@ -388,23 +341,24 @@ export class FacturiesComponent implements OnInit {
     formData.append('nFeesBank', this.factForm.value.nFeesBank);
     formData.append('nFees', this.factForm.value.nFees);
 
+    // Conversion des booleens en string '1'/'0' pour FormData
     formData.append(
       'btFeesIncluded',
-      String(!!this.factForm.value.btFeesIncluded),
+      this.factForm.value.btFeesIncluded === true ? '1' : '0',
     );
     formData.append(
       'btFeesUsePercent',
-      String(!!this.factForm.value.btFeesUsePercent),
+      this.factForm.value.btFeesUsePercent === true ? '1' : '0',
     );
     formData.append(
       'btFeesBankUsePercent',
-      String(!!this.factForm.value.btFeesBankUsePercent),
+      this.factForm.value.btFeesBankUsePercent === true ? '1' : '0',
     );
 
     formData.append('iMerchandID', String(this.selectedFacturierId));
 
     formData.forEach((key, value) => {
-      console.log('formData - key:', key, 'value:', value);
+      console.log('formData - key:', value, 'value:', key);
     });
 
     this.isLoading = true;
@@ -499,7 +453,7 @@ export class FacturiesComponent implements OnInit {
       next: (res) => {
         if (res.status === 200) {
           this.facturies = res.data || [];
-          console.log({ facturies: this.facturies });
+          console.log('liste des facturiers:', this.facturies);
           // Charger les images pour chaque facturier
           this.facturies.forEach((f: any) => {
             if (f.vcLogoPath) {
@@ -622,5 +576,10 @@ export class FacturiesComponent implements OnInit {
     if (input.value.length + pastedData.length > this.phoneMaxLength) {
       event.preventDefault();
     }
+  }
+
+  onCheckboxChange(name: string) {
+    const value = this.factForm.get(name)?.value;
+    console.log(`${name} changé →`, value);
   }
 }

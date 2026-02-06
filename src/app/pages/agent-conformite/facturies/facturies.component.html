@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="card border-0 shadow-sm" id="tableView">
+    <div class="card border-0 shadow-sm">
       <div class="card-body p-2">
         <div class="table-responsive">
           <table
@@ -91,30 +91,32 @@
                 <td>
                   <span
                     class="badge rounded-pill bg-{{
-                      facturie.btFeesBankUsePercent ? 'primary' : 'warning'
+                      facturie.btFeesBankUsePercent === true
+                        ? 'primary'
+                        : 'warning'
                     }}"
                   >
-                    {{ facturie.btFeesBankUsePercent ? "Oui" : "Non" }}
+                    {{ facturie.btFeesBankUsePercent === true ? "Oui" : "Non" }}
                   </span>
                 </td>
 
                 <td>
                   <span
                     class="badge rounded-pill bg-{{
-                      facturie.btFeesUsePercent ? 'info' : 'warning'
+                      facturie.btFeesUsePercent === true ? 'info' : 'warning'
                     }}"
                   >
-                    {{ facturie.btFeesUsePercent ? "Oui" : "Non" }}
+                    {{ facturie.btFeesUsePercent === true ? "Oui" : "Non" }}
                   </span>
                 </td>
 
                 <td>
                   <span
                     class="badge rounded-pill bg-{{
-                      facturie.btFeesIncluded ? 'dark' : 'warning'
+                      facturie.btFeesIncluded === true ? 'dark' : 'warning'
                     }}"
                   >
-                    {{ facturie.btFeesIncluded ? "Oui" : "Non" }}
+                    {{ facturie.btFeesIncluded === true ? "Oui" : "Non" }}
                   </span>
                 </td>
 
@@ -498,6 +500,7 @@
                   formControlName="btFeesIncluded"
                   [ngClass]="getFormControlClass('btFeesIncluded')"
                 />
+                <!-- (change)="onCheckboxChange('btFeesIncluded')" -->
               </div>
               <span class="text-danger" *ngIf="isInvalid('btFeesIncluded')">
                 {{ getErrorMessage("btFeesIncluded") }}
@@ -568,14 +571,20 @@
         <div class="modal-body">
           <div class="row g-3">
             <!-- Affichage du logo existant lors de la modification -->
-            <div class="col-md-6 text-center" width="100" height="100%">
+            <div class="col-md-6 text-center" width="100%" height="100%">
               <label class="form-label">Logo existant</label>
               <div *ngIf="isEditMode && existingLogoPath">
-                <img
+                <!-- <img
                   [src]="existingLogoPath"
                   alt="Logo existant"
                   class="img-fluid img-thumbnail mb-3"
                   style="max-height: 100px"
+                /> -->
+
+                <img
+                  [src]="previewUrl || existingLogoPath"
+                  class="img-thumbnail"
+                  style="max-height: 150px"
                 />
               </div>
             </div>

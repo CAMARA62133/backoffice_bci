@@ -30,21 +30,21 @@ export class FacturiesService {
 
   // Ajouter un facturies
   addFacturier(payload: any): Observable<any> {
-    console.log('service payload : ', { payload });
+    console.log('service payload create : ', { payload });
     return this.http.post(`${this.nodeApiUrl}/facturiers/add`, payload, {
       withCredentials: true,
     });
   }
 
   updateFacturier(payload: any): Observable<any> {
-    console.log('service payload : ', payload);
+    console.log('service payload update : ', payload.values());
     return this.http.put(`${this.nodeApiUrl}/facturiers/update`, payload, {
       withCredentials: true,
     });
   }
 
   toggleFacturier(payload: FacturierToggleStatus): Observable<any> {
-    console.log('service payload : ', { payload });
+    console.log('service payload toggle : ', { payload });
     return this.http.post(`${this.nodeApiUrl}/facturiers/toggle`, payload, {
       withCredentials: true,
     });
