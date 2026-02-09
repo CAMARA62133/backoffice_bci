@@ -40,58 +40,33 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
+          <!-- Card header -->
           <div class="card-header">
             <h4 class="d-inline-flex d-flex mb-0 card-title">
-              <strong>Progression :</strong>&nbsp;<small
-                class="text-muted ms-2"
-                id="progressText"
-                >Étape 1 sur 7</small
-              >
+              <strong>Progression :</strong>&nbsp;
+              <small class="text-muted ms-2">Étape {{ step }} sur 7 </small>
             </h4>
             <div
               class="d-flex float-md-end justify-content-between align-items-center flex-wrap flex-md-nowrap border-bottom .float-md-end"
             >
+              <!-- Bouttons d'actions -->
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2" role="group">
                   <button
                     class="btn btn-outline-secondary btn-sm"
-                    id="saveDraftBtn"
                     type="button"
                     onclick="saveDraft()"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="1em"
-                      height="1em"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                      class="bi bi-save2-fill"
-                    >
-                      <path
-                        d="M8.5 1.5A1.5 1.5 0 0 1 10 0h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h6c-.314.418-.5.937-.5 1.5v6h-2a.5.5 0 0 0-.354.854l2.5 2.5a.5.5 0 0 0 .708 0l2.5-2.5A.5.5 0 0 0 10.5 7.5h-2z"
-                      ></path>
-                    </svg>
-                    Sauvegarder</button
-                  ><button
+                    <i class="fas fa-save"></i>
+                    Sauvegarder
+                  </button>
+
+                  <button
                     class="btn btn-outline-info btn-sm"
                     type="button"
                     onclick="exportDraft()"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="1em"
-                      height="1em"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                      class="bi bi-download"
-                    >
-                      <path
-                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
-                      ></path>
-                      <path
-                        d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"
-                      ></path>
-                    </svg>
+                    <i class="fas fa-share"></i>
                     Export PDF
                   </button>
                 </div>
@@ -100,44 +75,32 @@
                     class="btn btn-outline-info btn-sm"
                     onclick="previewCompany()"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="1em"
-                      height="1em"
-                      fill="currentColor"
-                      viewBox="0 0 16 16"
-                      class="bi bi-eye-fill"
-                    >
-                      <path
-                        d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"
-                      ></path>
-                      <path
-                        d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"
-                      ></path>
-                    </svg>
-                    Aperçu</button
-                  ><button
+                    <i class="fas fa-eye"></i>
+                    Aperçu
+                  </button>
+                  <button
                     class="btn btn-outline-warning btn-sm"
                     onclick="resetForm()"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="1em"
-                      height="1em"
+                      width="16"
+                      height="16"
                       fill="currentColor"
-                      viewBox="0 0 16 16"
                       class="bi bi-arrow-clockwise"
+                      viewBox="0 0 16 16"
                     >
                       <path
                         fill-rule="evenodd"
                         d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
-                      ></path>
+                      />
                       <path
                         d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"
-                      ></path>
+                      />
                     </svg>
                     Réinitialiser
                   </button>
+
                   <div class="dropdown btn-group" role="group">
                     <button
                       class="btn btn-outline-primary btn-sm"
@@ -147,15 +110,15 @@
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
+                        width="16"
+                        height="16"
                         fill="currentColor"
-                        viewBox="0 0 16 16"
                         class="bi bi-three-dots-vertical"
+                        viewBox="0 0 16 16"
                       >
                         <path
                           d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"
-                        ></path>
+                        />
                       </svg>
                     </button>
                     <div class="dropdown-menu">
@@ -177,158 +140,68 @@
                 </div>
               </div>
             </div>
+            <!-- Indicateurs -->
             <span
               class="spinner-border spinner-border-sm text-primary me-2"
-              role="status"
-              id="savingIndicator"
-              aria-hidden="true"
-              style="display: none"
-            ></span
-            ><span
+              *ngIf="saving"
+            ></span>
+
+            <span
               class="text-success me-2"
               id="autoSaveIndicator"
               style="display: none"
-              ><i class="fas fa-check-circle me-1"></i>Sauvegardé !</span
             >
+              <i class="fas fa-check-circle me-1"></i>
+              Sauvegardé !
+            </span>
           </div>
+
+          <!-- Card body start of steps -->
           <div class="card-body">
             <div id="progrss-wizard" class="twitter-bs-wizard">
               <ul
                 class="nav nav-pills nav-justified twitter-bs-wizard-nav step-progress"
                 id="stepProgress"
+                role="tablist"
               >
-                <li class="nav-item">
+                <li
+                  class="nav-item"
+                  role="presentation"
+                  *ngFor="let s of steps"
+                >
                   <a
-                    class="nav-link active step"
-                    data-toggle="tab"
-                    href="#step1"
-                    data-step="1"
+                    class="nav-link"
+                    [class.active]="step === s.id"
+                    [class.disabled]="s.id > maxStepReached"
+                    (click)="goToStep(s.id)"
+                    style="cursor: pointer"
                   >
-                    <div
-                      data-bs-toggle="tooltip"
-                      data-bss-tooltip=""
-                      class="step-icon step-label"
-                      title="Informations légales"
-                    >
-                      <span class="fw-bold step-number">1</span>
+                    <div class="step-icon step-label" [title]="s.label">
+                      <span>{{ s.id }}</span>
                     </div>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link step"
-                    data-toggle="tab"
-                    href="#step2"
-                    data-step="2"
-                  >
-                    <div
-                      data-bs-toggle="tooltip"
-                      data-bss-tooltip=""
-                      class="step-icon step-label"
-                      title="Contacts"
-                    >
-                      <span class="fw-bold step-number">2</span>
-                    </div>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link step"
-                    data-toggle="tab"
-                    href="#step3"
-                    data-step="3"
-                  >
-                    <div
-                      data-bs-toggle="tooltip"
-                      data-bss-tooltip=""
-                      class="step-icon step-label"
-                      title="Documents KYC"
-                    >
-                      <span class="fw-bold step-number">3</span>
-                    </div>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link step"
-                    data-toggle="tab"
-                    href="#step4"
-                    data-step="4"
-                  >
-                    <div
-                      data-bs-toggle="tooltip"
-                      data-bss-tooltip=""
-                      class="step-icon step-label"
-                      title="Modules &amp; Services"
-                    >
-                      <span class="fw-bold step-number">4</span>
-                    </div>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link step"
-                    data-toggle="tab"
-                    href="#step5"
-                    data-step="5"
-                  >
-                    <div
-                      data-bs-toggle="tooltip"
-                      data-bss-tooltip=""
-                      class="step-icon step-label"
-                      title="Workflows"
-                    >
-                      <span class="fw-bold step-number">5</span>
-                    </div>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link step"
-                    data-toggle="tab"
-                    href="#step6"
-                    data-step="6"
-                  >
-                    <div
-                      data-bs-toggle="tooltip"
-                      data-bss-tooltip=""
-                      class="step-icon step-label"
-                      title="Attribution"
-                    >
-                      <span class="fw-bold step-number">6</span>
-                    </div>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a
-                    class="nav-link step"
-                    data-toggle="tab"
-                    href="#step7"
-                    data-step="7"
-                  >
-                    <div
-                      data-bs-toggle="tooltip"
-                      data-bss-tooltip=""
-                      class="step-icon step-label"
-                      title="Validation"
-                    >
-                      <span class="fw-bold step-number">7</span>
-                    </div>
-                  </a>
-                </li>
+
+                <div class="progress-line" style="width: 10%"></div>
               </ul>
-              <div class="mt-4 progress">
-                <div
-                  class="bg-primary progress-bar progress-bar-striped progress-bar-animated"
-                  id="progressBar"
-                ></div>
-              </div>
-              <div class="tab-content twitter-bs-wizard-tab-content">
-                <form id="createCompanyForm" novalidate="">
+
+              <div class="mt-4">
+                <div class="progress" role="progressbar">
                   <div
-                    id="step1"
-                    class="tab-pane step-content active"
-                    role="tabpanel"
+                    class="progress-bar progress-bar-striped"
+                    [style.width.%]="progressPercent"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="tab-content twitter-bs-wizard-tab-content">
+                <form [formGroup]="form">
+                  <!-- Step 1 -->
+                  <div
+                    *ngIf="step === 1"
+                    formGroupName="step1"
+                    class="tab-pane step-content"
+                    [class.active]="step === 1"
                   >
                     <div class="card">
                       <div class="card-header">
@@ -341,17 +214,32 @@
                         <div class="row">
                           <div class="col-md-6">
                             <label class="form-label required" for="companyName"
-                              >Raison sociale complète</label
-                            ><input
+                              >Raison sociale complète
+                            </label>
+                            <input
                               class="form-control form-control"
                               type="text"
-                              id="companyName"
-                              name="companyName"
-                              required=""
+                              required
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.companyName')?.touched &&
+                                  form.get('step1.companyName')?.invalid,
+                                'is-valid':
+                                  form.get('step1.companyName')?.touched &&
+                                  form.get('step1.companyName')?.valid,
+                              }"
+                              formControlName="companyName"
                             />
-                            <div class="invalid-feedback">
-                              <span>Veuillez saisir la raison sociale</span>
+                            <div
+                              class="invalid-feedback d-block"
+                              *ngIf="
+                                step1.get('companyName')?.touched &&
+                                step1.get('companyName')?.invalid
+                              "
+                            >
+                              Veuillez saisir la raison sociale
                             </div>
+
                             <div class="form-text">
                               <span
                                 >Nom complet tel qu'enregistré
@@ -359,19 +247,32 @@
                               >
                             </div>
                           </div>
+
                           <div class="col-md-6">
                             <label class="form-label required" for="companyNIF"
                               >Numéro d'Identification Fiscale (NIF)</label
                             ><input
                               class="form-control form-control"
                               type="text"
-                              id="companyNIF"
-                              maxlength="20"
-                              name="companyNIF"
-                              required=""
+                              required
+                              formControlName="companyNIF"
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.companyNIF')?.touched &&
+                                  form.get('step1.companyNIF')?.invalid,
+                                'is-valid':
+                                  form.get('step1.companyNIF')?.touched &&
+                                  form.get('step1.companyNIF')?.valid,
+                              }"
                             />
-                            <div class="invalid-feedback">
-                              <span>NIF requis et doit être unique</span>
+                            <div
+                              class="invalid-feedback d-block"
+                              *ngIf="
+                                step1.get('companyNIF')?.touched &&
+                                step1.get('companyNIF')?.invalid
+                              "
+                            >
+                              NIF requis (10 à 20 caractères)
                             </div>
                             <div class="form-text">
                               <span
@@ -381,15 +282,23 @@
                             </div>
                           </div>
                         </div>
+
                         <div class="row mt-3">
                           <div class="col-md-4">
                             <label class="form-label required" for="legalForm"
                               >Forme juridique</label
-                            ><select
-                              class="form-select form-select"
-                              id="legalForm"
-                              name="legalForm"
-                              required=""
+                            >
+                            <select
+                              class="form-select"
+                              formControlName="legalForm"
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.legalForm')?.touched &&
+                                  form.get('step1.legalForm')?.invalid,
+                                'is-valid':
+                                  form.get('step1.legalForm')?.touched &&
+                                  form.get('step1.legalForm')?.valid,
+                              }"
                             >
                               <option value="">Sélectionner...</option>
                               <option value="SARL">SARL</option>
@@ -400,11 +309,16 @@
                               <option value="EI">
                                 Entreprise Individuelle
                               </option>
-                              <option value="GIE">
-                                Groupement d'Intérêt Économique
-                              </option>
+                              <option value="GIE">GIE</option>
                             </select>
-                            <div class="invalid-feedback">
+
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                step1.get('legalForm')?.touched &&
+                                step1.get('legalForm')?.invalid
+                              "
+                            >
                               <span
                                 >Veuillez sélectionner la forme juridique</span
                               >
@@ -413,95 +327,131 @@
                           <div class="col-md-4">
                             <label class="form-label required" for="segment"
                               >Segment client</label
-                            ><select
-                              class="form-select form-select"
-                              id="segment"
-                              name="segment"
-                              required=""
+                            >
+                            <select
+                              class="form-select"
+                              formControlName="segment"
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.segment')?.touched &&
+                                  form.get('step1.segment')?.invalid,
+                                'is-valid':
+                                  form.get('step1.segment')?.touched &&
+                                  form.get('step1.segment')?.valid,
+                              }"
                             >
                               <option value="">Sélectionner...</option>
-                              <option value="PME">
-                                PME (Petite et Moyenne Entreprise)
-                              </option>
+                              <option value="PME">PME</option>
                               <option value="GRANDE_ENTREPRISE">
                                 Grande Entreprise
                               </option>
-                              <option value="ONG">ONG / Association</option>
-                              <option value="GROUPE">
-                                Groupe / Multinationale
-                              </option>
+                              <option value="ONG">ONG</option>
+                              <option value="GROUPE">Groupe</option>
                               <option value="STARTUP">Startup</option>
                             </select>
-                            <div class="invalid-feedback">
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                step1.get('segment')?.touched &&
+                                step1.get('segment')?.invalid
+                              "
+                            >
                               <span>Veuillez sélectionner le segment</span>
                             </div>
                           </div>
+
                           <div class="col-md-4">
                             <label class="form-label required" for="sector"
                               >Secteur d'activité</label
-                            ><select
-                              class="form-select form-select"
-                              id="sector"
-                              name="sector"
-                              required=""
+                            >
+                            <select
+                              class="form-select"
+                              formControlName="sector"
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.sector')?.touched &&
+                                  form.get('step1.sector')?.invalid,
+                                'is-valid':
+                                  form.get('step1.sector')?.touched &&
+                                  form.get('step1.sector')?.valid,
+                              }"
                             >
                               <option value="">Sélectionner...</option>
                               <option value="AGRICULTURE">Agriculture</option>
-                              <option value="MINES">Mines et Extraction</option>
-                              <option value="INDUSTRIE">
-                                Industrie Manufacturière
-                              </option>
-                              <option value="CONSTRUCTION">
-                                BTP et Construction
-                              </option>
+                              <option value="MINES">Mines</option>
+                              <option value="INDUSTRIE">Industrie</option>
                               <option value="COMMERCE">Commerce</option>
-                              <option value="TRANSPORT">
-                                Transport et Logistique
-                              </option>
-                              <option value="TELECOMS">
-                                Télécommunications
-                              </option>
-                              <option value="BANQUE">Banque et Finance</option>
                               <option value="SERVICES">Services</option>
-                              <option value="EDUCATION">Éducation</option>
-                              <option value="SANTE">Santé</option>
-                              <option value="AUTRE">Autre</option>
                             </select>
-                            <div class="invalid-feedback">
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                step1.get('sector')?.touched &&
+                                step1.get('sector')?.invalid
+                              "
+                            >
                               <span>Veuillez sélectionner le secteur</span>
                             </div>
                           </div>
                         </div>
+
                         <div class="row mt-3">
                           <div class="col-md-12">
                             <label
                               class="form-label required"
                               for="companyAddress"
-                              >Adresse du siège social</label
-                            ><textarea
-                              class="form-control form-control"
-                              id="companyAddress"
-                              name="companyAddress"
-                              required=""
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.companyAddress')?.touched &&
+                                  form.get('step1.companyAddress')?.invalid,
+                                'is-valid':
+                                  form.get('step1.companyAddress')?.touched &&
+                                  form.get('step1.companyAddress')?.valid,
+                              }"
+                              >Adresse du siège social
+                            </label>
+                            <textarea
+                              class="form-control"
                               rows="2"
+                              formControlName="companyAddress"
                             ></textarea>
-                            <div class="invalid-feedback">
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                step1.get('companyAddress')?.touched &&
+                                step1.get('companyAddress')?.invalid
+                              "
+                            >
                               <span>Veuillez saisir l'adresse complète</span>
                             </div>
                           </div>
                         </div>
+
                         <div class="row mt-3">
                           <div class="col-md-4">
-                            <label class="form-label required" for="city"
-                              >Ville</label
-                            ><input
+                            <label class="form-label required" for="city">
+                              Ville
+                            </label>
+                            <input
                               class="form-control form-control"
                               type="text"
-                              id="city"
-                              name="city"
-                              required=""
+                              formControlName="city"
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.city')?.touched &&
+                                  form.get('step1.city')?.invalid,
+                                'is-valid':
+                                  form.get('step1.city')?.touched &&
+                                  form.get('step1.city')?.valid,
+                              }"
                             />
-                            <div class="invalid-feedback">
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                step1.get('city')?.touched &&
+                                step1.get('city')?.invalid
+                              "
+                            >
                               <span>Veuillez saisir la ville</span>
                             </div>
                           </div>
@@ -511,8 +461,15 @@
                             ><select
                               class="form-select form-select"
                               id="country"
-                              name="country"
-                              required=""
+                              formControlName="country"
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.country')?.touched &&
+                                  form.get('step1.country')?.invalid,
+                                'is-valid':
+                                  form.get('step1.country')?.touched &&
+                                  form.get('step1.country')?.valid,
+                              }"
                             >
                               <option value="">Sélectionner...</option>
                               <option value="GN" selected="">Guinée</option>
@@ -523,7 +480,13 @@
                               <option value="FR">France</option>
                               <option value="OTHER">Autre</option>
                             </select>
-                            <div class="invalid-feedback">
+                            <div
+                              class="invalid-feedback"
+                              *ngIf="
+                                step1.get('country')?.touched &&
+                                step1.get('country')?.invalid
+                              "
+                            >
                               <span>Veuillez sélectionner le pays</span>
                             </div>
                           </div>
@@ -534,8 +497,26 @@
                               class="form-control form-control"
                               type="date"
                               id="creationDate"
-                              name="creationDate"
+                              required
+                              formControlName="creationDate"
+                              [ngClass]="{
+                                'is-invalid':
+                                  form.get('step1.creationDate')?.touched &&
+                                  form.get('step1.creationDate')?.invalid,
+                                'is-valid':
+                                  form.get('step1.creationDate')?.touched &&
+                                  form.get('step1.creationDate')?.valid,
+                              }"
                             />
+                            <div
+                              class="invalid-feedback d-block"
+                              *ngIf="
+                                step1.get('creationDate')?.touched &&
+                                step1.get('creationDate')?.invalid
+                              "
+                            >
+                              Date officielle d'enregistrement
+                            </div>
                             <div class="form-text">
                               <span>Date officielle d'enregistrement</span>
                             </div>
@@ -545,7 +526,13 @@
                       </div>
                     </div>
                   </div>
-                  <div id="step2" class="tab-pane step-content" role="tabpanel">
+
+                  <!-- Step 2 -->
+                  <div
+                    *ngIf="step === 2"
+                    class="tab-pane step-content"
+                    [class.active]="step === 2"
+                  >
                     <div class="card">
                       <div
                         class="card-header d-flex justify-content-between align-items-center"
@@ -555,105 +542,212 @@
                           Représentants Légaux
                         </h5>
                         <button
-                          class="btn btn-outline-primary btn-sm"
+                          class="btn btn-primary btn-sm"
+                          (click)="addContact()"
                           type="button"
-                          onclick="addContact()"
                         >
                           <i class="fas fa-plus-circle me-1"></i>Ajouter un
                           contact
                         </button>
                       </div>
+
                       <div class="card-body">
-                        <div id="contactsList">
-                          <div
-                            class="border rounded p-3 mb-3 contact-item"
-                            data-contact-index="0"
-                          >
+                        <div formGroupName="step2">
+                          <div formArrayName="contacts">
                             <div
-                              class="d-flex justify-content-between align-items-start mb-3"
+                              *ngFor="
+                                let contact of contacts.controls;
+                                let i = index
+                              "
+                              [formGroupName]="i"
+                              class="border rounded p-3 mb-3 contact-item"
+                              [class.removing]="removingIndex === i"
                             >
-                              <h6 class="text-primary mb-0">
-                                Contact Principal (Obligatoire)
-                              </h6>
-                              <span class="badge bg-primary">Principal</span>
-                            </div>
-                            <div class="row">
-                              <div class="col-md-6">
-                                <label class="form-label required"
-                                  >Nom complet</label
-                                ><input
-                                  class="form-control form-control"
-                                  type="text"
-                                  name="contacts[0][fullName]"
-                                  required=""
-                                />
-                                <div class="invalid-feedback">
-                                  <span>Nom requis</span>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <label class="form-label required"
-                                  >Fonction</label
-                                ><select
-                                  class="form-select form-select"
-                                  name="contacts[0][role]"
-                                  required=""
+                              <div
+                                class="d-flex justify-content-between align-items-start mb-3"
+                              >
+                                <h6 class="text-primary mb-0">
+                                  {{
+                                    contact.get("isPrimary")?.value
+                                      ? "Contact Principal (Obligatoire)"
+                                      : "Contact Supplémentaire"
+                                  }}
+                                </h6>
+                                <span
+                                  class="badge bg-primary"
+                                  *ngIf="contact.get('isPrimary')?.value"
                                 >
-                                  <option value="">Sélectionner...</option>
-                                  <option value="PDG">
-                                    Président Directeur Général
-                                  </option>
-                                  <option value="DIRECTEUR">
-                                    Directeur Général
-                                  </option>
-                                  <option value="GERANT">Gérant</option>
-                                  <option value="ADMINISTRATEUR">
-                                    Administrateur
-                                  </option>
-                                  <option value="REPRESENTANT">
-                                    Représentant Légal
-                                  </option>
-                                  <option value="AUTRE">Autre</option>
-                                </select>
-                                <div class="invalid-feedback">
-                                  <span>Fonction requise</span>
+                                  Principal
+                                </span>
+
+                                <button
+                                  *ngIf="!contact.get('isPrimary')?.value"
+                                  type="button"
+                                  class="contact-remove-btn"
+                                  (click)="removeContact(i)"
+                                  title="Supprimer le contact"
+                                >
+                                  <i class="fas fa-times"></i>
+                                </button>
+                              </div>
+                              <!-- Nom et Fonction -->
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <label class="form-label required"
+                                    >Nom complet</label
+                                  >
+                                  <input
+                                    type="text"
+                                    formControlName="fullname"
+                                    class="form-control"
+                                    [ngClass]="{
+                                      'is-invalid':
+                                        contact.get('fullname')?.invalid &&
+                                        contact.get('fullname')?.touched,
+
+                                      'is-valid':
+                                        contact.get('fullname')?.touched &&
+                                        contact.get('fullname')?.valid,
+                                    }"
+                                  />
+                                  <div
+                                    class="invalid-feedback"
+                                    *ngIf="
+                                      contact.get('fullname')?.invalid &&
+                                      contact.get('fullname')?.touched
+                                    "
+                                  >
+                                    Nom requis
+                                  </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                  <label class="form-label required"
+                                    >Fonction</label
+                                  >
+                                  <select
+                                    formControlName="fonction"
+                                    class="form-select"
+                                    [ngClass]="{
+                                      'is-invalid':
+                                        contact.get('fonction')?.invalid &&
+                                        contact.get('fonction')?.touched,
+                                      'is-valid':
+                                        contact.get('fonction')?.touched &&
+                                        contact.get('fonction')?.valid,
+                                    }"
+                                  >
+                                    <option value="">Sélectionner...</option>
+                                    <option value="PDG">
+                                      Président Directeur Général
+                                    </option>
+                                    <option value="DIRECTEUR">
+                                      Directeur Général
+                                    </option>
+                                    <option value="GERANT">Gérant</option>
+                                    <option value="ADMINISTRATEUR">
+                                      Administrateur
+                                    </option>
+                                    <option value="REPRESENTANT">
+                                      Représentant Légal
+                                    </option>
+                                    <option value="AUTRE">Autre</option>
+                                  </select>
+                                  <div
+                                    class="invalid-feedback"
+                                    *ngIf="
+                                      contact.get('fonction')?.invalid &&
+                                      contact.get('fonction')?.touched
+                                    "
+                                  >
+                                    Fonction requise
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Email et Téléphone -->
+                              <div class="row mt-3">
+                                <div class="col-md-6">
+                                  <label class="form-label required"
+                                    >Email</label
+                                  >
+                                  <input
+                                    type="email"
+                                    formControlName="email"
+                                    class="form-control"
+                                    [ngClass]="{
+                                      'is-invalid':
+                                        contact.get('email')?.touched &&
+                                        contact.get('email')?.invalid,
+
+                                      'is-valid':
+                                        contact.get('email')?.touched &&
+                                        contact.get('email')?.valid &&
+                                        !contact.get('email')?.errors?.[
+                                          'email'
+                                        ],
+                                    }"
+                                  />
+                                  <div
+                                    class="invalid-feedback"
+                                    *ngIf="
+                                      contact.get('email')?.invalid &&
+                                      contact.get('email')?.touched
+                                    "
+                                  >
+                                    <span
+                                      *ngIf="
+                                        contact.get('email')?.errors?.[
+                                          'required'
+                                        ]
+                                      "
+                                    >
+                                      Email requis
+                                    </span>
+
+                                    <span
+                                      *ngIf="
+                                        contact.get('email')?.errors?.['email']
+                                      "
+                                    >
+                                      Format d’email invalide
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                  <label class="form-label required"
+                                    >Téléphone</label
+                                  >
+                                  <input
+                                    type="tel"
+                                    formControlName="phone"
+                                    class="form-control"
+                                    [ngClass]="{
+                                      'is-invalid':
+                                        contact.get('phone')?.invalid &&
+                                        contact.get('phone')?.touched,
+
+                                      'is-valid':
+                                        contact.get('phone')?.valid &&
+                                        contact.get('phone')?.touched,
+                                    }"
+                                  />
+                                  <div
+                                    class="invalid-feedback"
+                                    *ngIf="
+                                      contact.get('phone')?.invalid &&
+                                      contact.get('phone')?.touched
+                                    "
+                                  >
+                                    Téléphone requis
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                            <div class="row mt-3">
-                              <div class="col-md-6">
-                                <label class="form-label required">Email</label
-                                ><input
-                                  class="form-control form-control"
-                                  type="email"
-                                  name="contacts[0][email]"
-                                  required=""
-                                />
-                                <div class="invalid-feedback">
-                                  <span>Email valide requis</span>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <label class="form-label required"
-                                  >Téléphone</label
-                                ><input
-                                  class="form-control form-control"
-                                  type="tel"
-                                  name="contacts[0][phone]"
-                                  required=""
-                                />
-                                <div class="invalid-feedback">
-                                  <span>Téléphone requis</span>
-                                </div>
-                              </div>
-                            </div>
-                            <input
-                              type="hidden"
-                              name="contacts[0][isPrimary]"
-                              value="true"
-                            />
                           </div>
                         </div>
+
                         <div class="alert alert-info" role="alert">
                           <i class="fas fa-info-circle me-2"></i
                           ><strong>Information :</strong
@@ -667,7 +761,14 @@
                       </div>
                     </div>
                   </div>
-                  <div id="step3" class="tab-pane step-content" role="tabpanel">
+
+                  <!-- Step 3 -->
+                  <div
+                    *ngIf="step === 3"
+                    formGroupName="step3"
+                    class="tab-pane step-content"
+                    [class.active]="step === 3"
+                  >
                     <div class="card">
                       <div class="card-header">
                         <h5 class="text-primary mb-0">
@@ -891,7 +992,13 @@
                       </div>
                     </div>
                   </div>
-                  <div id="step4" class="tab-pane step-content" role="tabpanel">
+
+                  <div
+                    *ngIf="step === 4"
+                    formGroupName="step4"
+                    class="tab-pane step-content"
+                    [class.active]="step === 4"
+                  >
                     <div class="card">
                       <div class="card-header">
                         <h5 class="mb-0">
@@ -1221,32 +1328,60 @@
                     </div>
                   </div>
                 </form>
+
+                <!-- Bouttons -->
                 <div class="card mt-4">
                   <div class="card-body py-3">
                     <div
                       class="d-flex justify-content-between align-items-center"
                     >
+                      <!-- Precedent -->
                       <button
-                        class="btn btn-outline-secondary disabled"
-                        id="prevBtn"
-                        type="button"
-                        disabled=""
-                        onclick="changeStep(-1)"
+                        class="btn btn-outline-secondary cursor-pointer"
+                        (click)="prev()"
+                        [disabled]="step === 1"
                       >
-                        <i class="me-1 bi bi-chevron-left"></i>Précédent
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-arrow-left-circle-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+                          />
+                        </svg>
+                        Précédent
                       </button>
+
+                      <!-- NB -->
                       <div class="text-center step-info">
                         <small class="text-muted"
                           >Utilisez Tab pour naviguer entre les champs</small
                         >
                       </div>
+
+                      <!-- Suivant -->
                       <button
                         class="btn btn-primary"
-                        id="nextBtn"
-                        type="button"
-                        onclick="changeStep(1)"
+                        (click)="next()"
+                        [disabled]="form.get('step' + step)?.invalid"
                       >
-                        Suivant<i class="ms-1 bi bi-chevron-right"></i>
+                        Suivant
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          class="bi bi-arrow-right-circle-fill"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"
+                          />
+                        </svg>
                       </button>
                     </div>
                   </div>
@@ -1289,6 +1424,7 @@
     </div>
   </div>
 </div>
+
 <div class="modal fade" role="dialog" tabindex="-1" id="confirmationModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
