@@ -1,22 +1,35 @@
-import {CommonModule} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
-import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../services/auth/authService/auth.service';
-import {ModalsService} from '../../services/modals/modals.service';
-import {SharedService} from '../../services/shared/shared.service';
-import {UsersService} from '../../services/users/users.service';
-import {getErrorMessage, getFormControlClass, isInvalid, isValid,} from '../../core/utils/form-helpers';
-import {ActivatedRoute} from '@angular/router';
-import {DatatableService} from '../../services/datatable/datatable.service';
-import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { DataTablesModule } from 'angular-datatables';
+import { Config } from 'datatables.net';
+import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs';
+import {
+  getErrorMessage,
+  getFormControlClass,
+  isInvalid,
+  isValid,
+} from '../../core/utils/form-helpers';
+import { AuthService } from '../../services/auth/authService/auth.service';
+import { DatatableService } from '../../services/datatable/datatable.service';
+import { ModalsService } from '../../services/modals/modals.service';
+import { SharedService } from '../../services/shared/shared.service';
+import { UsersService } from '../../services/users/users.service';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-utilisteur',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableDirective],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTablesModule],
   templateUrl: './utilisteur.component.html',
   styleUrl: './utilisteur.component.css',
 })
@@ -50,6 +63,9 @@ export class UtilisteurComponent implements OnInit {
 
   id: number | null = null;
 
+  dtoptions: Config = {};
+  dttrigger: Subject<any> = new Subject<any>();
+
   constructor(
     private modalsService: ModalsService,
     private fb: FormBuilder,
@@ -58,9 +74,8 @@ export class UtilisteurComponent implements OnInit {
     private sharedService: SharedService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private datatableService: DatatableService
-  ) {
-  }
+    private datatableService: DatatableService,
+  ) {}
 
   // Raccourcis pour le template
   isInvalid = (name: string) => isInvalid(this.userForm, name);
@@ -78,21 +93,21 @@ export class UtilisteurComponent implements OnInit {
     console.log('userInfo : ', this.userInfo);
 
     // Recuperer l'ID dans l'url automatiquement
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe((params) => {
       this.id = params.get('id') ? Number(params.get('id')) : null;
       console.log('ID = ', this.id);
     });
 
     if (dataConfig) {
-      this.userInfoConfig = {...dataConfig};
+      this.userInfoConfig = { ...dataConfig };
       console.log('userInfoConfig : ', this.userInfoConfig);
 
       this.phoneCode = dataConfig.organisation.find(
-        (c: any) => c.vcKey === 'Telephone_Code'
+        (c: any) => c.vcKey === 'Telephone_Code',
       )?.vcValue;
 
       this.phoneFormat = dataConfig.organisation.find(
-        (c: any) => c.vcKey === 'Telephone_Format'
+        (c: any) => c.vcKey === 'Telephone_Format',
       )?.vcValue;
 
       this.phoneMaxLength = this.phoneFormat.length;
@@ -115,6 +130,37 @@ export class UtilisteurComponent implements OnInit {
 
     // Chargement des pays
     this.loadCountries();
+
+    this.dtoptions = {
+      paging: true,
+      pagingType: 'full_numbers',
+      // lengthMenu:[5, 10, 15, 20, 25, 30, 35, 50],
+      // pageLength:8,
+      scrollY: '350',
+
+      language: {
+        processing: 'Traitement en cours...',
+        search: 'Rechercher&nbsp;:',
+        lengthMenu: 'Afficher _MENU_ &eacute;l&eacute;ments',
+        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:
+          "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:
+          '(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)',
+        infoPostFix: '',
+        loadingRecords: 'Chargement en cours...',
+        zeroRecords: 'Aucun &eacute;l&eacute;ment &agrave; afficher',
+        emptyTable: 'Aucune donnée disponible dans le tableau',
+        paginate: {
+          first: 'Premier',
+          previous: 'Pr&eacute;c&eacute;dent',
+          next: 'Suivant',
+          last: 'Dernier',
+        },
+      },
+
+      select: true,
+    };
   }
 
   /**
@@ -126,13 +172,14 @@ export class UtilisteurComponent implements OnInit {
       vcFirstname: ['', Validators.required],
       vcEmail: ['', [Validators.required, Validators.email]],
       iRoleID: [null, Validators.required],
-      vcPhoneNumber: ['',
+      vcPhoneNumber: [
+        '',
         [
           Validators.required,
           Validators.pattern(/^[0-9]+$/),
           Validators.minLength(this.phoneMaxLength),
           Validators.maxLength(this.phoneMaxLength),
-        ]
+        ],
       ],
       modeOtp: ['', Validators.required],
       idPays: [null, Validators.required],
@@ -212,7 +259,6 @@ export class UtilisteurComponent implements OnInit {
     console.log('Selected user : ', user);
     console.log(this.selectedUserId, this.btEnabled);
   }
-
 
   // Ouverture de modal
   openModal(modalId: string) {
@@ -349,12 +395,15 @@ export class UtilisteurComponent implements OnInit {
     this.usersService.getAllUsers().subscribe({
       next: (res) => {
         const allUsers = res?.data;
+        this.dttrigger.next(null);
 
-        console.log("allUser", {allUsers});
-        console.log(this.id, idToFilter)
+        console.log('allUser', { allUsers });
+        console.log(this.id, idToFilter);
 
         // Filtrage si un id est présent
-        this.users = idToFilter ? allUsers.filter((user: any) => +user.id === idToFilter) : allUsers;
+        this.users = idToFilter
+          ? allUsers.filter((user: any) => +user.id === idToFilter)
+          : allUsers;
 
         console.log('API res:', res);
         console.log('Users filtrés:', this.users);
@@ -363,9 +412,15 @@ export class UtilisteurComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.error?.message === 'Unauthorized.' ? "Votre session a expirée." : err.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.toastr.error(
+          err?.error?.message === 'Unauthorized.'
+            ? 'Votre session a expirée.'
+            : err.message,
+          '',
+          {
+            positionClass: 'toast-custom-center',
+          },
+        );
         console.log('api err : ', err);
         this.isLoadingUser = false;
       },
@@ -383,12 +438,20 @@ export class UtilisteurComponent implements OnInit {
         // Liste des IDs à exclure
         // const excludedRoleIds = [7, 10];
 
-        if (this.userInfo?.vcRoleName === 'Admin integrateur' || +this.userInfo?.iRoleID === 10) {
-          this.roles = (res?.data || []).filter((role: any) => +role.id === 16)
+        if (
+          this.userInfo?.vcRoleName === 'Admin integrateur' ||
+          +this.userInfo?.iRoleID === 10
+        ) {
+          this.roles = (res?.data || []).filter((role: any) => +role.id === 16);
         }
 
-        if (this.userInfo?.vcRoleName === 'Admin integrateur banque' || +this?.userInfo?.iRoleID === 16) {
-          this.roles = (res?.data || []).filter((role: any) => +role.id === 7 || +role.id === 3)
+        if (
+          this.userInfo?.vcRoleName === 'Admin integrateur banque' ||
+          +this?.userInfo?.iRoleID === 16
+        ) {
+          this.roles = (res?.data || []).filter(
+            (role: any) => +role.id === 7 || +role.id === 3,
+          );
         }
 
         // if (this.userInfo?.vcRoleName === 'Administrateur Système (IT)' || +this?.userInfo?.iRoleID === 7) {
@@ -426,7 +489,6 @@ export class UtilisteurComponent implements OnInit {
       next: (res) => {
         this.countries = res?.data || [];
         console.log('countries :>', this.roles);
-
 
         console.log('api res : ', res);
         this.isLoading = false;

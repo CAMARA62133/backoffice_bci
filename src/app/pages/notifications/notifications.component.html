@@ -30,10 +30,10 @@
           <div class="card-body">
             <div class="table-responsive">
               <table
-                *ngIf="notifications.length > 0"
-                appDataTable
+                datatable
+                [dtOptions]="dtoptions"
+                [dtTrigger]="dttrigger"
                 class="table table-hover table-striped mb-0"
-                id="rapportsTable"
               >
                 <thead class="table-primary">
                   <tr>
@@ -147,7 +147,6 @@
               </p>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -335,11 +334,7 @@
         </div>
 
         <div class="modal-footer">
-          <button
-            class="btn btn-danger"
-            data-bs-dismiss="modal"
-            type="button"
-          >
+          <button class="btn btn-danger" data-bs-dismiss="modal" type="button">
             Annuler
           </button>
 
@@ -540,11 +535,7 @@
         </div>
 
         <div class="modal-footer">
-          <button
-            class="btn btn-danger"
-            data-bs-dismiss="modal"
-            type="button"
-          >
+          <button class="btn btn-danger" data-bs-dismiss="modal" type="button">
             Annuler
           </button>
 

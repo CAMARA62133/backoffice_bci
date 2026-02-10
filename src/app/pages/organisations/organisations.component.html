@@ -29,97 +29,103 @@
           <div class="card-body">
             <div class="table-responsive">
               <table
-                *ngIf="!isLoadingOrgs && organisations.length > 0"
-                appDataTable
-                class="table table-hover table-striped mb-0 datatable"
+                datatable
+                [dtOptions]="dtoptions"
+                [dtTrigger]="dttrigger"
+                class="table table-hover table-striped mb-0"
                 id="rapportsTable"
               >
                 <thead class="table-primary">
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Organisations</th>
-                  <th scope="col">Contact</th>
-                  <th scope="col">Téléphone</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Ville</th>
-                  <th scope="col">Pays</th>
-                  <th scope="col">Adresse</th>
-                  <th scope="col">Logo</th>
-                  <th scope="col">Business Email</th>
-                  <th scope="col">Statut</th>
-                  <th scope="col">Date Création</th>
-                  <th scope="col" class="text-center">Actions</th>
-                </tr>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Organisations</th>
+                    <th scope="col">Contact</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Ville</th>
+                    <th scope="col">Pays</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">Logo</th>
+                    <th scope="col">Business Email</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Date Création</th>
+                    <th scope="col" class="text-center">Actions</th>
+                  </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let org of organisations; let i = index">
-                  <td>{{ i + 1 }}</td>
-                  <td>{{ org.organisationName }}</td>
-                  <td>{{ org.vcContact }}</td>
-                  <td>{{ org.vcPhoneNumber }}</td>
-                  <td>{{ org.vcEmail }}</td>
-                  <td>{{ org.vcCity }}</td>
-                  <td>{{ org.vcCountry }}</td>
-                  <td>{{ org.vcAddress }}</td>
-                  <td>
-                    <!-- <img
+                  <tr *ngFor="let org of organisations; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ org.organisationName }}</td>
+                    <td>{{ org.vcContact }}</td>
+                    <td>{{ org.vcPhoneNumber }}</td>
+                    <td>{{ org.vcEmail }}</td>
+                    <td>{{ org.vcCity }}</td>
+                    <td>{{ org.vcCountry }}</td>
+                    <td>{{ org.vcAddress }}</td>
+                    <td>
+                      <!-- <img
                       [src]="org.vcLogoPath"
                       [alt]="org.organisationName"
                     /> -->
-                    <img src="logoBCI.svg" alt="" width="50px"/>
-                  </td>
-                  <td>{{ org.vcBusinessEmailDomain }}</td>
-                  <td>
+                      <img src="logoBCI.svg" alt="" width="50px" />
+                    </td>
+                    <td>{{ org.vcBusinessEmailDomain }}</td>
+                    <td>
                       <span
                         class="badge text-bg-{{
                           +org.btEnabled === 1 ? 'success' : 'danger'
                         }} rounded-pill"
-                      >{{
+                        >{{
                           +org.btEnabled === 1 ? "Active" : "Inactive"
                         }}</span
                       >
-                  </td>
-                  <td>{{ org.dtCreated | date : "dd/MM/yyyy" }}</td>
-                  <td>
-                    <div class="d-flex gap-1 justify-content-center">
-                      <a routerLink="/organisations/{{org.id}}/liste-entreprise"
-                         type="button"
-                         class="btn btn-outline-info btn-action btn-sm"
-                         title="Consulter"
-                      >
-                        <i class="fas fa-eye"></i>
-                      </a>
-
-                      @if (currentUser?.vcRoleName === "Admin integrateur banque") {
-                        <button
+                    </td>
+                    <td>{{ org.dtCreated | date: "dd/MM/yyyy" }}</td>
+                    <td>
+                      <div class="d-flex gap-1 justify-content-center">
+                        <a
+                          routerLink="/organisations/{{
+                            org.id
+                          }}/liste-entreprise"
                           type="button"
-                          class="btn btn-outline-warning btn-action btn-sm"
-                          title="Modifier"
-                          (click)="onEdit(org)"
+                          class="btn btn-outline-info btn-action btn-sm"
+                          title="Consulter"
                         >
-                          <i class="fas fa-edit"></i>
-                        </button>
+                          <i class="fas fa-eye"></i>
+                        </a>
 
-                        <button
-                          type="button"
-                          class="btn btn-action btn-sm"
-                          title="{{
-                            +org.btEnabled === 1 ? 'Désactiver' : 'Réactiver'
-                          }}"
-                          (click)="onToggle(org)"
-                        >
-                          <i
-                            class="fas fa-{{
-                              +org.btEnabled === 1 ? 'lock-open' : 'lock'
-                            }} text-{{
-                              +org.btEnabled === 1 ? 'success' : 'danger'
+                        @if (
+                          currentUser?.vcRoleName === "Admin integrateur banque"
+                        ) {
+                          <button
+                            type="button"
+                            class="btn btn-outline-warning btn-action btn-sm"
+                            title="Modifier"
+                            (click)="onEdit(org)"
+                          >
+                            <i class="fas fa-edit"></i>
+                          </button>
+
+                          <button
+                            type="button"
+                            class="btn btn-action btn-sm"
+                            title="{{
+                              +org.btEnabled === 1 ? 'Désactiver' : 'Réactiver'
                             }}"
-                          ></i>
-                        </button>
-                      }
-                    </div>
-                  </td>
-                </tr>
+                            (click)="onToggle(org)"
+                          >
+                            <i
+                              class="fas fa-{{
+                                +org.btEnabled === 1 ? 'lock-open' : 'lock'
+                              }} text-{{
+                                +org.btEnabled === 1 ? 'success' : 'danger'
+                              }}"
+                            ></i>
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -128,7 +134,7 @@
             <div *ngIf="isLoadingOrgs" class="text-center my-3">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden"
-                >Chargement des données en cours...</span
+                  >Chargement des données en cours...</span
                 >
               </div>
               <p class="text-muted">
@@ -230,8 +236,8 @@
               <div class="col-md-6">
                 <label class="form-label">
                   Téléphone<span class="text-danger"
-                >* ({{ phoneMaxLength }} carractères obligatoire)</span
-                >
+                    >* ({{ phoneMaxLength }} carractères obligatoire)</span
+                  >
                 </label>
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1">

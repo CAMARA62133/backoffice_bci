@@ -1,5 +1,10 @@
 import { NgClass, NgForOf, NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,8 +13,12 @@ import {
   Validators,
   ɵInternalFormsSharedModule,
 } from '@angular/forms';
+import { DataTableDirective, DataTablesModule } from 'angular-datatables';
+import 'datatables.net-bs5';
+import { Config } from 'datatables.net-bs5';
+import 'datatables.net-buttons-dt';
 import { ToastrService } from 'ngx-toastr';
-import { DataTableDirective } from '../../../core/directives/data-table/data-table.directive';
+import { Subject } from 'rxjs';
 import { FacturierListing } from '../../../core/interfaces/facturies.interface';
 import { FacturiesService } from '../../../core/node/services/facturies/facturies.service';
 import {
@@ -21,21 +30,26 @@ import {
 import { AuthService } from '../../../services/auth/authService/auth.service';
 import { ModalsService } from '../../../services/modals/modals.service';
 
+import 'datatables.net-select';
+
 @Component({
   selector: 'app-facturies',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    DataTableDirective,
     NgForOf,
     NgIf,
     NgClass,
     ɵInternalFormsSharedModule,
+    DataTablesModule,
   ],
   templateUrl: './facturies.component.html',
   styleUrl: './facturies.component.css',
 })
 export class FacturiesComponent implements OnInit {
+  dtoptions: Config = {};
+  dttrigger: Subject<any> = new Subject<any>();
+
   isLoadingFacturies: boolean = false;
   facturies!: any;
   factForm!: FormGroup;
@@ -129,6 +143,37 @@ export class FacturiesComponent implements OnInit {
 
     this.loadFacturies();
     this.initForm();
+
+    this.dtoptions = {
+      paging: true,
+      pagingType: 'full_numbers',
+      // lengthMenu:[5, 10, 15, 20, 25, 30, 35, 50],
+      // pageLength:8,
+      scrollY: '350',
+
+      language: {
+        processing: 'Traitement en cours...',
+        search: 'Rechercher&nbsp;:',
+        lengthMenu: 'Afficher _MENU_ &eacute;l&eacute;ments',
+        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:
+          "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:
+          '(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)',
+        infoPostFix: '',
+        loadingRecords: 'Chargement en cours...',
+        zeroRecords: 'Aucun &eacute;l&eacute;ment &agrave; afficher',
+        emptyTable: 'Aucune donnée disponible dans le tableau',
+        paginate: {
+          first: 'Premier',
+          previous: 'Pr&eacute;c&eacute;dent',
+          next: 'Suivant',
+          last: 'Dernier',
+        },
+      },
+
+      select: true,
+    };
   }
 
   // Initialisation du formulaire
@@ -371,6 +416,7 @@ export class FacturiesComponent implements OnInit {
           });
           this.loadFacturies();
           this.modalsService.closeAllModals();
+          this.dttrigger.next(null);
         } else {
           this.toastr.error(res?.message, '', {
             positionClass: 'toast-custom-center',
@@ -389,6 +435,7 @@ export class FacturiesComponent implements OnInit {
         console.log('Erreur update:', err?.message);
         this.isLoading = false;
         this.modalsService.closeAllModals();
+        this.dttrigger.next(null);
       },
     });
   }
@@ -453,6 +500,8 @@ export class FacturiesComponent implements OnInit {
       next: (res) => {
         if (res.status === 200) {
           this.facturies = res.data || [];
+          this.dttrigger.next(null);
+
           console.log('liste des facturiers:', this.facturies);
           // Charger les images pour chaque facturier
           this.facturies.forEach((f: any) => {

@@ -6,26 +6,38 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { DataTablesModule } from 'angular-datatables';
+import { Config } from 'datatables.net';
 import { ToastrService } from 'ngx-toastr';
-import { ConfigNotificationService } from '../../services/configNotification/config-notification.service';
-import { ModalsService } from '../../services/modals/modals.service';
-import { PaginationsService } from '../../services/paginations/paginations.service';
-import { RolesService } from '../../services/auth/roles/roles.service';
+import { Subject } from 'rxjs';
 import {
   getErrorMessage,
   getFormControlClass,
   isInvalid,
   isValid,
 } from '../../core/utils/form-helpers';
-import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
+import { RolesService } from '../../services/auth/roles/roles.service';
+import { ConfigNotificationService } from '../../services/configNotification/config-notification.service';
+import { ModalsService } from '../../services/modals/modals.service';
+import { PaginationsService } from '../../services/paginations/paginations.service';
 
 @Component({
   selector: 'app-config-user-defaut-notifs',
-  imports: [NgClass, NgFor, NgIf, ReactiveFormsModule, CommonModule, DataTableDirective],
+  imports: [
+    NgClass,
+    NgFor,
+    NgIf,
+    ReactiveFormsModule,
+    CommonModule,
+    DataTablesModule,
+  ],
   templateUrl: './config-user-defaut-notifs.component.html',
   styleUrl: './config-user-defaut-notifs.component.css',
 })
 export class ConfigUserDefautNotifsComponent implements OnInit {
+  dtoptions: Config = {};
+  dttrigger: Subject<any> = new Subject<any>();
+
   isLoading: boolean = false;
   isLoadingRole: boolean = false;
   isLoadingDefaultNotif: boolean = false;
@@ -49,7 +61,7 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
     private modalsService: ModalsService,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
-    public paginationService: PaginationsService
+    public paginationService: PaginationsService,
   ) {}
 
   // Raccourcis pour le template
@@ -84,6 +96,37 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
     this.loadRoles();
     this.loadDefaultNotification();
     this.loadNotification();
+
+    this.dtoptions = {
+      paging: true,
+      pagingType: 'full_numbers',
+      // lengthMenu:[5, 10, 15, 20, 25, 30, 35, 50],
+      // pageLength:8,
+      scrollY: '350',
+
+      language: {
+        processing: 'Traitement en cours...',
+        search: 'Rechercher&nbsp;:',
+        lengthMenu: 'Afficher _MENU_ &eacute;l&eacute;ments',
+        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:
+          "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:
+          '(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)',
+        infoPostFix: '',
+        loadingRecords: 'Chargement en cours...',
+        zeroRecords: 'Aucun &eacute;l&eacute;ment &agrave; afficher',
+        emptyTable: 'Aucune donnée disponible dans le tableau',
+        paginate: {
+          first: 'Premier',
+          previous: 'Pr&eacute;c&eacute;dent',
+          next: 'Suivant',
+          last: 'Dernier',
+        },
+      },
+
+      select: true,
+    };
   }
 
   onCreate(): void {
@@ -100,8 +143,8 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
     this.configNotifService.createNotificationDefaut(dataToSend).subscribe({
       next: (res) => {
         this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          positionClass: 'toast-custom-center',
+        });
         console.log('Notification configuer avec success', res);
         this.configDefNotifForm.reset();
         this.modalsService.closeAllModals();
@@ -110,8 +153,8 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
 
       error: (err) => {
         this.toastr.error(err?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          positionClass: 'toast-custom-center',
+        });
         console.log('Erreur configuration notif : ', err);
       },
 
@@ -198,6 +241,7 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
       next: (res) => {
         this.defaultNotifications = res.data;
         console.log('Default Notifi list : ', this.defaultNotifications);
+        this.dttrigger.next(null);
       },
 
       error: (err) => console.log('Erreur chargement default notif :', err),

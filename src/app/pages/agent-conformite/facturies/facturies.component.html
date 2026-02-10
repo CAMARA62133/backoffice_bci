@@ -26,8 +26,10 @@
       <div class="card-body p-2">
         <div class="table-responsive">
           <table
-            appDataTable
-            class="table table-hover mb-0 text-center datatable"
+            datatable
+            [dtOptions]="dtoptions"
+            [dtTrigger]="dttrigger"
+            class="table table-hover mb-0 text-center"
           >
             <thead class="table-primary text-center">
               <tr>

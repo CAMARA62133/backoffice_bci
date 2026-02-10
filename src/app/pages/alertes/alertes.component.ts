@@ -23,11 +23,13 @@ import {
   isValid,
 } from '../../core/utils/form-helpers';
 import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
-
+import { DataTablesModule } from 'angular-datatables';
+import { Config } from 'datatables.net';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-alertes',
-  imports: [CommonModule, ReactiveFormsModule, NgClass, NgIf, DataTableDirective],
+  imports: [CommonModule, ReactiveFormsModule, NgClass, NgIf, DataTablesModule],
   templateUrl: './alertes.component.html',
   styleUrl: './alertes.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -66,7 +68,9 @@ export class AlertesComponent implements OnInit {
   isloadingBloquerDebloquer: boolean = false;
 
     //
-    
+
+      dtoptions: Config = {};
+  dttrigger: Subject<any> = new Subject<any>();
 
   // Constructeur
   constructor(
@@ -110,6 +114,37 @@ export class AlertesComponent implements OnInit {
     this.loadGroupes();
     this.loadModules();
     this.loadNiveauxUrgence();
+
+     this.dtoptions = {
+      paging: true,
+      pagingType: 'full_numbers',
+      // lengthMenu:[5, 10, 15, 20, 25, 30, 35, 50],
+      // pageLength:8,
+      scrollY: '350',
+
+      language: {
+        processing: 'Traitement en cours...',
+        search: 'Rechercher&nbsp;:',
+        lengthMenu: 'Afficher _MENU_ &eacute;l&eacute;ments',
+        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:
+          "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:
+          '(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)',
+        infoPostFix: '',
+        loadingRecords: 'Chargement en cours...',
+        zeroRecords: 'Aucun &eacute;l&eacute;ment &agrave; afficher',
+        emptyTable: 'Aucune donnée disponible dans le tableau',
+        paginate: {
+          first: 'Premier',
+          previous: 'Pr&eacute;c&eacute;dent',
+          next: 'Suivant',
+          last: 'Dernier',
+        },
+      },
+
+      select: true,
+    };
   }
 
   // Ouverture de modal
@@ -317,6 +352,7 @@ export class AlertesComponent implements OnInit {
           this.alertes = res.data || [];
 
           this.isLoadingAlerte = false;
+          this.dttrigger.next(null);
         } else {
           if (res?.status === 401) {
             this.toastr.error("Votre session a expirée", '', {

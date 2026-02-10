@@ -1,4 +1,4 @@
-import {NgClass, NgFor, NgIf} from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
@@ -11,28 +11,33 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {ToastrService} from 'ngx-toastr';
-import {AlerteType} from '../../core/interfaces/alertes';
-import {AlertesService} from '../../services/alertes/alertes.service';
-import {ModalsService} from '../../services/modals/modals.service';
-import {NotificationsService} from '../../services/notifications/notifications.service';
-import {PaginationsService} from '../../services/paginations/paginations.service';
+import { DataTablesModule } from 'angular-datatables';
+import { Config } from 'datatables.net';
+import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs';
+import { AlerteType } from '../../core/interfaces/alertes';
 import {
   getErrorMessage,
   getFormControlClass,
   isInvalid,
   isValid,
 } from '../../core/utils/form-helpers';
-import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
+import { AlertesService } from '../../services/alertes/alertes.service';
+import { ModalsService } from '../../services/modals/modals.service';
+import { NotificationsService } from '../../services/notifications/notifications.service';
+import { PaginationsService } from '../../services/paginations/paginations.service';
 
 @Component({
   selector: 'app-notifications',
-  imports: [ReactiveFormsModule, NgIf, NgClass, NgFor, DataTableDirective],
+  imports: [ReactiveFormsModule, NgIf, NgClass, NgFor, DataTablesModule],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NotificationsComponent implements OnInit {
+  dtoptions: Config = {};
+  dttrigger: Subject<any> = new Subject<any>();
+
   isLoadingNotif: boolean = false;
   isLoadingGroupes: boolean = false;
   isLoadingModules: boolean = false;
@@ -58,8 +63,8 @@ export class NotificationsComponent implements OnInit {
   niveauxUrgence: any[] = [];
 
   typeAlertes: AlerteType[] = [
-    {id: 'URGENT', description: 'URGENT'},
-    {id: 'INFO', description: 'INFO'},
+    { id: 'URGENT', description: 'URGENT' },
+    { id: 'INFO', description: 'INFO' },
   ];
 
   constructor(
@@ -69,9 +74,8 @@ export class NotificationsComponent implements OnInit {
     private notifService: NotificationsService,
     private alertesService: AlertesService,
     private cd: ChangeDetectorRef,
-    public paginationService: PaginationsService
-  ) {
-  }
+    public paginationService: PaginationsService,
+  ) {}
 
   // Raccourcis pour le template
   isInvalid = (name: string) => isInvalid(this.notifForm, name);
@@ -105,6 +109,37 @@ export class NotificationsComponent implements OnInit {
     this.loadNotifications();
     this.loadModules();
     this.loadNiveauxUrgence();
+
+    this.dtoptions = {
+      paging: true,
+      pagingType: 'full_numbers',
+      // lengthMenu:[5, 10, 15, 20, 25, 30, 35, 50],
+      // pageLength:8,
+      scrollY: '350',
+
+      language: {
+        processing: 'Traitement en cours...',
+        search: 'Rechercher&nbsp;:',
+        lengthMenu: 'Afficher _MENU_ &eacute;l&eacute;ments',
+        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:
+          "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:
+          '(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)',
+        infoPostFix: '',
+        loadingRecords: 'Chargement en cours...',
+        zeroRecords: 'Aucun &eacute;l&eacute;ment &agrave; afficher',
+        emptyTable: 'Aucune donnée disponible dans le tableau',
+        paginate: {
+          first: 'Premier',
+          previous: 'Pr&eacute;c&eacute;dent',
+          next: 'Suivant',
+          last: 'Dernier',
+        },
+      },
+
+      select: true,
+    };
   }
 
   // Ouverture de modal
@@ -129,18 +164,22 @@ export class NotificationsComponent implements OnInit {
 
     this.isLoading = true;
 
-    const dataToSend = {...this.notifForm.value};
+    const dataToSend = { ...this.notifForm.value };
     console.log('Data to send : ', dataToSend);
 
     this.notifService.createNotification(dataToSend).subscribe({
       next: (res) => {
-        this.isLoading = false
+        this.isLoading = false;
         this.notifForm.reset();
         this.modalsService.closeAllModals();
 
-        this.toastr.success(res?.message || 'Notification créée avec succès !', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.toastr.success(
+          res?.message || 'Notification créée avec succès !',
+          '',
+          {
+            positionClass: 'toast-custom-center',
+          },
+        );
 
         this.paginationService.reset();
         this.loadNotifications();
@@ -149,11 +188,15 @@ export class NotificationsComponent implements OnInit {
       },
 
       error: (err) => {
-        this.isLoading = false
+        this.isLoading = false;
 
-        this.toastr.error(err?.message || "Erreur lors de la creation de l'alerte", '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.toastr.error(
+          err?.message || "Erreur lors de la creation de l'alerte",
+          '',
+          {
+            positionClass: 'toast-custom-center',
+          },
+        );
         console.log('Erreur create notification : ', err);
       },
     });
@@ -162,7 +205,7 @@ export class NotificationsComponent implements OnInit {
   // A l'edition
   onEdit(notification: any) {
     this.openModal('updateNotificationModal');
-    this.selectedNotification = {...notification};
+    this.selectedNotification = { ...notification };
     this.idNotif = this.selectedNotification.id;
 
     console.log('selected notification : ', this.selectedNotification);
@@ -292,6 +335,7 @@ export class NotificationsComponent implements OnInit {
         this.notifications = res.data || [];
         console.log('Notification liste : ', this.notifications);
         this.isLoadingNotif = false;
+        this.dttrigger.next(null);
       },
 
       error: (err) => {

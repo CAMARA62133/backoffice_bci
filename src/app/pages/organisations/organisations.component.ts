@@ -8,9 +8,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { DataTablesModule } from 'angular-datatables';
+import { Config } from 'datatables.net';
 import { ToastrService } from 'ngx-toastr';
+import { Subject } from 'rxjs';
 import { environment } from '../../../environnements/environnement';
-import { DataTableDirective } from '../../core/directives/data-table/data-table.directive';
 import {
   getErrorMessage,
   getFormControlClass,
@@ -31,7 +33,7 @@ import { OrganisationsService } from '../../services/organisations/organisations
     NgIf,
     NgClass,
     DatePipe,
-    DataTableDirective,
+    DataTablesModule,
     RouterLink,
   ],
   templateUrl: './organisations.component.html',
@@ -80,6 +82,10 @@ export class OrganisationsComponent implements OnInit {
 
   id!: number | null;
   org!: any[];
+
+  //
+  dtoptions: Config = {};
+  dttrigger: Subject<any> = new Subject<any>();
 
   constructor(
     private modalsService: ModalsService,
@@ -144,6 +150,37 @@ export class OrganisationsComponent implements OnInit {
     this.loadRoles();
     this.loadOrganisations();
     this.loadListePays();
+
+    this.dtoptions = {
+      paging: true,
+      pagingType: 'full_numbers',
+      // lengthMenu:[5, 10, 15, 20, 25, 30, 35, 50],
+      // pageLength:8,
+      scrollY: '350',
+
+      language: {
+        processing: 'Traitement en cours...',
+        search: 'Rechercher&nbsp;:',
+        lengthMenu: 'Afficher _MENU_ &eacute;l&eacute;ments',
+        info: "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+        infoEmpty:
+          "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+        infoFiltered:
+          '(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)',
+        infoPostFix: '',
+        loadingRecords: 'Chargement en cours...',
+        zeroRecords: 'Aucun &eacute;l&eacute;ment &agrave; afficher',
+        emptyTable: 'Aucune donnée disponible dans le tableau',
+        paginate: {
+          first: 'Premier',
+          previous: 'Pr&eacute;c&eacute;dent',
+          next: 'Suivant',
+          last: 'Dernier',
+        },
+      },
+
+      select: true,
+    };
   }
 
   // Initialiser le formulaire
@@ -515,6 +552,7 @@ export class OrganisationsComponent implements OnInit {
       next: (res) => {
         this.organisations = res.data;
         this.isLoadingOrgs = false;
+        this.dttrigger.next(null);
         console.log(res);
       },
 

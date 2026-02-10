@@ -27,15 +27,25 @@
               }
             ],
             "styles": [
+              "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css",
               "src/styles.css",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "node_modules/ngx-toastr/toastr.css",
-              "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
+              "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css",
+              "node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css",
+              "node_modules/datatables.net-select-dt/css/select.dataTables.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/datatables.net/js/dataTables.min.js",
-              "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"
+              "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js",
+              "node_modules/jszip/dist/jszip.js",
+              "node_modules/datatables.net-buttons/js/dataTables.buttons.min.js",
+              "node_modules/datatables.net-buttons/js/buttons.colVis.min.js",
+              "node_modules/datatables.net-buttons/js/buttons.flash.min.js",
+              "node_modules/datatables.net-buttons/js/buttons.html5.min.js",
+              "node_modules/datatables.net-buttons/js/buttons.print.min.js",
+              "node_modules/datatables.net-select/js/dataTables.select.min.js"
             ]
           },
           "configurations": {

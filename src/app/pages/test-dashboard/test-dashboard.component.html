@@ -3,16 +3,29 @@
   <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">Tableau de Bord - Entreprises Clientes</h4>
-            <p class="text-secondary mb-sm-0 font-size-13">Vue d'ensemble et indicateurs en temps réel</p>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Tableau de Bord - Entreprises Clientes
+            </h4>
+            <p class="text-secondary mb-sm-0 font-size-13">
+              Vue d'ensemble et indicateurs en temps réel
+            </p>
           </div>
           <div class="page-title-right">
             <ol class="breadcrumb m-0">
-              <li class="breadcrumb-item"><a><span>Entreprises Clientes</span></a></li>
-              <li class="breadcrumb-item"><a href="#"><span>Tableau de Bord</span></a></li>
-            </ol><span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>
+              <li class="breadcrumb-item">
+                <a><span>Entreprises Clientes</span></a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#"><span>Tableau de Bord</span></a>
+              </li>
+            </ol>
+            <span class="badge bg-success ms-2"
+              >🟢 Tous les services opérationnels</span
+            >
           </div>
         </div>
       </div>
@@ -22,14 +35,20 @@
     <div class="row mb-5">
       <div class="col-xl-4">
         <div class="card text-white bg-primary card-h-100">
-          <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+          <div
+            class="card-header bg-transparent d-flex justify-content-between align-items-center"
+          >
             <div class="d-flex align-items-center flex-wrap">
               <h4 class="card-title">Évolution des Entreprises</h4>
             </div>
-            <div class="btn-group btn-group-sm" role="group"><button class="btn btn-primary" type="button" onclick="changeChartPeriod(&#39;7d&#39;)">7j</button><button class="btn btn-primary" type="button" onclick="changeChartPeriod(&#39;30d&#39;)">30j</button><button class="btn btn-primary" type="button" onclick="changeChartPeriod(&#39;90d&#39;)">3 mois</button></div>
+            <div class="btn-group btn-group-sm" role="group">
+              <button class="btn btn-primary" type="button">7j</button
+              ><button class="btn btn-primary" type="button">30j</button
+              ><button class="btn btn-primary" type="button">3 mois</button>
+            </div>
           </div>
           <div class="card-body align-content-center">
-            <div id="evolutionChart" style="height:300px;"></div>
+            <div id="evolutionChart" style="height: 300px"></div>
           </div>
         </div>
       </div>
@@ -42,48 +61,117 @@
           </div>
           <div class="card-body finance-chart-container">
             <div class="row text-center d-xxl-flex justify-content-xxl-center">
-              <div class="col-6 col-md-4 mb-4"><a class="custom-icon-container" href="../entreprises-clientes/liste-entreprises.html" onclick="showSection(&#39;companies&#39;)"><i class="icon ion-ios-list custom-icon-size"></i>
-                <p class="custom-icon-text">Liste des entreprises</p>
-              </a></div>
-              <div class="col-6 col-md-4 mb-4"><a class="custom-icon-container" href="#" onclick="showSection(&#39;users&#39;)"><i class="icon ion-person-stalker custom-icon-size"></i>
-                <p class="custom-icon-text">Gestion utilisateurs</p>
-              </a></div>
-              <div class="col-6 col-md-4 mb-4"><a class="custom-icon-container" href="#" onclick="showSection(&#39;workflows&#39;)"><i class="icon ion-plus-circled custom-icon-size"></i>
-                <p class="custom-icon-text">Workflows &amp; validations</p>
-              </a></div>
-              <div class="col-6 col-md-4 mb-4"><a class="custom-icon-container" onclick="openCreateModal()" href="#"><i class="icon ion-plus-circled custom-icon-size"></i>
-                <p class="custom-icon-text">Nouvelle Entreprise</p>
-              </a></div>
-              <div class="col-6 col-md-4 mb-4 quick-action-card"><a class="custom-icon-container" onclick="openQuickSearch()" href="#"><i class="icon ion-search custom-icon-size"></i>
-                <p class="custom-icon-text">Recherche Entreprise</p>
-              </a></div>
-              <div class="col-6 col-md-4 mb-4"><a class="custom-icon-container" onclick="showComplianceCenter()" href="#"><i class="icon ion-android-checkbox custom-icon-size"></i>
-                <p class="custom-icon-text">Centre Conformité</p>
-              </a></div>
-              <div class="col-6 col-md-4 mb-4"><a class="custom-icon-container" href="#" onclick="generateQuickReport()"><i class="icon ion-android-document custom-icon-size" style="font-size: 41px;"></i>
-                <p class="custom-icon-text">Rapport Express</p>
-              </a></div>
-              <div class="col-6 col-md-4 mb-4"><a class="custom-icon-container" onclick="refreshDashboard()" href="#"><i class="icon ion-ios-refresh custom-icon-size"></i>
-                <p class="custom-icon-text">Actualiser</p>
-              </a></div>
-              <div class="col-6 col-md-4 mb-4"><a class="custom-icon-container" href="#" onclick="exportDashboard()"><i class="icon ion-document-text custom-icon-size"></i>
-                <p class="custom-icon-text">Exporter PDF</p>
-              </a></div>
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  class="custom-icon-container"
+                  href="../entreprises-clientes/liste-entreprises.html"
+                  ><i class="icon ion-ios-list custom-icon-size"></i>
+                  <p class="custom-icon-text">Liste des entreprises</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a class="custom-icon-container" href="#"
+                  ><i class="icon ion-person-stalker custom-icon-size"></i>
+                  <p class="custom-icon-text">Gestion utilisateurs</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a class="custom-icon-container" href="#"
+                  ><i class="icon ion-plus-circled custom-icon-size"></i>
+                  <p class="custom-icon-text">Workflows &amp; validations</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  class="custom-icon-container"
+                  onclick="openCreateModal()"
+                  href="#"
+                  ><i class="icon ion-plus-circled custom-icon-size"></i>
+                  <p class="custom-icon-text">Nouvelle Entreprise</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4 quick-action-card">
+                <a
+                  class="custom-icon-container"
+                  onclick="openQuickSearch()"
+                  href="#"
+                  ><i class="icon ion-search custom-icon-size"></i>
+                  <p class="custom-icon-text">Recherche Entreprise</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  class="custom-icon-container"
+                  onclick="showComplianceCenter()"
+                  href="#"
+                  ><i class="icon ion-android-checkbox custom-icon-size"></i>
+                  <p class="custom-icon-text">Centre Conformité</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  class="custom-icon-container"
+                  href="#"
+                  onclick="generateQuickReport()"
+                  ><i
+                    class="icon ion-android-document custom-icon-size"
+                    style="font-size: 41px"
+                  ></i>
+                  <p class="custom-icon-text">Rapport Express</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  class="custom-icon-container"
+                  onclick="refreshDashboard()"
+                  href="#"
+                  ><i class="icon ion-ios-refresh custom-icon-size"></i>
+                  <p class="custom-icon-text">Actualiser</p>
+                </a>
+              </div>
+              <div class="col-6 col-md-4 mb-4">
+                <a
+                  class="custom-icon-container"
+                  href="#"
+                  onclick="exportDashboard()"
+                  ><i class="icon ion-document-text custom-icon-size"></i>
+                  <p class="custom-icon-text">Exporter PDF</p>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-xl-4">
         <div class="card bg-light card-h-100">
-          <div class="card-header bg-transparent border-white d-flex justify-content-between align-items-center border-bottom">
+          <div
+            class="card-header bg-transparent border-white d-flex justify-content-between align-items-center border-bottom"
+          >
             <div class="d-flex align-items-center flex-wrap">
               <h5 class="me-2 card-title">Répartition par Segment</h5>
-            </div><button class="btn btn-outline-secondary btn-sm" onclick="exporterHistorique()"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z" fill="currentColor"></path>
-          </svg></button>
+            </div>
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              onclick="exporterHistorique()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M3 17C3 16.4477 3.44772 16 4 16H16C16.5523 16 17 16.4477 17 17C17 17.5523 16.5523 18 16 18H4C3.44772 18 3 17.5523 3 17ZM6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289L9 10.5858L9 3C9 2.44772 9.44771 2 10 2C10.5523 2 11 2.44771 11 3L11 10.5858L12.2929 9.29289C12.6834 8.90237 13.3166 8.90237 13.7071 9.29289C14.0976 9.68342 14.0976 10.3166 13.7071 10.7071L10.7071 13.7071C10.5196 13.8946 10.2652 14 10 14C9.73478 14 9.48043 13.8946 9.29289 13.7071L6.29289 10.7071C5.90237 10.3166 5.90237 9.68342 6.29289 9.29289Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </button>
           </div>
           <div class="card-body finance-chart-container">
-            <div id="segmentChart" style="height:300px;"></div>
+            <div id="segmentChart" style="height: 300px"></div>
           </div>
         </div>
       </div>
@@ -93,13 +181,23 @@
         <div class="card border-success border-4 kpi-card border-start">
           <div class="card-body">
             <div class="d-flex align-items-center">
-              <div class="flex-grow-1">
-                <div class="text-uppercase fw-bold text-success mb-1 text-xs"><span> Entreprises Actives </span></div>
-                <div class="fw-bold mb-0 h5" id="kpi-active-companies"><span class="counter" data-target="247">0</span></div>
+              <div class="grow">
+                <div class="text-uppercase fw-bold text-success mb-1 text-xs">
+                  <span> Entreprises Actives </span>
+                </div>
+                <div class="fw-bold mb-0 h5" id="kpi-active-companies">
+                  <span class="counter" data-target="247">0</span>
+                </div>
               </div>
-              <div class="flex-shrink-0"><i class="text-success bi bi-buildings kpi-icon"></i></div>
+              <div class="shrink-0">
+                <i class="text-success bi bi-buildings kpi-icon"></i>
+              </div>
             </div>
-            <div class="mt-2"><small class="text-success"><i class="bi bi-arrow-up"></i> +12% ce mois </small></div>
+            <div class="mt-2">
+              <small class="text-success"
+                ><i class="bi bi-arrow-up"></i> +12% ce mois
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -107,13 +205,23 @@
         <div class="card border-warning border-4 kpi-card border-start">
           <div class="card-body">
             <div class="d-flex align-items-center">
-              <div class="flex-grow-1">
-                <div class="text-uppercase fw-bold text-warning mb-1 text-xs"><span> Alertes en cours </span></div>
-                <div class="fw-bold mb-0 h5" id="kpi-alerts"><span class="counter" data-target="18">0</span></div>
+              <div class="grow">
+                <div class="text-uppercase fw-bold text-warning mb-1 text-xs">
+                  <span> Alertes en cours </span>
+                </div>
+                <div class="fw-bold mb-0 h5" id="kpi-alerts">
+                  <span class="counter" data-target="18">0</span>
+                </div>
               </div>
-              <div class="flex-shrink-0"><i class="text-warning bi bi-exclamation-triangle kpi-icon"></i></div>
+              <div class="shrink-0">
+                <i class="text-warning bi bi-exclamation-triangle kpi-icon"></i>
+              </div>
             </div>
-            <div class="mt-2"><small class="text-danger"><i class="bi bi-arrow-up"></i> 3 critiques </small></div>
+            <div class="mt-2">
+              <small class="text-danger"
+                ><i class="bi bi-arrow-up"></i> 3 critiques
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -121,13 +229,23 @@
         <div class="card border-info border-4 kpi-card border-start">
           <div class="card-body">
             <div class="d-flex align-items-center">
-              <div class="flex-grow-1">
-                <div class="text-uppercase fw-bold text-info mb-1 text-xs"><span> Tâches en attente </span></div>
-                <div class="fw-bold mb-0 h5" id="kpi-tasks"><span class="counter" data-target="42">0</span></div>
+              <div class="grow">
+                <div class="text-uppercase fw-bold text-info mb-1 text-xs">
+                  <span> Tâches en attente </span>
+                </div>
+                <div class="fw-bold mb-0 h5" id="kpi-tasks">
+                  <span class="counter" data-target="42">0</span>
+                </div>
               </div>
-              <div class="flex-shrink-0"><i class="text-info bi bi-list-task kpi-icon"></i></div>
+              <div class="shrink-0">
+                <i class="text-info bi bi-list-task kpi-icon"></i>
+              </div>
             </div>
-            <div class="mt-2"><small class="text-info"><i class="bi bi-clock"></i> 12 prioritaires </small></div>
+            <div class="mt-2">
+              <small class="text-info"
+                ><i class="bi bi-clock"></i> 12 prioritaires
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -135,13 +253,23 @@
         <div class="card border-primary border-4 kpi-card border-start">
           <div class="card-body">
             <div class="d-flex align-items-center">
-              <div class="flex-grow-1">
-                <div class="text-uppercase fw-bold text-primary mb-1 text-xs"><span> Taux conformité </span></div>
-                <div class="fw-bold mb-0 h5" id="kpi-compliance"><span class="counter" data-target="94">0</span><span>% </span></div>
+              <div class="grow">
+                <div class="text-uppercase fw-bold text-primary mb-1 text-xs">
+                  <span> Taux conformité </span>
+                </div>
+                <div class="fw-bold mb-0 h5" id="kpi-compliance">
+                  <span class="counter" data-target="94">0</span><span>% </span>
+                </div>
               </div>
-              <div class="flex-shrink-0"><i class="text-primary bi bi-shield-check kpi-icon"></i></div>
+              <div class="shrink-0">
+                <i class="text-primary bi bi-shield-check kpi-icon"></i>
+              </div>
             </div>
-            <div class="mt-2"><small class="text-success"><i class="bi bi-arrow-up"></i> +2% cette semaine </small></div>
+            <div class="mt-2">
+              <small class="text-success"
+                ><i class="bi bi-arrow-up"></i> +2% cette semaine
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -149,24 +277,47 @@
     <div class="row mb-4">
       <div class="col-xl-6 mb-4">
         <div class="card">
-          <div class="card-header bg-light-subtle d-flex justify-content-between align-items-center">
-            <h6 class="fw-bold m-0">Alertes Prioritaires</h6><button class="btn btn-outline-primary btn-sm" onclick="viewAllAlerts()"> Voir tout </button>
+          <div
+            class="card-header bg-light-subtle d-flex justify-content-between align-items-center"
+          >
+            <h6 class="fw-bold m-0">Alertes Prioritaires</h6>
+            <button
+              class="btn btn-outline-primary btn-sm"
+              onclick="viewAllAlerts()"
+            >
+              Voir tout
+            </button>
           </div>
-          <div class="card-body p-0" style="max-height:300px;overflow-y:auto;">
+          <div
+            class="card-body p-0"
+            style="max-height: 300px; overflow-y: auto"
+          >
             <ul class="list-group list-group-flush" id="alertsList"></ul>
           </div>
         </div>
       </div>
       <div class="col-xl-6 mb-4">
         <div class="card">
-          <div class="card-header bg-light-subtle d-flex justify-content-between align-items-center">
-            <h6 class="fw-bold m-0">Tâches Assignées</h6><button class="btn btn-outline-success btn-sm" onclick="viewAllTasks()"> Gérer </button>
+          <div
+            class="card-header bg-light-subtle d-flex justify-content-between align-items-center"
+          >
+            <h6 class="fw-bold m-0">Tâches Assignées</h6>
+            <button
+              class="btn btn-outline-success btn-sm"
+              onclick="viewAllTasks()"
+            >
+              Gérer
+            </button>
           </div>
-          <div class="card-body p-0" style="max-height:300px;overflow-y:auto;">
+          <div
+            class="card-body p-0"
+            style="max-height: 300px; overflow-y: auto"
+          >
             <ul class="list-group list-group-flush" id="tasksList"></ul>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div><!-- End: Page -->
+</div>
+<!-- End: Page -->

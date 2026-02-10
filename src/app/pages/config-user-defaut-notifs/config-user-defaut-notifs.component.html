@@ -31,9 +31,10 @@
           <div class="card-body">
             <div class="table-responsive">
               <table
-                *ngIf="!isLoading && defaultNotifications.length > 0"
-                appDataTable
-                class="table table-hover table-striped mb-0 datatable"
+               datatable
+            [dtOptions]="dtoptions"
+            [dtTrigger]="dttrigger"
+                class="table table-hover table-striped mb-0"
               >
                 <thead class="table-primary">
                   <tr class="text-center">
