@@ -27,7 +27,7 @@
         <div class="table-responsive">
           <table
             appDataTable
-            class="table table-hover mb-0 datatable text-center"
+            class="table table-hover mb-0 text-center datatable"
           >
             <thead class="table-primary text-center">
               <tr>
@@ -151,7 +151,7 @@
                         facturie.btEnabled ? 'success' : 'danger'
                       }} btn-sm"
                       title="{{
-                        facturie.btEnabled ? 'Activer' : 'Désactiver'
+                        facturie.btEnabled ? 'Désactiver' : 'Activer'
                       }} le facturier"
                       (click)="onToggleFacturier(facturie)"
                     >

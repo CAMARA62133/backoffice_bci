@@ -360,7 +360,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'facturies',
+        path: 'facturiers',
         title: 'BCI - Online | Liste des facturiés',
         component: FacturiesComponent,
         canActivate: [AuthGuard],

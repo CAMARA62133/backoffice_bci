@@ -15,7 +15,7 @@ import {
   styleUrl: './create-entreprise.component.css',
 })
 export class CreateEntrepriseComponent {
-  step = 2;
+  step = 3;
   form: FormGroup;
   saving = false;
   autoSaved = false;
