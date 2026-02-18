@@ -9,6 +9,7 @@ export const environment = {
 
   // Le liens des apis avec node
   nodeApi: {
+    apiUrl:'https://dev-api-bcibankjs.ecash-guinee.com',
     userLogUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api/user_activity',
     orgLogUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api/org_logs',
     baseUrl: 'https://dev-api-bcibankjs.ecash-guinee.com/api',

@@ -1,0 +1,116 @@
+<div class="modal d-block" tabindex="-1" style="background-color: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);">
+  <div class="modal-dialog modal-lg modal-dialog-centered shadow-lg">
+    <div class="modal-content border-0">
+      
+      <div class="modal-header border-0 p-4 text-white shadow-sm" style="background-color: #3b3b7a;">
+        <div class="d-flex align-items-center gap-3">
+          <div class="bg-white rounded p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px;">
+            <ng-container *ngIf="operator?.vcLogoPath; else noLogo">
+              <img [src]="operator?.vcLogoPath" alt="Logo" class="mw-100 mh-100" style="object-fit: contain;">
+            </ng-container>
+            <ng-template #noLogo>
+              <i class="fas fa-building text-dark fs-4"></i>
+            </ng-template>
+          </div>
+          <div>
+            <h2 class="h5 mb-0 fw-bold text-white">{{ operator?.vcName }}</h2>
+            <small class="text-uppercase fw-semibold opacity-75" style="letter-spacing: 1px; font-size: 0.7rem;">Détails de l'opérateur</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white" (click)="onClose()"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        
+        <div class="row g-4 mb-5">
+          <div class="col-md-6">
+            <h3 class="small fw-bold text-muted text-uppercase mb-3 d-flex align-items-center gap-2">
+              <i class="fas fa-address-card text-primary"></i> Contact Principal
+            </h3>
+            <div class="p-3 bg-light border rounded-3 border-light-subtle shadow-sm">
+              <div class="mb-2">
+                <label class="d-block fw-bold text-secondary" style="font-size: 10px; opacity: 0.7;">RESPONSABLE</label>
+                <span class="fw-semibold text-dark small">{{ operator?.vcContact }}</span>
+              </div>
+              <div class="mb-2">
+                <label class="d-block fw-bold text-secondary" style="font-size: 10px; opacity: 0.7;">TÉLÉPHONE</label>
+                <span class="fw-semibold text-dark small">{{ operator?.vcPhoneNumber }}</span>
+              </div>
+              <div>
+                <label class="d-block fw-bold text-secondary" style="font-size: 10px; opacity: 0.7;">EMAIL</label>
+                <span class="fw-semibold text-primary small text-decoration-underline">{{ operator?.vcEmail }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <h3 class="small fw-bold text-muted text-uppercase mb-3 d-flex align-items-center gap-2">
+              <i class="fas fa-map-marker-alt text-primary"></i> Localisation
+            </h3>
+            <div class="p-3 bg-light border rounded-3 border-light-subtle shadow-sm">
+              <div class="mb-2 text-truncate">
+                <label class="d-block fw-bold text-secondary" style="font-size: 10px; opacity: 0.7;">ADRESSE</label>
+                <span class="fw-semibold text-dark small">{{ operator?.vcAddress }}</span>
+              </div>
+              <div>
+                <label class="d-block fw-bold text-secondary" style="font-size: 10px; opacity: 0.7;">VILLE & PAYS</label>
+                <span class="fw-semibold text-dark small">{{ operator?.vcCity }}, {{ operator?.vcCountry }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="small fw-bold text-muted text-uppercase mb-3 d-flex align-items-center gap-2">
+            <i class="fas fa-wallet text-primary"></i> Informations Financières
+          </h3>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="p-3 rounded-3 border h-100" style="background-color: #f8f9ff; border-color: #e0e7ff !important;">
+                <label class="d-block fw-bold text-primary mb-1" style="font-size: 10px;">COMPTE</label>
+                <p class="mb-0 fw-bold text-dark small text-truncate">{{ operator?.vcAccountName }}</p>
+                <small class="font-monospace text-muted">{{ operator?.vcAccountNumber }}</small>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="p-3 rounded-3 border h-100" style="background-color: #f0fdf4; border-color: #dcfce7 !important;">
+                <label class="d-block fw-bold text-success mb-1" style="font-size: 10px;">FRAIS</label>
+                <p class="mb-0 h4 fw-bolder text-success">
+                  {{ operator?.nFees }} <span class="fs-6 fw-bold">{{ operator?.btFeesUsePercent ? '%' : 'GNF' }}</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="p-3 rounded-3 border bg-light h-100 d-flex flex-column justify-content-center gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fas fa-check-circle" [class.text-success]="operator?.btFeesIncluded" [class.text-secondary]="!operator?.btFeesIncluded" style="opacity: 0.5;"></i>
+                  <span class="fw-bold text-uppercase small" [class.text-dark]="operator?.btFeesIncluded" [class.text-muted]="!operator?.btFeesIncluded" style="font-size: 10px;">
+                    Frais inclus
+                  </span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fas fa-power-off" [class.text-success]="operator?.btEnabled" [class.text-danger]="!operator?.btEnabled"></i>
+                  <span class="fw-bold text-uppercase small" style="font-size: 10px;">
+                    {{ operator?.btEnabled ? 'Actif' : 'Inactif' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 pt-4 border-top">
+          <button (click)="onClose()" class="btn btn-link text-decoration-none text-secondary fw-bold text-uppercase px-4" style="font-size: 0.8rem; letter-spacing: 1px;">
+            Fermer
+          </button>
+          <button (click)="onEdit()" class="btn shadow-sm text-white fw-bold text-uppercase px-4 d-flex align-items-center gap-2" style="background-color: #3b3b7a; font-size: 0.8rem; letter-spacing: 1px;">
+            <i class="fas fa-edit small"></i> Modifier
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

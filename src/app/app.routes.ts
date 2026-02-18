@@ -44,6 +44,8 @@ import { OrgListEntrepriseComponent } from './pages/orgs/org-list-entreprise/org
 import { RepportingExportComponent } from './pages/orgs/repporting-export/repporting-export.component';
 import { TransactionsOperationsComponent } from './pages/orgs/transactions-operations/transactions-operations.component';
 import { CreateEntrepriseComponent } from './pages/agent-conformite/create-entreprise/create-entreprise.component';
+import { MobileOperatorComponent } from './pages/agent-conformite/mobile-operator/mobile-operator/mobile-operator.component';
+import { HistoriqueTransactionComponent } from './pages/admin-integrateur/historique-transaction/historique-transaction.component';
 
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
@@ -165,7 +167,13 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
       },
-
+      {
+        path: 'historique-transaction',
+        title: 'BCI - Online | Historique des transactions',
+        component: HistoriqueTransactionComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+      },
       {
         path: 'logs-utilisateurs',
         title: 'BCI - Online | Logs des Utilisateurs',
@@ -363,6 +371,13 @@ export const routes: Routes = [
         path: 'facturiers',
         title: 'BCI - Online | Liste des facturiés',
         component: FacturiesComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Agent Conformité'] },
+      },
+      {
+        path: 'operateurs-mobiles',
+        title: 'BCI - Online | Liste des opérateurs mobiles',
+        component: MobileOperatorComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Agent Conformité'] },
       },

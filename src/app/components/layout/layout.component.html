@@ -804,18 +804,6 @@
                 </a>
               </li>
 
-              <!-- utilisateurs -->
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  routerLink="utilisateurs"
-                  aria-expanded="false"
-                >
-                  <i class="icon ion-person"></i>
-                  <span data-key="t-dashboard">Liste des utilisateurs</span>
-                </a>
-              </li>
-
               <!-- Entreprises et organisations -->
               <li class="nav-item">
                 <a class="nav-link has-arrow">
@@ -887,18 +875,45 @@
 
               <!-- Transactions et Operations -->
               <li class="nav-item">
+                <a class="nav-link has-arrow"
+                  ><i class="icon ion-cash"></i
+                  ><span data-key="t-apps"
+                    >Transactions &amp; opérations</span
+                  ></a
+                >
+                <ul class="sub-menu mm-collapse" aria-expanded="false">
+                  <li>
+                    <a class="text-truncate" routerLink="/historique-transaction"
+                      ><span>Historique de transaction</span></a
+                    >
+                  </li>
+                  <li>
+                    <!-- <a class="text-truncate" href="#"
+                      ><span data-key="t-chat">Transactions sensibles </span></a
+                    >
+                  </li>
+                  <li>
+                    <a href="#"><span>Validation &amp; Rejet manuel</span></a>
+                  </li>
+                  <li>
+                    <a href="#"><span>Historique des opérations</span></a>
+                  </li>
+                  <li>
+                    <a href="#"><span>Télécharg. de justificatifs</span></a>
+                  </li> -->
+                </ul>
+              </li>
+              <!-- utilisateurs -->
+              <li class="nav-item">
                 <a
                   class="nav-link"
-                  routerLink="transactions-operations"
+                  routerLink="utilisateurs"
                   aria-expanded="false"
                 >
-                  <i class="icon ion-android-share"></i>
-                  <span data-key="t-dashboard"
-                    >Transactions &amp; Opérations</span
-                  >
+                  <i class="icon ion-person"></i>
+                  <span data-key="t-dashboard">Liste des utilisateurs</span>
                 </a>
               </li>
-
               <!-- Alertes et Supervisions -->
               <li class="nav-item">
                 <a
@@ -955,7 +970,7 @@
                   aria-expanded="false"
                 >
                   <i class="icon ion-ios-speedometer active"></i>
-                  <span data-key="t-dashboard">Tableau de Bord</span>
+                  <span data-key="t-dashboard">Tableau de Bord </span>
                 </a>
               </li>
 
@@ -995,6 +1010,17 @@
                 >
                   <i class="icon ion-document-text"></i>
                   <span>Gestion des Facturiers</span>
+                </a>
+              </li>
+              <!-- Gestions des facturies -->
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="operateurs-mobiles"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-mobile-alt me-2"></i>
+                  <span>Gestion des Opérateurs</span>
                 </a>
               </li>
             }

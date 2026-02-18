@@ -42,7 +42,8 @@
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/datatables.net-dt/css/dataTables.dataTables.min.css",
               "node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css",
-              "node_modules/datatables.net-select-dt/css/select.dataTables.min.css"
+              "node_modules/datatables.net-select-dt/css/select.dataTables.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -118,5 +119,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "5be68f8a-1698-4085-a68e-0581a9c7e0cd"
   }
 }

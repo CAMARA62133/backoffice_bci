@@ -1,0 +1,363 @@
+<div class="page-content">
+  <div class="container-fluid py-4">
+    <div class="card border-0 shadow-sm mb-4">
+      <!-- Header -->
+      <div
+        class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-2"
+      >
+        <h5 class="text-primary mb-0">
+          <i class="fas fa-building me-2"></i> Historique des transactions
+        </h5>
+      </div>
+
+      <!-- Filtres -->
+      <div class="card-body border-top">
+        <div class="row align-items-end g-3">
+          <div class="col-md-6 col-lg-3">
+            <label class="fw-semibold form-label">Type de paiement</label>
+            <select class="form-select" [(ngModel)]="paymentModeName">
+              <option value="">Tous</option>
+              <option value="Interne">Interne</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Interbancaire domestique">
+                Interbancaire domestique
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <label class="fw-semibold form-label">Date Début</label>
+            <input type="date" class="form-control" [(ngModel)]="dateDebut" />
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <label class="fw-semibold form-label">Date Fin</label>
+            <input type="date" class="form-control" [(ngModel)]="dateFin" />
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex">
+            <button
+              class="btn btn-outline-secondary w-100"
+              (click)="resetFilters()"
+            >
+              <i class="fas fa-undo me-1"></i> Réinitialiser
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 p-2"
+    >
+      <div class="d-flex gap-2">
+        <button
+          class="btn btn-outline-success btn-sm px-3 d-flex align-items-center shadow-sm btn-export"
+          (click)="exportExcel()"
+        >
+          <i class="fas fa-file-excel me-2"></i>
+          <span class="fw-medium">Excel</span>
+        </button>
+
+        <button
+          class="btn btn-outline-danger btn-sm px-3 d-flex align-items-center shadow-sm btn-export"
+          (click)="exportPdf()"
+        >
+          <i class="fas fa-file-pdf me-2"></i>
+          <span class="fw-medium">PDF</span>
+        </button>
+      </div>
+      <div class="search-container">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-white border-end-0 text-muted">
+            <i class="fas fa-search"></i>
+          </span>
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Rechercher une transaction..."
+            class="form-control border-start-0 ps-0 shadow-none search-input"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- Table -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-2 table-responsive">
+        <table class="table table-hover mb-0 text-center">
+          <thead class="table-primary text-center">
+            <tr>
+              <th
+                class="text-nowrap cursor-pointer"
+                (click)="sort('dtCreated')"
+              >
+                Date <i class="fas" [ngClass]="getSortIcon('dtCreated')"></i>
+              </th>
+              <th
+                class="text-nowrap cursor-pointer"
+                (click)="sort('Reference')"
+              >
+                Référence
+                <i class="fas" [ngClass]="getSortIcon('Reference')"></i>
+              </th>
+              <th
+                class="text-nowrap cursor-pointer"
+                (click)="sort('UserFullName')"
+              >
+                Prénom et nom
+                <i class="fas" [ngClass]="getSortIcon('UserFullName')"></i>
+              </th>
+              <th
+                class="text-nowrap cursor-pointer"
+                (click)="sort('PaymentModeName')"
+              >
+                Nom organisation
+                <i class="fas" [ngClass]="getSortIcon('PaymentModeName')"></i>
+              </th>
+              <th
+                class="text-nowrap cursor-pointer"
+                (click)="sort('BenefName')"
+              >
+                Nom bénéficiaire
+                <i class="fas" [ngClass]="getSortIcon('BenefName')"></i>
+              </th>
+              <th
+                class="text-nowrap cursor-pointer"
+                (click)="sort('PaymentModeName')"
+              >
+                Type paiement
+                <i class="fas" [ngClass]="getSortIcon('PaymentModeName')"></i>
+              </th>
+              <th class="text-nowrap cursor-pointer" (click)="sort('Amount')">
+                Montant <i class="fas" [ngClass]="getSortIcon('Amount')"></i>
+              </th>
+              <th
+                class="text-nowrap cursor-pointer"
+                (click)="sort('mAmountConverted')"
+              >
+                Montant converti
+                <i class="fas" [ngClass]="getSortIcon('mAmountConverted')"></i>
+              </th>
+              <th class="text-nowrap cursor-pointer" (click)="sort('nRate')">
+                Taux échange <i class="fas" [ngClass]="getSortIcon('nRate')"></i>
+              </th>
+              <th
+                class="text-nowrap cursor-pointer"
+                (click)="sort('description')"
+              >
+                Description
+                <i class="fas" [ngClass]="getSortIcon('description')"></i>
+              </th>
+              <th class="text-nowrap cursor-pointer" (click)="sort('Status')">
+                Status <i class="fas" [ngClass]="getSortIcon('Status')"></i>
+              </th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="!isLoading">
+            <tr *ngFor="let item of paginedTransaction">
+              <td>{{ item.dtCreated | date: "dd/MM/yyyy HH:mm" }}</td>
+              <td class="fw-bold">{{ item.Reference }}</td>
+              <td>{{ item.UserFullName }}</td>
+              <td>{{ item.OrganisationName }}</td>
+              <td>{{ item.BenefName }}</td>
+              <td>
+                <span class="badge bg-primary text-white">{{
+                  item.PaymentModeName
+                }}</span>
+              </td>
+              <td>
+                {{ formatMontant(item.Amount) }} {{ item.debiteurCurrency }}
+              </td>
+              <td>
+                {{ formatMontant(item.mAmountConverted) }}
+                {{ item.BenefCurrency }}
+              </td>
+              <td>{{ item.nRate }}</td>
+              <td>{{ item.description }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-success': item.Status?.toLowerCase() === 'success',
+                    'bg-danger':
+                      item.Status?.toLowerCase() === 'cancelled' ||
+                      item.Status?.toLowerCase() === 'failed',
+                    'bg-warning text-dark':
+                      item.Status?.toLowerCase() === 'pending',
+                  }"
+                >
+                  {{ getStatusLabel(item.Status!) }}
+                </span>
+              </td>
+              <td>
+                <div class="d-flex gap-1 justify-content-center">
+                  <button
+                    *ngIf="item.Status?.toLowerCase() === 'pending'"
+                    class="btn btn-outline-info btn-sm"
+                    (click)="checkStatus(item.iRequestID!)"
+                  >
+                    <i class="fas fa-sync-alt"></i>
+                  </button>
+                  <button
+                    *ngIf="item.Status?.toLowerCase() === 'success'"
+                    class="btn btn-outline-danger btn-sm"
+                    (click)="openCancelModal(item)"
+                  >
+                    <i class="fas fa-times-circle"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div
+          *ngIf="!isLoading && filteredData.length > pageSize"
+          class="mt-4 d-flex justify-content-between align-items-center p-2 rounded shadow-sm border-top"
+        >
+          <div class="ms-2">
+            <span class="text-muted small fw-medium">
+              Affichage <b class="text-dark">{{ startIndex() }}</b> à
+              <b class="text-dark">{{ endIndex() }}</b> sur
+              <b class="text-dark">{{ filteredData.length }}</b>
+            </span>
+          </div>
+
+          <div class="d-flex gap-1 align-items-center">
+            <button
+              class="btn btn-outline-primary btn-sm rounded-pill px-2 me-1"
+              (click)="goToPage(1)"
+              [disabled]="currentPage === 1"
+              title="Première page"
+            >
+              <i class="fas fa-angle-double-left"></i>
+            </button>
+
+            <button
+              class="btn btn-outline-primary btn-sm rounded-pill px-3 me-2"
+              (click)="previousPage()"
+              [disabled]="currentPage === 1"
+            >
+              <i class="fas fa-chevron-left small"></i>
+            </button>
+
+            <div class="d-flex gap-1">
+              <ng-container *ngFor="let page of getPages()">
+                <button
+                  class="btn btn-sm page-number-btn"
+                  [ngClass]="{
+                    'btn-primary text-white shadow-sm': page === currentPage,
+                    'btn-light border-0 text-primary':
+                      page !== currentPage && page !== '...',
+                    'btn-link text-muted disabled': page === '...',
+                  }"
+                  (click)="onPageClick(page)"
+                  [disabled]="page === '...'"
+                >
+                  {{ page }}
+                </button>
+              </ng-container>
+            </div>
+
+            <button
+              class="btn btn-outline-primary btn-sm rounded-pill px-3 ms-2"
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages()"
+            >
+              <i class="fas fa-chevron-right small"></i>
+            </button>
+
+            <button
+              class="btn btn-outline-primary btn-sm rounded-pill px-2 ms-1"
+              (click)="goToPage(totalPages())"
+              [disabled]="currentPage === totalPages()"
+              title="Dernière page"
+            >
+              <i class="fas fa-angle-double-right"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Loading Spinner -->
+        <div *ngIf="isLoading" class="text-center my-4">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p class="text-muted mt-2">Chargement de l'historique...</p>
+        </div>
+
+        <!-- No data -->
+        <div
+          *ngIf="!isLoading && filteredData.length === 0"
+          class="text-center py-5"
+        >
+          <i class="fas fa-inbox display-1 text-muted mb-3"></i>
+          <h5 class="text-muted">Aucune transaction trouvée</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Annulation -->
+  <div
+    class="modal fade show"
+    *ngIf="selectedTransaction"
+    style="display: block; background: rgba(0, 0, 0, 0.5)"
+    tabindex="-1"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header border-bottom-0 pb-0">
+          <h5 class="modal-title fw-bold text-dark">Confirmation</h5>
+          <button
+            type="button"
+            class="btn-close shadow-none"
+            (click)="closeModal()"
+          ></button>
+        </div>
+
+        <div class="modal-body text-center py-4">
+          <div class="mb-3">
+            <i
+              class="fas fa-exclamation-circle text-danger"
+              style="font-size: 3rem"
+            ></i>
+          </div>
+
+          <h5 class="mb-2">Annuler la transaction ?</h5>
+          <p class="text-muted px-3">
+            Êtes-vous sûr de vouloir annuler la transaction
+            <span class="badge bg-light text-dark border fw-bold">{{
+              selectedTransaction.Reference
+            }}</span>
+            ?
+          </p>
+        </div>
+
+        <div class="modal-footer border-top-0 justify-content-center pb-4">
+          <button
+            type="button"
+            class="btn btn-light btn-lg px-4 fw-medium text-muted"
+            (click)="closeModal()"
+            style="font-size: 0.9rem"
+          >
+            Ignorer
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger btn-lg px-4 fw-medium shadow-sm"
+            (click)="confirmCancel()"
+            [disabled]="isCancelling"
+            style="font-size: 0.9rem"
+          >
+            <span
+              *ngIf="isCancelling"
+              class="spinner-border spinner-border-sm me-2"
+            ></span>
+            {{
+              isCancelling ? "Annulation en cours..." : "Confirmer l'annulation"
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
