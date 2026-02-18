@@ -1,16 +1,14 @@
 <div class="page-content">
   <div class="container-fluid py-4">
     <div class="card border-0 shadow-sm mb-4">
-      <!-- Header -->
       <div
         class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-2"
       >
         <h5 class="text-primary mb-0">
-          <i class="fas fa-building me-2"></i> Historique des transactions
+          <i class="fas fa-history me-2"></i> Historique des transactions
         </h5>
       </div>
 
-      <!-- Filtres -->
       <div class="card-body border-top">
         <div class="row align-items-end g-3">
           <div class="col-md-6 col-lg-3">
@@ -46,28 +44,27 @@
         </div>
       </div>
     </div>
+
     <div
       class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 p-2"
     >
       <div class="d-flex gap-2">
         <button
-          class="btn btn-outline-success btn-sm px-3 d-flex align-items-center shadow-sm btn-export"
+          class="btn btn-outline-success btn-sm px-3 shadow-sm btn-export"
           (click)="exportExcel()"
         >
-          <i class="fas fa-file-excel me-2"></i>
-          <span class="fw-medium">Excel</span>
+          <i class="fas fa-file-excel me-2"></i
+          ><span class="fw-medium">Excel</span>
         </button>
-
         <button
-          class="btn btn-outline-danger btn-sm px-3 d-flex align-items-center shadow-sm btn-export"
+          class="btn btn-outline-danger btn-sm px-3 shadow-sm btn-export"
           (click)="exportPdf()"
         >
-          <i class="fas fa-file-pdf me-2"></i>
-          <span class="fw-medium">PDF</span>
+          <i class="fas fa-file-pdf me-2"></i><span class="fw-medium">PDF</span>
         </button>
       </div>
       <div class="search-container">
-        <div class="input-group input-group-sm">
+        <div class="input-group input-group-sm" style="width: 300px">
           <span class="input-group-text bg-white border-end-0 text-muted">
             <i class="fas fa-search"></i>
           </span>
@@ -80,103 +77,197 @@
         </div>
       </div>
     </div>
-    <!-- Table -->
+
     <div class="card border-0 shadow-sm">
       <div class="card-body p-2 table-responsive">
-        <table class="table table-hover mb-0 text-center">
-          <thead class="table-primary text-center">
+        <table class="table table-hover mb-0 text-center align-middle">
+          <thead class="table-primary">
             <tr>
               <th
                 class="text-nowrap cursor-pointer"
                 (click)="sort('dtCreated')"
               >
-                Date <i class="fas" [ngClass]="getSortIcon('dtCreated')"></i>
+                Date
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon('dtCreated', sortColumn, sortDirection)
+                  "
+                ></i>
               </th>
               <th
                 class="text-nowrap cursor-pointer"
                 (click)="sort('Reference')"
               >
                 Référence
-                <i class="fas" [ngClass]="getSortIcon('Reference')"></i>
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon('Reference', sortColumn, sortDirection)
+                  "
+                ></i>
               </th>
               <th
                 class="text-nowrap cursor-pointer"
                 (click)="sort('UserFullName')"
               >
                 Prénom et nom
-                <i class="fas" [ngClass]="getSortIcon('UserFullName')"></i>
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon('UserFullName', sortColumn, sortDirection)
+                  "
+                ></i>
               </th>
               <th
                 class="text-nowrap cursor-pointer"
-                (click)="sort('PaymentModeName')"
+                (click)="sort('OrganisationName')"
               >
                 Nom organisation
-                <i class="fas" [ngClass]="getSortIcon('PaymentModeName')"></i>
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon(
+                      'OrganisationName',
+                      sortColumn,
+                      sortDirection
+                    )
+                  "
+                ></i>
               </th>
               <th
                 class="text-nowrap cursor-pointer"
                 (click)="sort('BenefName')"
               >
                 Nom bénéficiaire
-                <i class="fas" [ngClass]="getSortIcon('BenefName')"></i>
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon('BenefName', sortColumn, sortDirection)
+                  "
+                ></i>
               </th>
               <th
                 class="text-nowrap cursor-pointer"
                 (click)="sort('PaymentModeName')"
               >
                 Type paiement
-                <i class="fas" [ngClass]="getSortIcon('PaymentModeName')"></i>
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon(
+                      'PaymentModeName',
+                      sortColumn,
+                      sortDirection
+                    )
+                  "
+                ></i>
               </th>
               <th class="text-nowrap cursor-pointer" (click)="sort('Amount')">
-                Montant <i class="fas" [ngClass]="getSortIcon('Amount')"></i>
+                Montant
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon('Amount', sortColumn, sortDirection)
+                  "
+                ></i>
               </th>
               <th
                 class="text-nowrap cursor-pointer"
                 (click)="sort('mAmountConverted')"
               >
                 Montant converti
-                <i class="fas" [ngClass]="getSortIcon('mAmountConverted')"></i>
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon(
+                      'mAmountConverted',
+                      sortColumn,
+                      sortDirection
+                    )
+                  "
+                ></i>
               </th>
               <th class="text-nowrap cursor-pointer" (click)="sort('nRate')">
-                Taux échange <i class="fas" [ngClass]="getSortIcon('nRate')"></i>
+                Taux échange
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon('nRate', sortColumn, sortDirection)
+                  "
+                ></i>
               </th>
               <th
                 class="text-nowrap cursor-pointer"
                 (click)="sort('description')"
               >
                 Description
-                <i class="fas" [ngClass]="getSortIcon('description')"></i>
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon('description', sortColumn, sortDirection)
+                  "
+                ></i>
               </th>
               <th class="text-nowrap cursor-pointer" (click)="sort('Status')">
-                Status <i class="fas" [ngClass]="getSortIcon('Status')"></i>
+                Statut
+                <i
+                  class="fas"
+                  [class]="
+                    utils.getSortIcon('Status', sortColumn, sortDirection)
+                  "
+                ></i>
               </th>
               <th class="text-center">Actions</th>
             </tr>
           </thead>
+
           <tbody *ngIf="!isLoading">
             <tr *ngFor="let item of paginedTransaction">
-              <td>{{ item.dtCreated | date: "dd/MM/yyyy HH:mm" }}</td>
-              <td class="fw-bold">{{ item.Reference }}</td>
+              <td class="small">
+                {{ item.dtCreated | date: "dd/MM/yyyy HH:mm" }}
+              </td>
+
+              <td class="fw-bold text-primary small">{{ item.Reference }}</td>
+
               <td>{{ item.UserFullName }}</td>
               <td>{{ item.OrganisationName }}</td>
               <td>{{ item.BenefName }}</td>
-              <td>
-                <span class="badge bg-primary text-white">{{
-                  item.PaymentModeName
-                }}</span>
-              </td>
-              <td>
-                {{ formatMontant(item.Amount) }} {{ item.debiteurCurrency }}
-              </td>
-              <td>
-                {{ formatMontant(item.mAmountConverted) }}
-                {{ item.BenefCurrency }}
-              </td>
-              <td>{{ item.nRate }}</td>
-              <td>{{ item.description }}</td>
+
               <td>
                 <span
-                  class="badge"
+                  *ngIf="item.PaymentModeName"
+                  class="badge bg-light text-primary border border-primary-subtle px-2"
+                >
+                  {{ item.PaymentModeName }}
+                </span>
+              </td>
+
+              <td class="fw-bold">
+                {{ utils.formatAmount(item.Amount) }}
+                <small class="text-muted">{{ item.debiteurCurrency }}</small>
+              </td>
+              <td class="fw-bold text-success">
+                {{ utils.formatAmount(item.mAmountConverted) }}
+                <small class="text-muted">{{ item.BenefCurrency }}</small>
+              </td>
+
+              <td>
+                <span class="badge bg-light text-dark border">{{
+                  item.nRate
+                }}</span>
+              </td>
+              <td
+                class="small text-truncate"
+                style="max-width: 150px"
+                [title]="item.description"
+              >
+                {{ item.description }}
+              </td>
+
+              <td>
+                <span
+                  class="badge px-3 py-2"
                   [ngClass]="{
                     'bg-success': item.Status?.toLowerCase() === 'success',
                     'bg-danger':
@@ -186,17 +277,35 @@
                       item.Status?.toLowerCase() === 'pending',
                   }"
                 >
-                  {{ getStatusLabel(item.Status!) }}
+                  {{ utils.getStatusLabel(item.Status!) }}
                 </span>
               </td>
+
               <td>
                 <div class="d-flex gap-1 justify-content-center">
                   <button
-                    *ngIf="item.Status?.toLowerCase() === 'pending'"
-                    class="btn btn-outline-info btn-sm"
-                    (click)="checkStatus(item.iRequestID!)"
+                    *ngIf="item.Status?.toUpperCase() === 'PENDING'"
+                    class="btn btn-sm shadow-sm"
+                    [ngClass]="
+                      $any(item).isChecking ? 'btn-warning' : 'btn-outline-info'
+                    "
+                    (click)="checkStatus(item)"
+                    [disabled]="$any(item).isChecking"
+                    [title]="
+                      $any(item).isChecking
+                        ? 'Vérification en cours...'
+                        : 'Vérifier le statut'
+                    "
                   >
-                    <i class="fas fa-sync-alt"></i>
+                    <i
+                      class="fas"
+                      [ngClass]="
+                        $any(item).isChecking
+                          ? 'fa-spinner fa-spin'
+                          : 'fa-sync-alt'
+                      "
+                    >
+                    </i>
                   </button>
                   <button
                     *ngIf="item.Status?.toLowerCase() === 'success'"
@@ -210,87 +319,79 @@
             </tr>
           </tbody>
         </table>
-
-        <!-- Pagination -->
-        <div
-          *ngIf="!isLoading && filteredData.length > pageSize"
-          class="mt-4 d-flex justify-content-between align-items-center p-2 rounded shadow-sm border-top"
-        >
-          <div class="ms-2">
-            <span class="text-muted small fw-medium">
-              Affichage <b class="text-dark">{{ startIndex() }}</b> à
-              <b class="text-dark">{{ endIndex() }}</b> sur
-              <b class="text-dark">{{ filteredData.length }}</b>
-            </span>
-          </div>
-
-          <div class="d-flex gap-1 align-items-center">
-            <button
-              class="btn btn-outline-primary btn-sm rounded-pill px-2 me-1"
-              (click)="goToPage(1)"
-              [disabled]="currentPage === 1"
-              title="Première page"
-            >
-              <i class="fas fa-angle-double-left"></i>
-            </button>
-
-            <button
-              class="btn btn-outline-primary btn-sm rounded-pill px-3 me-2"
-              (click)="previousPage()"
-              [disabled]="currentPage === 1"
-            >
-              <i class="fas fa-chevron-left small"></i>
-            </button>
-
-            <div class="d-flex gap-1">
-              <ng-container *ngFor="let page of getPages()">
-                <button
-                  class="btn btn-sm page-number-btn"
-                  [ngClass]="{
-                    'btn-primary text-white shadow-sm': page === currentPage,
-                    'btn-light border-0 text-primary':
-                      page !== currentPage && page !== '...',
-                    'btn-link text-muted disabled': page === '...',
-                  }"
-                  (click)="onPageClick(page)"
-                  [disabled]="page === '...'"
-                >
-                  {{ page }}
-                </button>
-              </ng-container>
-            </div>
-
-            <button
-              class="btn btn-outline-primary btn-sm rounded-pill px-3 ms-2"
-              (click)="nextPage()"
-              [disabled]="currentPage === totalPages()"
-            >
-              <i class="fas fa-chevron-right small"></i>
-            </button>
-
-            <button
-              class="btn btn-outline-primary btn-sm rounded-pill px-2 ms-1"
-              (click)="goToPage(totalPages())"
-              [disabled]="currentPage === totalPages()"
-              title="Dernière page"
-            >
-              <i class="fas fa-angle-double-right"></i>
-            </button>
-          </div>
-        </div>
-        <!-- Loading Spinner -->
-        <div *ngIf="isLoading" class="text-center my-4">
+        <div *ngIf="isLoading" class="text-center my-5">
           <div class="spinner-border text-primary" role="status"></div>
           <p class="text-muted mt-2">Chargement de l'historique...</p>
         </div>
 
-        <!-- No data -->
         <div
           *ngIf="!isLoading && filteredData.length === 0"
           class="text-center py-5"
         >
-          <i class="fas fa-inbox display-1 text-muted mb-3"></i>
+          <i class="fas fa-inbox display-1 text-muted opacity-25 mb-3"></i>
           <h5 class="text-muted">Aucune transaction trouvée</h5>
+        </div>
+      </div>
+      <div
+        *ngIf="!isLoading && filteredData.length > pageSize"
+        class="mt-4 d-flex justify-content-between align-items-center p-3 border-top bg-light-subtle rounded-bottom"
+      >
+        <div>
+          <span class="text-muted small fw-medium">
+            Affichage <b>{{ startIndex }}</b> à <b>{{ endIndex }}</b> sur
+            <b>{{ filteredData.length }}</b>
+          </span>
+        </div>
+
+        <div class="d-flex gap-1 align-items-center">
+          <button
+            class="btn btn-outline-primary btn-sm rounded-pill px-2"
+            (click)="onPageClick(1)"
+            [disabled]="currentPage === 1"
+          >
+            <i class="fas fa-angle-double-left"></i>
+          </button>
+
+          <button
+            class="btn btn-outline-primary btn-sm rounded-pill px-2"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <div class="mx-2 d-flex gap-1">
+            <button
+              *ngFor="let page of paginationRange"
+              class="btn btn-sm px-3 rounded-pill"
+              [ngClass]="{
+                'btn-primary shadow-sm': page === currentPage,
+                'btn-light text-primary':
+                  page !== currentPage && page !== '...',
+                'btn-link text-muted disabled border-0': page === '...',
+              }"
+              (click)="onPageClick(page)"
+              [disabled]="page === '...'"
+            >
+              {{ page }}
+            </button>
+          </div>
+
+          <button
+            class="btn btn-outline-primary btn-sm rounded-pill px-2"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
+
+          <button
+            class="btn btn-outline-primary btn-sm rounded-pill px-2"
+            (click)="onPageClick(totalPages)"
+            [disabled]="currentPage === totalPages"
+          >
+            <i class="fas fa-angle-double-right"></i>
+          </button>
         </div>
       </div>
     </div>
