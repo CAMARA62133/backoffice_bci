@@ -5,29 +5,32 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
 // Services
-import { HistoriqueTransactionService } from '../../../services/admin-integrateur/historique-transaction.service';
+
 import { ExportService } from '../../../services/utils/export.service';
 
 // Interfaces
-import { Transaction } from '../models/transaction.interface';
+import { Transaction, TransactionInternational } from '../models/transaction.interface';
 import { UtilsService } from '../../../services/utils/table-utils.service';
+import { AuthService } from '../../../services/auth/authService/auth.service';
+import { TransactionInternationalService } from '../../../services/admin-integrateur/transaction-international.service';
 
 @Component({
-  selector: 'app-historique-transaction',
-  standalone: true,
+  selector: 'app-transaction-international',
   imports: [FormsModule, CommonModule],
-  templateUrl: './historique-transaction.component.html',
-  styleUrl: './historique-transaction.component.css',
+  templateUrl: './transaction-international.component.html',
+  styleUrl: './transaction-international.component.css',
 })
-export class HistoriqueTransactionComponent implements OnInit {
+export class TransactionInternationalComponent implements OnInit {
   // --- Injections ---
-  private historiqueService = inject(HistoriqueTransactionService);
+  private transactionInternationalService = inject(
+    TransactionInternationalService,
+  );
   private toastr = inject(ToastrService);
   private exportService = inject(ExportService);
   public utils = inject(UtilsService);
-
+  private authService = inject(AuthService);
   // --- Données ---
-  historiqueTransactions: Transaction[] = [];
+  transactionsInternational: TransactionInternational[] = [];
   isLoading = false;
   listePaymentModes: string[] = [];
   // --- États des Filtres ---
@@ -47,22 +50,29 @@ export class HistoriqueTransactionComponent implements OnInit {
   isCancelling: boolean = false;
 
   ngOnInit(): void {
-    this.loadHistorique();
+    this.loadTransactionsInternational();
   }
 
   // --- Chargement des données ---
-  loadHistorique(): void {
+  loadTransactionsInternational(): void {
+    const user = this.authService.userInfo();
+    if (!user || !user.iOrganisationID) {
+      this.toastr.error('Session utilisateur invalide');
+      return;
+    }
     this.isLoading = true;
-    this.historiqueService.getHistoriqueTransactions().subscribe({
-      next: (response) => {
-        this.historiqueTransactions = response.data || [];
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error("Erreur lors du chargement de l'historique:", err);
-        this.isLoading = false;
-      },
-    });
+    this.transactionInternationalService
+      .getTransactionsInternational(user.iOrganisationID)
+      .subscribe({
+        next: (response) => {
+          this.transactionsInternational = response.data || [];
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error("Erreur lors du chargement de l'historique:", err);
+          this.isLoading = false;
+        },
+      });
   }
 
   // ==========================================
@@ -70,8 +80,8 @@ export class HistoriqueTransactionComponent implements OnInit {
   // ==========================================
 
   /** Retourne les données filtrées et triées */
-  get filteredData(): Transaction[] {
-    let data = [...this.historiqueTransactions];
+  get filteredData(): TransactionInternational[] {
+    let data = [...this.transactionsInternational];
 
     // 1. Filtre par plage de dates
     data = this.utils.filterByDateRange(
@@ -165,7 +175,7 @@ export class HistoriqueTransactionComponent implements OnInit {
     this.sortColumn = '';
     this.sortDirection = 'asc';
 
-    this.loadHistorique();
+    this.loadTransactionsInternational();
     this.toastr.info('Filtres réinitialisés', '', {
       positionClass: 'toast-custom-center',
       timeOut: 2000,
@@ -245,7 +255,7 @@ export class HistoriqueTransactionComponent implements OnInit {
     if (!this.selectedTransaction) return;
 
     this.isCancelling = true;
-    this.historiqueService
+    this.transactionInternationalService
       .cancelTransaction(this.selectedTransaction.iRequestID)
       .subscribe({
         next: (response: any) => {
@@ -253,7 +263,7 @@ export class HistoriqueTransactionComponent implements OnInit {
             this.toastr.success('Transaction annulée avec succès', '', {
               positionClass: 'toast-custom-center',
             });
-            this.loadHistorique();
+            this.loadTransactionsInternational();
           } else {
             const errorMsg =
               this.utils.decodeMessage(response.message) ||
@@ -280,7 +290,7 @@ export class HistoriqueTransactionComponent implements OnInit {
       return;
     }
     item.isChecking = true;
-    this.historiqueService
+    this.transactionInternationalService
       .getTransactionStatus(item.iRequestID)
       .pipe(finalize(() => (item.isChecking = false)))
       .subscribe({
@@ -292,17 +302,18 @@ export class HistoriqueTransactionComponent implements OnInit {
               this.toastr.success(
                 `Statut mis à jour : ${this.utils.getStatusLabel(nouveauStatut)}`,
               );
-              this.loadHistorique();
+              this.loadTransactionsInternational();
             } else {
               this.toastr.info('Le statut n’a pas changé', '');
             }
           } else {
             this.toastr.error(
-              this.utils.decodeMessage(res?.message) || 'Le service est momentanément indisponible',
+              this.utils.decodeMessage(res?.message) ||
+                'Le service est momentanément indisponible',
             );
           }
         },
-        error: () => this.toastr.error('Connexion perdue ou impossible', '')
+        error: () => this.toastr.error('Connexion perdue ou impossible', ''),
       });
   }
 }

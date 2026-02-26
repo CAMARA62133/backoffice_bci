@@ -1,0 +1,13 @@
+/* On crée une classe personnalisée pour plus de sécurité */
+.nav-link-custom {
+    white-space: normal !important; /* Autorise le retour à la ligne */
+    display: block;                 /* S'assure que le lien prend la place nécessaire */
+    line-height: 1.4;              /* Ajoute un peu d'espace entre les lignes pour la lisibilité */
+    padding: 8px 15px;             /* Ajustez selon votre design */
+}
+
+/* Optionnel : Si vous voulez que les mots très longs se coupent aussi */
+.nav-link-custom span {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

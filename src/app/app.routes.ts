@@ -46,6 +46,7 @@ import { TransactionsOperationsComponent } from './pages/orgs/transactions-opera
 import { CreateEntrepriseComponent } from './pages/agent-conformite/create-entreprise/create-entreprise.component';
 import { MobileOperatorComponent } from './pages/agent-conformite/mobile-operator/mobile-operator/mobile-operator.component';
 import { HistoriqueTransactionComponent } from './pages/admin-integrateur/historique-transaction/historique-transaction.component';
+import { TransactionInternationalComponent } from './pages/admin-integrateur/transaction-international/transaction-international.component';
 
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
@@ -171,6 +172,13 @@ export const routes: Routes = [
         path: 'historique-transaction',
         title: 'BCI - Online | Historique des transactions',
         component: HistoriqueTransactionComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+      },
+      {
+        path: 'transaction-internationale',
+        title: 'BCI - Online | Historique des transactions internationales',
+        component: TransactionInternationalComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
       },

@@ -31,6 +31,7 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getUserInfo();
+    this.recuperStatusCoreBanking();
     console.log(
       'current user : ',
       this.currentUser,
@@ -38,20 +39,47 @@ export class LayoutComponent implements OnInit {
     );
   }
 
+  // recuperStatusCoreBanking() {
+  //   this.statutBancaireService.coreBankingStatus().subscribe({
+  //     next: (response: any) => {
+  //       // Si la condition est respecter (i.e : available === false && status === 'KO)
+  //       if (
+  //         response?.data.available === false &&
+  //         response?.data.status === 'KO'
+  //       ) {
+  //         // Assigner le message de l'api dans data et afficher l'icon
+  //         this.statusMessage = response.data.message;
+  //         this.statusCoreBanking = response.data;
+  //         this.showNetworkNotification = true;
+  //       }
+  //       console.log('network status : ', this.statusCoreBanking);
+  //     },
+  //     error: () => {
+  //       // en cas d'erreur API → considérer comme indisponible
+  //       this.showNetworkNotification = false;
+  //     },
+  //   });
+  // }
+
+
+
   recuperStatusCoreBanking() {
     this.statutBancaireService.coreBankingStatus().subscribe({
       next: (response: any) => {
-        // Si la condition est respecter (i.e : available === false && status === 'KO)
+        this.statusCoreBanking = response.data;
+        console.log('this.statusCoreBanking: ', this.statusCoreBanking);
+
         if (
-          response?.data.available === false &&
-          response?.data.status === 'KO'
+          this.statusCoreBanking?.available === false &&
+          this.statusCoreBanking?.status === 'ko'
         ) {
-          // Assigner le message de l'api dans data et afficher l'icon
-          this.statusMessage = response.data.message;
-          this.statusCoreBanking = response.data;
-          this.showNetworkNotification = true;
+          // afficher notification seulement si service indisponible
+          this.showNetworkNotification =
+            this.statusCoreBanking?.available === true;
+        } else {
+          this.showNetworkNotification =
+            this.statusCoreBanking?.available === false;
         }
-        console.log('network status : ', this.statusCoreBanking);
       },
       error: () => {
         // en cas d'erreur API → considérer comme indisponible
@@ -59,7 +87,6 @@ export class LayoutComponent implements OnInit {
       },
     });
   }
-
   // Méthode de déconnexion et de redirection vers la page de login
   onLogout() {
     this.authService.logout();

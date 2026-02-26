@@ -2,27 +2,27 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environnements/environnement';
-import { ApiResponse, Transaction } from '../../pages/admin-integrateur/models/transaction.interface';
+import { ApiResponse, TransactionInternational } from '../../pages/admin-integrateur/models/transaction.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class HistoriqueTransactionService {
+export class TransactionInternationalService {
   private baseUrl = environment.nodeApi.apiUrl;
+  private url = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Récupère l'historique complet
-   */
-  // Historique classique
-  getHistoriqueTransactions(): Observable<ApiResponse<Transaction[]>> {
-    return this.http.get<ApiResponse<Transaction[]>>(
-      `${this.baseUrl}/api/transactions/history`,
+
+  // Historique International
+  getTransactionsInternational(
+    organisation_id: number,
+  ): Observable<ApiResponse<TransactionInternational[]>> {
+    return this.http.get<ApiResponse<TransactionInternational[]>>(
+      `${this.url}/api/getAllTransactionsInternation?organisation_id=${organisation_id}`,
       { withCredentials: true },
     );
   }
-
   /**
    * Vérifier le statut
    */
