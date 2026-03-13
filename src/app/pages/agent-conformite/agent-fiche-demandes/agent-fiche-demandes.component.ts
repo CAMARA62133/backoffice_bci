@@ -5,7 +5,7 @@ import {
   NgForOf,
   NgIf,
 } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -15,7 +15,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { ValidDemandePayload } from '../../../core/interfaces/demande.interface';
 import { RejectionReason } from '../../../core/interfaces/reject-raison.interface';
 import { AuthService } from '../../../core/node/services/auth/auth.service';
@@ -23,6 +23,7 @@ import { RejectRaisonService } from '../../../core/node/services/reject-raison/r
 import { DemandeService } from '../../../services/agent-conformite/demande/demande.service';
 import { AuthService as LaraAuthService } from '../../../services/auth/authService/auth.service';
 import { ModalsService } from '../../../services/modals/modals.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
@@ -48,11 +49,11 @@ export class AgentFicheDemandesComponent implements OnInit {
   demandeID!: number;
 
   private clientSitelink: string = 'http://localhost:4201';
-
+  public notification = inject(NotificationService);
   constructor(
     private route: ActivatedRoute,
     private demandeService: DemandeService,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     private router: Router,
     private fb: FormBuilder,
     private modalsService: ModalsService,
@@ -152,27 +153,33 @@ export class AgentFicheDemandesComponent implements OnInit {
     this.rejectRaisonService.rejectedDemande(payload).subscribe({
       next: (res) => {
         if (res?.status === 200) {
-          this.toastr.success('La demande a été rejetée avec succès.', '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success('La demande a été rejetée avec succès.');
+          // this.toastr.success('La demande a été rejetée avec succès.', '', {
+          //   positionClass: 'toast-custom-center',
+          // });
           this.closeModal('rejectModal');
           this.router.navigate(['/agent-demandes']);
           this.closeModal('unblockModal');
         } else {
-          this.toastr.error(
+          this.notification.error(
             'Une erreur est survenue lors du rejet de la demande.',
             '',
-            { positionClass: 'toast-custom-center' },
           );
+          // this.toastr.error(
+          //   'Une erreur est survenue lors du rejet de la demande.',
+          //   '',
+          //   { positionClass: 'toast-custom-center' },
+          // );
           console.log('Erreur rejet demande:', res);
         }
         console.log('res rejet demande:', res);
       },
 
       error: (err) => {
-        this.toastr.error('Une erreur interne est survenue.', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error('Une erreur interne est survenue.');
+        // this.toastr.error('Une erreur interne est survenue.', '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('err rejet demande:', err);
       },
     });
@@ -198,26 +205,32 @@ export class AgentFicheDemandesComponent implements OnInit {
     this.demandeService.validDemandeSouscription(payload).subscribe({
       next: (res) => {
         if (res?.status === 200) {
-          this.toastr.success(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(res.message);
+          // this.toastr.success(res.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
           this.closeModal('valideModal');
           this.router.navigate(['/agent-demandes']);
         } else {
-          this.toastr.error(
+          this.notification.error(
             'Une erreur est survenue lors de la validation de la demande.',
             '',
-            { positionClass: 'toast-custom-center' },
           );
+          // this.toastr.error(
+          //   'Une erreur est survenue lors de la validation de la demande.',
+          //   '',
+          //   { positionClass: 'toast-custom-center' },
+          // );
           console.log('Erreur validation demande:', res);
         }
         console.log('res validation demande:', res);
       },
 
       error: (err) => {
-        this.toastr.error('Une erreur interne est survenue.', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error('Une erreur interne est survenue.');
+        // this.toastr.error('Une erreur interne est survenue.', '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('err rejet demande:', err);
       },
 
@@ -270,9 +283,10 @@ export class AgentFicheDemandesComponent implements OnInit {
           console.log('Detail: ', this.demande);
         } else {
           if (res?.error?.message === 'Unauthenticated.') {
-            this.toastr.error('Votre session a expirée', '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.error('Votre session a expirée');
+            // this.toastr.error('Votre session a expirée', '', {
+            //   positionClass: 'toast-custom-center',
+            // });
             this.router.navigate(['/login']);
           }
         }
@@ -281,9 +295,10 @@ export class AgentFicheDemandesComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error('Une erreur interne est survenue.', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error('Une erreur interne est survenue.');
+        // this.toastr.error('Une erreur interne est survenue.', '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('err demandes:', err);
         this.isLoading = false;
       },
@@ -334,9 +349,10 @@ export class AgentFicheDemandesComponent implements OnInit {
   }
 
   private goBackWithMessage(message: string) {
-    this.toastr.error(message, '', {
-      positionClass: 'toast-custom-center',
-    });
+    this.notification.error(message);
+    // this.toastr.error(message, '', {
+    //   positionClass: 'toast-custom-center',
+    // });
 
     // this.location.back();
     // OU: this.router.navigate(['/agent-demandes']);

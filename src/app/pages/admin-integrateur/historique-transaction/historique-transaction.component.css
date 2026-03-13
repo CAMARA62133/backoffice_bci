@@ -1,22 +1,23 @@
-.fa-angle-double-left, .fa-angle-double-right {
+/* ============================================================
+   STYLES EXISTANTS
+============================================================ */
+
+.fa-angle-double-left,
+.fa-angle-double-right {
   font-size: 0.8rem;
   vertical-align: middle;
 }
 
-/* Aligne l'icône verticalement avec le texte */
 th i.text-white {
   vertical-align: middle;
   margin-left: 5px;
-  /* Optionnel : ajoute une légère lueur pour le rendre plus "premium" */
   text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
 }
 
-/* Style pour l'icône inactive sur un fond sombre */
 th i.text-muted {
-  color: rgba(255, 255, 255, 0.4) !important; /* Gris clair transparent pour fond sombre */
+  color: rgba(255, 255, 255, 0.4) !important;
 }
 
-/* Container de recherche */
 .search-container {
   min-width: 300px;
 }
@@ -27,10 +28,9 @@ th i.text-muted {
 }
 
 .search-input:focus {
-  border-color: #dee2e6; /* On garde la bordure douce */
+  border-color: #dee2e6;
 }
 
-/* Effet sur les boutons d'export */
 .btn-export {
   border-radius: 8px;
   transition: all 0.2s ease-in-out;
@@ -42,7 +42,6 @@ th i.text-muted {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Style pour l'icône de recherche */
 .input-group-text {
   border-radius: 8px 0 0 8px;
   color: #adb5bd;

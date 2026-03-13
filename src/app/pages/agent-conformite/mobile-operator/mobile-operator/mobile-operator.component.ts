@@ -8,6 +8,7 @@ import { MobileOperator } from '../models/mobile-operator.model';
 import { MobileOperatorService } from '../../../../services/agent-conformite/mobile-operator/mobile-operator.service';
 import { MobileOperatorForm } from '../mobile-operator-form/mobile-operator-form.component';
 import { MobileOperatorDetailsComponent } from '../mobile-operator-detail/mobile-operator-detail.component';
+import { NotificationService } from '../../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-mobile-operator-list',
@@ -23,7 +24,7 @@ import { MobileOperatorDetailsComponent } from '../mobile-operator-detail/mobile
 })
 export class MobileOperatorComponent implements OnInit, OnDestroy {
   private operatorService = inject(MobileOperatorService);
-
+  public notification = inject(NotificationService);
   // --- Configuration DataTables ---
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
@@ -48,35 +49,35 @@ export class MobileOperatorComponent implements OnInit, OnDestroy {
   }
 
   initDataTableConfig(): void {
-this.dtoptions = {
-  pagingType: 'full_numbers',
-  // 1. On définit 5 en premier pour correspondre au menu
-  pageLength: 5,
-  lengthMenu: [
-    [5, 10, 25, 50, 100, -1],
-    [5, 10, 25, 50, 100, 'Tout'],
-  ],
-  // 2. scrollY accepte soit un nombre, soit une chaîne avec 'px'
-  scrollY: '350px',
-  // 3. Permet de réduire la zone de scroll si le nombre d'éléments est faible
-  scrollCollapse: true,
-  processing: true,
-  destroy: true,
-  // 4. Important pour que le scroll horizontal fonctionne avec scrollY
-  scrollX: true,
-  language: {
-    search: 'Rechercher :',
-    lengthMenu: 'Afficher _MENU_ éléments',
-    info: 'Affichage de _START_ à _END_ sur _TOTAL_ éléments',
-    paginate: {
-      first: 'Premier',
-      previous: 'Précédent',
-      next: 'Suivant',
-      last: 'Dernier',
-    },
-    zeroRecords: 'Aucun enregistrement trouvé',
-  },
-};
+    this.dtoptions = {
+      pagingType: 'full_numbers',
+      // 1. On définit 5 en premier pour correspondre au menu
+      pageLength: 5,
+      lengthMenu: [
+        [5, 10, 25, 50, 100, -1],
+        [5, 10, 25, 50, 100, 'Tout'],
+      ],
+      // 2. scrollY accepte soit un nombre, soit une chaîne avec 'px'
+      scrollY: '350px',
+      // 3. Permet de réduire la zone de scroll si le nombre d'éléments est faible
+      scrollCollapse: true,
+      processing: true,
+      destroy: true,
+      // 4. Important pour que le scroll horizontal fonctionne avec scrollY
+      scrollX: true,
+      language: {
+        search: 'Rechercher :',
+        lengthMenu: 'Afficher _MENU_ éléments',
+        info: 'Affichage de _START_ à _END_ sur _TOTAL_ éléments',
+        paginate: {
+          first: 'Premier',
+          previous: 'Précédent',
+          next: 'Suivant',
+          last: 'Dernier',
+        },
+        zeroRecords: 'Aucun enregistrement trouvé',
+      },
+    };
   }
 
   loadOperators(): void {
@@ -111,6 +112,7 @@ this.dtoptions = {
         this.rerenderTable(); // Déclenche DataTables
       },
       error: (err) => {
+        this.notification.error('Erreur chargement');
         console.error('Erreur chargement:', err);
         this.isLoading = false;
       },

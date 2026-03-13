@@ -2,10 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { ChartOptions } from '../../core/interfaces/apexChartOptions';
 import { RouterLink } from "@angular/router";
+import { SkeletonLoaderComponent } from "../../shared/skeleton/skeleton-loader.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgApexchartsModule, ChartComponent, RouterLink],
+  imports: [NgApexchartsModule, ChartComponent, SkeletonLoaderComponent,CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -14,7 +16,7 @@ export class DashboardComponent {
   public volumeChart: Partial<ChartOptions>;
   public incidentChart: Partial<ChartOptions>;
   public heatmapChart: Partial<ChartOptions>;
-
+  public isLoading: boolean = true;
   incidentDataByMonth: Record<string, number[]> = {
     JUIN: [4, 3, 3, 2],
     MAI: [6, 2, 1, 3],
@@ -194,6 +196,10 @@ export class DashboardComponent {
 
     //
     this.incidentChart.series = this.incidentDataByMonth[this.selectedMonth];
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
+  
   }
 
   //

@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environnements/environnement';
-import { InactivityService } from '../inactivity/inactivity.service';
+// import { InactivityServiceTsService } from '../inactivity/inactivity.service';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -12,7 +13,7 @@ export class OtpLoginServiceService {
 
   constructor(
     private http: HttpClient,
-    private inactivityService: InactivityService
+    // private inactivityService: InactivityServiceTsService,
   ) {}
 
   private getToken(): string | null {
@@ -23,7 +24,7 @@ export class OtpLoginServiceService {
   verifierOtp(
     otp: string,
     email: string | null,
-    appName: string = this.appName
+    appName: string = this.appName,
   ): Observable<any> {
     const body = { otp, appName, email };
     console.log(body);
@@ -38,21 +39,21 @@ export class OtpLoginServiceService {
           // localStorage.setItem('token', response.token);
 
           // 🚀 Démarrage automatique de la surveillance d'inactivité
-          this.inactivityService.startWatching();
+          // this.inactivityService.startWatching();
         } else {
           console.warn('⚠️ OTP valide mais pas de token retourné.');
         }
       }),
       catchError((err) =>
-        throwError(() => new Error(err?.message || 'Erreur du serveur'))
-      )
+        throwError(() => new Error(err?.message || 'Erreur du serveur')),
+      ),
     );
   }
 
   // Méthode pour renvoyer l'OTP
   reenvoiOtp(
     email: string | null,
-    appName: string = this.appName
+    appName: string = this.appName,
   ): Observable<any> {
     const body = { email, appName };
     console.log(body);
@@ -61,8 +62,8 @@ export class OtpLoginServiceService {
       .post<any>(`${this.baseUrl}/api/RenvoiOTP`, body)
       .pipe(
         catchError((err) =>
-          throwError(() => new Error(err?.message || 'Erreur du serveur'))
-        )
+          throwError(() => new Error(err?.message || 'Erreur du serveur')),
+        ),
       );
   }
 }

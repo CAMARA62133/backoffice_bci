@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 
 // Services
@@ -11,21 +10,23 @@ import { ExportService } from '../../../services/utils/export.service';
 // Interfaces
 import { Transaction } from '../models/transaction.interface';
 import { UtilsService } from '../../../services/utils/table-utils.service';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { SkeletonLoaderComponent } from "../../../shared/skeleton/skeleton-loader.component";
 
 @Component({
   selector: 'app-historique-transaction',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, SkeletonLoaderComponent],
   templateUrl: './historique-transaction.component.html',
   styleUrl: './historique-transaction.component.css',
 })
 export class HistoriqueTransactionComponent implements OnInit {
   // --- Injections ---
   private historiqueService = inject(HistoriqueTransactionService);
-  private toastr = inject(ToastrService);
+
   private exportService = inject(ExportService);
   public utils = inject(UtilsService);
-
+  public notification = inject(NotificationService);
   // --- Données ---
   historiqueTransactions: Transaction[] = [];
   isLoading = false;
@@ -166,10 +167,7 @@ export class HistoriqueTransactionComponent implements OnInit {
     this.sortDirection = 'asc';
 
     this.loadHistorique();
-    this.toastr.info('Filtres réinitialisés', '', {
-      positionClass: 'toast-custom-center',
-      timeOut: 2000,
-    });
+    this.notification.info('Filtres réinitialisés');
   }
 
   exportPdf() {
@@ -250,34 +248,32 @@ export class HistoriqueTransactionComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           if (response.status === 200) {
-            this.toastr.success('Transaction annulée avec succès', '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.success('Transaction annulée avec succès');
             this.loadHistorique();
           } else {
             const errorMsg =
               this.utils.decodeMessage(response.message) ||
               "Erreur lors de l'annulation";
-            this.toastr.error(errorMsg, '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.error(errorMsg);
           }
           this.closeModal();
           this.isCancelling = false;
         },
         error: () => {
-          this.toastr.error('Une erreur technique est survenue.', '');
+          this.notification.error('Une erreur technique est survenue.', '');
           this.isCancelling = false;
         },
       });
   }
 
   checkStatus(item: any): void {
-    if (!item.iRequestID) {
-      this.toastr.warning('Transaction introuvable', '', {
-        positionClass: 'toast-custom-center',
-      });
-      return;
+    if (!item || !item.iRequestID) {
+      this.notification.error(
+        this.utils.decodeMessage(
+          'Echec de verification  ,  ID TXN banque  introuvable',
+        ),
+      );
+      return; // Empêche l'exécution de la suite si l'ID est manquant
     }
     item.isChecking = true;
     this.historiqueService
@@ -289,20 +285,22 @@ export class HistoriqueTransactionComponent implements OnInit {
             const nouveauStatut = res.Status;
             if (nouveauStatut !== item.Status) {
               item.Status = nouveauStatut;
-              this.toastr.success(
+              this.notification.success(
                 `Statut mis à jour : ${this.utils.getStatusLabel(nouveauStatut)}`,
               );
               this.loadHistorique();
             } else {
-              this.toastr.info('Le statut n’a pas changé', '');
+              this.notification.info('Le statut n’a pas changé', '');
             }
           } else {
-            this.toastr.error(
-              this.utils.decodeMessage(res?.message) || 'Le service est momentanément indisponible',
+            this.notification.error(
+              this.utils.decodeMessage(res?.message) ||
+                'Le service est momentanément indisponible',
             );
           }
         },
-        error: () => this.toastr.error('Connexion perdue ou impossible', '')
+        error: () =>
+          this.notification.error('Connexion perdue ou impossible', ''),
       });
   }
 }

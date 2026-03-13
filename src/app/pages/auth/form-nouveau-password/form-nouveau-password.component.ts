@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,8 +7,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { FormNouveauPasswordService } from '../../../services/auth/formNouveauPassword/form-nouveau-password.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-form-nouveau-password',
@@ -24,12 +25,12 @@ export class FormNouveauPasswordComponent implements OnInit {
 
   showPassword = false; // :œil: pour afficher/masquer mot de passe
   showConfirmPassword = false;
-
+  public notification = inject(NotificationService);
   constructor(
     private fb: FormBuilder,
     private formNouveauPasswordService: FormNouveauPasswordService,
     private router: Router,
-    private toastr: ToastrService
+    // private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -61,9 +62,10 @@ export class FormNouveauPasswordComponent implements OnInit {
 
         this.success = true;
         this.loading = false;
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(res?.message);
+        // this.toastr.success(res?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         // ✅ Nettoyage du localStorage
         localStorage.removeItem('urlEmail');
@@ -78,9 +80,10 @@ export class FormNouveauPasswordComponent implements OnInit {
         this.loading = false;
         this.message =
           err.error?.message || 'Erreur lors de la réinitialisation.';
-        this.toastr.error(this.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(this.message);
+        // this.toastr.error(this.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         console.log("Réponse en cas d'erreur serveur :", {
           Message: this.message,

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../../../services/auth/loading/loading.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-loading-page',
@@ -12,12 +13,12 @@ import { LoadingService } from '../../../services/auth/loading/loading.service';
 export class LoadingPageComponent implements OnInit {
   token!: string; // Déclaration de la variable token
   email!: string;
-
+  public notification = inject(NotificationService);
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private loadingService: LoadingService,
-    private toastr: ToastrService
+    // private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -36,9 +37,10 @@ export class LoadingPageComponent implements OnInit {
             this.router.navigate(['/nouveau-mot-de-passe']);
           } else {
             this.router.navigate(['/reinitialiser-mot-de-passe']);
-            this.toastr.error(res?.message || 'Lien est expiré !', '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.error(res?.message || 'Lien est expiré !');
+            // this.toastr.error(res?.message || 'Lien est expiré !', '', {
+            //   positionClass: 'toast-custom-center',
+            // });
           }
         },
         error: (err) => {

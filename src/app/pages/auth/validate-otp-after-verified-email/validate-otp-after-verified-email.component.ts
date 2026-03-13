@@ -1,10 +1,11 @@
 import {NgIf} from '@angular/common';
-import {Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, inject, QueryList, ViewChildren} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+// import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../../services/auth/authService/auth.service';
 import {OrgOtpLoginService} from '../../../services/auth/orgOtpLogin/org-otp-login.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-validate-otp-after-verified-email',
@@ -23,14 +24,13 @@ export class ValidateOtpAfterVerifiedEmailComponent {
   showModalSuccess: boolean = false;
   showModalError: boolean = false;
   showModalOTP_expire: boolean = false;
-
+  public notification = inject(NotificationService);
   constructor(
     private otpService: OrgOtpLoginService,
     private router: Router,
     private authService: AuthService,
-    private toastr: ToastrService
-  ) {
-  }
+    // private toastr: ToastrService
+  ) {}
 
   moveToNext(event: any, index: number) {
     const input = event.target;
@@ -73,9 +73,10 @@ export class ValidateOtpAfterVerifiedEmailComponent {
         this.isLoadingReEnvoi = false;
         this.otpValues = ['', '', '', ''];
 
-        this.toastr.success(response.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(response.message);
+        // this.toastr.success(response.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('reponse api : ', response);
       },
 
@@ -83,9 +84,10 @@ export class ValidateOtpAfterVerifiedEmailComponent {
         this.isLoadingReEnvoi = false;
         console.log(err);
 
-        this.toastr.error(err, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err);
+        // this.toastr.error(err, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
       },
     });
   }
@@ -109,10 +111,11 @@ export class ValidateOtpAfterVerifiedEmailComponent {
 
         this.isLoading = false;
         if (res?.status && res?.status === 200) {
-          this.toastr.success('OTP vérifier avec succès', '', {
-            positionClass: 'toast-custom-center',
-          });
-          console.log("OTP Organisation Valider : ", res?.status, res?.message);
+          this.notification.success('OTP vérifier avec succès');
+          // this.toastr.success('OTP vérifier avec succès', '', {
+          //   positionClass: 'toast-custom-center',
+          // });
+          console.log('OTP Organisation Valider : ', res?.status, res?.message);
           this.router.navigate(['/org-nouveau-mot-de-passe']);
         } else {
           // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
@@ -120,18 +123,20 @@ export class ValidateOtpAfterVerifiedEmailComponent {
             this.router.navigate(['/login']);
           }
 
-          this.toastr.error(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(res.message);
+          // this.toastr.error(res.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
         console.log(res);
       },
 
       error: (err) => {
         this.isLoading = false;
-        this.toastr.error(err.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err.message);
+        // this.toastr.error(err.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('erreur : ', err);
       },
     });

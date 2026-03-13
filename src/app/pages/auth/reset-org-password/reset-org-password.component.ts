@@ -1,5 +1,5 @@
 import {NgClass, NgIf} from '@angular/common';
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,8 +7,9 @@ import {
   Validators,
 } from '@angular/forms';
 import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+// import {ToastrService} from 'ngx-toastr';
 import {OrganisationsService} from '../../../services/organisations/organisations.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-reset-org-password',
@@ -21,14 +22,13 @@ export class ResetOrgPasswordComponent implements OnInit {
   showPassword = false;
   showConfirmPassword = false;
   loading = false;
-
+  public notification = inject(NotificationService);
   constructor(
     private fb: FormBuilder,
     private orgService: OrganisationsService,
     private router: Router,
-    private toastr: ToastrService
-  ) {
-  }
+    // private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.resetPasswordForm = this.fb.group(
@@ -36,7 +36,7 @@ export class ResetOrgPasswordComponent implements OnInit {
         newPassword: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', [Validators.required]],
       },
-      {validators: this.passwordsMatchValidator}
+      { validators: this.passwordsMatchValidator },
     );
   }
 
@@ -71,7 +71,7 @@ export class ResetOrgPasswordComponent implements OnInit {
     const newPass = form.get('newPassword')?.value;
     const confirm = form.get('confirmPassword')?.value;
     return newPass && confirm && newPass !== confirm
-      ? {passwordMismatch: true}
+      ? { passwordMismatch: true }
       : null;
   }
 
@@ -82,26 +82,28 @@ export class ResetOrgPasswordComponent implements OnInit {
       return;
     }
 
-    const {newPassword} = this.resetPasswordForm.value;
+    const { newPassword } = this.resetPasswordForm.value;
     this.loading = true;
 
     this.orgService.resetPasswordOrganisation(newPassword).subscribe({
       next: (res) => {
         this.loading = false;
 
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(res?.message);
+        // this.toastr.success(res?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.router.navigate(['/login']);
-        console.log({res});
+        console.log({ res });
       },
       error: (err) => {
         this.loading = false;
-        this.toastr.error(err.message, '', {
-          positionClass: 'toast-custom-center',
-        });
-        console.log({err});
+        this.notification.error(err.message);
+        // this.toastr.error(err.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
+        console.log({ err });
       },
     });
   }

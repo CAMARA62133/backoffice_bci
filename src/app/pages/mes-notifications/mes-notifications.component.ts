@@ -1,12 +1,13 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { AuthService } from '../../services/auth/authService/auth.service';
 import { MesNotifsService } from '../../services/mesNotifs/mes-notifs.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 declare var bootstrap: any;
 
@@ -28,12 +29,12 @@ export class MesNotificationsComponent implements OnInit {
 
   dtoptions: Config = {};
   dttrigger: Subject<any> = new Subject<any>();
-
+  public notification = inject(NotificationService);
   // Constructeur
   constructor(
     private mesNotifsService: MesNotifsService,
     private authService: AuthService,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
   ) {}
 
   // A l'initialisation du composant
@@ -89,7 +90,8 @@ export class MesNotificationsComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.message);
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message);
         console.log('Erreur chargement mes notifs : ', err);
         this.isLoading = false;
       },
@@ -126,9 +128,10 @@ export class MesNotificationsComponent implements OnInit {
   bloquerEtDebloquer(): void {
     if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
     if (this.selectedUserId === null) {
-      this.toastr.error('Aucune notification sélectionnée.', '', {
-        positionClass: 'toast-custom-center',
-      });
+      this.notification.error('Aucune notification sélectionnée.');
+      // this.toastr.error('Aucune notification sélectionnée.', '', {
+      //   positionClass: 'toast-custom-center',
+      // });
       return;
     }
 
@@ -143,9 +146,10 @@ export class MesNotificationsComponent implements OnInit {
       next: (res) => {
         this.isloadingBloquerDebloquer = false;
 
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(res?.message);
+        // this.toastr.success(res?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.loadNotifications();
         this.closeModalBloquerDebloquer();
@@ -154,9 +158,10 @@ export class MesNotificationsComponent implements OnInit {
       error: (err) => {
         this.isloadingBloquerDebloquer = false;
 
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.closeModalBloquerDebloquer();
       },

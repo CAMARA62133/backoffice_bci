@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { LoadingService } from '../../../services/auth/loading/loading.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-verifyemail-afterchange-page',
@@ -12,12 +13,12 @@ import { LoadingService } from '../../../services/auth/loading/loading.service';
 export class VerifyemailAfterchangePageComponent {
   token!: string;
   email!: string;
-
+  public notification = inject(NotificationService);
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private loadingService: LoadingService,
-    private toastr: ToastrService
+    // private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -35,26 +36,31 @@ export class VerifyemailAfterchangePageComponent {
         next: (res) => {
           if (res?.status && res?.status === 200) {
             this.router.navigate(['/login']);
-            this.toastr.success('Adresse email vérifié avec succès', '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.success('Adresse email vérifié avec succès');
+            // this.toastr.success('Adresse email vérifié avec succès', '', {
+            //   positionClass: 'toast-custom-center',
+            // });
           } else {
             this.router.navigate(['/lien-expire']);
-            this.toastr.error(res?.message, '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.error(res?.message);
+            // this.toastr.error(res?.message, '', {
+            //   positionClass: 'toast-custom-center',
+            // });
           }
 
           console.warn('DEBUG: After set token and email : ', res);
         },
         error: (err) => {
-          this.toastr.error(
+          this.notification.error(
             err?.message || 'Erreur lors de la vérification du token',
-            '',
-            {
-              positionClass: 'toast-custom-center',
-            }
           );
+          // this.toastr.error(
+          //   err?.message || 'Erreur lors de la vérification du token',
+          //   '',
+          //   {
+          //     positionClass: 'toast-custom-center',
+          //   }
+          // );
           console.error('❌ Erreur lors de la vérification du token :', err);
         },
       });

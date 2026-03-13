@@ -1,0 +1,266 @@
+/* ============================================================
+   STYLES EXISTANTS
+============================================================ */
+
+.fa-angle-double-left,
+.fa-angle-double-right {
+  font-size: 0.8rem;
+  vertical-align: middle;
+}
+
+th i.text-white {
+  vertical-align: middle;
+  margin-left: 5px;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+th i.text-muted {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.search-container {
+  min-width: 300px;
+}
+
+.search-input {
+  border-color: #dee2e6;
+  font-size: 0.9rem;
+}
+
+.search-input:focus {
+  border-color: #dee2e6;
+}
+
+.btn-export {
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  font-size: 0.85rem;
+}
+
+.btn-export:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.input-group-text {
+  border-radius: 8px 0 0 8px;
+  color: #adb5bd;
+}
+
+.form-control {
+  border-radius: 0 8px 8px 0;
+}
+
+/* ============================================================
+   SKELETON LOADING — Système complet
+
+   PRINCIPE : Un skeleton = une forme grise qui "pulse"
+   pour simuler l'emplacement du contenu qui charge.
+
+   COMMENT ÇA MARCHE :
+   1. On définit une animation "shimmer" (effet de brillance)
+   2. On crée des classes .skeleton-* pour chaque type d'élément
+   3. Dans le HTML, on les affiche quand [isLoading] est true
+      et on masque le vrai contenu
+============================================================ */
+
+/* -------------------------------------------------------
+   1. ANIMATION DE BASE — "Shimmer"
+
+   C'est l'animation qui fait passer une lumière de gauche
+   à droite sur tous les éléments skeleton.
+
+   - background-size: 200% = le dégradé est 2x plus large
+     que l'élément, ce qui permet de le faire glisser.
+   - @keyframes shimmer : on déplace le fond de 200% à 0%
+     pour que la lumière traverse de gauche à droite.
+------------------------------------------------------- */
+@keyframes shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+/* -------------------------------------------------------
+   2. CLASSE DE BASE — .skeleton
+
+   Toutes les classes skeleton héritent de celle-ci.
+   Elle définit :
+   - La couleur de fond grise
+   - Le dégradé animé (l'effet de lumière)
+   - L'animation qui tourne en boucle
+   - border-radius arrondi par défaut
+   - overflow hidden pour que rien ne dépasse
+------------------------------------------------------- */
+.skeleton {
+  /* Fond gris de base + dégradé lumineux par-dessus */
+  background-color: #e2e8f0;
+  background-image: linear-gradient(
+    90deg,
+    #e2e8f0 25%,
+    /* Gris de base */ #f8fafc 50%,
+    /* Blanc/lumière au centre */ #e2e8f0 75% /* Retour au gris */
+  );
+
+  /* Le fond est 200% large pour permettre le défilement */
+  background-size: 200% 100%;
+
+  /* Lance l'animation en boucle toutes les 1.5 secondes */
+  animation: shimmer 1.5s infinite linear;
+
+  border-radius: 6px;
+  overflow: hidden;
+
+  /* Empêche le texte éventuel d'apparaître */
+  color: transparent;
+  user-select: none;
+}
+
+/* -------------------------------------------------------
+   3. SKELETON TEXTE — Lignes de texte simulées
+
+   Utilisé pour simuler : titres, labels, contenus de cellules.
+   La hauteur est celle d'une ligne de texte standard.
+------------------------------------------------------- */
+.skeleton-text {
+  height: 14px;
+  border-radius: 4px;
+  display: block;
+}
+
+/* Variante pour les petits textes (badges, labels) */
+.skeleton-text-sm {
+  height: 11px;
+  border-radius: 4px;
+  display: block;
+}
+
+/* Variante pour les titres h5 */
+.skeleton-title {
+  height: 20px;
+  border-radius: 4px;
+  display: block;
+}
+
+/* -------------------------------------------------------
+   4. SKELETON BOUTON — Simule les boutons d'action
+
+   Dimension proche des vrais boutons Bootstrap .btn.btn-sm
+------------------------------------------------------- */
+.skeleton-btn {
+  height: 32px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* -------------------------------------------------------
+   5. SKELETON INPUT — Simule les champs de formulaire
+
+   Hauteur calquée sur .form-control et .form-select Bootstrap
+------------------------------------------------------- */
+.skeleton-input {
+  height: 38px;
+  border-radius: 6px;
+  width: 100%;
+  display: block;
+}
+
+/* Variante pour le champ de recherche (input-group) */
+.skeleton-search {
+  height: 32px;
+  border-radius: 8px;
+  width: 300px;
+  display: inline-block;
+}
+
+/* -------------------------------------------------------
+   6. SKELETON BADGE — Simule les petits badges colorés
+
+   ex : le badge "Interne", "Mobile", etc.
+       et le badge de statut (Success, Pending...)
+------------------------------------------------------- */
+.skeleton-badge {
+  height: 24px;
+  border-radius: 20px; /* Pill shape comme les vrais badges */
+  display: inline-block;
+}
+
+/* -------------------------------------------------------
+   7. SKELETON LIGNE DE TABLE — Simule une <tr>
+
+   Au lieu de recréer toutes les cellules <td> en skeleton,
+   on place UNE barre horizontale par ligne. C'est plus simple,
+   et ça donne l'impression d'une table qui charge.
+
+   La hauteur (52px) correspond à la hauteur visuelle d'une
+   ligne de notre table (avec padding et align-middle).
+------------------------------------------------------- */
+.skeleton-row {
+  height: 52px;
+  border-radius: 6px;
+  display: block;
+  width: 100%;
+
+  /* Légère alternance pour simuler les lignes table-hover */
+  margin-bottom: 2px;
+}
+
+/* Alternance de teintes pour les lignes paires/impaires */
+.skeleton-row:nth-child(even) {
+  opacity: 0.75;
+}
+
+/* -------------------------------------------------------
+   8. SKELETON LABEL — Au-dessus des inputs dans les filtres
+
+   Simule le <label class="fw-semibold form-label"> de Bootstrap
+------------------------------------------------------- */
+.skeleton-label {
+  height: 13px;
+  width: 60%;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 6px; /* Espace label → input, comme Bootstrap */
+}
+
+/* -------------------------------------------------------
+   9. SKELETON EN-TÊTE DE CARTE — Titre de la card
+
+   Simule le h5 avec l'icône dans .card-header
+------------------------------------------------------- */
+.skeleton-card-title {
+  height: 22px;
+  width: 240px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+/* -------------------------------------------------------
+   10. CONTENEUR DES LIGNES SKELETON
+
+   Wrapper optionnel si on place les barres hors du <table>
+------------------------------------------------------- */
+.skeleton-table-body {
+  padding: 8px;
+}
+
+/* -------------------------------------------------------
+   11. DARK MODE — Adaptation automatique
+
+   Si l'utilisateur est en thème sombre, on assombrit les
+   couleurs du skeleton pour qu'il reste visible.
+------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  .skeleton {
+    background-color: #334155;
+    background-image: linear-gradient(
+      90deg,
+      #334155 25%,
+      #475569 50%,
+      #334155 75%
+    );
+  }
+}

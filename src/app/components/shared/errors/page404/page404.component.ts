@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { Component, inject, OnInit } from '@angular/core';
+// import { ToastrService } from 'ngx-toastr';
 import { OrganisationsService } from '../../../../services/organisations/organisations.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-page404',
@@ -11,10 +12,10 @@ import { OrganisationsService } from '../../../../services/organisations/organis
 export class Page404Component implements OnInit {
   businnessEmailDomain: string | null = '';
   isLoading: boolean = false;
-
+  public notification = inject(NotificationService);
   constructor(
     private orgService: OrganisationsService,
-    private toastr: ToastrService
+    // private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -25,9 +26,10 @@ export class Page404Component implements OnInit {
     this.isLoading = true;
 
     if (!this.businnessEmailDomain) {
-      this.toastr.error('Email requis', '', {
-        positionClass: 'toast-custom-center',
-      });
+      this.notification.error('Email requis');
+      // this.toastr.error('Email requis', '', {
+      //   positionClass: 'toast-custom-center',
+      // });
       return;
     }
 
@@ -36,22 +38,25 @@ export class Page404Component implements OnInit {
       .subscribe({
         next: (res) => {
           if (res?.status && res?.status === 200) {
-            this.toastr.success(res?.message, '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.success(res?.message);
+            // this.toastr.success(res?.message, '', {
+            //   positionClass: 'toast-custom-center',
+            // });
           } else {
-            this.toastr.error(res?.message, '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.error(res?.message);
+            // this.toastr.error(res?.message, '', {
+            //   positionClass: 'toast-custom-center',
+            // });
           }
           console.log('res api', res);
           this.isLoading = false;
         },
 
         error: (err) => {
-          this.toastr.error(err?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(err?.message);
+          // this.toastr.error(err?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
           console.log('erreur : ', err);
           this.isLoading = false;
         },

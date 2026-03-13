@@ -20,9 +20,8 @@ registerLocaleData(localeFr, 'fr-FR');
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
-    provideToastr({
-      timeOut: 12000, 
-    }),
+    provideToastr(
+      ),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),

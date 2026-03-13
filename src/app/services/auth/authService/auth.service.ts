@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../../environnements/environnement';
+import { InactivityServiceTsService } from '../inactivity/inactivity.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,10 @@ export class AuthService {
   userInfoConfig = this._userInfoConfig.asReadonly();
 
   // Injection de HttpClient pour les requêtes HTTP
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private inactivityService: InactivityServiceTsService,
+  ) {
     const storedUser = localStorage.getItem('userInfo');
     if (storedUser) this.user = JSON.parse(storedUser);
     this.restoreFromLocalStorage();
@@ -396,6 +400,7 @@ export class AuthService {
           localStorage.clear();
           this._userInfo.set(null);
           this._userInfoConfig.set(null);
+          this.inactivityService.stopWatching();
         }),
         catchError((error) => {
           console.error('Erreur lors de la déconnexion :', error);

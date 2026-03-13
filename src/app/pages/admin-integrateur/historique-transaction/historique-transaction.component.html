@@ -1,248 +1,216 @@
 <div class="page-content">
   <div class="container-fluid py-4">
+    <!-- ================================================================
+         CARD FILTRES — SKELETON / RÉEL
+    ================================================================ -->
     <div class="card border-0 shadow-sm mb-4">
+      <!-- HEADER -->
       <div
         class="card-header bg-white border-0 d-flex justify-content-between align-items-center flex-wrap gap-2"
       >
-        <h5 class="text-primary mb-0">
-          <i class="fas fa-history me-2"></i> Historique des transactions
-        </h5>
+        <!-- Skeleton -->
+        <ng-container *ngIf="isLoading">
+          <app-skeleton-loader
+            type="card-title"
+            width="200px"
+          ></app-skeleton-loader>
+        </ng-container>
+        <!-- Réel -->
+        <ng-container *ngIf="!isLoading">
+          <h5 class="text-primary mb-0">
+            <i class="fas fa-history me-2"></i> Historique des transactions
+          </h5>
+        </ng-container>
       </div>
 
+      <!-- BODY -->
       <div class="card-body border-top">
         <div class="row align-items-end g-3">
+          <!-- Type de paiement -->
           <div class="col-md-6 col-lg-3">
-            <label class="fw-semibold form-label">Type de paiement</label>
-            <select class="form-select" [(ngModel)]="paymentModeName">
-              <option value="">Tous</option>
-              <option value="Interne">Interne</option>
-              <option value="Mobile">Mobile</option>
-              <option value="Interbancaire domestique">
-                Interbancaire domestique
-              </option>
-            </select>
+            <ng-container *ngIf="isLoading">
+              <app-skeleton-loader
+                type="text"
+                width="80px"
+              ></app-skeleton-loader>
+              <app-skeleton-loader
+                type="input"
+                width="100%"
+              ></app-skeleton-loader>
+            </ng-container>
+            <ng-container *ngIf="!isLoading">
+              <label class="fw-semibold form-label">Type de paiement</label>
+              <select class="form-select" [(ngModel)]="paymentModeName">
+                <option value="">Tous</option>
+                <option value="Interne">Interne</option>
+                <option value="Mobile">Mobile</option>
+                <option value="Interbancaire domestique">
+                  Interbancaire domestique
+                </option>
+              </select>
+            </ng-container>
           </div>
 
+          <!-- Date Début -->
           <div class="col-md-6 col-lg-3">
-            <label class="fw-semibold form-label">Date Début</label>
-            <input type="date" class="form-control" [(ngModel)]="dateDebut" />
+            <ng-container *ngIf="isLoading">
+              <app-skeleton-loader
+                type="text"
+                width="80px"
+              ></app-skeleton-loader>
+              <app-skeleton-loader
+                type="input"
+                width="100%"
+              ></app-skeleton-loader>
+            </ng-container>
+            <ng-container *ngIf="!isLoading">
+              <label class="fw-semibold form-label">Date Début</label>
+              <input type="date" class="form-control" [(ngModel)]="dateDebut" />
+            </ng-container>
           </div>
 
+          <!-- Date Fin -->
           <div class="col-md-6 col-lg-3">
-            <label class="fw-semibold form-label">Date Fin</label>
-            <input type="date" class="form-control" [(ngModel)]="dateFin" />
+            <ng-container *ngIf="isLoading">
+              <app-skeleton-loader
+                type="text"
+                width="80px"
+              ></app-skeleton-loader>
+              <app-skeleton-loader
+                type="input"
+                width="100%"
+              ></app-skeleton-loader>
+            </ng-container>
+            <ng-container *ngIf="!isLoading">
+              <label class="fw-semibold form-label">Date Fin</label>
+              <input type="date" class="form-control" [(ngModel)]="dateFin" />
+            </ng-container>
           </div>
 
+          <!-- Bouton Réinitialiser -->
           <div class="col-md-6 col-lg-3 d-flex">
-            <button
-              class="btn btn-outline-secondary w-100"
-              (click)="resetFilters()"
-            >
-              <i class="fas fa-undo me-1"></i> Réinitialiser
-            </button>
+            <ng-container *ngIf="isLoading">
+              <app-skeleton-loader
+                type="btn"
+                width="100%"
+              ></app-skeleton-loader>
+            </ng-container>
+            <ng-container *ngIf="!isLoading">
+              <button
+                class="btn btn-outline-secondary w-100"
+                (click)="resetFilters()"
+              >
+                <i class="fas fa-undo me-1"></i> Réinitialiser
+              </button>
+            </ng-container>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- ================================================================
+         BARRE OUTILS (Export + Recherche) — SKELETON / RÉEL
+    ================================================================ -->
     <div
       class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 p-2"
     >
-      <div class="d-flex gap-2">
-        <button
-          class="btn btn-outline-success btn-sm px-3 shadow-sm btn-export"
-          (click)="exportExcel()"
-        >
-          <i class="fas fa-file-excel me-2"></i
-          ><span class="fw-medium">Excel</span>
-        </button>
-        <button
-          class="btn btn-outline-danger btn-sm px-3 shadow-sm btn-export"
-          (click)="exportPdf()"
-        >
-          <i class="fas fa-file-pdf me-2"></i><span class="fw-medium">PDF</span>
-        </button>
-      </div>
-      <div class="search-container">
-        <div class="input-group input-group-sm" style="width: 300px">
-          <span class="input-group-text bg-white border-end-0 text-muted">
-            <i class="fas fa-search"></i>
-          </span>
-          <input
-            type="text"
-            [(ngModel)]="searchText"
-            placeholder="Rechercher une transaction..."
-            class="form-control border-start-0 ps-0 shadow-none search-input"
-          />
+      <!-- Skeleton -->
+      <ng-container *ngIf="isLoading">
+        <div class="d-flex gap-2">
+          <app-skeleton-loader type="btn" width="90px"></app-skeleton-loader>
+          <app-skeleton-loader type="btn" width="80px"></app-skeleton-loader>
         </div>
-      </div>
+        <app-skeleton-loader type="search" width="200px"></app-skeleton-loader>
+      </ng-container>
+      <!-- Réel -->
+      <ng-container *ngIf="!isLoading">
+        <div class="d-flex gap-2">
+          <button
+            class="btn btn-outline-success btn-sm px-3 shadow-sm btn-export"
+            (click)="exportExcel()"
+          >
+            <i class="fas fa-file-excel me-2"></i
+            ><span class="fw-medium">Excel</span>
+          </button>
+          <button
+            class="btn btn-outline-danger btn-sm px-3 shadow-sm btn-export"
+            (click)="exportPdf()"
+          >
+            <i class="fas fa-file-pdf me-2"></i
+            ><span class="fw-medium">PDF</span>
+          </button>
+        </div>
+        <div class="search-container">
+          <div class="input-group input-group-sm" style="width: 300px">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+              <i class="fas fa-search"></i>
+            </span>
+            <input
+              type="text"
+              [(ngModel)]="searchText"
+              placeholder="Rechercher une transaction..."
+              class="form-control border-start-0 ps-0 shadow-none search-input"
+            />
+          </div>
+        </div>
+      </ng-container>
     </div>
 
+    <!-- ================================================================
+         CARTE TABLE PRINCIPALE
+    ================================================================ -->
     <div class="card border-0 shadow-sm">
       <div class="card-body p-2 table-responsive">
+        <!-- TABLE HEAD -->
         <table class="table table-hover mb-0 text-center align-middle">
           <thead class="table-primary">
             <tr>
-              <th
-                class="text-nowrap cursor-pointer"
-                (click)="sort('dtCreated')"
-              >
-                Date
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon('dtCreated', sortColumn, sortDirection)
-                  "
-                ></i>
-              </th>
-              <th
-                class="text-nowrap cursor-pointer"
-                (click)="sort('Reference')"
-              >
-                Référence
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon('Reference', sortColumn, sortDirection)
-                  "
-                ></i>
-              </th>
-              <th
-                class="text-nowrap cursor-pointer"
-                (click)="sort('UserFullName')"
-              >
-                Prénom et nom
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon('UserFullName', sortColumn, sortDirection)
-                  "
-                ></i>
-              </th>
-              <th
-                class="text-nowrap cursor-pointer"
-                (click)="sort('OrganisationName')"
-              >
-                Nom organisation
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon(
-                      'OrganisationName',
-                      sortColumn,
-                      sortDirection
-                    )
-                  "
-                ></i>
-              </th>
-              <th
-                class="text-nowrap cursor-pointer"
-                (click)="sort('BenefName')"
-              >
-                Nom bénéficiaire
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon('BenefName', sortColumn, sortDirection)
-                  "
-                ></i>
-              </th>
-              <th
-                class="text-nowrap cursor-pointer"
-                (click)="sort('PaymentModeName')"
-              >
-                Type paiement
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon(
-                      'PaymentModeName',
-                      sortColumn,
-                      sortDirection
-                    )
-                  "
-                ></i>
-              </th>
-              <th class="text-nowrap cursor-pointer" (click)="sort('Amount')">
-                Montant
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon('Amount', sortColumn, sortDirection)
-                  "
-                ></i>
-              </th>
-              <th
-                class="text-nowrap cursor-pointer"
-                (click)="sort('mAmountConverted')"
-              >
-                Montant converti
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon(
-                      'mAmountConverted',
-                      sortColumn,
-                      sortDirection
-                    )
-                  "
-                ></i>
-              </th>
-              <th class="text-nowrap cursor-pointer" (click)="sort('nRate')">
-                Taux échange
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon('nRate', sortColumn, sortDirection)
-                  "
-                ></i>
-              </th>
-              <th
-                class="text-nowrap cursor-pointer"
-                (click)="sort('description')"
-              >
-                Description
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon('description', sortColumn, sortDirection)
-                  "
-                ></i>
-              </th>
-              <th class="text-nowrap cursor-pointer" (click)="sort('Status')">
-                Statut
-                <i
-                  class="fas"
-                  [class]="
-                    utils.getSortIcon('Status', sortColumn, sortDirection)
-                  "
-                ></i>
-              </th>
-              <th class="text-center">Actions</th>
+              <th>ID TXN banque</th>
+              <th>Date</th>
+              <th>Référence</th>
+              <th>Prénom et nom</th>
+              <th>Nom organisation</th>
+              <th>Nom bénéficiaire</th>
+              <th>Type paiement</th>
+              <th>Montant</th>
+              <th>Montant converti</th>
+              <th>Taux échange</th>
+              <th>Description</th>
+              <th>Statut</th>
+              <th>Actions</th>
             </tr>
           </thead>
 
+          <!-- TBODY SKELETON -->
+          <tbody *ngIf="isLoading">
+            <tr *ngFor="let _ of [].constructor(pageSize)">
+              <td colspan="13" class="p-2">
+                <app-skeleton-loader
+                  type="row"
+                  width="100%"
+                ></app-skeleton-loader>
+              </td>
+            </tr>
+          </tbody>
+
+          <!-- TBODY RÉEL -->
           <tbody *ngIf="!isLoading">
             <tr *ngFor="let item of paginedTransaction">
+              <td>{{ item.iRequestID }}</td>
               <td class="small">
                 {{ item.dtCreated | date: "dd/MM/yyyy HH:mm" }}
               </td>
-
               <td class="fw-bold text-primary small">{{ item.Reference }}</td>
-
               <td>{{ item.UserFullName }}</td>
               <td>{{ item.OrganisationName }}</td>
               <td>{{ item.BenefName }}</td>
-
               <td>
                 <span
                   *ngIf="item.PaymentModeName"
                   class="badge bg-light text-primary border border-primary-subtle px-2"
+                  >{{ item.PaymentModeName }}</span
                 >
-                  {{ item.PaymentModeName }}
-                </span>
               </td>
-
               <td class="fw-bold">
                 {{ utils.formatAmount(item.Amount) }}
                 <small class="text-muted">{{ item.debiteurCurrency }}</small>
@@ -251,7 +219,6 @@
                 {{ utils.formatAmount(item.mAmountConverted) }}
                 <small class="text-muted">{{ item.BenefCurrency }}</small>
               </td>
-
               <td>
                 <span class="badge bg-light text-dark border">{{
                   item.nRate
@@ -264,7 +231,6 @@
               >
                 {{ item.description }}
               </td>
-
               <td>
                 <span
                   class="badge px-3 py-2"
@@ -280,7 +246,6 @@
                   {{ utils.getStatusLabel(item.Status!) }}
                 </span>
               </td>
-
               <td>
                 <div class="d-flex gap-1 justify-content-center">
                   <button
@@ -304,8 +269,7 @@
                           ? 'fa-spinner fa-spin'
                           : 'fa-sync-alt'
                       "
-                    >
-                    </i>
+                    ></i>
                   </button>
                   <button
                     *ngIf="item.Status?.toLowerCase() === 'success'"
@@ -319,11 +283,8 @@
             </tr>
           </tbody>
         </table>
-        <div *ngIf="isLoading" class="text-center my-5">
-          <div class="spinner-border text-primary" role="status"></div>
-          <p class="text-muted mt-2">Chargement de l'historique...</p>
-        </div>
 
+        <!-- État vide -->
         <div
           *ngIf="!isLoading && filteredData.length === 0"
           class="text-center py-5"
@@ -332,6 +293,25 @@
           <h5 class="text-muted">Aucune transaction trouvée</h5>
         </div>
       </div>
+
+      <!-- PAGINATION SKELETON -->
+      <div
+        *ngIf="isLoading"
+        class="mt-4 d-flex justify-content-between align-items-center p-3 border-top bg-light-subtle rounded-bottom"
+      >
+        <app-skeleton-loader type="text" width="180px"></app-skeleton-loader>
+        <div class="d-flex gap-2 align-items-center">
+          <app-skeleton-loader type="btn" width="32px"></app-skeleton-loader>
+          <app-skeleton-loader type="btn" width="32px"></app-skeleton-loader>
+          <app-skeleton-loader type="btn" width="36px"></app-skeleton-loader>
+          <app-skeleton-loader type="btn" width="36px"></app-skeleton-loader>
+          <app-skeleton-loader type="btn" width="36px"></app-skeleton-loader>
+          <app-skeleton-loader type="btn" width="32px"></app-skeleton-loader>
+          <app-skeleton-loader type="btn" width="32px"></app-skeleton-loader>
+        </div>
+      </div>
+
+      <!-- PAGINATION RÉELLE -->
       <div
         *ngIf="!isLoading && filteredData.length > pageSize"
         class="mt-4 d-flex justify-content-between align-items-center p-3 border-top bg-light-subtle rounded-bottom"
@@ -342,7 +322,6 @@
             <b>{{ filteredData.length }}</b>
           </span>
         </div>
-
         <div class="d-flex gap-1 align-items-center">
           <button
             class="btn btn-outline-primary btn-sm rounded-pill px-2"
@@ -351,7 +330,6 @@
           >
             <i class="fas fa-angle-double-left"></i>
           </button>
-
           <button
             class="btn btn-outline-primary btn-sm rounded-pill px-2"
             (click)="previousPage()"
@@ -359,7 +337,6 @@
           >
             <i class="fas fa-chevron-left"></i>
           </button>
-
           <div class="mx-2 d-flex gap-1">
             <button
               *ngFor="let page of paginationRange"
@@ -376,7 +353,6 @@
               {{ page }}
             </button>
           </div>
-
           <button
             class="btn btn-outline-primary btn-sm rounded-pill px-2"
             (click)="nextPage()"
@@ -384,7 +360,6 @@
           >
             <i class="fas fa-chevron-right"></i>
           </button>
-
           <button
             class="btn btn-outline-primary btn-sm rounded-pill px-2"
             (click)="onPageClick(totalPages)"
@@ -397,7 +372,7 @@
     </div>
   </div>
 
-  <!-- Modal Annulation -->
+  <!-- MODAL ANNULATION -->
   <div
     class="modal fade show"
     *ngIf="selectedTransaction"
@@ -414,7 +389,6 @@
             (click)="closeModal()"
           ></button>
         </div>
-
         <div class="modal-body text-center py-4">
           <div class="mb-3">
             <i
@@ -422,7 +396,6 @@
               style="font-size: 3rem"
             ></i>
           </div>
-
           <h5 class="mb-2">Annuler la transaction ?</h5>
           <p class="text-muted px-3">
             Êtes-vous sûr de vouloir annuler la transaction
@@ -432,7 +405,6 @@
             ?
           </p>
         </div>
-
         <div class="modal-footer border-top-0 justify-content-center pb-4">
           <button
             type="button"

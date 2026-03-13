@@ -1,10 +1,11 @@
 import { DatePipe, NgIf, UpperCasePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { UserModel } from '../../core/models/user.model';
 import { AuthService } from '../../services/auth/authService/auth.service';
 import { StatusBancaireService } from '../../services/status-bancaire/status-bancaire.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-layout',
@@ -13,6 +14,7 @@ import { StatusBancaireService } from '../../services/status-bancaire/status-ban
   styleUrl: './layout.component.css',
 })
 export class LayoutComponent implements OnInit {
+  public notification = inject(NotificationService);
   // Information de l'utilisateur courrant
   currentUser!: UserModel;
   userCurrentTimeZone: string = '';
@@ -25,7 +27,8 @@ export class LayoutComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
+
     private statutBancaireService: StatusBancaireService,
   ) {}
 
@@ -60,8 +63,6 @@ export class LayoutComponent implements OnInit {
   //     },
   //   });
   // }
-
-
 
   recuperStatusCoreBanking() {
     this.statutBancaireService.coreBankingStatus().subscribe({
@@ -100,17 +101,16 @@ export class LayoutComponent implements OnInit {
         if (res.status && res.status === 200) {
           console.log('Déconnexion réussie :', res);
 
-          this.toastr.success(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(res.message);
+          // this.toastr.success(res.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
 
           // Nettoyage déjà fait dans le service, redirection après succès
           this.router.navigate(['/login']);
         } else {
           if (res.error.error.message === 'Unauthenticated.') {
-            this.toastr.success('Votre session a expiré', '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.success('Votre session a expiré');
             // Nettoyage déjà fait dans le service, redirection après succès
             this.router.navigate(['/login']);
           }
@@ -118,9 +118,7 @@ export class LayoutComponent implements OnInit {
       },
 
       error: (error) => {
-        this.toastr.error('Erreur lors de la déconnexion', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error('Erreur lors de la déconnexion');
 
         console.error('Erreur lors de la déconnexion :', error);
       },

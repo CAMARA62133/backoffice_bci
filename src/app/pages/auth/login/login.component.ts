@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,10 +9,11 @@ import {
 } from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {NgxCaptchaModule} from 'ngx-captcha';
-import {ToastrService} from 'ngx-toastr';
+// import {ToastrService} from 'ngx-toastr';
 import {environment} from '../../../../environnements/environnement';
 import {AuthService} from '../../../services/auth/authService/auth.service';
 import {isValid} from '../../../core/utils/form-helpers';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,7 @@ import {isValid} from '../../../core/utils/form-helpers';
 export class LoginComponent implements OnInit {
   // Formulaire de connexion
   loginForm!: FormGroup;
-
+  public notification = inject(NotificationService);
   // Variables pour la gestion des messages et du chargement
   message: any = '';
   success: boolean = false;
@@ -47,9 +48,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private toastr: ToastrService
-  ) {
-  }
+    // private toastr: ToastrService
+  ) {}
 
   // Lifecycle hook appelé à l'initialisation du composant
   ngOnInit(): void {
@@ -88,54 +88,64 @@ export class LoginComponent implements OnInit {
         captcha_token,
       });
 
-
       // 1️⃣ Charger le CSRF avant login (obligatoire)
       this.authService.getCsrfCookie().subscribe({
         next: () => {
           this.loading = false;
 
           // 2️⃣ POST login
-          this.authService.loginTest(email, password, captcha_token, appName).subscribe({
-            next: (res) => {
+          this.authService
+            .loginTest(email, password, captcha_token, appName)
+            .subscribe({
+              next: (res) => {
+                // Si la connexion reussi avec code 200
+                if (res.status === 200) {
+                  console.log('Statut login :', res.status);
+                  console.log(
+                    'Cookie après login :',
+                    this.authService.getCookieValue('bci_banking_session'),
+                  );
 
-              // Si la connexion reussi avec code 200
-              if (res.status === 200) {
-                console.log('Statut login :', res.status);
-                console.log('Cookie après login :', this.authService.getCookieValue('bci_banking_session'));
+                  // Si la réponse est un succès, on sauvegarde le token et on redirige
+                  this.loading = false;
+                  this.success = true;
 
-                // Si la réponse est un succès, on sauvegarde le token et on redirige
-                this.loading = false;
-                this.success = true;
+                  localStorage.setItem('loginEmail', email);
+                  this.router.navigate(['/valider-otp-login']);
 
-                localStorage.setItem('loginEmail', email);
-                this.router.navigate(['/valider-otp-login']);
+                  console.log('Connexion reussie :', res);
+                  console.log(
+                    'Login réussi, redirection vers la validation OTP',
+                  );
+                } else {
+                  this.notification.error(res?.message);
+                  // this.toastr.error(res?.message, '', {
+                  //   positionClass: 'toast-custom-center',
+                  // });
+                  this.router.navigate(['/login']);
+                  console.log('Erreur connexion dans "next" : ', res);
+                }
+              },
 
-                console.log('Connexion reussie :', res);
-                console.log('Login réussi, redirection vers la validation OTP');
-              } else {
-                this.toastr.error(res?.message, '', {
-                  positionClass: 'toast-custom-center',
-                });
+              error: (err) => {
                 this.router.navigate(['/login']);
-                console.log('Erreur connexion dans "next" : ', res);
-              }
-            },
-
-            error: (err) => {
-              this.router.navigate(['/login']);
-              console.error('Erreur lors de la connexion dans le "error" :', err);
-              // this.toastr.error(err?.error?.message, '', {positionClass: 'toast-custom-center'});
-              this.toastr.error("Une erreur est survenue", '', {positionClass: 'toast-custom-center'});
-              this.loading=false;
-            }
-          })
+                console.error(
+                  'Erreur lors de la connexion dans le "error" :',
+                  err,
+                );
+                // this.toastr.error(err?.error?.message, '', {positionClass: 'toast-custom-center'});
+                this.notification.error('Une erreur est survenue');
+                // this.toastr.error("Une erreur est survenue", '', {positionClass: 'toast-custom-center'});
+                this.loading = false;
+              },
+            });
         },
 
         error: () => {
           this.message = 'Erreur lors du chargement du cookie CSRF';
           this.loading = false;
-        }
-      })
+        },
+      });
       // Appel du service d'authentification
       // this.authService
       //   .login(email, password, appName, captcha_token)
@@ -169,13 +179,17 @@ export class LoginComponent implements OnInit {
       //     },
       //   });
     } else {
-      this.toastr.error(
+      this.notification.error(
         'Formulaire invalide !! Veuillez remplir tous les champs.',
-        '',
-        {
-          positionClass: 'toast-custom-center',
-        }
+  
       );
+      // this.toastr.error(
+      //   'Formulaire invalide !! Veuillez remplir tous les champs.',
+      //   '',
+      //   {
+      //     positionClass: 'toast-custom-center',
+      //   },
+      // );
       console.log('Formulaire invalide');
       this.loading = false;
     }

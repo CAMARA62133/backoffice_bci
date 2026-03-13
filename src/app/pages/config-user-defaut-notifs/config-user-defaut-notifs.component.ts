@@ -1,5 +1,5 @@
 import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import {
   getErrorMessage,
@@ -20,6 +20,7 @@ import { RolesService } from '../../services/auth/roles/roles.service';
 import { ConfigNotificationService } from '../../services/configNotification/config-notification.service';
 import { ModalsService } from '../../services/modals/modals.service';
 import { PaginationsService } from '../../services/paginations/paginations.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-config-user-defaut-notifs',
@@ -53,9 +54,9 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
   idNotif: number = 0;
 
   configDefNotifForm!: FormGroup;
-
+  public notification = inject(NotificationService);
   constructor(
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     private rolesService: RolesService,
     private configNotifService: ConfigNotificationService,
     private modalsService: ModalsService,
@@ -142,9 +143,10 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
 
     this.configNotifService.createNotificationDefaut(dataToSend).subscribe({
       next: (res) => {
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(res?.message);
+        // this.toastr.success(res?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('Notification configuer avec success', res);
         this.configDefNotifForm.reset();
         this.modalsService.closeAllModals();
@@ -152,9 +154,10 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('Erreur configuration notif : ', err);
       },
 
@@ -199,22 +202,25 @@ export class ConfigUserDefautNotifsComponent implements OnInit {
     this.configNotifService.updateNotificationDefaut(dataToSend).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(res?.message);
+          // this.toastr.success(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
           this.loadDefaultNotification();
           console.log('Modification effectuer avec success : ', res?.message);
         } else {
           console.log('Erreur api : ', res?.message);
-          this.toastr.error(res?.message);
+          this.notification.error(res?.message);
+          // this.toastr.error(res?.message);
         }
       },
 
       error: (err) => {
         console.log('Erreur de modification : ', err);
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
       },
 
       complete: () => {

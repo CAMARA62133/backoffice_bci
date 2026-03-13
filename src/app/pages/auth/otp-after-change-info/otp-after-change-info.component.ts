@@ -1,11 +1,12 @@
 import {CommonModule} from '@angular/common';
-import {Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, inject, QueryList, ViewChildren} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {Router, RouterLink} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+// import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../../services/auth/authService/auth.service';
 import {OtpAfterChangeInfoService} from '../../../services/auth/otp-after-change-info/otp-after-change-info.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-otp-after-change-info',
@@ -27,12 +28,12 @@ export class OtpAfterChangeInfoComponent {
   loginEmail: string | null = '';
   userEmail: string | null = '';
 
-  // Constructuer
+  public notification= inject(NotificationService)
   constructor(
     private otpService: OtpAfterChangeInfoService,
     private router: Router,
     private authService: AuthService,
-    private toastr: ToastrService
+    // private toastr: ToastrService
   ) {
   }
 
@@ -82,9 +83,10 @@ export class OtpAfterChangeInfoComponent {
 
         this.otpValues = ['', '', '', ''];
 
-        this.toastr.success(response.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(response.message);
+        // this.toastr.success(response.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         if (this.otpInputs && this.otpInputs.first) {
           setTimeout(() => {
@@ -98,9 +100,10 @@ export class OtpAfterChangeInfoComponent {
         this.isLoadingReEnvoi = false;
         console.log(err);
 
-        this.toastr.success(err, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(err);
+        // this.toastr.success(err, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.otpValues = ['', '', '', ''];
         if (this.otpInputs && this.otpInputs.first) {
@@ -140,9 +143,10 @@ export class OtpAfterChangeInfoComponent {
 
           console.log('res : ', response);
 
-          this.toastr.success("Numéro de téléphone vérifié avec succès", '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success('Numéro de téléphone vérifié avec succès');
+          // this.toastr.success("Numéro de téléphone vérifié avec succès", '', {
+          //   positionClass: 'toast-custom-center',
+          // });
           this.router.navigate(['/login']);
           localStorage.removeItem('userEmail');
         } else {
@@ -151,18 +155,20 @@ export class OtpAfterChangeInfoComponent {
             this.router.navigate(['/login']);
           }
 
-          this.toastr.error(response.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(response.message);
+          // this.toastr.error(response.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
         console.log(response);
       },
       error: (err) => {
         this.isLoading = false;
         console.log({err});
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
       },
     });
   }

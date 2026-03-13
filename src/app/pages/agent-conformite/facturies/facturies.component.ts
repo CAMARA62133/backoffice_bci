@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  inject,
   OnInit,
 } from '@angular/core';
 import {
@@ -17,7 +18,7 @@ import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import 'datatables.net-bs5';
 import { Config } from 'datatables.net-bs5';
 import 'datatables.net-buttons-dt';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { FacturierListing } from '../../../core/interfaces/facturies.interface';
 import { FacturiesService } from '../../../core/node/services/facturies/facturies.service';
@@ -31,6 +32,7 @@ import { AuthService } from '../../../services/auth/authService/auth.service';
 import { ModalsService } from '../../../services/modals/modals.service';
 
 import 'datatables.net-select';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-facturies',
@@ -86,10 +88,10 @@ export class FacturiesComponent implements OnInit {
 
   // ===================
   previewUrl: string | null = null;
-
+  public notification = inject(NotificationService);
   constructor(
     private facturiesService: FacturiesService,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     private modalsService: ModalsService,
     private fb: FormBuilder,
     private authService: AuthService,
@@ -285,25 +287,28 @@ export class FacturiesComponent implements OnInit {
     this.facturiesService.addFacturier(formData).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(res?.message);
+          // this.toastr.success(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
 
           this.loadFacturies();
           this.modalsService.closeAllModals();
         } else {
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(res?.message);
+          // this.toastr.error(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
         this.isLoading = false;
         console.log(res);
       },
 
       error: (err) => {
-        this.toastr.error('❌ Erreur lors de la création', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error('❌ Erreur lors de la création');
+        // this.toastr.error('❌ Erreur lors de la création', '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         console.error('❌ Erreur lors de la création :', err?.message);
 
@@ -411,25 +416,28 @@ export class FacturiesComponent implements OnInit {
     this.facturiesService.updateFacturier(formData).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(res?.message);
+          // this.toastr.success(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
           this.loadFacturies();
           this.modalsService.closeAllModals();
           this.dttrigger.next(null);
         } else {
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(res?.message);
+          // this.toastr.error(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
         console.log('res update:', res);
         this.isLoading = false;
       },
 
       error: (err) => {
-        this.toastr.error('❌ Une erreur interne est survenue', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error('❌ Une erreur interne est survenue');
+        // this.toastr.error('❌ Une erreur interne est survenue', '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         console.log('Erreur update:', err);
         console.log('Erreur update:', err?.message);
@@ -451,9 +459,10 @@ export class FacturiesComponent implements OnInit {
   bloquerEtDebloquer() {
     if (this.isloadingBloquerDebloquer) return;
     if (this.selectedFacturierId === null) {
-      this.toastr.error('Aucun facturier sélectionnée.', '', {
-        positionClass: 'toast-custom-center',
-      });
+      this.notification.error('Aucun facturier sélectionnée.');
+      // this.toastr.error('Aucun facturier sélectionnée.', '', {
+      //   positionClass: 'toast-custom-center',
+      // });
       return;
     }
 
@@ -469,9 +478,10 @@ export class FacturiesComponent implements OnInit {
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
 
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(res?.message);
+        // this.toastr.success(res?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.modalsService.closeModal('bloquerDebloquerModal');
         console.log('res api : ', res);
@@ -479,13 +489,16 @@ export class FacturiesComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(
+        this.notification.error(
           'Une erreur interne est survenue lors du blocage',
-          '',
-          {
-            positionClass: 'toast-custom-center',
-          },
         );
+        // this.toastr.error(
+        //   'Une erreur interne est survenue lors du blocage',
+        //   '',
+        //   {
+        //     positionClass: 'toast-custom-center',
+        //   },
+        // );
         console.log('err api : ', err);
         this.isloadingBloquerDebloquer = false;
         this.modalsService.closeModal('bloquerDebloquerModal');
@@ -510,18 +523,20 @@ export class FacturiesComponent implements OnInit {
             }
           });
         } else {
-          this.toastr.error('Erreur lors du chargement des facturies.', '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error('Erreur lors du chargement des facturies.');
+          // this.toastr.error('Erreur lors du chargement des facturies.', '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
         this.isLoadingFacturies = false;
         console.log(res);
       },
 
       error: (err) => {
-        this.toastr.error('Une erreur interne est survenue.', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error('Une erreur interne est survenue.');
+        // this.toastr.error('Une erreur interne est survenue.', '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('err facturies list:', err);
         this.isLoadingFacturies = false;
       },

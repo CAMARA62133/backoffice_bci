@@ -1,26 +1,20 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {DemandeService} from '../../../services/agent-conformite/demande/demande.service';
-import {ToastrService} from 'ngx-toastr';
+// import {ToastrService} from 'ngx-toastr';
 import {Subject} from 'rxjs';
 import {DataTablesModule} from 'angular-datatables';
 import DataTables from 'datatables.net';
 import {Settings} from 'jspdf-autotable';
 import type {Config} from 'datatables.net';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-agent-liste-demandes',
-  imports: [
-    RouterLink,
-    NgClass,
-    NgForOf,
-    NgIf,
-    DataTablesModule,
-    DatePipe
-  ],
+  imports: [RouterLink, NgClass, NgForOf, NgIf, DataTablesModule, DatePipe],
   templateUrl: './agent-liste-demandes.component.html',
-  styleUrl: './agent-liste-demandes.component.css'
+  styleUrl: './agent-liste-demandes.component.css',
 })
 export class AgentListeDemandesComponent implements OnInit, OnDestroy {
   // === GESTION MULTI-TABLES ===
@@ -48,10 +42,13 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
   traitedDemandes: any[] = [];
   rejectedDemandes: any[] = [];
 
-
+  public notification = inject(NotificationService);
   // constructeur
-  constructor(private demandeService: DemandeService, private toastr: ToastrService, private router: Router) {
-  }
+  constructor(
+    private demandeService: DemandeService,
+    // private toastr: ToastrService,
+    private router: Router,
+  ) {}
 
   // A l'initialisation
   ngOnInit() {
@@ -60,8 +57,8 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
       pagingType: 'full_numbers',
       pageLength: 10,
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
-      }
+        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json',
+      },
     };
 
     // CONFIG TABLE 2
@@ -69,8 +66,8 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
       pagingType: 'simple',
       pageLength: 5,
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
-      }
+        url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json',
+      },
     };
 
     // CRÉER LES TRIGGERS
@@ -87,35 +84,47 @@ export class AgentListeDemandesComponent implements OnInit, OnDestroy {
     this.demandeService.allDemandesSouscriptions().subscribe({
       next: (res) => {
         if (res?.status === 200) {
-          this.demandes = res?.data.filter((d: any) => d.statutDemande === "En traitement");
-          this.traitedDemandes = res?.data.filter((d: any) => d.statutDemande === "Valide");
-          this.rejectedDemandes = res?.data.filter((d: any) => d.statutDemande === "Rejete");
+          this.demandes = res?.data.filter(
+            (d: any) => d.statutDemande === 'En traitement',
+          );
+          this.traitedDemandes = res?.data.filter(
+            (d: any) => d.statutDemande === 'Valide',
+          );
+          this.rejectedDemandes = res?.data.filter(
+            (d: any) => d.statutDemande === 'Rejete',
+          );
 
           // Initialiser toutes les tables après chargement
-          this.dtTriggers.forEach(t => t.next(null));
+          this.dtTriggers.forEach((t) => t.next(null));
         } else {
-          if (res?.error?.message === "Unauthenticated.") {
-            this.toastr.error("Votre session a expirée", '', {positionClass: 'toast-custom-center'});
+          if (res?.error?.message === 'Unauthenticated.') {
+            this.notification.error('Votre session a expirée');
+            // this.toastr.error('Votre session a expirée', '', {
+            //   positionClass: 'toast-custom-center',
+            // });
             this.router.navigate(['/login']);
           }
         }
 
         this.isLoadingDemandes = false;
-        console.log("dmd attentes:", this.demandes);
-        console.log("dmd traited:", this.traitedDemandes);
-        console.log("dmd rejected:", this.rejectedDemandes);
+        console.log('dmd attentes:', this.demandes);
+        console.log('dmd traited:', this.traitedDemandes);
+        console.log('dmd rejected:', this.rejectedDemandes);
       },
 
       error: (err) => {
-        this.toastr.error("Une erreur interne est survenue.", '', {positionClass: 'toast-custom-center'});
-        console.log("err demandes:", err);
+        this.notification.error('Une erreur interne est survenue.');
+        // this.toastr.error('Une erreur interne est survenue.', '', {
+        //   positionClass: 'toast-custom-center',
+        // });
+        console.log('err demandes:', err);
         this.isLoadingDemandes = false;
-      }
-    })
+      },
+    });
   }
 
   ngOnDestroy(): void {
     // Détruire proprement
-    this.dtTriggers.forEach(t => t.unsubscribe());
+    this.dtTriggers.forEach((t) => t.unsubscribe());
   }
 }

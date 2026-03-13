@@ -40,42 +40,35 @@
         </div>
       </div>
     </div> -->
+
     <div class="row mt-3">
       <div class="col-xl-4">
         <div
           class="card card-h-100"
           style="
-            background: url(&quot;assets/img/images-bci/bg-chart-BCI-Internet_Banking-3.jpg?h=60704d8652a4d6012af3cf7b9e758808&quot;)
+            background: url(&quot;assets/img/images-bci/bg-chart-BCI-Internet_Banking-3.jpg&quot;)
               right / cover;
           "
         >
           <div class="card-header text-light bg-transparent">
-            <div class="d-flex align-items-center flex-wrap">
-              <h5 class="text-nowrap me-2 card-title chart-title">
-                Volume des opérations
-              </h5>
-              <div
-                class="btn-group btn-group-sm ms-auto page-title-right"
-                role="group"
-              >
-                <button class="btn btn-outline-secondary active" type="button">
-                  24h</button
-                ><button class="btn btn-outline-secondary" type="button">
-                  7j</button
-                ><button class="btn btn-outline-secondary" type="button">
-                  30j
-                </button>
-              </div>
-            </div>
+            <h5 class="card-title chart-title">Volume des opérations</h5>
           </div>
-          <div class="card-body text-light finance-chart-container">
+          <div class="card-body">
+            <app-skeleton-loader
+              *ngIf="isLoading"
+              type="row"
+              height="250px"
+            ></app-skeleton-loader>
+
             <apx-chart
+              *ngIf="!isLoading"
               [series]="volumeChart.series"
               [chart]="volumeChart.chart"
               [xaxis]="volumeChart.xaxis"
               [stroke]="volumeChart.stroke"
               [fill]="volumeChart.fill"
-            ></apx-chart>
+            >
+            </apx-chart>
           </div>
         </div>
       </div>
@@ -88,202 +81,215 @@
           </div>
           <div class="card-body finance-chart-container">
             <div class="row text-center justify-content-center">
-              <div class="col-6 col-md-4 mb-4">
-                <a
-                  class="custom-icon-container"
-                  href="#"
-                  data-bs-target="#createTicketModal"
-                  data-bs-toggle="modal"
-                  ><i class="icon ion-chatboxes custom-icon-size"></i>
-                  <p class="custom-icon-text">Créer ticket</p>
-                </a>
-              </div>
-              <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" routerLink="/repporting-export"
-                  ><i class="icon ion-document-text custom-icon-size"></i>
-                  <p class="custom-icon-text">Rapports Périodiques</p>
-                </a>
-              </div>
-              <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-ios-cloud-download custom-icon-size"></i>
-                  <p class="custom-icon-text">Exporter transactions</p>
-                </a>
-              </div>
-              <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-checkmark-circled custom-icon-size"></i>
-                  <p class="custom-icon-text">Opérations à valider</p>
-                </a>
-              </div>
-              <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-card custom-icon-size"></i>
-                  <p class="custom-icon-text">Transactions sensibles</p>
-                </a>
-              </div>
-              <div class="col-6 col-md-4 mb-4">
-                <a class="custom-icon-container" href="#"
-                  ><i class="icon ion-ios-list custom-icon-size"></i>
-                  <p class="custom-icon-text">Liste des entreprises</p>
-                </a>
-              </div>
+              <ng-container *ngIf="isLoading">
+                <div
+                  class="col-6 col-md-4 mb-4"
+                  *ngFor="let i of [1, 2, 3, 4, 5, 6]"
+                >
+                  <div
+                    class="custom-icon-container d-flex flex-column align-items-center"
+                  >
+                    <app-skeleton-loader
+                      type="btn"
+                      width="60px"
+                      height="60px"
+                      class="mb-2"
+                    >
+                    </app-skeleton-loader>
+                    <app-skeleton-loader type="text-sm" width="80%">
+                    </app-skeleton-loader>
+                  </div>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="!isLoading">
+                <div class="col-6 col-md-4 mb-4">
+                  <a
+                    class="custom-icon-container"
+                    href="#"
+                    data-bs-target="#createTicketModal"
+                    data-bs-toggle="modal"
+                  >
+                    <i class="icon ion-chatboxes custom-icon-size"></i>
+                    <p class="custom-icon-text">Créer ticket</p>
+                  </a>
+                </div>
+                <div class="col-6 col-md-4 mb-4">
+                  <a
+                    class="custom-icon-container"
+                    routerLink="/repporting-export"
+                  >
+                    <i class="icon ion-document-text custom-icon-size"></i>
+                    <p class="custom-icon-text">Rapports Périodiques</p>
+                  </a>
+                </div>
+                <div class="col-6 col-md-4 mb-4">
+                  <a class="custom-icon-container" href="#">
+                    <i class="icon ion-ios-cloud-download custom-icon-size"></i>
+                    <p class="custom-icon-text">Exporter transactions</p>
+                  </a>
+                </div>
+                <div class="col-6 col-md-4 mb-4">
+                  <a class="custom-icon-container" href="#">
+                    <i class="icon ion-checkmark-circled custom-icon-size"></i>
+                    <p class="custom-icon-text">Opérations à valider</p>
+                  </a>
+                </div>
+                <div class="col-6 col-md-4 mb-4">
+                  <a class="custom-icon-container" href="#">
+                    <i class="icon ion-card custom-icon-size"></i>
+                    <p class="custom-icon-text">Transactions sensibles</p>
+                  </a>
+                </div>
+                <div class="col-6 col-md-4 mb-4">
+                  <a class="custom-icon-container" href="#">
+                    <i class="icon ion-ios-list custom-icon-size"></i>
+                    <p class="custom-icon-text">Liste des entreprises</p>
+                  </a>
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-xl-4">
-        <div class="card text-white bg-info card-h-100">
-          <div class="card-header bg-transparent d-flex">
-            <h4 class="grow mb-0 card-title chart-title">
-              Cliché du travail pour aujourd'hui
-            </h4>
-          </div>
-          <div class="card-body finance-chart-container">
-            <div class="row">
-              <div class="col-lg">
-                <p class="font-size-13">A la date du 23 juin 2025</p>
-              </div>
-              <div class="col-lg-4">
-                <h3 class="text-end text-white mb-1">
-                  <span class="counter-value" data-target="90">0</span>&nbsp;%
-                </h3>
-              </div>
-            </div>
-            <div class="pt-1 px-3" data-simplebar style="max-height: 266px">
-              <ul class="list-unstyled mb-0 activity-wid">
-                <li class="activity-list activity-border">
-                  <div class="bg-transparent activity-icon avatar-md">
-                    <span
-                      class="text-success bg-success-subtle avatar-title rounded-circle"
-                      ><i class="icon ion-checkmark bx font-size-24"></i
-                    ></span>
-                  </div>
-                  <div class="timeline-list-item">
-                    <div class="d-flex">
-                      <div class="overflow-hidden grow me-4">
-                        <h5 class="text-white mb-2 font-size-14">Traité</h5>
-                        <h5 class="text-light mb-2 font-size-18">3</h5>
-                        <div class="mb-0 progress animated-progess">
-                          <div
-                            class="bg-success progress-bar progress-bar-striped"
-                            role="progressbar"
-                            style="width: 100%"
-                            aria-valuenow="100"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                      <div class="text-end shrink-0">
-                        <div class="dropdown">
-                          <button
-                            class="btn text-muted font-size-24"
-                            aria-expanded="false"
-                            data-bs-toggle="dropdown"
-                            type="button"
-                            aria-haspopup="true"
-                          >
-                            <i class="icon ion-android-more-vertical"></i>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Voir détails</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="activity-list activity-border">
-                  <div class="bg-transparent activity-icon avatar-md">
-                    <span
-                      class="text-warning bg-warning-subtle avatar-title rounded-circle"
-                      ><i class="icon ion-load-a bx font-size-24"></i
-                    ></span>
-                  </div>
-                  <div class="timeline-list-item">
-                    <div class="d-flex">
-                      <div class="overflow-hidden grow me-4">
-                        <h5 class="text-white mb-2 font-size-14">En cours</h5>
-                        <h5 class="text-light mb-2 font-size-18">1</h5>
-                        <div class="mb-0 progress animated-progess">
-                          <div
-                            class="bg-warning progress-bar progress-bar-striped"
-                            role="progressbar"
-                            style="width: 50%"
-                            aria-valuenow="50"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                      <div class="text-end shrink-0">
-                        <div class="dropdown">
-                          <button
-                            class="btn text-muted font-size-24"
-                            aria-expanded="false"
-                            data-bs-toggle="dropdown"
-                            type="button"
-                            aria-haspopup="true"
-                          >
-                            <i class="icon ion-android-more-vertical"></i>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Voir détails</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-                <li class="activity-list activity-border">
-                  <div class="bg-transparent activity-icon avatar-md">
-                    <span
-                      class="text-danger bg-danger-subtle avatar-title rounded-circle"
-                      ><i class="icon ion-close-circled bx font-size-24"></i
-                    ></span>
-                  </div>
-                  <div class="timeline-list-item">
-                    <div class="d-flex">
-                      <div class="overflow-hidden grow me-4">
-                        <h5 class="text-white mb-2 font-size-14">Rejeté</h5>
-                        <h5 class="text-light mb-2 font-size-18">0</h5>
-                        <div class="mb-0 progress animated-progess">
-                          <div
-                            class="bg-danger progress-bar progress-bar-striped"
-                            role="progressbar"
-                            style="width: 100%"
-                            aria-valuenow="100"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                      <div class="text-end shrink-0">
-                        <div class="dropdown">
-                          <button
-                            class="btn text-muted font-size-24"
-                            aria-expanded="false"
-                            data-bs-toggle="dropdown"
-                            type="button"
-                            aria-haspopup="true"
-                          >
-                            <i class="icon ion-android-more-vertical"></i>
-                          </button>
-                          <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="#">Voir détails</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="col-xl-4">
+  <div class="card text-white bg-info card-h-100">
+    <div class="card-header bg-transparent d-flex">
+      <h4 class="grow mb-0 card-title chart-title">
+        Cliché du travail pour aujourd'hui
+      </h4>
     </div>
+    <div class="card-body finance-chart-container">
+      
+      <ng-container *ngIf="isLoading">
+        <div class="row mb-4">
+          <div class="col-lg">
+            <app-skeleton-loader type="text-sm" width="120px"></app-skeleton-loader>
+          </div>
+          <div class="col-lg-4 text-end">
+            <app-skeleton-loader type="title" width="50px" class="ms-auto"></app-skeleton-loader>
+          </div>
+        </div>
+        
+        <div class="pt-1 px-3">
+          <div class="mb-4" *ngFor="let i of [1,2,3]">
+            <div class="d-flex align-items-center mb-2">
+              <app-skeleton-loader type="btn" width="40px" height="40px" class="me-3"></app-skeleton-loader>
+              <div class="grow">
+                <app-skeleton-loader type="text-sm" width="40%" class="mb-2"></app-skeleton-loader>
+                <app-skeleton-loader type="row" height="10px" width="100%"></app-skeleton-loader>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isLoading">
+        <div class="row">
+          <div class="col-lg">
+            <p class="font-size-13">A la date du 23 juin 2025</p>
+          </div>
+          <div class="col-lg-4">
+            <h3 class="text-end text-white mb-1">
+              <span class="counter-value" data-target="90">90</span>&nbsp;%
+            </h3>
+          </div>
+        </div>
+        <div class="pt-1 px-3" data-simplebar style="max-height: 266px">
+          <ul class="list-unstyled mb-0 activity-wid">
+            <li class="activity-list activity-border">
+              <div class="bg-transparent activity-icon avatar-md">
+                <span class="text-success bg-success-subtle avatar-title rounded-circle">
+                  <i class="icon ion-checkmark bx font-size-24"></i>
+                </span>
+              </div>
+              <div class="timeline-list-item">
+                <div class="d-flex">
+                  <div class="overflow-hidden grow me-4">
+                    <h5 class="text-white mb-2 font-size-14">Traité</h5>
+                    <h5 class="text-light mb-2 font-size-18">3</h5>
+                    <div class="mb-0 progress animated-progess">
+                      <div class="bg-success progress-bar progress-bar-striped" role="progressbar" style="width: 100%"></div>
+                    </div>
+                  </div>
+                  <div class="text-end shrink-0">
+                    <div class="dropdown">
+                      <button class="btn text-muted font-size-24" data-bs-toggle="dropdown" type="button">
+                        <i class="icon ion-android-more-vertical"></i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="#">Voir détails</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="activity-list activity-border">
+              <div class="bg-transparent activity-icon avatar-md">
+                <span class="text-warning bg-warning-subtle avatar-title rounded-circle">
+                  <i class="icon ion-load-a bx font-size-24"></i>
+                </span>
+              </div>
+              <div class="timeline-list-item">
+                <div class="d-flex">
+                  <div class="overflow-hidden grow me-4">
+                    <h5 class="text-white mb-2 font-size-14">En cours</h5>
+                    <h5 class="text-light mb-2 font-size-18">1</h5>
+                    <div class="mb-0 progress animated-progess">
+                      <div class="bg-warning progress-bar progress-bar-striped" role="progressbar" style="width: 50%"></div>
+                    </div>
+                  </div>
+                  <div class="text-end shrink-0">
+                    <div class="dropdown">
+                      <button class="btn text-muted font-size-24" data-bs-toggle="dropdown" type="button">
+                        <i class="icon ion-android-more-vertical"></i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="#">Voir détails</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="activity-list activity-border">
+              <div class="bg-transparent activity-icon avatar-md">
+                <span class="text-danger bg-danger-subtle avatar-title rounded-circle">
+                  <i class="icon ion-close-circled bx font-size-24"></i>
+                </span>
+              </div>
+              <div class="timeline-list-item">
+                <div class="d-flex">
+                  <div class="overflow-hidden grow me-4">
+                    <h5 class="text-white mb-2 font-size-14">Rejeté</h5>
+                    <h5 class="text-light mb-2 font-size-18">0</h5>
+                    <div class="mb-0 progress animated-progess">
+                      <div class="bg-danger progress-bar progress-bar-striped" role="progressbar" style="width: 100%"></div>
+                    </div>
+                  </div>
+                  <div class="text-end shrink-0">
+                    <div class="dropdown">
+                      <button class="btn text-muted font-size-24" data-bs-toggle="dropdown" type="button">
+                        <i class="icon ion-android-more-vertical"></i>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="#">Voir détails</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+    </div>
+
     <!-- <div class="row mt-3">
       <div class="col-12">
         <div class="bounce animated kpi-container">

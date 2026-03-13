@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
+  inject,
   OnInit,
 } from '@angular/core';
 import {
@@ -13,7 +14,7 @@ import {
 } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { AlerteType } from '../../core/interfaces/alertes';
 import {
@@ -26,6 +27,7 @@ import { AlertesService } from '../../services/alertes/alertes.service';
 import { ModalsService } from '../../services/modals/modals.service';
 import { NotificationsService } from '../../services/notifications/notifications.service';
 import { PaginationsService } from '../../services/paginations/paginations.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-notifications',
@@ -67,10 +69,11 @@ export class NotificationsComponent implements OnInit {
     { id: 'INFO', description: 'INFO' },
   ];
 
+  public notification = inject(NotificationService);
   constructor(
     private fb: FormBuilder,
     private modalsService: ModalsService,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     private notifService: NotificationsService,
     private alertesService: AlertesService,
     private cd: ChangeDetectorRef,
@@ -173,13 +176,17 @@ export class NotificationsComponent implements OnInit {
         this.notifForm.reset();
         this.modalsService.closeAllModals();
 
-        this.toastr.success(
-          res?.message || 'Notification créée avec succès !',
-          '',
-          {
-            positionClass: 'toast-custom-center',
-          },
+        this.notification.success(
+          res?.message || 'Notification créée avec succès !'
         );
+
+        // this.toastr.success(
+        //   res?.message || 'Notification créée avec succès !',
+        //   '',
+        //   {
+        //     positionClass: 'toast-custom-center',
+        //   },
+        // );
 
         this.paginationService.reset();
         this.loadNotifications();
@@ -190,13 +197,16 @@ export class NotificationsComponent implements OnInit {
       error: (err) => {
         this.isLoading = false;
 
-        this.toastr.error(
+        this.notification.error(
           err?.message || "Erreur lors de la creation de l'alerte",
-          '',
-          {
-            positionClass: 'toast-custom-center',
-          },
         );
+        // this.toastr.error(
+        //   err?.message || "Erreur lors de la creation de l'alerte",
+        //   '',
+        //   {
+        //     positionClass: 'toast-custom-center',
+        //   },
+        // );
         console.log('Erreur create notification : ', err);
       },
     });
@@ -256,18 +266,20 @@ export class NotificationsComponent implements OnInit {
     this.notifService.uppdateNotification(dataToSend).subscribe({
       next: (res) => {
         console.log('Modification effectuer avec success : ', res?.message);
-        this.toastr.success('Modification effectuer avec success ', '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success('Modification effectuer avec success ');
+        // this.toastr.success('Modification effectuer avec success ', '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.paginationService.reset();
       },
 
       error: (err) => {
         console.log('Erreur de modification : ', err);
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
       },
 
       complete: () => {
@@ -289,7 +301,8 @@ export class NotificationsComponent implements OnInit {
   bloquerEtDebloquer(): void {
     if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
     if (this.selectedNotificationId === null) {
-      this.toastr.error('Aucune notification sélectionnée.');
+      this.notification.error('Aucune notification sélectionnée.');
+      // this.toastr.error('Aucune notification sélectionnée.');
       return;
     }
 
@@ -305,9 +318,10 @@ export class NotificationsComponent implements OnInit {
         this.showModalOpenBloquerDebloquer = false;
         this.isloadingBloquerDebloquer = false;
 
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(res?.message);
+        // this.toastr.success(res?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.loadNotifications();
 
@@ -317,9 +331,10 @@ export class NotificationsComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('err api : ', err);
         this.isloadingBloquerDebloquer = false;
         this.modalsService.closeModal('bloquerDebloquerModal');

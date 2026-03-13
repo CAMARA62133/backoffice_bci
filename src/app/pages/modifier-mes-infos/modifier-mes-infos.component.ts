@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectorRef, Component, inject} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -9,12 +9,13 @@ import {
   Validators,
 } from '@angular/forms';
 import {Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+// import {ToastrService} from 'ngx-toastr';
 import {AuthService} from '../../services/auth/authService/auth.service';
 import {ConfigurationsService} from '../../services/configurations/configurations.service';
 import {OrganisationsService} from '../../services/organisations/organisations.service';
 import {MesNotifsService} from '../../services/mesNotifs/mes-notifs.service';
 import {DataTableDirective} from '../../core/directives/data-table/data-table.directive';
+import { NotificationService } from '../../services/notification/notification.service';
 
 declare var bootstrap: any;
 
@@ -56,7 +57,7 @@ export class ModifierMesInfosComponent {
   passwordVisibleOld = false;
   passwordVisibleNew = false;
   passwordVisibleConfirm = false;
-  password = {old: '', new: '', confirm: ''};
+  password = { old: '', new: '', confirm: '' };
 
   countries: any[] = [];
   isLoadingCoutries: boolean = false;
@@ -90,22 +91,20 @@ export class ModifierMesInfosComponent {
   isloadingBloquerDebloquer: boolean = false;
 
   // ===================================================
-
+  public notification = inject(NotificationService);
   constructor(
     private authService: AuthService,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     private orgService: OrganisationsService,
     private fb: FormBuilder,
     private configService: ConfigurationsService,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private mesNotifsService: MesNotifsService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.getUserInfo();
-
 
     const dataConfig = this.authService.getUserInfoConfig();
     const userInfo = this.authService.getUserInfo();
@@ -115,33 +114,33 @@ export class ModifierMesInfosComponent {
     console.log('userInfo : ', userInfo);
 
     if (dataConfig) {
-      this.userInfoConfig = {...dataConfig};
+      this.userInfoConfig = { ...dataConfig };
       console.log('userInfoConfig : ', this.userInfoConfig);
 
       this.country = dataConfig.organisation.find(
-        (c: any) => c.vcKey === 'Pays'
+        (c: any) => c.vcKey === 'Pays',
       )?.vcValue;
       console.log(this.country);
 
       this.phoneCode = dataConfig.organisation.find(
-        (c: any) => c.vcKey === 'Telephone_Code'
+        (c: any) => c.vcKey === 'Telephone_Code',
       )?.vcValue;
 
       this.phoneFormat = dataConfig.organisation.find(
-        (c: any) => c.vcKey === 'Telephone_Format'
+        (c: any) => c.vcKey === 'Telephone_Format',
       )?.vcValue;
       this.phoneMaxLength = this.phoneFormat.length;
 
       this.currency = dataConfig.organisation.find(
-        (c: any) => c.vcKey === 'Devise'
+        (c: any) => c.vcKey === 'Devise',
       )?.vcValue;
 
       this.timeZone = dataConfig.organisation.find(
-        (c: any) => c.vcKey === 'TimeZone'
+        (c: any) => c.vcKey === 'TimeZone',
       )?.vcValue;
 
       this.timeZonePerUser = dataConfig.organisation.find(
-        (c: any) => c.vcKey === 'TimeZonePerUser'
+        (c: any) => c.vcKey === 'TimeZonePerUser',
       )?.vcValue;
       console.log('TimeZonePerUser : ', this.timeZonePerUser);
 
@@ -155,13 +154,17 @@ export class ModifierMesInfosComponent {
       console.log('phoneFirstNumber : ', this.phoneFirstNumber);
     }
 
-    if (this.timeZonePerUser === 1 || this.timeZonePerUser === '1' || this.timeZonePerUser === true) {
+    if (
+      this.timeZonePerUser === 1 ||
+      this.timeZonePerUser === '1' ||
+      this.timeZonePerUser === true
+    ) {
       this.isChecked = true;
     }
 
     // Chargement de l'utilisateur connecté
     const data = this.authService.getUserInfo();
-    if (data) this.currentUserInfo = {...data};
+    if (data) this.currentUserInfo = { ...data };
 
     // Initialisation du formulaire
     this.initForm();
@@ -180,7 +183,7 @@ export class ModifierMesInfosComponent {
       const selected = this.countries.find(
         (c: any) =>
           c.vcCode.toLowerCase().trim() ==
-          selectedCountryCode.toLowerCase().trim()
+          selectedCountryCode.toLowerCase().trim(),
       );
       console.log('selected country : ', selected);
 
@@ -193,12 +196,10 @@ export class ModifierMesInfosComponent {
             Devise: selected.devise || this.currency, // si ton API renvoie une devise
             TimeZonePerUser: this.timeZonePerUser === 1 ? true : false,
           },
-          {emitEvent: false} // 🛑 évite la boucle infinie
+          { emitEvent: false }, // 🛑 évite la boucle infinie
         );
       }
     });
-
-
   }
 
   // ✅ Changer visibilité mot de passe
@@ -275,7 +276,7 @@ export class ModifierMesInfosComponent {
         this.currentUserInfo.vcFirstname,
         this.currentUserInfo.email,
         this.currentUserInfo.vcPhoneNumber,
-        Number(this.currentUserInfo.id)
+        Number(this.currentUserInfo.id),
       )
       .subscribe({
         next: (response: any) => {
@@ -290,14 +291,17 @@ export class ModifierMesInfosComponent {
           // Gestion des scénarios de déconnexion
           if (response?.isDeconnectUsersPhone === 'pageotp') {
             // Affichage du message de success
-            this.toastr.success(
+            this.notification.success(
               'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation téléphone.',
-              '',
-              {
-                positionClass: 'toast-custom-center',
-                timeOut: 5000,
-              }
             );
+            // this.toastr.success(
+            //   'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation téléphone.',
+            //   '',
+            //   {
+            //     positionClass: 'toast-custom-center',
+            //     timeOut: 5000,
+            //   },
+            // );
 
             // Deconnexion et redirection apres 5 secondes
             setTimeout(() => {
@@ -305,16 +309,18 @@ export class ModifierMesInfosComponent {
               this.router.navigate(['/valider-otp']);
             }, 5000);
           } else if (response?.isDeconnectUsersEmail === 'pageemail') {
-
             // Affichage du message de success si l'email a ete modifier
-            this.toastr.success(
-              'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation email.',
-              '',
-              {
-                positionClass: 'toast-custom-center',
-                timeOut: 5000,
-              }
+            this.notification.success(
+              'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation email.'
             );
+            // this.toastr.success(
+            //   'Vos informations ont été modifiées. Déconnexion dans 5 secondes pour validation email.',
+            //   '',
+            //   {
+            //     positionClass: 'toast-custom-center',
+            //     timeOut: 5000,
+            //   },
+            // );
 
             // Deconnexion et redirection apres 5 secondes
             setTimeout(() => {
@@ -323,9 +329,10 @@ export class ModifierMesInfosComponent {
             }, 5000);
           } else {
             // Sinon afficher cas meme le message de modification uniquement
-            this.toastr.success(response.message, '', {
-              positionClass: 'toast-custom-center',
-            });
+            this.notification.success(response.message);
+            // this.toastr.success(response.message, '', {
+            //   positionClass: 'toast-custom-center',
+            // });
           }
 
           console.log(response);
@@ -333,9 +340,10 @@ export class ModifierMesInfosComponent {
 
         error: (error) => {
           this.isLoading = false;
-          this.toastr.error(error.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(error.message);
+          // this.toastr.error(error.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         },
       });
   }
@@ -345,16 +353,17 @@ export class ModifierMesInfosComponent {
     // Vérification du formulaire avant tout
     if (form.invalid) {
       Object.values(form.controls).forEach((control) =>
-        control.markAsTouched()
+        control.markAsTouched(),
       );
       return; // Ne pas appeler l'API
     }
 
     // Vérifier correspondance des mots de passe
     if (this.password.new !== this.password.confirm) {
-      this.toastr.error('Les mots de passe ne correspondent pas.', '', {
-        positionClass: 'toast-custom-center',
-      });
+      this.notification.error('Les mots de passe ne correspondent pas.');
+      // this.toastr.error('Les mots de passe ne correspondent pas.', '', {
+      //   positionClass: 'toast-custom-center',
+      // });
       return;
     }
 
@@ -364,25 +373,27 @@ export class ModifierMesInfosComponent {
       .updatePassword(
         this.password.old,
         this.password.new,
-        this.currentUserInfo.email
+        this.currentUserInfo.email,
       )
       .subscribe({
         next: (response: any) => {
           this.isLoading = false;
 
-          this.toastr.success(response?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(response?.message);
+          // this.toastr.success(response?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
 
-          this.password = {old: '', new: '', confirm: ''};
+          this.password = { old: '', new: '', confirm: '' };
           form.resetForm();
         },
 
         error: (error: any) => {
           this.isLoading = false;
-          this.toastr.error('Échec de la modification.', '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error('Échec de la modification.');
+          // this.toastr.error('Échec de la modification.', '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         },
       });
   }
@@ -411,9 +422,9 @@ export class ModifierMesInfosComponent {
         const selectedCountry = this.countries.find(
           (c: any) =>
             c.vcName.toLowerCase().trim() ===
-            this.country?.toLowerCase().trim() ||
+              this.country?.toLowerCase().trim() ||
             c.vcCode.toLowerCase().trim() ===
-            this.country?.toLowerCase().trim()
+              this.country?.toLowerCase().trim(),
         );
 
         if (selectedCountry) {
@@ -425,7 +436,7 @@ export class ModifierMesInfosComponent {
               TimeZone: selectedCountry.vcTimeZone,
               Devise: selectedCountry.vcCurrency || this.currency,
             },
-            {emitEvent: false} // évite boucle
+            { emitEvent: false }, // évite boucle
           );
         }
         console.log(res);
@@ -433,13 +444,21 @@ export class ModifierMesInfosComponent {
       },
 
       error: (err) => {
-        this.toastr.error(err?.error?.message === "Unauthenticated." ? "Votre session a expirée" : 'Une erreur est survenue.',
-          '',
-          {
-            positionClass: 'toast-custom-center',
-          }
+        this.notification.error(
+          err?.error?.message === 'Unauthenticated.'
+            ? 'Votre session a expirée'
+            : 'Une erreur est survenue.',
         );
-        console.log("Une erreur est survenue : ", err);
+        // this.toastr.error(
+        //   err?.error?.message === 'Unauthenticated.'
+        //     ? 'Votre session a expirée'
+        //     : 'Une erreur est survenue.',
+        //   '',
+        //   {
+        //     positionClass: 'toast-custom-center',
+        //   },
+        // );
+        console.log('Une erreur est survenue : ', err);
         this.isLoadingCoutries = false;
       },
     });
@@ -474,24 +493,28 @@ export class ModifierMesInfosComponent {
         console.log('doneer envoyer sont : ', this.orgId, payload);
 
         if (res?.status && res?.status === 200) {
-          this.toastr.success(
+          this.notification.success(
             'Votre fuseau horaire a été modifié avec succès !',
-            '',
-            {
-              positionClass: 'toast-custom-center',
-            }
           );
+          // this.toastr.success(
+          //   'Votre fuseau horaire a été modifié avec succès !',
+          //   '',
+          //   {
+          //     positionClass: 'toast-custom-center',
+          //   },
+          // );
 
           const oldConf = this.authService.getUserInfoConfig();
-          console.log('dany', oldConf, {...oldConf, organisation: res?.data});
-          const config = {...oldConf, organisation: res?.data};
+          console.log('dany', oldConf, { ...oldConf, organisation: res?.data });
+          const config = { ...oldConf, organisation: res?.data };
           console.log('New config : ', config);
           this.authService.setUserInfoConfig(config);
           this.cdr.detectChanges();
         } else {
-          this.toastr.error(res.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(res.message);
+          // this.toastr.error(res.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
         console.log('test res:', res);
         console.log(this.timeZonePerUser);
@@ -500,9 +523,10 @@ export class ModifierMesInfosComponent {
 
       error: (err) => {
         console.log(err);
-        this.toastr.error(err.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err.message);
+        // this.toastr.error(err.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         this.isLoading = false;
       },
     });
@@ -534,13 +558,19 @@ export class ModifierMesInfosComponent {
           this.isLoading = false;
           this.notifications = res.data;
         } else {
-          this.toastr.error(res?.message, '', {positionClass: 'toast-custom-center',});
+          this.notification.error(res?.message);
+          // this.toastr.error(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
         console.log('chargement mes notifs : ', res);
       },
 
       error: (err) => {
-        this.toastr.error(err?.message, '', {positionClass: 'toast-custom-center',});
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log('Erreur chargement mes notifs : ', err);
         this.isLoading = false;
       },
@@ -577,9 +607,10 @@ export class ModifierMesInfosComponent {
   bloquerEtDebloquer(): void {
     if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
     if (this.selectedUserId === null) {
-      this.toastr.error('Aucune notification sélectionnée.', '', {
-        positionClass: 'toast-custom-center',
-      });
+      this.notification.error('Aucune notification sélectionnée.');
+      // this.toastr.error('Aucune notification sélectionnée.', '', {
+      //   positionClass: 'toast-custom-center',
+      // });
       return;
     }
 
@@ -594,9 +625,10 @@ export class ModifierMesInfosComponent {
       next: (res) => {
         this.isloadingBloquerDebloquer = false;
 
-        this.toastr.success(res?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(res?.message);
+        // this.toastr.success(res?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.loadNotifications();
         this.closeModalBloquerDebloquer();
@@ -605,9 +637,10 @@ export class ModifierMesInfosComponent {
       error: (err) => {
         this.isloadingBloquerDebloquer = false;
 
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         this.closeModalBloquerDebloquer();
       },

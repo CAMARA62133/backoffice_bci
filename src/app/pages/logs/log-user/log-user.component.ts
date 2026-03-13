@@ -8,9 +8,10 @@ import {HttpClient} from '@angular/common/http';
 import {debounce, debounceTime, distinctUntilChanged} from 'rxjs';
 import {SearchParams} from '../../../core/interfaces/search-params.interface';
 import {RouterLink} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+// import {ToastrService} from 'ngx-toastr';
 import {exportToCSV, exportToPDF} from '../../../core/utils/export.utils';
 import {DataTableDirective} from '../../../core/directives/data-table/data-table.directive';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 
 @Component({
@@ -21,10 +22,10 @@ import {DataTableDirective} from '../../../core/directives/data-table/data-table
     ReactiveFormsModule,
     DatePipe,
     RouterLink,
-    DataTableDirective
+    DataTableDirective,
   ],
   templateUrl: './log-user.component.html',
-  styleUrl: './log-user.component.css'
+  styleUrl: './log-user.component.css',
 })
 export class LogUserComponent implements OnInit {
   // Variables
@@ -38,24 +39,22 @@ export class LogUserComponent implements OnInit {
 
   searchForm: FormGroup;
   searchResults: any[] = [];
-
+  public notification = inject(NotificationService);
   constructor(
     private fb: FormBuilder,
     private userLogSerive: UserLogService,
     public paginationService: PaginationsService,
-    private toastr: ToastrService
+    // private toastr: ToastrService
   ) {
     this.searchForm = this.createForm();
   }
-
 
   // A l'initialisation du composant
   ngOnInit() {
     // this.setupRealTimeSearch();
     this.loadLogActiviteUsers();
-    this.loadNomUsers()
+    this.loadNomUsers();
   }
-
 
   /**
    * Creer un formulaire
@@ -66,21 +65,22 @@ export class LogUserComponent implements OnInit {
       dateFin: [''],
       application: [''],
       username: [''],
-    })
+    });
   }
 
   /**
    * Recherche en temps réel avec debounce pour éviter trop d'appels API
    */
   setupRealTimeSearch() {
-    this.searchForm.valueChanges.pipe(
-      debounceTime(500), // Attendre 500ms après le dernier changement
-      distinctUntilChanged() // Ne déclencher que si la valeur a changé
-    ).subscribe(() => {
-      this.performSearch()
-    })
+    this.searchForm.valueChanges
+      .pipe(
+        debounceTime(500), // Attendre 500ms après le dernier changement
+        distinctUntilChanged(), // Ne déclencher que si la valeur a changé
+      )
+      .subscribe(() => {
+        this.performSearch();
+      });
   }
-
 
   /**
    * Fonction private pour charger la liste des logs d'activites utilisateurs
@@ -93,17 +93,15 @@ export class LogUserComponent implements OnInit {
       next: (res) => {
         this.isLoadingUserLogs = false;
         this.logActiviteUsers = res.data;
-        console.log("LAU res : ", res);
-
-
+        console.log('LAU res : ', res);
       },
 
       error: (err) => {
         this.isLoadingUserLogs = false;
         this.logActiviteUsers = [];
-        console.log("LAU err : ", err);
-      }
-    })
+        console.log('LAU err : ', err);
+      },
+    });
   }
 
   /**
@@ -117,17 +115,16 @@ export class LogUserComponent implements OnInit {
       next: (res) => {
         this.isLoadingNomUser = false;
         this.nomUsers = res.data;
-        console.log("LAU res : ", res);
+        console.log('LAU res : ', res);
       },
 
       error: (err) => {
         this.isLoadingNomUser = false;
         this.nomUsers = [];
-        console.log("LAU err : ", err);
-      }
-    })
+        console.log('LAU err : ', err);
+      },
+    });
   }
-
 
   // ====================== GESTION DE LA RECHERCHE OU FILTRAGE ======================
   /**
@@ -141,8 +138,8 @@ export class LogUserComponent implements OnInit {
       dateDebut: this.searchForm.get('dateDebut')?.value,
       dateFin: this.searchForm.get('dateFin')?.value,
       application: this.searchForm.get('application')?.value,
-      username: this.searchForm.get('username')?.value
-    }
+      username: this.searchForm.get('username')?.value,
+    };
 
     console.log(searchParams);
 
@@ -152,16 +149,14 @@ export class LogUserComponent implements OnInit {
 
         this.searchResults = res.data;
         this.logActiviteUsers = this.searchResults;
-        console.log("LAUF res : ", res);
-
-
+        console.log('LAUF res : ', res);
       },
 
       error: (err) => {
         this.isLoadingNomUser = false;
-        console.log("LAUF err : ", err);
-      }
-    })
+        console.log('LAUF err : ', err);
+      },
+    });
   }
 
   /**
@@ -187,21 +182,24 @@ export class LogUserComponent implements OnInit {
    * @param event
    */
   exportToPDFHandler(event: Event) {
-    event.preventDefault()
+    event.preventDefault();
 
     // Implementation de la logique d'export
-    exportToPDF(this.paginatedLogActiviteUser, "LogsActivitesUtilisateurs.pdf", "Liste des Logs d'activitées Utilisateurs")
+    exportToPDF(
+      this.paginatedLogActiviteUser,
+      'LogsActivitesUtilisateurs.pdf',
+      "Liste des Logs d'activitées Utilisateurs",
+    );
   }
-
 
   /**
    * Exporter en CSV
    * @param event
    */
   exportToCSVHandler(event: Event) {
-    event.preventDefault()
+    event.preventDefault();
 
     // Implementation de la logique d'export
-    exportToCSV(this.paginatedLogActiviteUser, 'LogsActivitesUtilisateurs.csv')
+    exportToCSV(this.paginatedLogActiviteUser, 'LogsActivitesUtilisateurs.csv');
   }
 }

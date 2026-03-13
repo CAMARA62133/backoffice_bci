@@ -1,19 +1,22 @@
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
   ElementRef,
+  inject,
   OnInit,
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {Router, RouterLink} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
-import {AuthService} from '../../../services/auth/authService/auth.service';
-import {OtpLoginServiceService} from '../../../services/auth/otpLogin/otp-login.service';
-import {AuthService as NodeAuthService} from "../../../core/node/services/auth/auth.service";
+import { FormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router, RouterLink } from '@angular/router';
+// import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../../services/auth/authService/auth.service';
+import { OtpLoginServiceService } from '../../../services/auth/otpLogin/otp-login.service';
+import { AuthService as NodeAuthService } from '../../../core/node/services/auth/auth.service';
+import { InactivityServiceTsService } from '../../../services/auth/inactivity/inactivity.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
@@ -34,15 +37,15 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
   showModalOTP_expire: boolean = false;
 
   loginEmail: string | null = '';
-
+  public notification = inject(NotificationService);
   constructor(
     private otpService: OtpLoginServiceService,
     private router: Router,
     private authService: AuthService,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     private nodeAuthService: NodeAuthService,
-  ) {
-  }
+    private inactivityService: InactivityServiceTsService,
+  ) {}
 
   ngOnInit() {
     this.loginEmail = localStorage.getItem('loginEmail');
@@ -96,9 +99,10 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
         this.isLoadingReEnvoi = false;
         this.otpValues = ['', '', '', ''];
 
-        this.toastr.success(response.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.success(response.message);
+        // this.toastr.success(response.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         if (this.otpInputs && this.otpInputs.first) {
           setTimeout(() => {
@@ -112,9 +116,10 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
       error: (err) => {
         this.isLoadingReEnvoi = false;
 
-        this.toastr.error(err, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err);
+        // this.toastr.error(err, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         console.log(err);
       },
@@ -146,37 +151,42 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
 
           console.log('res : ', response);
 
-          this.toastr.success(response?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(response?.message);
+          // this.toastr.success(response?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
+          this.inactivityService.startWatching();
 
           // Redirection en fonction du role
-          if (response?.data?.vcRoleName === "Agent Conformité") {
+          if (response?.data?.vcRoleName === 'Agent Conformité') {
             this.router.navigate(['/agent-dashboard']);
-          } else if (response?.data?.vcRoleName === "Administrateur Système (IT)") {
+          } else if (
+            response?.data?.vcRoleName === 'Administrateur Système (IT)'
+          ) {
             this.router.navigate(['/org-dashboard']);
           } else {
             this.router.navigate(['/dashboard']);
           }
-
         } else {
           // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
           if (response?.status === 405 || response?.status === '405') {
             this.router.navigate(['/login']);
           }
 
-          this.toastr.error(response.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(response.message);
+          // this.toastr.error(response.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
         console.log(response);
       },
       error: (err) => {
         this.isLoading = false;
-        console.log({err});
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        console.log({ err });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
       },
     });
   }

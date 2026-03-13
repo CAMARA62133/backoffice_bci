@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ToastrService} from 'ngx-toastr';
+// import {ToastrService} from 'ngx-toastr';
 import {LoadingService} from '../../../services/auth/loading/loading.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-loading-verify-email-page',
@@ -13,14 +14,13 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
   token!: string;
   email!: string;
   isLoading: boolean = false;
-
+  public notification = inject(NotificationService);
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private loadingService: LoadingService,
-    private toastr: ToastrService
-  ) {
-  }
+    // private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -52,12 +52,16 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
         .subscribe({
           next: (res) => {
             if (res?.status && res?.status === 200) {
-
-              console.log("DEBUG : After checking organisation's email and token");
+              console.log(
+                "DEBUG : After checking organisation's email and token",
+              );
               console.log(res);
               this.router.navigate(['/valider-otp-email']);
             } else {
-              this.toastr.error(res?.message, '', {positionClass: 'toast-custom-center'});
+              this.notification.error(res?.message);
+              // this.toastr.error(res?.message, '', {
+              //   positionClass: 'toast-custom-center',
+              // });
 
               console.error(res);
               this.router.navigate(['/lien-expire']);
@@ -66,7 +70,10 @@ export class LoadingVerifyEmailPageComponent implements OnInit {
           },
 
           error: (err) => {
-            this.toastr.error(err?.message, '', {positionClass: 'toast-custom-center'});
+            this.notification.error(err?.message);
+            // this.toastr.error(err?.message, '', {
+            //   positionClass: 'toast-custom-center',
+            // });
 
             console.error(err);
             this.router.navigate(['/lien-expire']);

@@ -1,0 +1,546 @@
+<div class="page-content">
+  <div class="container-fluid py-4">
+    <form [formGroup]="transfertForm" class="card border-0 shadow-sm mb-4">
+      <div class="w-100 bg-white rounded shadow-lg d-flex flex-column">
+        <div
+          class="px-4 py-3 border-bottom d-flex justify-content-between align-items-center text-white"
+          style="background: #3b3b7a"
+        >
+          <h2
+            class="h5 fw-bold text-uppercase mb-0"
+            style="color: white !important"
+          >
+            {{ stepTitles[currentStep - 1] }}
+          </h2>
+        </div>
+
+        <div class="position-relative px-4 py-4 bg-light">
+          <div
+            class="position-absolute top-50 start-0 end-0 translate-middle-y"
+            style="height: 2px; background: #dee2e6; margin: 0 2rem"
+          ></div>
+          <div
+            class="position-absolute top-50 translate-middle-y"
+            style="height: 2px; background: #ffc107; margin-left: 2rem"
+            [style.width.%]="((currentStep - 1) / 3) * 82"
+          ></div>
+
+          <div
+            class="position-relative d-flex justify-content-between align-items-center w-100"
+          >
+            <div
+              *ngFor="let step of [1, 2, 3, 4]; let i = index"
+              class="d-flex flex-column align-items-center position-relative"
+            >
+              <div
+                class="rounded-circle d-flex align-items-center justify-content-center fw-bold border"
+                style="width: 32px; height: 32px; font-size: 12px; z-index: 10"
+                [ngClass]="
+                  currentStep >= step
+                    ? 'bg-warning border-warning text-white'
+                    : 'bg-white border-secondary text-secondary'
+                "
+              >
+                {{ step }}
+              </div>
+              <span
+                class="position-absolute text-uppercase fw-semibold text-center"
+                style="
+                  top: 40px;
+                  font-size: 10px;
+                  white-space: nowrap;
+                  left: 50%;
+                  transform: translateX(-50%);
+                "
+                [ngClass]="currentStep >= step ? 'text-dark' : 'text-secondary'"
+              >
+                {{ stepTitles[i] }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 overflow-auto">
+          <div
+            *ngIf="currentStep === 1"
+            class="fade show animate__animated animate__fadeIn"
+          >
+            <div class="row g-4">
+              <div class="col-12">
+                <div
+                  class="bg-light p-3 rounded-3 border-start border-primary border-4 shadow-sm"
+                >
+                  <label class="form-label fw-bold text-dark mb-0">
+                    Bienvenue sur BCI-Online ! Veuillez fournir vos informations
+                    de base pour démarrer votre souscription
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-md-8 col-lg-6">
+                <label class="form-label fw-bold text-dark small">
+                  Numéro du client ID
+                  <span class="text-muted"
+                    >(6 premiers chiffres du numéro de compte)</span
+                  >
+                  <span class="text-danger">*</span> :
+                </label>
+
+                <div class="d-flex gap-2">
+                  <input
+                    type="text"
+                    formControlName="idClient"
+                    class="form-control form-control-lg bg-light border-0 shadow-none custom-input"
+                    [class.is-invalid]="
+                      f['idClient'].invalid &&
+                      (f['idClient'].dirty || f['idClient'].touched)
+                    "
+                    placeholder="Ex: 123456"
+                  />
+
+                  <button
+                    type="button"
+                    (click)="verifierClient()"
+                    [disabled]="f['idClient'].invalid || isVerifyingClient"
+                    class="btn btn-primary px-4 fw-bold shadow-sm custom-btn d-flex align-items-center gap-2"
+                    style="white-space: nowrap"
+                  >
+                    <span
+                      *ngIf="isVerifyingClient"
+                      class="spinner-border spinner-border-sm"
+                    ></span>
+                    {{ clientVerified ? "Vérifié" : "Vérifier" }}
+                  </button>
+                </div>
+
+                <div
+                  class="text-danger small mt-1"
+                  *ngIf="
+                    f['idClient'].invalid &&
+                    (f['idClient'].dirty || f['idClient'].touched)
+                  "
+                >
+                  <span *ngIf="f['idClient'].errors?.['required']"
+                    >L'ID Client est obligatoire.</span
+                  >
+                  <span *ngIf="f['idClient'].errors?.['pattern']"
+                    >L'ID Client doit contenir exactement 6 chiffres.</span
+                  >
+                </div>
+                <div
+                  class="text-success small mt-1 fw-bold"
+                  *ngIf="clientVerified && !f['idClient'].dirty"
+                >
+                  <i class="bi bi-check-circle-fill me-1"></i> Client identifié
+                  avec succès.
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="bg-light p-3 rounded-3 border">
+                  <label class="form-label mb-0 text-secondary small italic">
+                    <i class="bi bi-shield-lock-fill me-2"></i> Vos informations
+                    resteront strictement confidentielles.
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- SKELETON LOADER COMPTES DISPONIBLES PENDANT CHARGEMENT -->
+          <div *ngIf="isVerifyingClient && !clientVerified" class="mt-3">
+            <app-skeleton-loader type="card-title"></app-skeleton-loader>
+            <app-skeleton-loader
+              type="row"
+              *ngFor="let i of [1, 2, 3]"
+            ></app-skeleton-loader>
+          </div>
+          <div
+            *ngIf="currentStep === 2"
+            class="fade show animate__animated animate__fadeIn"
+          >
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <i
+                class="fas fa-info-circle text-secondary"
+                style="font-size: 1.1rem"
+              ></i>
+              <label
+                class="form-label fw-bold mb-0 fs-6 text-secondary"
+                style="letter-spacing: 0.5px"
+              >
+                Sélectionnez les comptes à ajouter
+              </label>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-12 col-md-4" *ngFor="let c of comptesDisponibles">
+                <div
+                  class="card border rounded-3 position-relative custom-account-card shadow-sm"
+                  [ngClass]="{ 'is-selected': isCompteSelected(c.compte) }"
+                >
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                      <input
+                        class="form-check-input custom-check-input m-0"
+                        type="checkbox"
+                        [id]="'compte-' + c.compte"
+                        [checked]="isCompteSelected(c.compte)"
+                        (change)="toggleCompte(c)"
+                      />
+
+                      <div
+                        class="d-flex align-items-center gap-2 text-primary-dark fw-bold text-uppercase fs-7 ms-2"
+                      >
+                        <i class="fas fa-university"></i>
+                        <span>{{ c.agencelib }}</span>
+                      </div>
+                      <label
+                        class="stretched-link"
+                        [for]="'compte-' + c.compte"
+                      ></label>
+                    </div>
+
+                    <div class="mb-1 fs-7">
+                      <span class="text-secondary fw-medium"
+                        >Solde actuel :</span
+                      >
+                      <span class="fw-bold ms-1 text-dark">
+                        {{ c.posdisp | number: "1.2-2" }} {{ c.devise }}
+                      </span>
+                    </div>
+
+                    <div class="mb-3 fs-7">
+                      <span class="text-secondary fw-medium">N° Compte :</span>
+                      <span class="ms-1 text-dark-emphasis">{{
+                        c.compte
+                      }}</span>
+                    </div>
+
+                    <div
+                      class="d-inline-flex align-items-center gap-2 px-3 py-1 bg-black text-white rounded-pill fs-8 fw-medium mb-2"
+                    >
+                      <i
+                        class="fas"
+                        [ngClass]="
+                          !c.isBlocked
+                            ? 'fa-check-circle text-success'
+                            : 'fa-ban text-danger'
+                        "
+                      >
+                      </i>
+                      <span>Status compte :</span>
+                      <span
+                        [ngClass]="
+                          !c.isBlocked ? 'text-success' : 'text-danger'
+                        "
+                      >
+                        {{ !c.isBlocked ? "Actif" : "Inactif" }}
+                      </span>
+                    </div>
+
+                    <div
+                      *ngIf="c.isBlocked"
+                      class="mt-2 pt-2 border-top border-light-subtle"
+                    >
+                      <div
+                        class="d-inline-flex align-items-center gap-2 px-3 py-1 bg-black text-white rounded-pill fs-8 fw-medium mb-1"
+                      >
+                        <i class="fas fa-info-circle text-warning"></i>
+                        <span>Detail compte :</span>
+                      </div>
+                      <div
+                        class="text-warning fw-bold text-uppercase fs-8 ps-2 mt-1"
+                        style="letter-spacing: 0.5px"
+                      >
+                        {{ c.isBlockedDetails || "DEBIT ET CREDIT INTERDITS" }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="currentStep === 3"
+            class="fade show animate__animated animate__fadeIn"
+          >
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label fw-bold text-uppercase small mb-3"
+                  >Avez-vous une organisation ?
+                  <span class="text-danger">*</span></label
+                >
+                <div class="d-flex gap-4 mb-3">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="oui"
+                      id="orgOui"
+                      formControlName="hasOrganisation"
+                    />
+                    <label class="form-check-label" for="orgOui">Oui</label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="non"
+                      id="orgNon"
+                      formControlName="hasOrganisation"
+                    />
+                    <label class="form-check-label" for="orgNon">Non</label>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="col-12 col-md-6 animate__animated animate__fadeIn"
+                *ngIf="f['hasOrganisation'].value === 'oui'"
+              >
+                <label
+                  class="form-label fw-bold text-uppercase small mb-1 text-primary"
+                  >Lien de l'organisation :
+                  <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  formControlName="lienOrganisation"
+                  class="form-control form-control-lg bg-light border-0 shadow-none custom-input"
+                  placeholder="Ex: https://"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            *ngIf="currentStep === 4"
+            class="container my-2 animate__animated animate__fadeIn"
+          >
+            <div class="text-center mb-4">
+              <div
+                class="border border-secondary-subtle shadow-sm py-3 px-4 bg-white rounded-3"
+              >
+                <h1
+                  class="text-uppercase fw-bold tracking-wide text-dark mb-0 fs-4"
+                >
+                  <i class="fas fa-clipboard-check me-2 text-primary-dark"></i>
+                  RÉCAPITULATIF GÉNÉRAL
+                </h1>
+              </div>
+            </div>
+
+            <div
+              class="border border-secondary-subtle mb-4 shadow-sm rounded-3 overflow-hidden bg-white"
+            >
+              <div
+                class="bg-light border-bottom border-secondary-subtle px-3 py-2"
+              >
+                <h3 class="fw-bold small text-uppercase mb-0 text-secondary">
+                  <i class="fas fa-user me-2"></i> I. Informations Client
+                </h3>
+              </div>
+              <div class="p-3">
+                <div class="d-flex align-items-center">
+                  <span
+                    class="fw-semibold text-secondary"
+                    style="min-width: 8.5rem"
+                    >ID Client :</span
+                  >
+                  <span class="text-uppercase fw-bold text-dark fs-6">
+                    {{ f["idClient"].value || "Non renseigné" }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="border border-secondary-subtle mb-4 shadow-sm rounded-3 overflow-hidden bg-white"
+            >
+              <div
+                class="bg-light px-3 py-2 border-bottom border-secondary-subtle"
+              >
+                <h3 class="fw-bold small text-uppercase mb-0 text-secondary">
+                  <i class="fas fa-list-ul me-2"></i> II. Comptes sélectionnés
+                </h3>
+              </div>
+
+              <div class="p-0">
+                <div
+                  class="table-responsive"
+                  *ngIf="f['comptesSelectionnes'].value.length > 0"
+                >
+                  <table class="table table-hover align-middle mb-0">
+                    <thead
+                      class="bg-light text-secondary"
+                      style="font-size: 0.7rem"
+                    >
+                      <tr class="text-uppercase border-0">
+                        <th class="ps-3 py-3 border-0">N° Compte / Agence</th>
+                        <th class="text-end py-3 border-0">Solde</th>
+                        <th class="text-center py-3 border-0">Devise</th>
+                        <th class="text-center py-3 border-0 pe-3">État</th>
+                      </tr>
+                    </thead>
+                    <tbody style="font-size: 0.85rem">
+                      <tr
+                        *ngFor="let compte of f['comptesSelectionnes'].value"
+                        class="border-top border-light-subtle"
+                      >
+                        <td class="ps-3 fw-semibold text-dark">
+                          <i
+                            class="fas fa-university text-primary-dark me-2"
+                          ></i>
+                          {{ compte.compte }} -
+                          <span class="text-uppercase small text-secondary">{{
+                            compte.agencelib
+                          }}</span>
+                        </td>
+                        <td class="text-end fw-bold text-dark">
+                          {{ compte.posdisp | number: "1.2-2" }}
+                        </td>
+                        <td class="text-center text-muted fw-medium">
+                          {{ compte.devise }}
+                        </td>
+                        <td class="text-center pe-3">
+                          <div
+                            class="d-inline-flex align-items-center gap-2 px-3 py-1 bg-black text-white rounded-pill"
+                            style="font-size: 0.7rem"
+                          >
+                            <i
+                              class="fas"
+                              [ngClass]="
+                                !compte.isBlocked
+                                  ? 'fa-check-circle text-success'
+                                  : 'fa-ban text-danger'
+                              "
+                            ></i>
+                            <span
+                              [ngClass]="
+                                !compte.isBlocked
+                                  ? 'text-success'
+                                  : 'text-danger'
+                              "
+                              class="fw-bold"
+                            >
+                              {{ !compte.isBlocked ? "ACTIF" : "INACTIF" }}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div
+                  *ngIf="f['comptesSelectionnes'].value.length === 0"
+                  class="p-4 text-center"
+                >
+                  <i
+                    class="fas fa-exclamation-triangle text-warning mb-2"
+                    style="font-size: 1.5rem"
+                  ></i>
+                  <p class="text-muted small mb-0">
+                    Aucun compte n'a été sélectionné.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="border border-secondary-subtle mb-4 shadow-sm rounded-3 overflow-hidden bg-white"
+            >
+              <div
+                class="bg-light px-3 py-2 border-bottom border-secondary-subtle"
+              >
+                <h3 class="fw-bold small text-uppercase mb-0 text-secondary">
+                  <i class="fas fa-sitemap me-2"></i> III. Organisation
+                </h3>
+              </div>
+              <div class="p-3">
+                <div class="d-flex align-items-center mb-2">
+                  <span
+                    class="fw-semibold text-secondary"
+                    style="min-width: 12rem"
+                    >Possède une organisation :</span
+                  >
+                  <span
+                    class="badge rounded-pill px-3 py-2"
+                    [ngClass]="
+                      f['hasOrganisation'].value === 'oui'
+                        ? 'bg-success'
+                        : 'bg-secondary'
+                    "
+                  >
+                    <i
+                      class="fas me-1"
+                      [ngClass]="
+                        f['hasOrganisation'].value === 'oui'
+                          ? 'fa-check'
+                          : 'fa-times'
+                      "
+                    ></i>
+                    {{ f["hasOrganisation"].value === "oui" ? "OUI" : "NON" }}
+                  </span>
+                </div>
+                <div
+                  class="d-flex align-items-center"
+                  *ngIf="f['hasOrganisation'].value === 'oui'"
+                >
+                  <span
+                    class="fw-semibold text-secondary"
+                    style="min-width: 12rem"
+                    >Lien organisation :</span
+                  >
+                  <span class="text-primary-dark fw-bold text-uppercase">
+                    <i class="fas fa-link me-1 small"></i>
+                    {{ f["lienOrganisation"].value || "Non sélectionné" }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="px-4 py-3 border-top d-flex justify-content-between align-items-center bg-white"
+        >
+          <button
+            type="button"
+            (click)="prevStep()"
+            [disabled]="currentStep === 1"
+            class="btn btn-outline-secondary px-4"
+          >
+            Précédent
+          </button>
+
+          <button
+            *ngIf="currentStep < 4"
+            type="button"
+            (click)="nextStep()"
+            [disabled]="!canGoNext()"
+            class="btn text-white px-4 fw-bold transition-all shadow-sm"
+            [style.background-color]="canGoNext() ? '#3b3b7a' : '#6c757d'"
+            [style.opacity]="canGoNext() ? '1' : '0.6'"
+            [style.cursor]="canGoNext() ? 'pointer' : 'not-allowed'"
+          >
+            Suivant
+          </button>
+
+          <button
+            *ngIf="currentStep === 4"
+            type="submit"
+            (click)="validateTransactions()"
+            [disabled]="isSubmitting || transfertForm.invalid"
+            class="btn text-white d-flex align-items-center gap-2 px-4 shadow-sm"
+            style="background-color: #3b3b7a"
+          >
+            <span
+              *ngIf="isSubmitting"
+              class="spinner-border spinner-border-sm"
+            ></span>
+            {{ isSubmitting ? "VALIDATION..." : "VALIDER LA SOUSCRIPTION" }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

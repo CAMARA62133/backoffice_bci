@@ -1,0 +1,15 @@
+<span
+  class="skeleton"
+  [ngClass]="{
+    'skeleton-text': type === 'text',
+    'skeleton-text-sm': type === 'text-sm',
+    'skeleton-title': type === 'title',
+    'skeleton-input': type === 'input',
+    'skeleton-btn': type === 'btn',
+    'skeleton-badge': type === 'badge',
+    'skeleton-row': type === 'row',
+    'skeleton-card-title': type === 'card-title',
+    'skeleton-search': type === 'search'
+  }"
+  [ngStyle]="{ width: width, height: height }"
+></span>

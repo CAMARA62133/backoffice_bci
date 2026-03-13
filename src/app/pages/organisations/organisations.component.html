@@ -3,20 +3,66 @@
     <div class="card">
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h1 class="text-primary mb-1 h4">
-              <i class="fas fa-building me-2"></i> Liste des Organisations
-            </h1>
-          </div>
-
-          @if (currentUser?.vcRoleName === "Admin integrateur banque") {
-            <div class="d-flex gap-2">
-              <button class="btn btn-primary" (click)="openCreateModal()">
-                <i class="fas fa-plus me-1"></i>
-                Créer une organisation
-              </button>
+          <!-- Skeleton Loader pour le titre -->
+          <ng-container *ngIf="!isLoadingOrgs; else skeletonHeader">
+            <div>
+              <h1 class="text-primary mb-1 h4">
+                <i class="fas fa-building me-2"></i> Liste des Organisations
+              </h1>
             </div>
-          }
+
+            <!-- Boutons visibles seulement si Admin -->
+            <ng-container
+              *ngIf="currentUser?.vcRoleName === 'Admin integrateur banque'"
+            >
+              <div class="d-flex gap-2">
+                <!-- Bouton Nouvelle Souscription -->
+                <button
+                  class="btn btn-primary"
+                  routerLink="/souscription-client"
+                >
+                  <i class="fas fa-plus me-1"></i>
+                  <!-- icône "plus" pour ajouter une souscription -->
+                  Nouvelle Souscription
+                </button>
+
+                <!-- Bouton Créer une organisation -->
+                <button class="btn btn-primary" (click)="openCreateModal()">
+                  <i class="fas fa-building me-1"></i>
+                  <!-- icône "building" pour créer une organisation -->
+                  Créer une organisation
+                </button>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <!-- Skeleton Loader -->
+          <ng-template #skeletonHeader>
+            <div
+              class="d-flex justify-content-between w-100 align-items-center"
+            >
+              <!-- Skeleton du titre -->
+              <app-skeleton-loader
+                type="title"
+                width="250px"
+                height="24px"
+              ></app-skeleton-loader>
+
+              <!-- Skeleton des boutons -->
+              <div class="d-flex gap-2">
+                <app-skeleton-loader
+                  type="btn"
+                  width="120px"
+                  height="36px"
+                ></app-skeleton-loader>
+                <app-skeleton-loader
+                  type="btn"
+                  width="140px"
+                  height="36px"
+                ></app-skeleton-loader>
+              </div>
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>
@@ -25,36 +71,319 @@
   <div class="container-fluid py-3">
     <div class="row">
       <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="table-responsive">
-              <table
-                datatable
-                [dtOptions]="dtoptions"
-                [dtTrigger]="dttrigger"
-                class="table table-hover table-striped mb-0"
-                id="rapportsTable"
+        <!-- Barre d'actions : Export + Recherche -->
+        <div
+          class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3 p-2"
+        >
+          <!-- Boutons Export -->
+          <div class="d-flex gap-2 flex-wrap">
+            <!-- <button
+              class="btn btn-outline-success btn-sm px-3 shadow-sm btn-export"
+              (click)="exportExcel()"
+            >
+              <i class="fas fa-file-excel me-2"></i>
+              <span class="fw-medium">Excel</span>
+            </button>
+            <button
+              class="btn btn-outline-danger btn-sm px-3 shadow-sm btn-export"
+              (click)="exportPdf()"
+            >
+              <i class="fas fa-file-pdf me-2"></i>
+              <span class="fw-medium">PDF</span>
+            </button> -->
+          </div>
+
+          <!-- Champ de recherche -->
+          <div class="search-container ms-auto">
+            <ng-container *ngIf="!isLoadingOrgs; else skeletonSearch">
+              <div
+                class="input-group input-group-sm"
+                style="min-width: 250px; max-width: 350px"
               >
+                <span class="input-group-text bg-white border-end-0 text-muted">
+                  <i class="fas fa-search"></i>
+                </span>
+                <input
+                  type="text"
+                  [(ngModel)]="searchText"
+                  placeholder="Rechercher une organisation..."
+                  class="form-control border-start-0 ps-0 shadow-none"
+                />
+              </div>
+            </ng-container>
+
+            <ng-template #skeletonSearch>
+              <app-skeleton-loader
+                type="search"
+                width="300px"
+                height="36px"
+              ></app-skeleton-loader>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0 text-center align-middle">
                 <thead class="table-primary">
                   <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Organisations</th>
-                    <th scope="col">Contact</th>
-                    <th scope="col">Téléphone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Ville</th>
-                    <th scope="col">Pays</th>
-                    <th scope="col">Adresse</th>
-                    <th scope="col">Logo</th>
-                    <th scope="col">Business Email</th>
-                    <th scope="col">Statut</th>
-                    <th scope="col">Date Création</th>
-                    <th scope="col" class="text-center">Actions</th>
+                    <th class="text-nowrap cursor-pointer" (click)="sort('id')">
+                      ID
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon('id', sortColumn, sortDirection)
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('organisationName')"
+                    >
+                      Organisations
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'organisationName',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('vcContact')"
+                    >
+                      Contact
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'vcContact',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('vcPhoneNumber')"
+                    >
+                      Téléphone
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'vcPhoneNumber',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('vcEmail')"
+                    >
+                      Email
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'vcEmail',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('vcCity')"
+                    >
+                      Ville
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon('vcCity', sortColumn, sortDirection)
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('vcCountry')"
+                    >
+                      Pays
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'vcCountry',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('vcAddress')"
+                    >
+                      Adresse
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'vcAddress',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th>Logo</th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('vcBusinessEmailDomain')"
+                    >
+                      Business Email
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'vcBusinessEmailDomain',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('btEnabled')"
+                    >
+                      Statut
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'btEnabled',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th
+                      class="text-nowrap cursor-pointer"
+                      (click)="sort('dtCreated')"
+                    >
+                      Date Création
+                      <i
+                        class="fas"
+                        [class]="
+                          utils.getSortIcon(
+                            'dtCreated',
+                            sortColumn,
+                            sortDirection
+                          )
+                        "
+                      ></i>
+                    </th>
+                    <th class="text-center">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr *ngFor="let org of organisations; let i = index">
-                    <td>{{ i + 1 }}</td>
+                <!-- Skeleton Loader -->
+                <tbody *ngIf="isLoadingOrgs">
+                  <tr *ngFor="let _ of skeletonRows">
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="50px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="150px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="120px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="100px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="150px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="100px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="100px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="180px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="badge"
+                        width="50px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="150px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="badge"
+                        width="80px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="text"
+                        width="120px"
+                      ></app-skeleton-loader>
+                    </td>
+                    <td>
+                      <app-skeleton-loader
+                        type="btn"
+                        width="80px"
+                      ></app-skeleton-loader>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="!isLoadingOrgs">
+                  <tr *ngFor="let org of paginedTransaction; let i = index">
+                    <td>{{ i + startIndex + 1 }}</td>
                     <td>{{ org.organisationName }}</td>
                     <td>{{ org.vcContact }}</td>
                     <td>{{ org.vcPhoneNumber }}</td>
@@ -63,11 +392,7 @@
                     <td>{{ org.vcCountry }}</td>
                     <td>{{ org.vcAddress }}</td>
                     <td>
-                      <!-- <img
-                      [src]="org.vcLogoPath"
-                      [alt]="org.organisationName"
-                    /> -->
-                      <img src="logoBCI.svg" alt="" width="50px" />
+                      <img src="logoBCI.svg" alt="Logo" width="50px" />
                     </td>
                     <td>{{ org.vcBusinessEmailDomain }}</td>
                     <td>
@@ -75,54 +400,58 @@
                         class="badge text-bg-{{
                           +org.btEnabled === 1 ? 'success' : 'danger'
                         }} rounded-pill"
-                        >{{
-                          +org.btEnabled === 1 ? "Active" : "Inactive"
-                        }}</span
                       >
+                        {{ +org.btEnabled === 1 ? "Active" : "Inactive" }}
+                      </span>
                     </td>
                     <td>{{ org.dtCreated | date: "dd/MM/yyyy" }}</td>
                     <td>
                       <div class="d-flex gap-1 justify-content-center">
                         <a
-                          routerLink="/organisations/{{
-                            org.id
-                          }}/liste-entreprise"
-                          type="button"
+                          [routerLink]="
+                            '/organisations/' + org.id + '/liste-entreprise'
+                          "
                           class="btn btn-outline-info btn-action btn-sm"
                           title="Consulter"
                         >
                           <i class="fas fa-eye"></i>
                         </a>
 
-                        @if (
-                          currentUser?.vcRoleName === "Admin integrateur banque"
-                        ) {
-                          <button
-                            type="button"
-                            class="btn btn-outline-warning btn-action btn-sm"
-                            title="Modifier"
-                            (click)="onEdit(org)"
-                          >
-                            <i class="fas fa-edit"></i>
-                          </button>
+                        <button
+                          *ngIf="
+                            currentUser?.vcRoleName ===
+                            'Admin integrateur banque'
+                          "
+                          type="button"
+                          class="btn btn-outline-warning btn-action btn-sm"
+                          title="Modifier"
+                          (click)="onEdit(org)"
+                        >
+                          <i class="fas fa-edit"></i>
+                        </button>
 
-                          <button
-                            type="button"
-                            class="btn btn-action btn-sm"
-                            title="{{
-                              +org.btEnabled === 1 ? 'Désactiver' : 'Réactiver'
+                        <button
+                          *ngIf="
+                            currentUser?.vcRoleName ===
+                            'Admin integrateur banque'
+                          "
+                          type="button"
+                          class="btn btn-action btn-sm"
+                          title="{{
+                            +org.btEnabled === 1 ? 'Désactiver' : 'Réactiver'
+                          }}"
+                          (click)="onToggle(org)"
+                        >
+                          <i
+                            class="fas fa-{{
+                              +org.btEnabled === 1 ? 'lock-open' : 'lock'
                             }}"
-                            (click)="onToggle(org)"
-                          >
-                            <i
-                              class="fas fa-{{
-                                +org.btEnabled === 1 ? 'lock-open' : 'lock'
-                              }} text-{{
-                                +org.btEnabled === 1 ? 'success' : 'danger'
-                              }}"
-                            ></i>
-                          </button>
-                        }
+                            [ngClass]="{
+                              'text-success': +org.btEnabled === 1,
+                              'text-danger': +org.btEnabled === 0,
+                            }"
+                          ></i>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -130,7 +459,70 @@
               </table>
             </div>
 
-            <!-- au chargement des donnne -->
+            <!-- Pagination -->
+            <div
+              *ngIf="!isLoading && filteredData.length > pageSize"
+              class="mt-2 d-flex justify-content-between align-items-center p-3 border-top bg-light-subtle rounded-bottom flex-wrap gap-2"
+            >
+              <div>
+                <span class="text-muted small fw-medium">
+                  Affichage <b>{{ startIndex + 1 }}</b> à
+                  <b>{{ endIndex }}</b> sur
+                  <b>{{ filteredData.length }}</b>
+                </span>
+              </div>
+
+              <div class="d-flex gap-1 align-items-center flex-wrap">
+                <button
+                  class="btn btn-outline-primary btn-sm rounded-pill px-2"
+                  (click)="onPageClick(1)"
+                  [disabled]="currentPage === 1"
+                >
+                  <i class="fas fa-angle-double-left"></i>
+                </button>
+                <button
+                  class="btn btn-outline-primary btn-sm rounded-pill px-2"
+                  (click)="previousPage()"
+                  [disabled]="currentPage === 1"
+                >
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <div class="mx-2 d-flex gap-1">
+                  <button
+                    *ngFor="let page of paginationRange"
+                    class="btn btn-sm px-3 rounded-pill"
+                    [ngClass]="{
+                      'btn-primary shadow-sm': page === currentPage,
+                      'btn-light text-primary':
+                        page !== currentPage && page !== '...',
+                      'btn-link text-muted disabled border-0': page === '...',
+                    }"
+                    (click)="onPageClick(page)"
+                    [disabled]="page === '...'"
+                  >
+                    {{ page }}
+                  </button>
+                </div>
+
+                <button
+                  class="btn btn-outline-primary btn-sm rounded-pill px-2"
+                  (click)="nextPage()"
+                  [disabled]="currentPage === totalPages"
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+                <button
+                  class="btn btn-outline-primary btn-sm rounded-pill px-2"
+                  (click)="onPageClick(totalPages)"
+                  [disabled]="currentPage === totalPages"
+                >
+                  <i class="fas fa-angle-double-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Spinner de chargement -->
             <div *ngIf="isLoadingOrgs" class="text-center my-3">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden"
@@ -138,11 +530,11 @@
                 >
               </div>
               <p class="text-muted">
-                Veuillez patientez pendant que les données se chargent.
+                Veuillez patienter pendant le chargement.
               </p>
             </div>
 
-            <!-- Si liste des organisations est vide -->
+            <!-- Liste vide -->
             <div
               *ngIf="!isLoadingOrgs && organisations.length === 0"
               class="text-center py-5"
@@ -150,9 +542,9 @@
               <div class="mb-3">
                 <i class="text-muted bi bi-inbox display-1"></i>
               </div>
-              <h5 class="text-muted">Aucune organisation disponible....</h5>
+              <h5 class="text-muted">Aucune organisation disponible</h5>
               <p class="text-muted">
-                Il n'y a pas d'organisations enregistrée pour l'instant !
+                Il n'y a pas d'organisations enregistrées pour l'instant.
               </p>
             </div>
           </div>
@@ -885,6 +1277,7 @@
           class="btn btn-primary"
           (click)="bloquerEtDebloquer()"
           [disabled]="isloadingBloquerDebloquer"
+          data-bs-dismiss="modal"
         >
           <ng-container
             *ngIf="!isloadingBloquerDebloquer; else loadingTemplate"

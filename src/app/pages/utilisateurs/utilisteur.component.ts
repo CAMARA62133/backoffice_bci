@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,7 +10,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
-import { ToastrService } from 'ngx-toastr';
+// import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import {
   getErrorMessage,
@@ -23,6 +23,7 @@ import { DatatableService } from '../../services/datatable/datatable.service';
 import { ModalsService } from '../../services/modals/modals.service';
 import { SharedService } from '../../services/shared/shared.service';
 import { UsersService } from '../../services/users/users.service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 // Déclarer bootstrap pour TypeScript
 declare var bootstrap: any;
@@ -65,12 +66,12 @@ export class UtilisteurComponent implements OnInit {
 
   dtoptions: Config = {};
   dttrigger: Subject<any> = new Subject<any>();
-
+  public notification = inject(NotificationService);
   constructor(
     private modalsService: ModalsService,
     private fb: FormBuilder,
     private usersService: UsersService,
-    private toastr: ToastrService,
+    // private toastr: ToastrService,
     private sharedService: SharedService,
     private authService: AuthService,
     private route: ActivatedRoute,
@@ -310,16 +311,18 @@ export class UtilisteurComponent implements OnInit {
     this.usersService.createUser(payload).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(res?.message);
+          // this.toastr.success(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
           this.loadUsers();
           this.userForm.reset();
           this.closeModal('createUserModal');
         } else {
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(res?.message);
+          // this.toastr.error(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
 
         console.log('create user res:', res);
@@ -327,9 +330,10 @@ export class UtilisteurComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
         console.log(err);
         this.isLoading = false;
       },
@@ -343,7 +347,8 @@ export class UtilisteurComponent implements OnInit {
   bloquerEtDebloquer(): void {
     if (this.isloadingBloquerDebloquer) return; // 🔒 empêche le double clic
     if (this.selectedUserId === null) {
-      this.toastr.error('Aucun utilisateur sélectionné.');
+      this.notification.error('Aucun utilisateur sélectionné.');
+      // this.toastr.error('Aucun utilisateur sélectionné.');
       return;
     }
 
@@ -355,14 +360,16 @@ export class UtilisteurComponent implements OnInit {
     this.usersService.toggleUserStatus(params).subscribe({
       next: (res) => {
         if (res?.status && res?.status === 200) {
-          this.toastr.success(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.success(res?.message);
+          // this.toastr.success(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
           this.loadUsers();
         } else {
-          this.toastr.error(res?.message, '', {
-            positionClass: 'toast-custom-center',
-          });
+          this.notification.error(res?.message);
+          // this.toastr.error(res?.message, '', {
+          //   positionClass: 'toast-custom-center',
+          // });
         }
 
         this.showModalOpenBloquerDebloquer = false;
@@ -373,9 +380,10 @@ export class UtilisteurComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(err?.message, '', {
-          positionClass: 'toast-custom-center',
-        });
+        this.notification.error(err?.message);
+        // this.toastr.error(err?.message, '', {
+        //   positionClass: 'toast-custom-center',
+        // });
 
         console.log('err api : ', err);
         this.isloadingBloquerDebloquer = false;
@@ -412,15 +420,20 @@ export class UtilisteurComponent implements OnInit {
       },
 
       error: (err) => {
-        this.toastr.error(
+        this.notification.error(
           err?.error?.message === 'Unauthorized.'
             ? 'Votre session a expirée.'
             : err.message,
-          '',
-          {
-            positionClass: 'toast-custom-center',
-          },
         );
+        // this.toastr.error(
+        //   err?.error?.message === 'Unauthorized.'
+        //     ? 'Votre session a expirée.'
+        //     : err.message,
+        //   '',
+        //   {
+        //     positionClass: 'toast-custom-center',
+        //   },
+        // );
         console.log('api err : ', err);
         this.isLoadingUser = false;
       },

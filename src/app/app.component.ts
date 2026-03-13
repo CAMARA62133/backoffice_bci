@@ -1,13 +1,14 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { NotificationComponent } from './pages/notification/notification.component';
 // import {DataTablesModule} from 'angular-datatables';
 
 // import { NgApexchartsModule } from "ng-apexcharts";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet,NotificationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
