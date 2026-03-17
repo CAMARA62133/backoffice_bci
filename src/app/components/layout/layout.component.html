@@ -1,8 +1,13 @@
-<div id="layout-wrapper">
+<div
+  id="layout-wrapper"
+  [class.sidebar-collapsed]="sidebarService.isSidebarCollapsed"
+>
+  <!-- Header -->
   <header class="d-print-none" id="page-topbar">
     <div class="my-2 navbar-header">
       <div class="d-flex">
-        <div class="px-0 navbar-brand-box">
+        <!-- Logo -->
+<div class="px-0 navbar-brand-box">
           <a routerLink="/" class="logo logo-dark">
             <span class="logo-sm">
               <img
@@ -44,10 +49,15 @@
             </span>
           </a>
         </div>
+
+
+        <!-- Toggle Sidebar Button -->
         <button
           class="btn btn-sm ms-2 px-3 font-size-16 header-item"
           id="vertical-menu-btn"
           type="button"
+          (click)="toggleSidebar()"
+          [attr.aria-expanded]="!sidebarService.isSidebarCollapsed"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -72,72 +82,24 @@
           </div>
         </form> -->
       </div>
-      <div class="d-flex">
-        <!-- <div class="dropdown d-inline-block d-lg-none ms-2">
-          <button class="btn header-item" aria-expanded="false" data-bs-toggle="dropdown" aria-haspopup="true"
-            id="page-header-search-dropdown" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" fill="none"
-              class="icon-lg">
-              <path fill-rule="evenodd" clip-rule="evenodd"
-                d="M8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4ZM2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8C14 9.29583 13.5892 10.4957 12.8907 11.4765L17.7071 16.2929C18.0976 16.6834 18.0976 17.3166 17.7071 17.7071C17.3166 18.0976 16.6834 18.0976 16.2929 17.7071L11.4765 12.8907C10.4957 13.5892 9.29583 14 8 14C4.68629 14 2 11.3137 2 8Z"
-                fill="currentColor"></path>
-            </svg>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end p-0 dropdown-menu-lg"
-            aria-labelledby="page-header-search-dropdown">
-            <form class="p-3">
-              <div class="m-0 form-group">
-                <div class="input-group">
-                  <input class="form-control customSearchBox app-search" type="text" aria-label="Recherche"
-                    placeholder="Rechercher..." />
-                  <button class="btn btn-primary" type="submit">
-                    <i class="mdi mdi-magnify"></i>
-                  </button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div> -->
-        <!-- <div class="d-none d-sm-inline-block dropdown">
-          <button class="btn header-item" type="button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              viewBox="0 0 20 20"
-              fill="none"
-              class="icon-lg layout-mode-dark"
-            >
-              <path
-                d="M10.7071 2.29289C10.3166 1.90237 9.68342 1.90237 9.29289 2.29289L2.29289 9.29289C1.90237 9.68342 1.90237 10.3166 2.29289 10.7071C2.68342 11.0976 3.31658 11.0976 3.70711 10.7071L4 10.4142V17C4 17.5523 4.44772 18 5 18H7C7.55228 18 8 17.5523 8 17V15C8 14.4477 8.44772 14 9 14H11C11.5523 14 12 14.4477 12 15V17C12 17.5523 12.4477 18 13 18H15C15.5523 18 16 17.5523 16 17V10.4142L16.2929 10.7071C16.6834 11.0976 17.3166 11.0976 17.7071 10.7071C18.0976 10.3166 18.0976 9.68342 17.7071 9.29289L10.7071 2.29289Z"
-                fill="currentColor"
-              ></path>
-            </svg>
 
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              viewBox="0 0 20 20"
-              fill="none"
-              class="icon-lg layout-mode-light"
-            >
-              <path
-                d="M10.7071 2.29289C10.3166 1.90237 9.68342 1.90237 9.29289 2.29289L2.29289 9.29289C1.90237 9.68342 1.90237 10.3166 2.29289 10.7071C2.68342 11.0976 3.31658 11.0976 3.70711 10.7071L4 10.4142V17C4 17.5523 4.44772 18 5 18H7C7.55228 18 8 17.5523 8 17V15C8 14.4477 8.44772 14 9 14H11C11.5523 14 12 14.4477 12 15V17C12 17.5523 12.4477 18 13 18H15C15.5523 18 16 17.5523 16 17V10.4142L16.2929 10.7071C16.6834 11.0976 17.3166 11.0976 17.7071 10.7071C18.0976 10.3166 18.0976 9.68342 17.7071 9.29289L10.7071 2.29289Z"
-                fill="currentColor"
-              ></path>
-            </svg>
-          </button>
-        </div> -->
+      <div class="d-flex">
+        <!-- Theme Toggle Button -->
         <div class="d-none d-sm-inline-block dropdown">
-          <button class="btn header-item" id="mode-setting-btn" type="button">
+          <button
+            class="btn header-item"
+            id="mode-setting-btn"
+            type="button"
+            (click)="toggleTheme()"
+          >
             <svg
+              *ngIf="!isDarkMode"
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
               height="1em"
               viewBox="0 0 20 20"
               fill="none"
-              class="icon-lg layout-mode-dark"
+              class="icon-lg"
             >
               <path
                 d="M17.2929 13.2929C16.2886 13.7471 15.1738 13.9999 14 13.9999C9.58172 13.9999 6 10.4182 6 5.9999C6 4.82593 6.25287 3.71102 6.70712 2.70667C3.93137 3.96191 2 6.75526 2 9.9997C2 14.418 5.58172 17.9997 10 17.9997C13.2443 17.9997 16.0376 16.0685 17.2929 13.2929Z"
@@ -145,12 +107,13 @@
               ></path>
             </svg>
             <svg
+              *ngIf="isDarkMode"
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
               height="1em"
               viewBox="0 0 20 20"
               fill="none"
-              class="icon-lg layout-mode-light"
+              class="icon-lg"
             >
               <path
                 fill-rule="evenodd"
@@ -162,7 +125,7 @@
           </button>
         </div>
 
-        <!-- Notification Reseau -->
+        <!-- Network Notification -->
         <div class="dropdown" *ngIf="showNetworkNotification">
           <button
             class="btn position-relative header-item noti-icon"
@@ -173,7 +136,6 @@
             type="button"
           >
             <i class="fas fa-wifi"></i>
-            <!-- <span class="badge rounded-pill bg-info">1</span> -->
           </button>
 
           <div
@@ -185,14 +147,6 @@
                 <div class="col">
                   <h6 class="m-0">Notifications Reseau</h6>
                 </div>
-                <!-- <div class="col-auto">
-                  <a
-                    class="small text-reset text-decoration-underline"
-                    href="#!"
-                  >
-                    Non lue(s) (1)
-                  </a>
-                </div> -->
               </div>
             </div>
 
@@ -410,7 +364,7 @@
           </div>
         </div>
 
-        <span *ngIf="getUserInfoConfig() as user"> </span>
+        <!-- User Menu -->
         <div class="dropdown d-inline-block">
           <button
             class="btn d-xl-flex d-xxl-flex align-items-xl-center align-items-xxl-center header-item"
@@ -427,8 +381,7 @@
             >
               Bienvenue
               {{ user!.vcFirstname + " " + user!.vcLastname | uppercase }}
-              !
-              <br />
+              !<br />
               <span
                 class="fw-semibold me-2 my-sm-2 font-size-11"
                 id="user-role"
@@ -497,55 +450,79 @@
     </div>
   </header>
 
-  <!-- Start: vertical-menu -->
-  <div class="d-print-none vertical-menu" [style.position]="'fixed'">
+  <!-- Sidebar -->
+  <div
+    class="d-print-none vertical-menu"
+    [class.collapsed]="sidebarService.isSidebarCollapsed"
+    [style.position]="'fixed'"
+  >
     <div class="h-100" data-simplebar>
       <div class="mt-3" id="sidebar-menu">
         <ul class="nav metismenu list-unstyled" id="side-menu">
-          <li class="nav-item menu-title">
+          <li
+            class="nav-item menu-title"
+            *ngIf="!sidebarService.isSidebarCollapsed"
+          >
             <span>Menu</span>
           </li>
 
           @switch (currentUser.vcRoleName) {
             @case ("Administrateur Système (IT)") {
               <!-- Tableau de bord -->
-              <li class="nav-item mm-active">
+              <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="org-dashboard"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
-                  <i class="icon ion-ios-speedometer active"></i>
-                  <span data-key="t-dashboard">Tableau de Bord</span>
+                  <i class="icon ion-ios-speedometer"></i>
+                  <span 
+                    >Tableau de Bord</span
+                  >
                 </a>
               </li>
 
-              <!-- Entreprises et organisations -->
-              <li class="nav-item">
-                <a class="nav-link has-arrow">
+              <!-- Organisations -->
+              <li class="nav-item" [class.mm-active]="isSubMenuOpen('org')">
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('org', $event)"
+                  [class.collapsed]="!isSubMenuOpen('org')"
+                >
                   <i class="icon ion-briefcase"></i>
-                  <span>Organisations</span>
+                  <span 
+                    >Organisations</span
+                  >
+         
                 </a>
-                <ul class="sub-menu mmm-collapse" aria-expanded="false">
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('org')"
+                  [class.mm-collapse]="!isSubMenuOpen('org')"
+                >
                   <li>
                     <a
                       class="text-truncate align-self-center"
                       routerLink="org-entreprise"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Liste des entreprises</span>
                     </a>
                   </li>
-
                   <li>
                     <a
                       class="text-truncate align-self-center"
                       routerLink="repporting-export"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Repportings et Exports</span>
                     </a>
                   </li>
-
-                  <!-- <li>
+                  <!--
+                      <li>
                         <a class="text-truncate align-self-center" href="#">
                           <span>Liste des entreprises </span>
                         </a>
@@ -593,10 +570,13 @@
                 <a
                   class="nav-link"
                   routerLink="org-utilisateur"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-person"></i>
-                  <span data-key="t-dashboard">Liste des utilisateurs</span>
+                  <span 
+                    >Liste des utilisateurs</span
+                  >
                 </a>
               </li>
 
@@ -605,11 +585,12 @@
                 <a
                   class="nav-link"
                   routerLink="transactions-operations"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-share"></i>
-                  <span data-key="t-dashboard"
-                    >Transactions &amp; Opérations</span
+                  <span 
+                    >Transactions & Opérations</span
                   >
                 </a>
               </li>
@@ -619,13 +600,15 @@
                 <a
                   class="nav-link"
                   routerLink="alertes-supervisions"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-notifications"></i>
-                  <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
+                  <span 
+                    >Alertes & Supervisions</span
+                  >
                 </a>
               </li>
-
               <!-- Beneficiaires -->
               <!--              <li class="nav-item">-->
               <!--                <a class="nav-link" routerLink="beneficiaires" aria-expanded="false">-->
@@ -635,45 +618,60 @@
               <!--              </li>-->
             }
 
-            <!-- Admin Integrateur -->
             @case ("Admin integrateur") {
               <!-- Tableau de bord -->
               <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="dashboard"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
-                  <i class="icon ion-ios-speedometer active"></i>
-                  <span data-key="t-dashboard">Tableau de Bord</span>
+                  <i class="icon ion-ios-speedometer"></i>
+                  <span 
+                    >Tableau de Bord</span
+                  >
                 </a>
               </li>
 
-              <!-- Entreprises et organisations -->
-              <li class="nav-item">
-                <a class="nav-link has-arrow">
+              <!-- Organisations -->
+              <li class="nav-item" [class.mm-active]="isSubMenuOpen('org')">
+                <a
+                  class="nav-link"
+                  (click)="toggleSubMenu('org', $event)"
+                  [class.collapsed]="!isSubMenuOpen('org')"
+                >
                   <i class="icon ion-briefcase"></i>
-                  <span>Organisations</span>
+                  <span 
+                    >Organisations</span
+                  >
+     
                 </a>
-                <ul class="sub-menu mmm-collapse" aria-expanded="false">
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('org')"
+                  [class.mm-collapse]="!isSubMenuOpen('org')"
+                >
                   <li>
                     <a
                       class="text-truncate align-self-center"
                       routerLink="organisations"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Liste des organisations</span>
                     </a>
                   </li>
-
                   <li>
                     <a
                       class="text-truncate align-self-center"
                       routerLink="repporting-export"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Repportings et Exports</span>
                     </a>
                   </li>
-
                   <!--
                       <li>
                         <a class="text-truncate align-self-center" href="#">
@@ -723,11 +721,12 @@
                 <a
                   class="nav-link"
                   routerLink="transactions-operations"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-share"></i>
-                  <span data-key="t-dashboard"
-                    >Transactions &amp; Opérations</span
+                  <span 
+                    >Transactions & Opérations</span
                   >
                 </a>
               </li>
@@ -737,10 +736,13 @@
                 <a
                   class="nav-link"
                   routerLink="alertes-supervisions"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-notifications"></i>
-                  <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
+                  <span 
+                    >Alertes & Supervisions</span
+                  >
                 </a>
               </li>
 
@@ -749,40 +751,67 @@
                 <a
                   class="nav-link"
                   routerLink="utilisateurs"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-person"></i>
-                  <span data-key="t-dashboard">Liste des utilisateurs</span>
+                  <span 
+                    >Liste des utilisateurs</span
+                  >
                 </a>
               </li>
 
               <!-- Parametres -->
-              <li class="nav-item">
-                <a class="nav-link has-arrow">
+              <li class="nav-item" [class.mm-active]="isSubMenuOpen('params')">
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('params', $event)"
+                  [class.collapsed]="!isSubMenuOpen('params')"
+                >
                   <i class="icon ion-android-settings"></i>
-                  <span>Paramétrage &amp; administr...</span>
+                  <span 
+                    >Paramétrage</span
+                  >
+     
                 </a>
-                <ul class="sub-menu mm-collapse" aria-expanded="false">
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('params')"
+                  [class.mm-collapse]="!isSubMenuOpen('params')"
+                >
                   <li>
-                    <a routerLink="configuration-alertes">
+                    <a
+                      routerLink="configuration-alertes"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
                       <span>Config. Alertes</span>
                     </a>
                   </li>
-
                   <li>
-                    <a routerLink="configuration-notifications">
+                    <a
+                      routerLink="configuration-notifications"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
                       <span>Config. Notifications</span>
                     </a>
                   </li>
-
                   <li>
-                    <a routerLink="configuration-notif-user-defaut">
+                    <a
+                      routerLink="configuration-notif-user-defaut"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
                       <span>Config. Notif Défaut User</span>
                     </a>
                   </li>
-
                   <li>
-                    <a routerLink="mes-notifications">
+                    <a
+                      routerLink="mes-notifications"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
                       <span>Mes Notifications</span>
                     </a>
                   </li>
@@ -790,46 +819,63 @@
               </li>
             }
 
-            <!-- Admin Integrateur Banque -->
             @case ("Admin integrateur banque") {
               <!-- Tableau de bord -->
               <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="dashboard"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
-                  <i class="icon ion-ios-speedometer active"></i>
-                  <span data-key="t-dashboard">Tableau de Bord</span>
+                  <i class="icon ion-ios-speedometer"></i>
+                  <span 
+                    >Tableau de Bord</span
+                  >
                 </a>
               </li>
 
-              <!-- Entreprises et organisations -->
-              <li class="nav-item">
-                <a class="nav-link has-arrow">
+              <!-- Organisations -->
+              <li class="nav-item" [class.mm-active]="isSubMenuOpen('org')">
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('org', $event)"
+                  [class.collapsed]="!isSubMenuOpen('org')"
+                >
                   <i class="icon ion-briefcase"></i>
-                  <span>Organisations</span>
+                  <span 
+                    >Organisations</span
+                  >
+          
                 </a>
-                <ul class="sub-menu mmm-collapse" aria-expanded="false">
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('org')"
+                  [class.mm-collapse]="!isSubMenuOpen('org')"
+                >
                   <li>
                     <a
                       class="text-truncate align-self-center"
                       routerLink="/organisations"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Liste des organisations</span>
                     </a>
                   </li>
-
                   <li>
                     <a
                       class="text-truncate align-self-center"
                       routerLink="/organisations"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Repportings et Exports</span>
                     </a>
                   </li>
-
-                  <!--
+                </ul>
+              </li>
+              <!--
                       <li>
                         <a class="text-truncate align-self-center" href="#">
                           <span>Liste des entreprises </span>
@@ -870,21 +916,33 @@
                           <span>Audit &amp; traçabilité</span>
                         </a>
                       </li> -->
-                </ul>
-              </li>
-
               <!-- Transactions et Operations -->
-              <li class="nav-item">
-                <a class="nav-link has-arrow">
+              <li
+                class="nav-item"
+                [class.mm-active]="isSubMenuOpen('transactions')"
+              >
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('transactions', $event)"
+                  [class.collapsed]="!isSubMenuOpen('transactions')"
+                >
                   <i class="icon ion-cash"></i>
-                  <span data-key="t-apps">Transactions &amp; opérations</span>
+                  <span 
+                    >Transactions & opérations</span
+                  >
+          
                 </a>
-
-                <ul class="sub-menu mm-collapse" aria-expanded="false">
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('transactions')"
+                  [class.mm-collapse]="!isSubMenuOpen('transactions')"
+                >
                   <li>
                     <a
                       class="nav-link-custom"
                       routerLink="/historique-transaction"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Historique des transactions</span>
                     </a>
@@ -893,62 +951,96 @@
                     <a
                       class="nav-link-custom"
                       routerLink="/transaction-internationale"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Transactions internationales</span>
                     </a>
                   </li>
                 </ul>
               </li>
+
               <!-- utilisateurs -->
               <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="utilisateurs"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-person"></i>
-                  <span data-key="t-dashboard">Liste des utilisateurs</span>
+                  <span 
+                    >Liste des utilisateurs</span
+                  >
                 </a>
               </li>
+
               <!-- Alertes et Supervisions -->
               <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="alertes-supervisions"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-notifications"></i>
-                  <span data-key="t-dashboard">Alertes &amp; Supervisions</span>
+                  <span 
+                    >Alertes & Supervisions</span
+                  >
                 </a>
               </li>
 
               <!-- Parametres -->
-              <li class="nav-item">
-                <a class="nav-link has-arrow">
+              <li class="nav-item" [class.mm-active]="isSubMenuOpen('params')">
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('params', $event)"
+                  [class.collapsed]="!isSubMenuOpen('params')"
+                >
                   <i class="icon ion-android-settings"></i>
-                  <span>Paramétrage &amp; administr...</span>
+                  <span 
+                    >Paramétrage</span
+                  >
+    
                 </a>
-                <ul class="sub-menu mm-collapse" aria-expanded="false">
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('params')"
+                  [class.mm-collapse]="!isSubMenuOpen('params')"
+                >
                   <li>
-                    <a routerLink="configuration-alertes">
+                    <a
+                      routerLink="configuration-alertes"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
                       <span>Config. Alertes</span>
                     </a>
                   </li>
-
                   <li>
-                    <a routerLink="configuration-notifications">
+                    <a
+                      routerLink="configuration-notifications"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
                       <span>Config. Notifications</span>
                     </a>
                   </li>
-
                   <li>
-                    <a routerLink="configuration-notif-user-defaut">
+                    <a
+                      routerLink="configuration-notif-user-defaut"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
                       <span>Config. Notif Défaut User</span>
                     </a>
                   </li>
-
                   <li>
-                    <a routerLink="mes-notifications">
+                    <a
+                      routerLink="mes-notifications"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
                       <span>Mes Notifications</span>
                     </a>
                   </li>
@@ -956,40 +1048,59 @@
               </li>
             }
 
-            <!-- Pour l'agent conformite  -->
             @case ("Agent Conformité") {
               <!-- Tableau de bord -->
               <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="agent-dashboard"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
-                  <i class="icon ion-ios-speedometer active"></i>
-                  <span data-key="t-dashboard">Tableau de Bord </span>
+                  <i class="icon ion-ios-speedometer"></i>
+                  <span 
+                    >Tableau de Bord</span
+                  >
                 </a>
               </li>
 
               <!-- Demandes de souscription -->
-              <li class="nav-item">
-                <a class="nav-link has-arrow">
+              <li
+                class="nav-item"
+                [class.mm-active]="isSubMenuOpen('demandes')"
+              >
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('demandes', $event)"
+                  [class.collapsed]="!isSubMenuOpen('demandes')"
+                >
                   <i class="icon ion-eye"></i>
-                  <span>Demandes Souscriptions </span>
+                  <span 
+                    >Demandes Souscriptions</span
+                  >
+       
                 </a>
-                <ul class="sub-menu mmm-collapse" aria-expanded="false">
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('demandes')"
+                  [class.mm-collapse]="!isSubMenuOpen('demandes')"
+                >
                   <li>
                     <a
                       class="text-truncate align-self-center"
                       routerLink="/agent-demandes"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Liste des demandes</span>
                     </a>
                   </li>
-
                   <li>
                     <a
                       class="text-truncate align-self-center"
                       routerLink="/agent-entreprise"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
                     >
                       <span>Liste des entreprises</span>
                     </a>
@@ -1002,39 +1113,44 @@
                 <a
                   class="nav-link"
                   routerLink="facturiers"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="icon ion-document-text"></i>
-                  <span>Gestion des Facturiers</span>
+                  <span 
+                    >Gestion des Facturiers</span
+                  >
                 </a>
               </li>
-              <!-- Gestions des facturies -->
+
+              <!-- Gestions des operateurs mobiles -->
               <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="operateurs-mobiles"
-                  aria-expanded="false"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
                 >
                   <i class="fas fa-mobile-alt me-2"></i>
-                  <span>Gestion des Opérateurs</span>
+                  <span 
+                    >Gestion des Opérateurs</span
+                  >
                 </a>
               </li>
             }
-
-            <!-- Par defaut -->
-            @default {}
           }
         </ul>
       </div>
     </div>
   </div>
-  <!-- End: vertical-menu -->
 
   <!-- Start: Main -->
-  <div class="main-content">
-    <router-outlet></router-outlet>
-    <!-- End: Page -->
 
+  <div
+    class="main-content"
+    [class.sidebar-collapsed]="sidebarService.isSidebarCollapsed"
+  >
+    <router-outlet></router-outlet>
     <!-- Footer -->
     <!--    <footer class="bg-light d-print-none mt-4 py-3 footer border-top">-->
     <!--      <div class="container-fluid">-->
@@ -1047,6 +1163,5 @@
     <!--      </div>-->
     <!--    </footer>-->
   </div>
-
   <!-- End: Main -->
 </div>
