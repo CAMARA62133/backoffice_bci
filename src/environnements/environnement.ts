@@ -16,7 +16,7 @@ export const environment = {
     facturierImgUrl:
       'https://dev-api-bcibankjs.ecash-guinee.com/api/webdav/read-image',
   },
-
+  
   appVersion: {
     vcVersion: '1.00',
   },

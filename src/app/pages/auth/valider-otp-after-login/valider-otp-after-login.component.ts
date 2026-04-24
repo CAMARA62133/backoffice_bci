@@ -156,14 +156,14 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
           //   positionClass: 'toast-custom-center',
           // });
           this.inactivityService.startWatching();
-
+          const role = response?.data?.vcRoleName?.trim();
           // Redirection en fonction du role
-          if (response?.data?.vcRoleName === 'Agent Conformité') {
+          if (role === 'Agent Conformité') {
             this.router.navigate(['/agent-dashboard']);
-          } else if (
-            response?.data?.vcRoleName === 'Administrateur Système (IT)'
-          ) {
+          } else if (role === 'Administrateur Système (IT)') {
             this.router.navigate(['/org-dashboard']);
+          } else if (role === 'Trade Agent') {
+            this.router.navigate(['/agent-trade-dashboard']);
           } else {
             this.router.navigate(['/dashboard']);
           }

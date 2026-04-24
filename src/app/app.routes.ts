@@ -48,6 +48,11 @@ import { MobileOperatorComponent } from './pages/agent-conformite/mobile-operato
 import { HistoriqueTransactionComponent } from './pages/admin-integrateur/historique-transaction/historique-transaction.component';
 import { TransactionInternationalComponent } from './pages/admin-integrateur/transaction-international/transaction-international.component';
 import { SouscriptionClientComponent } from './pages/admin-integrateur/souscription-client/souscription-client.component';
+import { DemandesClientsComponent } from './pages/agent-trade/demandes-clients/demandes-clients.component';
+import { TransactionInternationaleProcurationComponent } from './pages/agent-trade/transaction-internationale-procuration/transaction-internationale-procuration.component';
+import { HistoriqueTransactionClientsComponent } from './pages/agent-trade/historique-transaction-clients/historique-transaction-clients.component';
+import { AgentTradeDashboardComponent } from './pages/agent-trade/agent-trade-dashboard/agent-trade-dashboard.component';
+import { DetailDemandeClientComponent } from './pages/agent-trade/detail-demande-client/detail-demande-client.component';
 
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
@@ -152,7 +157,9 @@ export const routes: Routes = [
         title: 'BCI - Online | Tableau de bord',
         component: DashboardComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        data: {
+          roles: ['Admin integrateur', 'Admin integrateur banque'],
+        },
       },
 
       {
@@ -396,6 +403,46 @@ export const routes: Routes = [
         component: MobileOperatorComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Agent Conformité'] },
+      },
+
+      // ========== agent trade ==================
+
+      {
+        path: 'agent-trade-dashboard',
+        title: 'BCI - Online | Tableau de bord Agent Trade',
+        component: AgentTradeDashboardComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Trade Agent'] },
+      },
+
+      {
+        path: 'demandes-clients',
+        title: 'BCI - Online | Liste des demandes de souscriptions des clients',
+        component: DemandesClientsComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Trade Agent'] },
+      },
+
+      {
+        path: 'detail-demande-client/:id',
+        title: 'BCI - Détail de la demande de transaction',
+        component: DetailDemandeClientComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Trade Agent'] },
+      },
+      {
+        path: 'transaction-internationale-procuration',
+        title: 'BCI - Online | Transactions internationales par procuration',
+        component: TransactionInternationaleProcurationComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Trade Agent'] },
+      },
+      {
+        path: 'historique-transaction-clients',
+        title: 'BCI - Online | Historique des transactions des clients',
+        component: HistoriqueTransactionClientsComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Trade Agent'] },
       },
     ],
   },

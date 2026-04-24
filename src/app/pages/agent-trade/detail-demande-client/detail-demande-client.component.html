@@ -1,0 +1,494 @@
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
+          <div>
+            <h4 class="fw-semibold text-primary mb-sm-0 h4">
+              Détail Transaction
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  @if (demande) {
+    <div class="container-fluid mt-3">
+      <div class="row">
+        <div class="col-12">
+          <!-- Header Card -->
+          <div class="card shadow-sm mb-3 border-0 overflow-hidden">
+            <div
+              class="card-body p-2"
+              style="
+                background: linear-gradient(135deg, #3b3b7a 0%, #2a2a5a 100%);
+              "
+            >
+              <div class="d-flex align-items-center gap-2">
+                <!-- Icône -->
+                <div class="rounded-circle bg-white p-1">
+                  <i class="fas fa-exchange-alt text-primary fs-6"></i>
+                </div>
+
+                <!-- Infos transaction -->
+                <div class="grow">
+                  <!-- Ligne 1: Comptes -->
+                  <div class="d-flex flex-wrap align-items-center ">
+                    <span class="text-white-50 small">Donneur:</span>
+                    <span class="text-white fw-semibold small font-monospace">{{
+                      isLoading ? "..." : demande.compteTransfert
+                    }}</span>
+                    <i class="fas fa-arrow-right text-white-50 fa-xs"></i>
+                    <span class="text-white-50 small">Bénéficiaire:</span>
+                    <span class="text-white fw-semibold small font-monospace">{{
+                      isLoading ? "..." : demande.ibanNCompte
+                    }}</span>
+                  </div>
+                  <!-- Ligne 2: Date et Statut -->
+                  <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+                    <span class="text-white-50 small">
+                      <i class="fas fa-calendar-alt me-1 fa-xs"></i>
+                      {{
+                        isLoading
+                          ? "..."
+                          : (demande.dtCreated | date: "dd/MM/yyyy")
+                      }}
+                    </span>
+                    <span
+                      class="badge rounded-pill px-3 py-1 fs-6 fw-semibold"
+                      [ngClass]="{
+                        'bg-warning text-dark':
+                          demande.statutDemande === 'En traitement',
+                        'bg-success': demande.statutDemande === 'Valide',
+                        'bg-danger': demande.statutDemande === 'Rejete',
+                      }"
+                    >
+                      @if (isLoading) {
+                        ...
+                      } @else if (demande.statutDemande === "En traitement") {
+                        En attente
+                      } @else if (demande.statutDemande === "Valide") {
+                        Validée
+                      } @else {
+                        Réjetée
+                      }
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <!-- Colonne Gauche -->
+        <div class="col-lg-6">
+          <!-- Card Donneur d'ordre compact -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-user-circle me-1 fa-sm"></i> Donneur d'ordre
+              </h6>
+            </div>
+            <div class="card-body pt-2 pb-3">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <label class="text-muted small fw-semibold"
+                      >Raison Sociale</label
+                    >
+                    <p class="fw-semibold mb-0 text-end">
+                      {{ isLoading ? "..." : demande.raisonSocialeDO }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <label class="text-muted small fw-semibold">Adresse</label>
+                    <p class="mb-0 text-end small">
+                      {{ isLoading ? "..." : demande.adresseDO }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold"
+                      >Compte Transfert</label
+                    >
+                    <span class="font-monospace small">{{
+                      isLoading ? "..." : demande.compteTransfert
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold"
+                      >Solde du compte</label
+                    >
+                    <span class="fw-bold text-primary">{{
+                      isLoading
+                        ? "..."
+                        : (demande.soldeCompte
+                          | currency: demande.devise : "symbol" : "1.2-2")
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold"
+                      >Compte Commission</label
+                    >
+                    <span class="font-monospace small">{{
+                      isLoading ? "..." : demande.compteCommission
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold"
+                      >Frais étranger</label
+                    >
+                    <span class="badge bg-secondary fw-normal">{{
+                      isLoading ? "..." : demande.fraisEtranger
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Détails Opération compact -->
+          <div class="card border-0 shadow-sm mt-3">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-chart-line me-1 fa-sm"></i> Détails Opération
+              </h6>
+            </div>
+            <div class="card-body pt-2 pb-3">
+              <div class="row g-2">
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <label class="text-muted small fw-semibold"
+                      >Motif économique</label
+                    >
+                    <p class="mb-0 text-end small">
+                      {{ isLoading ? "..." : demande.motifEconomique }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold"
+                      >Référence</label
+                    >
+                    <span class="badge bg-primary fw-normal">{{
+                      isLoading ? "..." : demande.refDocument
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold">Devise</label>
+                    <span class="badge bg-info text-dark fw-normal">{{
+                      isLoading ? "..." : demande.devise
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-12 mt-2">
+                  <div
+                    class="p-2 rounded"
+                    style="background: #f8f9ff; border-left: 3px solid #3b3b7a"
+                  >
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <label class="text-muted small fw-semibold mb-0"
+                        >Montant à transférer</label
+                      >
+                      <span class="fw-bold fs-5" style="color: #3b3b7a">
+                        {{
+                          isLoading
+                            ? "..."
+                            : (demande.montantTransaction
+                              | currency: demande.devise : "symbol" : "1.2-2")
+                        }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                @if (demande.soldeCompte < demande.montantTransaction) {
+                  <div class="col-12 mt-2">
+                    <div class="p-2 rounded bg-danger bg-opacity-10">
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <label class="text-danger small fw-semibold mb-0"
+                          >⚠️ Alerte</label
+                        >
+                        <span class="text-danger small"
+                          >Solde insuffisant pour effectuer cette
+                          transaction</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne Droite -->
+        <div class="col-lg-6">
+          <!-- Card Bénéficiaire compact -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-user-check me-1 fa-sm"></i> Bénéficiaire
+              </h6>
+            </div>
+            <div class="card-body pt-2 pb-3">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <label class="text-muted small fw-semibold"
+                      >Raison Sociale</label
+                    >
+                    <p class="fw-semibold mb-0 text-end">
+                      {{ isLoading ? "..." : demande.raisonSocialeB }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <label class="text-muted small fw-semibold">Adresse</label>
+                    <p class="mb-0 text-end small">
+                      {{ isLoading ? "..." : demande.adresseB }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold"
+                      >IBAN / N° Compte</label
+                    >
+                    <span class="font-monospace small">{{
+                      isLoading ? "..." : demande.ibanNCompte
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold">Banque</label>
+                    <span class="small">{{
+                      isLoading ? "..." : demande.bankBeneficiaire
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <label class="text-muted small fw-semibold">SWIFT</label>
+                    <span
+                      class="font-monospace fw-bold small"
+                      style="color: #3b3b7a"
+                      >{{
+                        isLoading ? "..." : demande.swifiBankBeneficiaire
+                      }}</span
+                    >
+                  </div>
+                </div>
+
+                @if (demande.bankIntermediaire && !isLoading) {
+                  <div class="col-12 mt-4">
+                    <hr class="my-2" />
+                    <div class="row g-2 mt-1">
+                      <div class="col-6">
+                        <div
+                          class="d-flex justify-content-between align-items-center"
+                        >
+                          <label class="text-muted small fw-semibold"
+                            >Banque Intermédiaire</label
+                          >
+                          <span class="small">{{
+                            demande.bankIntermediaire
+                          }}</span>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div
+                          class="d-flex justify-content-between align-items-center"
+                        >
+                          <label class="text-muted small fw-semibold"
+                            >SWIFT Intermédiaire</label
+                          >
+                          <span class="font-monospace small">{{
+                            demande.swifibankIntermediaire
+                          }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Actions -->
+          <div class="card border-0 shadow-sm mt-3 p-4" style="height: 160px">
+            <div class="card-header bg-white border-0 pt-2 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-gavel me-1 fa-sm"></i> Actions
+              </h6>
+            </div>
+            <div class="card-body pt-2 d-flex align-items-center">
+              @if (!isLoading && demande.statutDemande === "En traitement") {
+                <div class="d-flex gap-2 w-100">
+                  <button
+                    class="btn btn-sm flex-fill py-1 fw-semibold border-0"
+                    style="background: #3b3b7a; color: white"
+                    (click)="openModal('valideModal')"
+                  >
+                    <i class="fa fa-check-circle me-1"></i> Valider
+                  </button>
+                  <button
+                    class="btn btn-sm flex-fill py-1 fw-semibold btn-outline-danger"
+                    (click)="openModal('unblockModal')"
+                  >
+                    <i class="fa fa-times-circle me-1"></i> Réjeter
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Modal de réjet compact -->
+<div class="modal fade" id="unblockModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg">
+      <div
+        class="modal-header border-0 py-2"
+        style="background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%)"
+      >
+        <h6 class="modal-title text-white">
+          <i class="fas fa-times-circle me-1"></i>Réjet de transaction
+        </h6>
+        <button
+          type="button"
+          class="btn-close btn-close-white btn-sm"
+          data-bs-dismiss="modal"
+          (click)="closeModal('unblockModal')"
+        ></button>
+      </div>
+      <form [formGroup]="bloqueForm" (ngSubmit)="onRejectAsk()">
+        <div class="modal-body p-3">
+          <div class="mb-3">
+            <label class="form-label small fw-semibold">Motif du réjet</label>
+            <textarea
+              formControlName="vcMotif"
+              class="form-control form-control-sm"
+              placeholder="Saisissez le motif du réjet..."
+              rows="2"
+            ></textarea>
+            @if (
+              bloqueForm.get("vcMotif")?.invalid &&
+              bloqueForm.get("vcMotif")?.touched
+            ) {
+              <div class="alert alert-danger mt-1 mb-0 py-1 small">
+                <i class="fas fa-exclamation-triangle me-1 fa-xs"></i>
+                Le motif est obligatoire
+              </div>
+            }
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0 pb-3 px-3">
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            (click)="closeModal('unblockModal')"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="btn btn-sm btn-danger"
+            [disabled]="bloqueForm.invalid"
+          >
+            Rejeter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de validation compact -->
+<div class="modal fade" id="valideModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg">
+      <div
+        class="modal-header border-0 py-2"
+        style="background: linear-gradient(135deg, #3b3b7a 0%, #2a2a5a 100%)"
+      >
+        <h6 class="modal-title text-white">
+          <i class="fas fa-check-circle me-1"></i>Validation
+        </h6>
+        <button
+          type="button"
+          class="btn-close btn-close-white btn-sm"
+          data-bs-dismiss="modal"
+          (click)="closeModal('valideModal')"
+        ></button>
+      </div>
+      <form [formGroup]="valideForm" (ngSubmit)="onValidateAsk()">
+        <div class="modal-body p-3 text-center">
+          <i class="fas fa-check-circle text-success fs-1 mb-2"></i>
+          <p class="mb-0 fw-semibold">
+            Voulez-vous vraiment valider cette transaction ?
+          </p>
+        </div>
+        <div class="modal-footer border-0 pt-0 pb-3 px-3">
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            (click)="closeModal('valideModal')"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="btn btn-sm"
+            style="background: #3b3b7a; color: white"
+          >
+            Valider
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

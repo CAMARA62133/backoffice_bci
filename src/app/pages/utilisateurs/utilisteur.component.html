@@ -292,7 +292,7 @@
               </span>
             </div>
 
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
               <label class="form-label">
                 Mode d'envoi de l'OTP <span class="text-danger">*</span>
               </label>
@@ -321,12 +321,46 @@
                 />
                 <label class="form-check-label" for="otp_email"> Email </label>
               </div>
-
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  formControlName="modeOtp"
+                  id="otp_email_sms"
+                  value="emailSms"
+                />
+                <label class="form-check-label" for="otp_email_sms"
+                  >SMS et Email</label
+                >
+              </div>
               <span class="text-danger" *ngIf="isInvalid('modeOtp')">
                 {{ getErrorMessage("modeOtp") }}
               </span>
+            </div> -->
+  <!-- Mode OTP -->
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label class="form-label">
+                  Mode d'envoi de l'OTP <span class="text-danger">*</span>
+                </label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" formControlName="modeOtp" id="otp_sms" value="SMS" />
+                  <label class="form-check-label" for="otp_sms">SMS</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" formControlName="modeOtp" id="otp_email" value="email" />
+                  <label class="form-check-label" for="otp_email">Email</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" formControlName="modeOtp" id="otp_email_sms"
+                    value="emailSms" />
+                  <label class="form-check-label" for="otp_email_sms">SMS et Email</label>
+                </div>
+                <span class="text-danger" *ngIf="isInvalid('modeOtp')">
+                  {{ getErrorMessage("modeOtp") }}
+                </span>
+              </div>
             </div>
-
             <div class="col-md-12">
               <div class="mb-3">
                 <label class="form-label" for="description">

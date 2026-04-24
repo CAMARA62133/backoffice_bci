@@ -450,6 +450,8 @@ export class UtilisteurComponent implements OnInit {
       next: (res) => {
         // Liste des IDs à exclure
         // const excludedRoleIds = [7, 10];
+        // agent tred
+        console.log("Les roles",res.data)
 
         if (
           this.userInfo?.vcRoleName === 'Admin integrateur' ||
@@ -463,7 +465,7 @@ export class UtilisteurComponent implements OnInit {
           +this?.userInfo?.iRoleID === 16
         ) {
           this.roles = (res?.data || []).filter(
-            (role: any) => +role.id === 7 || +role.id === 3,
+            (role: any) => +role.id === 7 || +role.id === 3 || +role.id === 17,
           );
         }
 

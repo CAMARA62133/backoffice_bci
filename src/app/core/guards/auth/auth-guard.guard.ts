@@ -1,23 +1,25 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivate,
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import {catchError, map, Observable, of} from 'rxjs';
-import {AuthService} from '../../../services/auth/authService/auth.service';
+import { catchError, map, Observable, of } from 'rxjs';
+import { AuthService } from '../../../services/auth/authService/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {
-  }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Observable<boolean> | Promise<boolean> | boolean {
     // const user = this.authService.getCurrentUser();
     //
@@ -40,7 +42,9 @@ export class AuthGuard implements CanActivate {
       map((isLoggedIn: boolean) => {
         // S'il n'est pas connecter on lui redirige sur la page login
         if (!isLoggedIn) {
-          this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
+          this.router.navigate(['/login'], {
+            queryParams: { returnUrl: state.url },
+          });
           return false;
         }
 
@@ -49,7 +53,9 @@ export class AuthGuard implements CanActivate {
 
         // Si n'y pas d'utilisateur dans le locaStorage => deconnexion
         if (!user) {
-          this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
+          this.router.navigate(['/login'], {
+            queryParams: { returnUrl: state.url },
+          });
           return false;
           // this.authService.logout();
           // this.router.navigate(['/login']);
@@ -59,23 +65,35 @@ export class AuthGuard implements CanActivate {
         // Variables qui contient la liste roles dans une array
         const exceptedRoles = route.data['roles'] as string[];
 
-        // S'il n'y a pas de role defini et si le role de l'user n'existe pas dans le tableau de role => non autoriser
-        if (exceptedRoles?.length && !exceptedRoles.includes(user.vcRoleName)) {
-          this.router.navigate(['unauthorized']);
-          return false;
-        }
+        // Sécurité : On récupère le rôle et on applique .trim() pour supprimer les espaces invisibles
+        const userRole = user.vcRoleName ? user.vcRoleName.trim() : '';
 
+        // S'il y a des rôles définis dans la route
+        if (exceptedRoles?.length) {
+          // On nettoie aussi les rôles attendus dans la route par précaution
+          const cleanedExceptedRoles = exceptedRoles.map((role) => role.trim());
+
+          if (!cleanedExceptedRoles.includes(userRole)) {
+            console.warn(
+              `Accès refusé : Rôle utilisateur '${userRole}' non présent dans`,
+              cleanedExceptedRoles,
+            );
+            this.router.navigate(['unauthorized']);
+            return false;
+          }
+        }
         // Sinon on retour true
         return true;
       }),
 
       // En cas d'erreur
       catchError(() => {
-        this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}})
+        this.router.navigate(['/login'], {
+          queryParams: { returnUrl: state.url },
+        });
         return of(false);
-      })
-    )
-
+      }),
+    );
 
     // Vérifie la session côté serveur via cookie
     // return this.authService.checkSession().pipe(

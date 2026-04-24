@@ -7,7 +7,7 @@
     <div class="my-2 navbar-header">
       <div class="d-flex">
         <!-- Logo -->
-<div class="px-0 navbar-brand-box">
+        <div class="px-0 navbar-brand-box">
           <a routerLink="/" class="logo logo-dark">
             <span class="logo-sm">
               <img
@@ -49,7 +49,6 @@
             </span>
           </a>
         </div>
-
 
         <!-- Toggle Sidebar Button -->
         <button
@@ -466,7 +465,7 @@
             <span>Menu</span>
           </li>
 
-          @switch (currentUser.vcRoleName) {
+          @switch (currentUser.vcRoleName?.trim()) {
             @case ("Administrateur Système (IT)") {
               <!-- Tableau de bord -->
               <li class="nav-item">
@@ -477,9 +476,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-ios-speedometer"></i>
-                  <span 
-                    >Tableau de Bord</span
-                  >
+                  <span>Tableau de Bord</span>
                 </a>
               </li>
 
@@ -491,10 +488,7 @@
                   [class.collapsed]="!isSubMenuOpen('org')"
                 >
                   <i class="icon ion-briefcase"></i>
-                  <span 
-                    >Organisations</span
-                  >
-         
+                  <span>Organisations</span>
                 </a>
                 <ul
                   class="sub-menu"
@@ -574,9 +568,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-person"></i>
-                  <span 
-                    >Liste des utilisateurs</span
-                  >
+                  <span>Liste des utilisateurs</span>
                 </a>
               </li>
 
@@ -589,9 +581,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-share"></i>
-                  <span 
-                    >Transactions & Opérations</span
-                  >
+                  <span>Transactions & Opérations</span>
                 </a>
               </li>
 
@@ -604,9 +594,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-notifications"></i>
-                  <span 
-                    >Alertes & Supervisions</span
-                  >
+                  <span>Alertes & Supervisions</span>
                 </a>
               </li>
               <!-- Beneficiaires -->
@@ -628,9 +616,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-ios-speedometer"></i>
-                  <span 
-                    >Tableau de Bord</span
-                  >
+                  <span>Tableau de Bord</span>
                 </a>
               </li>
 
@@ -642,10 +628,7 @@
                   [class.collapsed]="!isSubMenuOpen('org')"
                 >
                   <i class="icon ion-briefcase"></i>
-                  <span 
-                    >Organisations</span
-                  >
-     
+                  <span>Organisations</span>
                 </a>
                 <ul
                   class="sub-menu"
@@ -725,9 +708,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-share"></i>
-                  <span 
-                    >Transactions & Opérations</span
-                  >
+                  <span>Transactions & Opérations</span>
                 </a>
               </li>
 
@@ -740,9 +721,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-notifications"></i>
-                  <span 
-                    >Alertes & Supervisions</span
-                  >
+                  <span>Alertes & Supervisions</span>
                 </a>
               </li>
 
@@ -755,9 +734,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-person"></i>
-                  <span 
-                    >Liste des utilisateurs</span
-                  >
+                  <span>Liste des utilisateurs</span>
                 </a>
               </li>
 
@@ -769,10 +746,7 @@
                   [class.collapsed]="!isSubMenuOpen('params')"
                 >
                   <i class="icon ion-android-settings"></i>
-                  <span 
-                    >Paramétrage</span
-                  >
-     
+                  <span>Paramétrage</span>
                 </a>
                 <ul
                   class="sub-menu"
@@ -829,9 +803,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-ios-speedometer"></i>
-                  <span 
-                    >Tableau de Bord</span
-                  >
+                  <span>Tableau de Bord</span>
                 </a>
               </li>
 
@@ -843,10 +815,7 @@
                   [class.collapsed]="!isSubMenuOpen('org')"
                 >
                   <i class="icon ion-briefcase"></i>
-                  <span 
-                    >Organisations</span
-                  >
-          
+                  <span>Organisations</span>
                 </a>
                 <ul
                   class="sub-menu"
@@ -927,10 +896,7 @@
                   [class.collapsed]="!isSubMenuOpen('transactions')"
                 >
                   <i class="icon ion-cash"></i>
-                  <span 
-                    >Transactions & opérations</span
-                  >
-          
+                  <span>Transactions & opérations</span>
                 </a>
                 <ul
                   class="sub-menu"
@@ -969,9 +935,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-person"></i>
-                  <span 
-                    >Liste des utilisateurs</span
-                  >
+                  <span>Liste des utilisateurs</span>
                 </a>
               </li>
 
@@ -984,9 +948,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-android-notifications"></i>
-                  <span 
-                    >Alertes & Supervisions</span
-                  >
+                  <span>Alertes & Supervisions</span>
                 </a>
               </li>
 
@@ -998,10 +960,7 @@
                   [class.collapsed]="!isSubMenuOpen('params')"
                 >
                   <i class="icon ion-android-settings"></i>
-                  <span 
-                    >Paramétrage</span
-                  >
-    
+                  <span>Paramétrage</span>
                 </a>
                 <ul
                   class="sub-menu"
@@ -1058,9 +1017,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-ios-speedometer"></i>
-                  <span 
-                    >Tableau de Bord</span
-                  >
+                  <span>Tableau de Bord</span>
                 </a>
               </li>
 
@@ -1075,10 +1032,7 @@
                   [class.collapsed]="!isSubMenuOpen('demandes')"
                 >
                   <i class="icon ion-eye"></i>
-                  <span 
-                    >Demandes Souscriptions</span
-                  >
-       
+                  <span>Demandes Souscriptions</span>
                 </a>
                 <ul
                   class="sub-menu"
@@ -1117,9 +1071,7 @@
                   (click)="onMenuClick()"
                 >
                   <i class="icon ion-document-text"></i>
-                  <span 
-                    >Gestion des Facturiers</span
-                  >
+                  <span>Gestion des Facturiers</span>
                 </a>
               </li>
 
@@ -1132,10 +1084,216 @@
                   (click)="onMenuClick()"
                 >
                   <i class="fas fa-mobile-alt me-2"></i>
-                  <span 
-                    >Gestion des Opérateurs</span
-                  >
+                  <span>Gestion des Opérateurs</span>
                 </a>
+              </li>
+            }
+
+            @case ("Trade Agent") {
+              <!-- Tableau de bord -->
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="agent-trade-dashboard"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
+                >
+                  <i class="icon ion-ios-speedometer"></i>
+                  <span>Tableau de Bord</span>
+                </a>
+              </li>
+
+              <!-- Demandes des clients -->
+              <li
+                class="nav-item"
+                [class.mm-active]="isSubMenuOpen('demandes-clients')"
+              >
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('demandes-clients', $event)"
+                  [class.collapsed]="!isSubMenuOpen('demandes-clients')"
+                >
+                  <i class="icon ion-briefcase"></i>
+                  <span>Demandes des clients</span>
+                </a>
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('demandes-clients')"
+                  [class.mm-collapse]="!isSubMenuOpen('demandes-clients')"
+                >
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/demandes-clients"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <i class="icon ion-ios-list-outline mr-2"></i>
+                      <span>Liste des demandes</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!--
+                      <li>
+                        <a class="text-truncate align-self-center" href="#">
+                          <span>Liste des entreprises </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="text-truncate align-self-center" href="#">
+                          <span>Nouvelle entreprise </span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="text-truncate align-self-center" href="#">
+                          <span>Gestion des Modules Activés</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="text-truncate align-self-center" href="#">
+                          <span>Workflows &amp; validations</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="text-truncate align-self-center" href="#">
+                          <span>Tickets &amp; Support</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="text-truncate align-self-center" href="#">
+                          <span>Alertes &amp; Supervision</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="text-truncate align-self-center" href="#">
+                          <span>Reporting &amp; exports</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a class="text-truncate align-self-center" href="#">
+                          <span>Audit &amp; traçabilité</span>
+                        </a>
+                      </li> -->
+              <!-- Transactions et Operations -->
+              <li
+                class="nav-item"
+                [class.mm-active]="isSubMenuOpen('transactions')"
+              >
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('transactions', $event)"
+                  [class.collapsed]="!isSubMenuOpen('transactions')"
+                >
+                  <i class="icon ion-cash"></i>
+                  <span>Transactions & opérations</span>
+                </a>
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('transactions')"
+                  [class.mm-collapse]="!isSubMenuOpen('transactions')"
+                >
+                  <li>
+                    <a
+                      class="nav-link-custom"
+                      routerLink="/transaction-internationale-procuration"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Transactions par procuration</span>
+                    </a>
+                  </li>
+
+                  <li>
+                    <a
+                      class="nav-link-custom"
+                      routerLink="/historique-transaction-clients"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Historique des transactions</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!-- utilisateurs -->
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="utilisateurs"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
+                >
+                  <i class="icon ion-person"></i>
+                  <span>Liste des utilisateurs</span>
+                </a>
+              </li>
+
+              <!-- Alertes et Supervisions -->
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="alertes-supervisions"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
+                >
+                  <i class="icon ion-android-notifications"></i>
+                  <span>Alertes & Supervisions</span>
+                </a>
+              </li>
+
+              <!-- Parametres -->
+              <li class="nav-item" [class.mm-active]="isSubMenuOpen('params')">
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('params', $event)"
+                  [class.collapsed]="!isSubMenuOpen('params')"
+                >
+                  <i class="icon ion-android-settings"></i>
+                  <span>Paramétrage</span>
+                </a>
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('params')"
+                  [class.mm-collapse]="!isSubMenuOpen('params')"
+                >
+                  <li>
+                    <a
+                      routerLink="configuration-alertes"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Config. Alertes</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      routerLink="configuration-notifications"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Config. Notifications</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      routerLink="configuration-notif-user-defaut"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Config. Notif Défaut User</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      routerLink="mes-notifications"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Mes Notifications</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
             }
           }
