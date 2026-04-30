@@ -1,24 +1,25 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
 import { UtilsService } from '../../../services/utils/table-utils.service';
 import { NotificationService } from '../../../services/notification/notification.service';
-import { DemandeTransactionInternationale } from '../data/demandes.data';
-import { DemandeTransactionClientService } from '../../../services/agent-trade/demande-transaction-client.service';
+import {
+  TransactionMultiple,
+  TRANSACTIONS_MULTIPLES,
+} from '../data/transaction-multile.data';
 
 @Component({
-  selector: 'app-transaction-internationale-procuration',
+  selector: 'app-transaction-multiple',
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './transaction-internationale-procuration.component.html',
-  styleUrl: './transaction-internationale-procuration.component.css',
+  templateUrl: './transaction-multiple.component.html',
+  styleUrl: './transaction-multiple.component.css',
 })
-export class TransactionInternationaleProcurationComponent
-  implements OnInit, OnDestroy
-{
+export class TransactionMultipleComponent implements OnInit {
   isLoadingDemandes: boolean = false;
-  demandes: DemandeTransactionInternationale[] = [];
+  toutesTransactions: TransactionMultiple[] = TRANSACTIONS_MULTIPLES;
+
+  activeTab: 'attente' | 'validees' | 'rejetees' = 'attente';
 
   pageSize = 10;
   currentPage = 1;
@@ -31,107 +32,106 @@ export class TransactionInternationaleProcurationComponent
 
   public utils = inject(UtilsService);
   public notification = inject(NotificationService);
-  private transactionService = inject(DemandeTransactionClientService);
-  private subscription!: Subscription;
-
-  constructor() {}
 
   ngOnInit() {
     this.loadData();
-
-    this.subscription = this.transactionService.transactionTraitee$.subscribe(
-      (id) => {
-        this.supprimerTransaction(id);
-      },
-    );
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-
-  // ==========================================
-  // CHARGEMENT - UNIQUEMENT LES DÉROGATIONS VALIDÉES PAR ADMIN
-  // ==========================================
   private loadData(): void {
     this.isLoadingDemandes = true;
-
     setTimeout(() => {
-      const toutesLesDemandes = this.transactionService.getDemandes();
-
-      // FILTRE : UNIQUEMENT les transactions AVEC dérogation ET validées par Admin ET en attente
-      this.demandes = toutesLesDemandes.filter((d) => {
-        return (
-          d.estDerogation === true &&
-          d.valideParAdminBanque === true &&
-          d.statutDemande === 'En traitement'
-        );
-      });
-
-      console.log(
-        'Transactions avec dérogation validées :',
-        this.demandes.length,
-      );
-
       this.isLoadingDemandes = false;
     }, 300);
   }
 
-  private supprimerTransaction(id: number): void {
-    const index = this.demandes.findIndex((d) => d.id === id);
-    if (index !== -1) {
-      this.demandes.splice(index, 1);
-      this.notification.success('Transaction traitée avec succès');
+  // Getters pour les transactions par statut
+  get transactionsEnAttente(): TransactionMultiple[] {
+    return this.toutesTransactions.filter(
+      (t) => t.statutDemande === 'En attente validation',
+    );
+  }
 
-      if (this.demandes.length === 0) {
-        this.currentPage = 1;
-      } else if (this.paginatedData.length === 0 && this.currentPage > 1) {
-        this.currentPage--;
-      }
+  get transactionsValidees(): TransactionMultiple[] {
+    return this.toutesTransactions.filter((t) => t.statutDemande === 'Valide');
+  }
+
+  get transactionsRejetees(): TransactionMultiple[] {
+    return this.toutesTransactions.filter((t) => t.statutDemande === 'Rejete');
+  }
+
+  // Changer d'onglet
+  setActiveTab(tab: 'attente' | 'validees' | 'rejetees'): void {
+    this.activeTab = tab;
+    this.currentPage = 1;
+    this.sortColumn = '';
+    this.sortDirection = 'asc';
+  }
+
+  getStatusLabel(): string {
+    switch (this.activeTab) {
+      case 'attente':
+        return 'en attente';
+      case 'validees':
+        return 'validées';
+      case 'rejetees':
+        return 'rejetées';
+      default:
+        return '';
+    }
+  }
+
+  // Obtenir les données selon l'onglet actif
+  get currentTransactions(): TransactionMultiple[] {
+    switch (this.activeTab) {
+      case 'attente':
+        return this.transactionsEnAttente;
+      case 'validees':
+        return this.transactionsValidees;
+      case 'rejetees':
+        return this.transactionsRejetees;
+      default:
+        return [];
     }
   }
 
   // ==========================================
   // LOGIQUE DE TABLE
   // ==========================================
-  get filteredData(): DemandeTransactionInternationale[] {
-    let data = [...this.demandes];
+  get filteredData(): TransactionMultiple[] {
+    let data = [...this.currentTransactions];
 
     if (this.searchText) {
       const searchLower = this.searchText.toLowerCase();
       data = data.filter(
         (item) =>
-          item.raisonSocialeDO?.toLowerCase().includes(searchLower) ||
-          item.raisonSocialeB?.toLowerCase().includes(searchLower) ||
-          item.refDocument?.toLowerCase().includes(searchLower) ||
+          item.reference?.toLowerCase().includes(searchLower) ||
+          item.initiateur?.toLowerCase().includes(searchLower) ||
           item.typeTransaction?.toLowerCase().includes(searchLower),
       );
     }
 
     if (this.dateDebut) {
       const debut = new Date(this.dateDebut);
-      data = data.filter((item) => new Date(item.dtCreated) >= debut);
+      data = data.filter((item) => new Date(item.date) >= debut);
     }
 
     if (this.dateFin) {
       const fin = new Date(this.dateFin);
       fin.setHours(23, 59, 59);
-      data = data.filter((item) => new Date(item.dtCreated) <= fin);
+      data = data.filter((item) => new Date(item.date) <= fin);
     }
 
     if (this.sortColumn) {
       data.sort((a, b) => {
-        let aVal = a[this.sortColumn as keyof DemandeTransactionInternationale];
-        let bVal = b[this.sortColumn as keyof DemandeTransactionInternationale];
+        let aVal = a[this.sortColumn as keyof TransactionMultiple];
+        let bVal = b[this.sortColumn as keyof TransactionMultiple];
 
         if (aVal === undefined || aVal === null) return 1;
         if (bVal === undefined || bVal === null) return -1;
 
-        if (this.sortColumn === 'dtCreated') {
-          aVal = new Date(aVal as Date).getTime();
-          bVal = new Date(bVal as Date).getTime();
+        if (this.sortColumn === 'date') {
+          aVal = new Date(aVal as string).getTime();
+          bVal = new Date(bVal as string).getTime();
         } else if (typeof aVal === 'number' && typeof bVal === 'number') {
           if (aVal < bVal) return this.sortDirection === 'asc' ? -1 : 1;
           if (aVal > bVal) return this.sortDirection === 'asc' ? 1 : -1;
@@ -150,7 +150,7 @@ export class TransactionInternationaleProcurationComponent
     return data;
   }
 
-  get paginatedData(): DemandeTransactionInternationale[] {
+  get paginatedData(): TransactionMultiple[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredData.slice(start, start + this.pageSize);
   }

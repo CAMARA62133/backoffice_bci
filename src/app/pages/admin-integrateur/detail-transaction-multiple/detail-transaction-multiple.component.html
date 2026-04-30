@@ -1,0 +1,589 @@
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
+          <div>
+            <h4 class="fw-semibold text-primary mb-sm-0 h4">
+              Détail Transaction Multiple
+            </h4>
+          </div>
+          <div>
+            <button class="btn btn-outline-secondary btn-sm" (click)="goBack()">
+              <i class="fas fa-arrow-left me-1"></i> Retour
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="container-fluid mt-4">
+      <div class="text-center py-5">
+        <div
+          class="spinner-border text-primary"
+          role="status"
+          style="width: 3rem; height: 3rem"
+        >
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="text-muted mt-3 mb-0">
+          <i class="fas fa-spinner fa-spin me-2"></i>
+          Chargement des détails...
+        </p>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading && transaction) {
+    <div class="container-fluid mt-3">
+      <!-- Header Card -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow-sm mb-3 border-0 overflow-hidden">
+            <div
+              class="card-body p-3"
+              style="
+                background: linear-gradient(135deg, #3b3b7a 0%, #2a2a5a 100%);
+              "
+            >
+              <div
+                class="d-flex flex-wrap justify-content-between align-items-center gap-2"
+              >
+                <div class="d-flex align-items-center gap-3">
+                  <div class="rounded-circle bg-white p-2">
+                    <i class="fas fa-exchange-alt text-primary fs-5"></i>
+                  </div>
+                  <div>
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="text-white-50 small">Référence:</span>
+                      <span class="text-white fw-bold">{{
+                        transaction.reference
+                      }}</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                      <span class="text-white-50 small">Date:</span>
+                      <span class="text-white small">{{
+                        transaction.date | date: "dd/MM/yyyy"
+                      }}</span>
+                      <span class="text-white-50 mx-1">|</span>
+                      <span class="text-white-50 small">Lieu:</span>
+                      <span class="text-white small">{{
+                        transaction.lieu
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <!-- Statut -->
+                  <span
+                    class="badge rounded-pill px-3 py-2 small fw-semibold"
+                    [ngClass]="{
+                      'bg-warning text-dark':
+                        transaction.statutDemande === 'En attente validation',
+                      'bg-success': transaction.statutDemande === 'Valide',
+                      'bg-danger': transaction.statutDemande === 'Rejete',
+                    }"
+                  >
+                    <i
+                      class="fas me-1"
+                      [ngClass]="{
+                        'fa-clock':
+                          transaction.statutDemande === 'En attente validation',
+                        'fa-check-circle':
+                          transaction.statutDemande === 'Valide',
+                        'fa-times-circle':
+                          transaction.statutDemande === 'Rejete',
+                      }"
+                    ></i>
+                    {{ transaction.statutDemande }}
+                  </span>
+
+                  <!-- Actions -->
+                  @if (transaction.statutDemande === "En attente validation") {
+                    <div class="d-flex gap-1 ms-2">
+                      <button
+                        class="btn btn-sm btn-outline-success px-2 py-1"
+                        (click)="openValidateModal()"
+                        title="Valider la transaction"
+                      >
+                        <i class="fas fa-check"></i>
+                      </button>
+
+                      <button
+                        class="btn btn-sm btn-outline-danger px-2 py-1"
+                        (click)="openRejectModal()"
+                        title="Rejeter la transaction"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-info-circle me-1 fa-sm"></i> Informations
+                générales
+              </h6>
+            </div>
+
+            <div class="card-body pt-2 pb-3">
+              <div class="row g-4">
+                <div class="col-md-6 border-end pe-md-4">
+                  <div class="d-flex flex-column gap-3">
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <label class="text-muted small fw-semibold"
+                        >Référence</label
+                      >
+                      <span class="badge bg-primary">{{
+                        transaction.reference
+                      }}</span>
+                    </div>
+
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <label class="text-muted small fw-semibold"
+                        >Initiateur</label
+                      >
+                      <span class="fw-semibold">{{
+                        transaction.initiateur
+                      }}</span>
+                    </div>
+
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <label class="text-muted small fw-semibold"
+                        >Type transaction</label
+                      >
+                      <span
+                        class="badge"
+                        [ngClass]="{
+                          'bg-primary':
+                            transaction.typeTransaction === 'Salaire',
+                          'bg-success': transaction.typeTransaction === 'Prime',
+                          'bg-warning text-dark':
+                            transaction.typeTransaction === 'Virement',
+                        }"
+                        >{{ transaction.typeTransaction }}</span
+                      >
+                    </div>
+
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <label class="text-muted small fw-semibold">Date</label>
+                      <span>{{ transaction.date | date: "dd/MM/yyyy" }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 ps-md-4">
+                  <div class="d-flex flex-column gap-3">
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <label class="text-muted small fw-semibold">Lieu</label>
+                      <span>{{ transaction.lieu }}</span>
+                    </div>
+
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <label class="text-muted small fw-semibold"
+                        >Nombre d'opérations</label
+                      >
+                      <span class="badge bg-info">{{
+                        transaction.nombreOperations
+                      }}</span>
+                    </div>
+
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <label class="text-muted small fw-semibold"
+                        >Montant total</label
+                      >
+                      <span class="fw-bold fs-5 text-primary">
+                        {{ transaction.montantTotal | number: "1.0-0" }} GNF
+                      </span>
+                    </div>
+
+                    @if (transaction.motifRejet) {
+                      <div class="alert alert-danger mb-0 small py-2">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        Motif: {{ transaction.motifRejet }}
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Tableau des opérations -->
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <div
+                class="d-flex flex-wrap justify-content-between align-items-center gap-2"
+              >
+                <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                  <i class="fas fa-table me-1 fa-sm"></i> Liste des opérations
+                </h6>
+                <div class="d-flex gap-2">
+                  <button
+                    class="btn btn-sm btn-success"
+                    (click)="exportToExcel()"
+                  >
+                    <i class="fas fa-file-excel me-1"></i> Exporter Excel
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body pt-3">
+              <!-- Filtres opérations -->
+              <div class="row mb-3 g-2">
+                <div class="col-md-3">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="searchOperationText"
+                    placeholder="Rechercher (Nom, Motif...)"
+                    (input)="currentOperationPage = 1"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="filterCompte"
+                    placeholder="N° Compte"
+                    (input)="currentOperationPage = 1"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <select
+                    class="form-select form-select-sm"
+                    [(ngModel)]="filterDevise"
+                    (change)="currentOperationPage = 1"
+                  >
+                    <option value="">Toutes devises</option>
+                    <option value="GNF">GNF</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="filterMontantMin"
+                    placeholder="Montant min"
+                    (input)="currentOperationPage = 1"
+                  />
+                </div>
+                <div class="col-md-2">
+                  <input
+                    type="number"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="filterMontantMax"
+                    placeholder="Montant max"
+                    (input)="currentOperationPage = 1"
+                  />
+                </div>
+                <div class="col-md-1">
+                  <button
+                    class="btn btn-sm btn-secondary w-100"
+                    (click)="resetOperationFilters()"
+                  >
+                    <i class="fas fa-undo"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tableau des opérations -->
+              <div class="table-responsive">
+                <table class="table table-hover table-sm align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th
+                        (click)="sortOperations('numero')"
+                        style="cursor: pointer; width: 70px"
+                      >
+                        N° <i [class]="getOperationSortIcon('numero')"></i>
+                      </th>
+                      <th
+                        (click)="sortOperations('nomClient')"
+                        style="cursor: pointer"
+                      >
+                        Nom du client
+                        <i [class]="getOperationSortIcon('nomClient')"></i>
+                      </th>
+                      <th
+                        (click)="sortOperations('numeroCompte')"
+                        style="cursor: pointer"
+                      >
+                        N° Compte
+                        <i [class]="getOperationSortIcon('numeroCompte')"></i>
+                      </th>
+                      <th>Code Banque</th>
+                      <th>Code Guichet</th>
+                      <th>Clé RIB</th>
+                      <th
+                        (click)="sortOperations('montant')"
+                        style="cursor: pointer; width: 120px"
+                      >
+                        Montant
+                        <i [class]="getOperationSortIcon('montant')"></i>
+                      </th>
+                      <th
+                        (click)="sortOperations('devise')"
+                        style="cursor: pointer"
+                      >
+                        Devise <i [class]="getOperationSortIcon('devise')"></i>
+                      </th>
+                      <th
+                        (click)="sortOperations('motif')"
+                        style="cursor: pointer"
+                      >
+                        Motif <i [class]="getOperationSortIcon('motif')"></i>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (
+                      operation of paginatedOperations;
+                      track operation.numero
+                    ) {
+                      <tr>
+                        <td class="fw-bold">{{ operation.numero }}</td>
+                        <td class="fw-semibold">{{ operation.nomClient }}</td>
+                        <td class="font-monospace small">
+                          {{ operation.numeroCompte }}
+                        </td>
+                        <td>{{ operation.codeBanque }}</td>
+                        <td>{{ operation.codeGuichet }}</td>
+                        <td>{{ operation.cleRib }}</td>
+                        <td class="fw-bold text-primary">
+                          {{ operation.montant | number: "1.0-0" }}
+                        </td>
+                        <td>
+                          <span class="badge bg-secondary">{{
+                            operation.devise
+                          }}</span>
+                        </td>
+                        <td class="small">{{ operation.motif }}</td>
+                      </tr>
+                    }
+                    @if (filteredOperations.length === 0) {
+                      <tr>
+                        <td colspan="9" class="text-center py-5 text-muted">
+                          <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                          Aucune opération trouvée
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                  <tfoot class="table-light">
+                    <tr class="fw-bold">
+                      <td colspan="6" class="text-end">Total :</td>
+                      <td class="text-primary">
+                        {{ totalMontantFiltered | number: "1.0-0" }} GFD
+                      </td>
+                      <td colspan="2"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+              <!-- Pagination opérations -->
+              @if (filteredOperations.length > 0) {
+                <div
+                  class="d-flex justify-content-between align-items-center mt-3"
+                >
+                  <div class="text-muted small">
+                    Affichage de {{ operationStartIndex }} à
+                    {{ operationEndIndex }} sur
+                    {{ filteredOperations.length }} opérations
+                  </div>
+                  <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                      <li
+                        class="page-item"
+                        [class.disabled]="currentOperationPage === 1"
+                      >
+                        <a class="page-link" (click)="previousOperationPage()"
+                          >Précédent</a
+                        >
+                      </li>
+                      @for (page of operationPaginationRange; track page) {
+                        <li
+                          class="page-item"
+                          [class.active]="page === currentOperationPage"
+                        >
+                          <a
+                            class="page-link"
+                            (click)="onOperationPageClick(page)"
+                            >{{ page }}</a
+                          >
+                        </li>
+                      }
+                      <li
+                        class="page-item"
+                        [class.disabled]="
+                          currentOperationPage === operationTotalPages
+                        "
+                      >
+                        <a class="page-link" (click)="nextOperationPage()"
+                          >Suivant</a
+                        >
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading && !transaction) {
+    <div class="container-fluid mt-4">
+      <div class="alert alert-warning text-center">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Transaction non trouvée
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Modal Validation -->
+<div class="modal fade" id="validateModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div
+        class="modal-header border-0 py-3"
+        style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%)"
+      >
+        <h5 class="modal-title text-white">
+          <i class="fas fa-check-circle me-2"></i>Validation de transaction
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          (click)="closeModals()"
+        ></button>
+      </div>
+      <div class="modal-body p-4 text-center">
+        <i class="fas fa-check-circle text-success fs-1 mb-3"></i>
+        <p class="mb-0 fw-semibold fs-5">
+          Voulez-vous vraiment valider cette transaction ?
+        </p>
+        <p class="text-muted small mt-2">
+          Cette action est irréversible. La transaction sera marquée comme
+          validée.
+        </p>
+      </div>
+      <div class="modal-footer border-0 pt-0 pb-4 px-4">
+        <button
+          type="button"
+          class="btn btn-outline-secondary px-4"
+          (click)="closeModals()"
+        >
+          Annuler
+        </button>
+        <button
+          type="button"
+          class="btn btn-success px-4"
+          (click)="onValidate()"
+        >
+          <i class="fas fa-check me-2"></i>Valider
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Rejet -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div
+        class="modal-header border-0 py-3"
+        style="background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%)"
+      >
+        <h5 class="modal-title text-white">
+          <i class="fas fa-times-circle me-2"></i>Rejet de transaction
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          (click)="closeModals()"
+        ></button>
+      </div>
+      <form [formGroup]="rejectForm" (ngSubmit)="onReject()">
+        <div class="modal-body p-4">
+          <p class="mb-3">Veuillez indiquer le motif du rejet :</p>
+          <div class="mb-3">
+            <label class="form-label fw-semibold"
+              >Motif du rejet <span class="text-danger">*</span></label
+            >
+            <textarea
+              formControlName="motifRejet"
+              class="form-control"
+              placeholder="Saisissez le motif du rejet..."
+              rows="3"
+            ></textarea>
+            @if (
+              rejectForm.get("motifRejet")?.invalid &&
+              rejectForm.get("motifRejet")?.touched
+            ) {
+              <div class="text-danger mt-1 small">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                Le motif est obligatoire
+              </div>
+            }
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0 pb-4 px-4">
+          <button
+            type="button"
+            class="btn btn-outline-secondary px-4"
+            (click)="closeModals()"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="btn btn-danger px-4"
+            [disabled]="rejectForm.invalid"
+          >
+            <i class="fas fa-trash me-2"></i>Confirmer le rejet
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

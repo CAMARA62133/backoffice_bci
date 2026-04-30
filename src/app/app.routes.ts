@@ -53,6 +53,9 @@ import { TransactionInternationaleProcurationComponent } from './pages/agent-tra
 import { HistoriqueTransactionClientsComponent } from './pages/agent-trade/historique-transaction-clients/historique-transaction-clients.component';
 import { AgentTradeDashboardComponent } from './pages/agent-trade/agent-trade-dashboard/agent-trade-dashboard.component';
 import { DetailDemandeClientComponent } from './pages/agent-trade/detail-demande-client/detail-demande-client.component';
+import { ValidationTransactionProcurationComponent } from './pages/agent-trade/validation-transaction-procuration/validation-transaction-procuration.component';
+import { TransactionMultipleComponent } from './pages/admin-integrateur/transaction-multiple/transaction-multiple.component';
+import { DetailTransactionMultipleComponent } from './pages/admin-integrateur/detail-transaction-multiple/detail-transaction-multiple.component';
 
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
@@ -187,6 +190,20 @@ export const routes: Routes = [
         path: 'transaction-internationale',
         title: 'BCI - Online | Historique des transactions internationales',
         component: TransactionInternationalComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+      },
+      {
+        path: 'detail-transaction-multiple/:id',
+        title: 'BCI - Détail transaction multiple',
+        component: DetailTransactionMultipleComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+      },
+      {
+        path: 'transaction-multiple',
+        title: 'BCI - Online | Transactions multiples',
+        component: TransactionMultipleComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
       },
@@ -441,6 +458,13 @@ export const routes: Routes = [
         path: 'historique-transaction-clients',
         title: 'BCI - Online | Historique des transactions des clients',
         component: HistoriqueTransactionClientsComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Trade Agent'] },
+      },
+      {
+        path: 'validation-transaction-procuration',
+        title: 'BCI - Online | Validation des transactions par procuration',
+        component: ValidationTransactionProcurationComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Trade Agent'] },
       },

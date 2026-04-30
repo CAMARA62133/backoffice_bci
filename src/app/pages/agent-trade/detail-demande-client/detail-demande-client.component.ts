@@ -48,7 +48,7 @@ export class DetailDemandeClientComponent implements OnInit {
       const id = Number(params?.get('id'));
 
       if (!id || isNaN(id)) {
-        this.goBackWithMessage('ID Invalide');
+        this.goBackWithMessage('ID de transaction invalide');
         return;
       }
       this.loadDemandeFromStaticData(id);
@@ -126,6 +126,10 @@ export class DetailDemandeClientComponent implements OnInit {
 
     this.notification.success('La transaction a été validée avec succès.');
     this.closeModal('valideModal');
+    this.router.navigate(['/demandes-clients']);
+  }
+
+  goBack(): void {
     this.router.navigate(['/demandes-clients']);
   }
 

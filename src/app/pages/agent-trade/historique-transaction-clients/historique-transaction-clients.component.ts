@@ -16,7 +16,7 @@ import {
   styleUrl: './historique-transaction-clients.component.css',
 })
 export class HistoriqueTransactionClientsComponent implements OnInit {
-  activeTab: string = 'traiter'; // Changé de 'attente' à 'traiter'
+  activeTab: string = 'validees';
   isLoadingDemandes: boolean = false;
   toutesLesDemandes: DemandeTransactionInternationale[] = [];
 
@@ -28,6 +28,7 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
   searchText: string = '';
   dateDebut: string = '';
   dateFin: string = '';
+  filtreDerogation: string = '';
 
   public utils = inject(UtilsService);
   public notification = inject(NotificationService);
@@ -46,30 +47,45 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
     }, 500);
   }
 
-  // Supprimé le getter demandes (transactions en attente)
+  // Transactions validées uniquement
+  // Ajoutez ces getters dans votre composant
 
-  get traitedDemandes(): DemandeTransactionInternationale[] {
+  get toutesTransactions(): DemandeTransactionInternationale[] {
+    return this.toutesLesDemandes.filter(
+      (d) => d.statutDemande === 'Valide' || d.statutDemande === 'Rejete',
+    );
+  }
+
+  // Transactions validées
+  get transactionsValidees(): DemandeTransactionInternationale[] {
     return this.toutesLesDemandes.filter((d) => d.statutDemande === 'Valide');
   }
 
-  get rejectedDemandes(): DemandeTransactionInternationale[] {
+  // Transactions rejetées
+  get transactionsRejetees(): DemandeTransactionInternationale[] {
     return this.toutesLesDemandes.filter((d) => d.statutDemande === 'Rejete');
   }
 
+
+
+  // Données selon l'onglet actif
   get currentData(): DemandeTransactionInternationale[] {
     switch (this.activeTab) {
-      case 'traiter':
-        return this.traitedDemandes;
-      case 'rejetes':
-        return this.rejectedDemandes;
+      case 'toutes':
+        return this.toutesTransactions;
+      case 'validees':
+        return this.transactionsValidees;
+      case 'rejetees':
+        return this.transactionsRejetees;
       default:
-        return [];
+        return this.toutesTransactions;
     }
   }
 
   get filteredData(): DemandeTransactionInternationale[] {
     let data = [...this.currentData];
 
+    // Filtre recherche texte
     if (this.searchText) {
       const searchLower = this.searchText.toLowerCase();
       data = data.filter(
@@ -81,17 +97,27 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
       );
     }
 
+    // Filtre date début
     if (this.dateDebut) {
       const debut = new Date(this.dateDebut);
       data = data.filter((item) => new Date(item.dtCreated) >= debut);
     }
 
+    // Filtre date fin
     if (this.dateFin) {
       const fin = new Date(this.dateFin);
       fin.setHours(23, 59, 59);
       data = data.filter((item) => new Date(item.dtCreated) <= fin);
     }
 
+    // Filtre dérogation
+    if (this.filtreDerogation === 'avec') {
+      data = data.filter((item) => item.estDerogation === true);
+    } else if (this.filtreDerogation === 'sans') {
+      data = data.filter((item) => item.estDerogation !== true);
+    }
+
+    // Tri
     if (this.sortColumn) {
       data.sort((a, b) => {
         let aVal = a[this.sortColumn as keyof DemandeTransactionInternationale];
@@ -196,6 +222,7 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
     this.searchText = '';
     this.dateDebut = '';
     this.dateFin = '';
+    this.filtreDerogation = '';
     this.currentPage = 1;
     this.sortColumn = '';
     this.sortDirection = 'asc';
@@ -210,6 +237,7 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
     this.searchText = '';
     this.dateDebut = '';
     this.dateFin = '';
+    this.filtreDerogation = '';
   }
 
   isActive(tabName: string) {

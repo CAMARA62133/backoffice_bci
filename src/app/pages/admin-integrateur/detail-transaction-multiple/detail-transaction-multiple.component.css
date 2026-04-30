@@ -1,0 +1,58 @@
+/* Styles compacts */
+.card {
+  border-radius: 12px !important;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.fs-small {
+  font-size: 0.7rem;
+}
+
+.card-header {
+  background-color: white;
+  border-bottom: none;
+}
+
+.btn-sm {
+  border-radius: 8px !important;
+}
+
+.form-select-sm, .form-control-sm {
+  border-radius: 8px;
+}
+
+.modal-content {
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+
+.modal-sm {
+  max-width: 400px;
+}
+
+/* Layout compact */
+.g-3 {
+  --bs-gutter-y: 0.75rem;
+  --bs-gutter-x: 0.75rem;
+}
+
+/* Badges plus petits */
+.badge {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.5rem;
+}
+
+/* Police plus petite pour les labels */
+label, .text-muted {
+  font-size: 0.7rem;
+}
+
+/* Espacements réduits */
+p, span {
+  font-size: 0.75rem;
+}

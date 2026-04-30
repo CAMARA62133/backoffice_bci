@@ -11,14 +11,12 @@
   letter-spacing: 0.3px;
 }
 
-.nav-tabs .nav-link {
-  transition: all 0.2s ease;
+.modal {
+  z-index: 1050;
 }
 
-.nav-tabs .nav-link:hover {
-  transform: translateY(-2px);
-}
-
-.nav-tabs .nav-link.active {
-  border-bottom: none;
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 1rem);
 }

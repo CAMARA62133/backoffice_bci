@@ -1,103 +1,58 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { UtilsService } from '../../../services/utils/table-utils.service';
-import { NotificationService } from '../../../services/notification/notification.service';
 import { DemandeTransactionInternationale } from '../data/demandes.data';
-import { DemandeTransactionClientService } from '../../../services/agent-trade/demande-transaction-client.service';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { DerogationService } from '../../../services/agent-trade/derogation.service';
 
 @Component({
-  selector: 'app-transaction-internationale-procuration',
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './transaction-internationale-procuration.component.html',
-  styleUrl: './transaction-internationale-procuration.component.css',
+  selector: 'app-validation-transaction-procuration',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './validation-transaction-procuration.component.html',
+  styleUrl: './validation-transaction-procuration.component.css',
 })
-export class TransactionInternationaleProcurationComponent
-  implements OnInit, OnDestroy
-{
-  isLoadingDemandes: boolean = false;
-  demandes: DemandeTransactionInternationale[] = [];
+export class ValidationTransactionProcurationComponent implements OnInit {
+  private workflowService = inject(DerogationService);
+  private notification = inject(NotificationService);
 
+  demandesEnAttente: DemandeTransactionInternationale[] = [];
+  demandeSelectionnee: DemandeTransactionInternationale | null = null;
+  showValidationModal = false;
+  showRejetModal = false;
+  commentaire = '';
+  motifRejet = '';
+  isLoading = false;
+  motifRejetTouched = false;
+
+  // Pagination et filtres
   pageSize = 10;
   currentPage = 1;
   sortColumn = '';
   sortDirection: 'asc' | 'desc' = 'asc';
-
   searchText: string = '';
   dateDebut: string = '';
   dateFin: string = '';
 
-  public utils = inject(UtilsService);
-  public notification = inject(NotificationService);
-  private transactionService = inject(DemandeTransactionClientService);
-  private subscription!: Subscription;
-
-  constructor() {}
-
   ngOnInit() {
-    this.loadData();
-
-    this.subscription = this.transactionService.transactionTraitee$.subscribe(
-      (id) => {
-        this.supprimerTransaction(id);
-      },
-    );
+    this.chargerDemandes();
   }
 
-  ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
-
-  // ==========================================
-  // CHARGEMENT - UNIQUEMENT LES DÉROGATIONS VALIDÉES PAR ADMIN
-  // ==========================================
-  private loadData(): void {
-    this.isLoadingDemandes = true;
+  chargerDemandes() {
+    this.isLoading = true;
 
     setTimeout(() => {
-      const toutesLesDemandes = this.transactionService.getDemandes();
-
-      // FILTRE : UNIQUEMENT les transactions AVEC dérogation ET validées par Admin ET en attente
-      this.demandes = toutesLesDemandes.filter((d) => {
-        return (
-          d.estDerogation === true &&
-          d.valideParAdminBanque === true &&
-          d.statutDemande === 'En traitement'
-        );
-      });
-
-      console.log(
-        'Transactions avec dérogation validées :',
-        this.demandes.length,
-      );
-
-      this.isLoadingDemandes = false;
+      this.demandesEnAttente =
+        this.workflowService.getDemandesEnAttenteValidation();
+      this.isLoading = false;
     }, 300);
-  }
-
-  private supprimerTransaction(id: number): void {
-    const index = this.demandes.findIndex((d) => d.id === id);
-    if (index !== -1) {
-      this.demandes.splice(index, 1);
-      this.notification.success('Transaction traitée avec succès');
-
-      if (this.demandes.length === 0) {
-        this.currentPage = 1;
-      } else if (this.paginatedData.length === 0 && this.currentPage > 1) {
-        this.currentPage--;
-      }
-    }
   }
 
   // ==========================================
   // LOGIQUE DE TABLE
   // ==========================================
   get filteredData(): DemandeTransactionInternationale[] {
-    let data = [...this.demandes];
+    let data = [...this.demandesEnAttente];
 
     if (this.searchText) {
       const searchLower = this.searchText.toLowerCase();
@@ -105,8 +60,8 @@ export class TransactionInternationaleProcurationComponent
         (item) =>
           item.raisonSocialeDO?.toLowerCase().includes(searchLower) ||
           item.raisonSocialeB?.toLowerCase().includes(searchLower) ||
-          item.refDocument?.toLowerCase().includes(searchLower) ||
-          item.typeTransaction?.toLowerCase().includes(searchLower),
+          item.motifEconomique?.toLowerCase().includes(searchLower) ||
+          item.refDocument?.toLowerCase().includes(searchLower),
       );
     }
 
@@ -233,5 +188,82 @@ export class TransactionInternationaleProcurationComponent
     this.sortColumn = '';
     this.sortDirection = 'asc';
     this.notification.info('Filtres réinitialisés');
+  }
+
+  // ==========================================
+  // MODALS VALIDATION / REJET
+  // ==========================================
+  ouvrirModalValidation(demande: DemandeTransactionInternationale) {
+    this.demandeSelectionnee = demande;
+    this.commentaire = '';
+    this.showValidationModal = true;
+  }
+
+  fermerModal() {
+    this.showValidationModal = false;
+    this.demandeSelectionnee = null;
+  }
+
+  confirmerValidation() {
+    if (!this.demandeSelectionnee) return;
+    this.isLoading = true;
+
+    this.workflowService
+      .validerDerogation(this.demandeSelectionnee.id, this.commentaire)
+      .subscribe({
+        next: (success) => {
+          if (success) {
+            this.notification.success('Dérogation validée avec succès');
+            this.chargerDemandes();
+            this.fermerModal();
+          } else {
+            this.notification.error('Erreur lors de la validation');
+          }
+          this.isLoading = false;
+        },
+        error: () => {
+          this.notification.error('Erreur technique');
+          this.isLoading = false;
+        },
+      });
+  }
+
+  ouvrirModalRejet(demande: DemandeTransactionInternationale) {
+    this.demandeSelectionnee = demande;
+    this.motifRejet = '';
+    this.motifRejetTouched = false;
+    this.showRejetModal = true;
+  }
+
+  fermerModalRejet() {
+    this.showRejetModal = false;
+    this.demandeSelectionnee = null;
+  }
+
+  confirmerRejet() {
+    if (!this.demandeSelectionnee || !this.motifRejet) {
+      this.motifRejetTouched = true;
+      return;
+    }
+    this.isLoading = true;
+
+    this.workflowService
+      .rejeterDerogation(this.demandeSelectionnee.id, this.motifRejet)
+      .subscribe({
+        next: (success) => {
+          if (success) {
+            this.notification.warning('Dérogation rejetée');
+            this.chargerDemandes();
+            this.fermerModalRejet();
+          } else {
+            this.notification.error('Erreur lors du rejet');
+          }
+          this.isLoading = false;
+        },
+        error: () => {
+          this.notification.error('Erreur technique');
+          this.isLoading = false;
+        },
+      });
   }
 }

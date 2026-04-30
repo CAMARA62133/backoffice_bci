@@ -10,11 +10,31 @@
               Détail Transaction
             </h4>
           </div>
+          <div>
+            <button class="btn btn-outline-secondary btn-sm" (click)="goBack()">
+              <i class="fas fa-arrow-left me-1"></i> Retour
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  @if (demande) {
+
+  @if (isLoading) {
+    <div class="container-fluid mt-4">
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="text-muted mt-3 mb-0">
+          <i class="fas fa-spinner fa-spin me-2"></i>
+          Chargement des détails...
+        </p>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading && demande) {
     <div class="container-fluid mt-3">
       <div class="row">
         <div class="col-12">
@@ -27,34 +47,25 @@
               "
             >
               <div class="d-flex align-items-center gap-2">
-                <!-- Icône -->
                 <div class="rounded-circle bg-white p-1">
                   <i class="fas fa-exchange-alt text-primary fs-6"></i>
                 </div>
-
-                <!-- Infos transaction -->
                 <div class="grow">
-                  <!-- Ligne 1: Comptes -->
-                  <div class="d-flex flex-wrap align-items-center ">
+                  <div class="d-flex flex-wrap align-items-center">
                     <span class="text-white-50 small">Donneur:</span>
                     <span class="text-white fw-semibold small font-monospace">{{
-                      isLoading ? "..." : demande.compteTransfert
+                      demande.compteTransfert
                     }}</span>
-                    <i class="fas fa-arrow-right text-white-50 fa-xs"></i>
+                    <i class="fas fa-arrow-right text-white-50 fa-xs mx-1"></i>
                     <span class="text-white-50 small">Bénéficiaire:</span>
                     <span class="text-white fw-semibold small font-monospace">{{
-                      isLoading ? "..." : demande.ibanNCompte
+                      demande.ibanNCompte
                     }}</span>
                   </div>
-                  <!-- Ligne 2: Date et Statut -->
                   <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
                     <span class="text-white-50 small">
                       <i class="fas fa-calendar-alt me-1 fa-xs"></i>
-                      {{
-                        isLoading
-                          ? "..."
-                          : (demande.dtCreated | date: "dd/MM/yyyy")
-                      }}
+                      {{ demande.dtCreated | date: "dd/MM/yyyy HH:mm" }}
                     </span>
                     <span
                       class="badge rounded-pill px-3 py-1 fs-6 fw-semibold"
@@ -63,18 +74,32 @@
                           demande.statutDemande === 'En traitement',
                         'bg-success': demande.statutDemande === 'Valide',
                         'bg-danger': demande.statutDemande === 'Rejete',
+                        'bg-info text-dark':
+                          demande.statutDemande === 'En attente validation'
                       }"
                     >
-                      @if (isLoading) {
-                        ...
-                      } @else if (demande.statutDemande === "En traitement") {
+                      @if (demande.statutDemande === "En traitement") {
                         En attente
                       } @else if (demande.statutDemande === "Valide") {
                         Validée
-                      } @else {
+                      } @else if (demande.statutDemande === "Rejete") {
                         Réjetée
+                      } @else if (demande.statutDemande === "En attente validation") {
+                        En attente validation Admin
                       }
                     </span>
+                    @if (demande.estDerogation) {
+                      <span class="badge bg-warning text-dark">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        Avec dérogation
+                      </span>
+                    }
+                    @if (demande.estDerogation && demande.valideParAdminBanque) {
+                      <span class="badge bg-success">
+                        <i class="fas fa-check-circle me-1"></i>
+                        Dérogation validée par Admin
+                      </span>
+                    }
                   </div>
                 </div>
               </div>
@@ -86,7 +111,7 @@
       <div class="row g-3">
         <!-- Colonne Gauche -->
         <div class="col-lg-6">
-          <!-- Card Donneur d'ordre compact -->
+          <!-- Card Donneur d'ordre -->
           <div class="card border-0 shadow-sm">
             <div class="card-header bg-white border-0 pt-3 pb-0">
               <h6 class="fw-bold mb-0" style="color: #3b3b7a">
@@ -101,7 +126,7 @@
                       >Raison Sociale</label
                     >
                     <p class="fw-semibold mb-0 text-end">
-                      {{ isLoading ? "..." : demande.raisonSocialeDO }}
+                      {{ demande.raisonSocialeDO }}
                     </p>
                   </div>
                 </div>
@@ -109,58 +134,52 @@
                   <div class="d-flex justify-content-between align-items-start">
                     <label class="text-muted small fw-semibold">Adresse</label>
                     <p class="mb-0 text-end small">
-                      {{ isLoading ? "..." : demande.adresseDO }}
+                      {{ demande.adresseDO }}
                     </p>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold"
                       >Compte Transfert</label
                     >
                     <span class="font-monospace small">{{
-                      isLoading ? "..." : demande.compteTransfert
+                      demande.compteTransfert
                     }}</span>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold"
                       >Solde du compte</label
                     >
-                    <span class="fw-bold text-primary">{{
-                      isLoading
-                        ? "..."
-                        : (demande.soldeCompte
-                          | currency: demande.devise : "symbol" : "1.2-2")
-                    }}</span>
+                    <span
+                      class="fw-bold"
+                      [class.text-danger]="demande.soldeCompte < demande.montantTransaction"
+                      [class.text-success]="demande.soldeCompte >= demande.montantTransaction"
+                    >
+                      {{ demande.soldeCompte | number: "1.2-2" }}
+                      {{ demande.devise }}
+                    </span>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold"
                       >Compte Commission</label
                     >
                     <span class="font-monospace small">{{
-                      isLoading ? "..." : demande.compteCommission
+                      demande.compteCommission
                     }}</span>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold"
                       >Frais étranger</label
                     >
                     <span class="badge bg-secondary fw-normal">{{
-                      isLoading ? "..." : demande.fraisEtranger
+                      demande.fraisEtranger
                     }}</span>
                   </div>
                 </div>
@@ -168,7 +187,7 @@
             </div>
           </div>
 
-          <!-- Card Détails Opération compact -->
+          <!-- Card Détails Opération -->
           <div class="card border-0 shadow-sm mt-3">
             <div class="card-header bg-white border-0 pt-3 pb-0">
               <h6 class="fw-bold mb-0" style="color: #3b3b7a">
@@ -183,30 +202,39 @@
                       >Motif économique</label
                     >
                     <p class="mb-0 text-end small">
-                      {{ isLoading ? "..." : demande.motifEconomique }}
+                      {{ demande.motifEconomique }}
                     </p>
                   </div>
                 </div>
                 <div class="col-6">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold"
                       >Référence</label
                     >
                     <span class="badge bg-primary fw-normal">{{
-                      isLoading ? "..." : demande.refDocument
+                      demande.refDocument
                     }}</span>
                   </div>
                 </div>
                 <div class="col-6">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold">Devise</label>
                     <span class="badge bg-info text-dark fw-normal">{{
-                      isLoading ? "..." : demande.devise
+                      demande.devise
                     }}</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <label class="text-muted small fw-semibold"
+                      >Type Transaction</label
+                    >
+                    <p class="mb-0 text-end small">
+                      {{ demande.typeTransaction }}
+                      @if (demande.autreTypeTransaction) {
+                        <span class="text-muted">({{ demande.autreTypeTransaction }})</span>
+                      }
+                    </p>
                   </div>
                 </div>
                 <div class="col-12 mt-2">
@@ -214,35 +242,27 @@
                     class="p-2 rounded"
                     style="background: #f8f9ff; border-left: 3px solid #3b3b7a"
                   >
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                    >
+                    <div class="d-flex justify-content-between align-items-center">
                       <label class="text-muted small fw-semibold mb-0"
                         >Montant à transférer</label
                       >
                       <span class="fw-bold fs-5" style="color: #3b3b7a">
-                        {{
-                          isLoading
-                            ? "..."
-                            : (demande.montantTransaction
-                              | currency: demande.devise : "symbol" : "1.2-2")
-                        }}
+                        {{ demande.montantTransaction | number: "1.2-2" }}
+                        {{ demande.devise }}
                       </span>
                     </div>
                   </div>
                 </div>
+
                 @if (demande.soldeCompte < demande.montantTransaction) {
                   <div class="col-12 mt-2">
                     <div class="p-2 rounded bg-danger bg-opacity-10">
-                      <div
-                        class="d-flex justify-content-between align-items-center"
-                      >
+                      <div class="d-flex justify-content-between align-items-center">
                         <label class="text-danger small fw-semibold mb-0"
                           >⚠️ Alerte</label
                         >
                         <span class="text-danger small"
-                          >Solde insuffisant pour effectuer cette
-                          transaction</span
+                          >Solde insuffisant pour effectuer cette transaction</span
                         >
                       </div>
                     </div>
@@ -255,7 +275,7 @@
 
         <!-- Colonne Droite -->
         <div class="col-lg-6">
-          <!-- Card Bénéficiaire compact -->
+          <!-- Card Bénéficiaire -->
           <div class="card border-0 shadow-sm">
             <div class="card-header bg-white border-0 pt-3 pb-0">
               <h6 class="fw-bold mb-0" style="color: #3b3b7a">
@@ -270,7 +290,7 @@
                       >Raison Sociale</label
                     >
                     <p class="fw-semibold mb-0 text-end">
-                      {{ isLoading ? "..." : demande.raisonSocialeB }}
+                      {{ demande.raisonSocialeB }}
                     </p>
                   </div>
                 </div>
@@ -278,55 +298,45 @@
                   <div class="d-flex justify-content-between align-items-start">
                     <label class="text-muted small fw-semibold">Adresse</label>
                     <p class="mb-0 text-end small">
-                      {{ isLoading ? "..." : demande.adresseB }}
+                      {{ demande.adresseB }}
                     </p>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold"
                       >IBAN / N° Compte</label
                     >
                     <span class="font-monospace small">{{
-                      isLoading ? "..." : demande.ibanNCompte
+                      demande.ibanNCompte
                     }}</span>
                   </div>
                 </div>
                 <div class="col-6">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold">Banque</label>
                     <span class="small">{{
-                      isLoading ? "..." : demande.bankBeneficiaire
+                      demande.bankBeneficiaire
                     }}</span>
                   </div>
                 </div>
                 <div class="col-6">
-                  <div
-                    class="d-flex justify-content-between align-items-center"
-                  >
+                  <div class="d-flex justify-content-between align-items-center">
                     <label class="text-muted small fw-semibold">SWIFT</label>
                     <span
                       class="font-monospace fw-bold small"
                       style="color: #3b3b7a"
-                      >{{
-                        isLoading ? "..." : demande.swifiBankBeneficiaire
-                      }}</span
+                      >{{ demande.swifiBankBeneficiaire }}</span
                     >
                   </div>
                 </div>
 
-                @if (demande.bankIntermediaire && !isLoading) {
-                  <div class="col-12 mt-4">
+                @if (demande.bankIntermediaire) {
+                  <div class="col-12 mt-3">
                     <hr class="my-2" />
                     <div class="row g-2 mt-1">
                       <div class="col-6">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
+                        <div class="d-flex justify-content-between align-items-center">
                           <label class="text-muted small fw-semibold"
                             >Banque Intermédiaire</label
                           >
@@ -336,9 +346,7 @@
                         </div>
                       </div>
                       <div class="col-6">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
+                        <div class="d-flex justify-content-between align-items-center">
                           <label class="text-muted small fw-semibold"
                             >SWIFT Intermédiaire</label
                           >
@@ -354,92 +362,181 @@
             </div>
           </div>
 
-          <!-- Card Actions -->
-          <div class="card border-0 shadow-sm mt-3 p-4" style="height: 160px">
-            <div class="card-header bg-white border-0 pt-2 pb-0">
-              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
-                <i class="fas fa-gavel me-1 fa-sm"></i> Actions
-              </h6>
+          <!-- Info Dérogation -->
+          @if (demande.estDerogation) {
+            <div class="card border-0 shadow-sm mt-3">
+              <div class="card-header bg-white border-0 pt-3 pb-0">
+                <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                  <i class="fas fa-file-alt me-1 fa-sm"></i> Informations Dérogation
+                </h6>
+              </div>
+              <div class="card-body pt-2 pb-3">
+                <div class="row g-2">
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <label class="text-muted small fw-semibold">Statut dérogation</label>
+                      <span class="badge" [ngClass]="{
+                        'bg-success': demande.valideParAdminBanque,
+                        'bg-warning text-dark': !demande.valideParAdminBanque && demande.statutDemande === 'En attente validation',
+                        'bg-danger': demande.statutDemande === 'Rejete'
+                      }">
+                        @if (demande.valideParAdminBanque) {
+                          <i class="fas fa-check-circle me-1"></i> Validée
+                        } @else if (demande.statutDemande === 'En attente validation') {
+                          <i class="fas fa-hourglass-half me-1"></i> En attente
+                        } @else {
+                          <i class="fas fa-times-circle me-1"></i> Non validée
+                        }
+                      </span>
+                    </div>
+                  </div>
+                  @if (demande.dateValidation) {
+                    <div class="col-12">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <label class="text-muted small fw-semibold">Date validation</label>
+                        <span class="small">{{ demande.dateValidation | date: 'dd/MM/yyyy HH:mm' }}</span>
+                      </div>
+                    </div>
+                  }
+                  @if (demande.commentaireValidation) {
+                    <div class="col-12">
+                      <div class="d-flex justify-content-between align-items-start">
+                        <label class="text-muted small fw-semibold">Commentaire</label>
+                        <p class="mb-0 text-end small">{{ demande.commentaireValidation }}</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
             </div>
-            <div class="card-body pt-2 d-flex align-items-center">
-              @if (!isLoading && demande.statutDemande === "En traitement") {
+          }
+
+          <!-- Card Actions - UNIQUEMENT pour les transactions en attente de traitement -->
+          @if (demande.statutDemande === "En traitement") {
+            <div class="card border-0 shadow-sm mt-3">
+              <div class="card-header bg-white border-0 pt-3 pb-0">
+                <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                  <i class="fas fa-gavel me-1 fa-sm"></i> Actions
+                </h6>
+              </div>
+              <div class="card-body pt-3">
                 <div class="d-flex gap-2 w-100">
                   <button
-                    class="btn btn-sm flex-fill py-1 fw-semibold border-0"
+                    class="btn btn-sm flex-fill py-2 fw-semibold border-0"
                     style="background: #3b3b7a; color: white"
                     (click)="openModal('valideModal')"
                   >
                     <i class="fa fa-check-circle me-1"></i> Valider
                   </button>
                   <button
-                    class="btn btn-sm flex-fill py-1 fw-semibold btn-outline-danger"
+                    class="btn btn-sm flex-fill py-2 fw-semibold btn-outline-danger"
                     (click)="openModal('unblockModal')"
                   >
-                    <i class="fa fa-times-circle me-1"></i> Réjeter
+                    <i class="fa fa-times-circle me-1"></i> Rejeter
                   </button>
                 </div>
-              }
+              </div>
             </div>
-          </div>
+          }
+
+          <!-- Message pour transactions déjà traitées -->
+          @if (demande.statutDemande === "Valide") {
+            <div class="card border-0 shadow-sm mt-3 bg-success bg-opacity-10">
+              <div class="card-body text-center py-3">
+                <i class="fas fa-check-circle text-success fs-2 mb-2"></i>
+                <p class="mb-0 fw-semibold text-success">Cette transaction a été validée</p>
+              </div>
+            </div>
+          }
+
+          @if (demande.statutDemande === "Rejete") {
+            <div class="card border-0 shadow-sm mt-3 bg-danger bg-opacity-10">
+              <div class="card-body text-center py-3">
+                <i class="fas fa-times-circle text-danger fs-2 mb-2"></i>
+                <p class="mb-0 fw-semibold text-danger">Cette transaction a été rejetée</p>
+                @if (demande.motifRejet) {
+                  <p class="mb-0 small text-danger mt-1">Motif: {{ demande.motifRejet }}</p>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- Message pour transactions en attente validation Admin -->
+          @if (demande.statutDemande === "En attente validation") {
+            <div class="card border-0 shadow-sm mt-3 bg-warning bg-opacity-10">
+              <div class="card-body text-center py-3">
+                <i class="fas fa-hourglass-half text-warning fs-2 mb-2"></i>
+                <p class="mb-0 fw-semibold text-warning">En attente de validation par l'Admin Banque</p>
+                <p class="mb-0 small text-muted mt-1">Cette transaction sera disponible après validation de la dérogation</p>
+              </div>
+            </div>
+          }
         </div>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading && !demande) {
+    <div class="container-fluid mt-4">
+      <div class="alert alert-warning text-center">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Transaction non trouvée
       </div>
     </div>
   }
 </div>
 
-<!-- Modal de réjet compact -->
+<!-- Modal de réjet -->
 <div class="modal fade" id="unblockModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-sm">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow-lg">
       <div
-        class="modal-header border-0 py-2"
+        class="modal-header border-0 py-3"
         style="background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%)"
       >
-        <h6 class="modal-title text-white">
-          <i class="fas fa-times-circle me-1"></i>Réjet de transaction
-        </h6>
+        <h5 class="modal-title text-white">
+          <i class="fas fa-times-circle me-2"></i>Rejet de transaction
+        </h5>
         <button
           type="button"
-          class="btn-close btn-close-white btn-sm"
+          class="btn-close btn-close-white"
           data-bs-dismiss="modal"
           (click)="closeModal('unblockModal')"
         ></button>
       </div>
       <form [formGroup]="bloqueForm" (ngSubmit)="onRejectAsk()">
-        <div class="modal-body p-3">
+        <div class="modal-body p-4">
+          <p class="mb-3">Veuillez indiquer le motif du rejet :</p>
           <div class="mb-3">
-            <label class="form-label small fw-semibold">Motif du réjet</label>
+            <label class="form-label fw-semibold">Motif du rejet <span class="text-danger">*</span></label>
             <textarea
               formControlName="vcMotif"
-              class="form-control form-control-sm"
-              placeholder="Saisissez le motif du réjet..."
-              rows="2"
+              class="form-control"
+              placeholder="Saisissez le motif du rejet..."
+              rows="3"
             ></textarea>
-            @if (
-              bloqueForm.get("vcMotif")?.invalid &&
-              bloqueForm.get("vcMotif")?.touched
-            ) {
-              <div class="alert alert-danger mt-1 mb-0 py-1 small">
-                <i class="fas fa-exclamation-triangle me-1 fa-xs"></i>
+            @if (bloqueForm.get("vcMotif")?.invalid && bloqueForm.get("vcMotif")?.touched) {
+              <div class="text-danger mt-1 small">
+                <i class="fas fa-exclamation-triangle me-1"></i>
                 Le motif est obligatoire
               </div>
             }
           </div>
         </div>
-        <div class="modal-footer border-0 pt-0 pb-3 px-3">
+        <div class="modal-footer border-0 pt-0 pb-4 px-4">
           <button
             type="button"
-            class="btn btn-sm btn-secondary"
+            class="btn btn-outline-secondary px-4"
             (click)="closeModal('unblockModal')"
           >
             Annuler
           </button>
           <button
             type="submit"
-            class="btn btn-sm btn-danger"
+            class="btn btn-danger px-4"
             [disabled]="bloqueForm.invalid"
           >
-            Rejeter
+            <i class="fas fa-trash me-2"></i>Confirmer le rejet
           </button>
         </div>
       </form>
@@ -447,45 +544,51 @@
   </div>
 </div>
 
-<!-- Modal de validation compact -->
+<!-- Modal de validation -->
 <div class="modal fade" id="valideModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-sm">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow-lg">
       <div
-        class="modal-header border-0 py-2"
+        class="modal-header border-0 py-3"
         style="background: linear-gradient(135deg, #3b3b7a 0%, #2a2a5a 100%)"
       >
-        <h6 class="modal-title text-white">
-          <i class="fas fa-check-circle me-1"></i>Validation
-        </h6>
+        <h5 class="modal-title text-white">
+          <i class="fas fa-check-circle me-2"></i>Validation de transaction
+        </h5>
         <button
           type="button"
-          class="btn-close btn-close-white btn-sm"
+          class="btn-close btn-close-white"
           data-bs-dismiss="modal"
           (click)="closeModal('valideModal')"
         ></button>
       </div>
       <form [formGroup]="valideForm" (ngSubmit)="onValidateAsk()">
-        <div class="modal-body p-3 text-center">
-          <i class="fas fa-check-circle text-success fs-1 mb-2"></i>
-          <p class="mb-0 fw-semibold">
+        <div class="modal-body p-4 text-center">
+          <i class="fas fa-check-circle text-success fs-1 mb-3"></i>
+          <p class="mb-0 fw-semibold fs-5">
             Voulez-vous vraiment valider cette transaction ?
           </p>
+          @if (demande?.estDerogation) {
+            <div class="alert alert-warning mt-3 mb-0 small">
+              <i class="fas fa-exclamation-triangle me-1"></i>
+              Cette transaction est une dérogation et a déjà été validée par l'Admin Banque.
+            </div>
+          }
         </div>
-        <div class="modal-footer border-0 pt-0 pb-3 px-3">
+        <div class="modal-footer border-0 pt-0 pb-4 px-4">
           <button
             type="button"
-            class="btn btn-sm btn-secondary"
+            class="btn btn-outline-secondary px-4"
             (click)="closeModal('valideModal')"
           >
             Annuler
           </button>
           <button
             type="submit"
-            class="btn btn-sm"
+            class="btn px-4"
             style="background: #3b3b7a; color: white"
           >
-            Valider
+            <i class="fas fa-check me-2"></i>Valider
           </button>
         </div>
       </form>

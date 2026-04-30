@@ -6,7 +6,6 @@
           class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
         >
           <div>
-            <!-- Badge et titre -->
             <div class="d-flex align-items-center gap-2 mb-1">
               <div class="rounded-circle bg-primary bg-opacity-10 p-2">
                 <i class="fas fa-exchange-alt text-primary fs-6"></i>
@@ -21,7 +20,6 @@
               Demandes de Transactions
               <span class="text-muted fw-normal">(Procuration)</span>
             </h4>
-      
           </div>
         </div>
       </div>
@@ -41,53 +39,70 @@
 
           <div class="card-body">
             <!-- Filtres -->
-            <div class="row mb-3 g-2">
-              <div class="col-md-4">
-                <div class="input-group">
+            <div class="row mb-4 g-2 align-items-end">
+              <div class="col-lg-3 col-md-6">
+                <label class="form-label small fw-bold text-muted ml-1"
+                  >Recherche</label
+                >
+                <div class="input-group shadow-sm">
                   <span class="input-group-text bg-white border-end-0">
-                    <i class="fas fa-search text-muted"></i>
+                    <i class="fas fa-search text-primary"></i>
                   </span>
                   <input
                     type="text"
-                    class="form-control border-start-0"
+                    class="form-control border-start-0 ps-0"
                     [(ngModel)]="searchText"
-                    placeholder="Rechercher (Donneur, Bénéficiaire, Référence...)"
+                    placeholder="Donneur, référence..."
                     (input)="currentPage = 1"
                   />
                 </div>
               </div>
-              <div class="col-md-2">
-                <input
-                  type="date"
-                  class="form-control"
-                  [(ngModel)]="dateDebut"
-                  placeholder="Date début"
-                  (change)="currentPage = 1"
-                />
+
+              <div class="col-lg-4 col-md-6">
+                <label class="form-label small fw-bold text-muted ml-1"
+                  >Période du / au</label
+                >
+                <div class="input-group shadow-sm">
+                  <input
+                    type="date"
+                    class="form-control"
+                    [(ngModel)]="dateDebut"
+                    (change)="currentPage = 1"
+                  />
+                  <span
+                    class="input-group-text bg-light border-start-0 border-end-0"
+                  >
+                    <i class="fas fa-arrow-right fa-xs text-muted"></i>
+                  </span>
+                  <input
+                    type="date"
+                    class="form-control"
+                    [(ngModel)]="dateFin"
+                    (change)="currentPage = 1"
+                  />
+                </div>
               </div>
-              <div class="col-md-2">
-                <input
-                  type="date"
-                  class="form-control"
-                  [(ngModel)]="dateFin"
-                  placeholder="Date fin"
-                  (change)="currentPage = 1"
-                />
-              </div>
-              <div class="col-md-2">
-                <button class="btn btn-secondary" (click)="resetFilters()">
-                  <i class="fas fa-undo"></i> Réinitialiser
+
+              <div class="col-lg-2 col-md-4">
+                <button
+                  class="btn btn-light border w-100 shadow-sm d-flex align-items-center justify-content-center"
+                  (click)="resetFilters()"
+                  style="height: 38px"
+                  title="Réinitialiser les filtres"
+                >
+                  <i class="fas fa-sync-alt me-2 text-secondary"></i>
+                  <span class="fw-medium">Réinitialiser</span>
                 </button>
               </div>
             </div>
+
             <!-- ========== TABLEAU DES DEMANDES EN ATTENTE ========== -->
             <div class="table-responsive">
               <table class="table table-hover text-center align-middle">
                 <thead class="table-primary">
                   <tr>
                     <th (click)="sort('id')" style="cursor: pointer">
-                      #N°
-                      <i [class]="getSortIcon('id')"></i>
+                      #N° <i [class]="getSortIcon('id')"></i>
                     </th>
                     <th
                       (click)="sort('raisonSocialeDO')"
@@ -116,6 +131,9 @@
                       Type transaction
                       <i [class]="getSortIcon('typeTransaction')"></i>
                     </th>
+                    <th (click)="sort('estDerogation')" style="cursor: pointer">
+                      Dérogation <i [class]="getSortIcon('estDerogation')"></i>
+                    </th>
                     <th (click)="sort('statutDemande')" style="cursor: pointer">
                       Statut <i [class]="getSortIcon('statutDemande')"></i>
                     </th>
@@ -134,14 +152,12 @@
                         demande.compteTransfert
                       }}</small>
                     </td>
-
                     <td class="text-start">
                       <div class="fw-bold">{{ demande.raisonSocialeB }}</div>
                       <small class="text-muted font-monospace">{{
                         demande.ibanNCompte
                       }}</small>
                     </td>
-
                     <td class="fw-bold">
                       {{ demande.montantTransaction | number: "1.2-2" }}
                     </td>
@@ -151,6 +167,24 @@
                         demande.typeTransaction
                       }}</span>
                     </td>
+
+                    <!-- AFFICHAGE DÉROGATION AVEC VALIDATION ADMIN -->
+                    @if (demande.estDerogation) {
+                      <td>
+  
+                        <div class="mt-1">
+                          <span
+                            class="badge bg-success"
+                            style="font-size: 10px"
+                          >
+                            <i class="fas fa-check-circle me-1"></i>
+                            Derogation Validée
+                          </span>
+                        </div>
+                      </td>
+                    }
+    
+
                     <td>
                       <span class="badge bg-warning text-dark">En attente</span>
                     </td>
@@ -166,17 +200,19 @@
                     </td>
                   </tr>
                   <tr *ngIf="filteredData.length === 0">
-                    <td colspan="11" class="text-center py-5 text-muted">
+                    <td colspan="10" class="text-center py-5 text-muted">
                       <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
                       <h5>Aucune demande en attente</h5>
                       <p class="mb-0">
-                        Il n'y a pas de transactions en attente pour le moment.
+                        Aucune transaction avec dérogation validée pour le
+                        moment.
                       </p>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
+
             <!-- Pagination -->
             <div
               *ngIf="filteredData.length > 0"
