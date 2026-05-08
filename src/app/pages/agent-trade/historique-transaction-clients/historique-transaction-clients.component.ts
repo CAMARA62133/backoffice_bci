@@ -11,64 +11,66 @@ import {
 
 @Component({
   selector: 'app-historique-transaction-clients',
+  standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './historique-transaction-clients.component.html',
   styleUrl: './historique-transaction-clients.component.css',
 })
 export class HistoriqueTransactionClientsComponent implements OnInit {
-  activeTab: string = 'validees';
-  isLoadingDemandes: boolean = false;
+  activeTab: 'toutes' | 'validees' | 'rejetees' = 'validees';
+  isLoadingDemandes = false;
+
   toutesLesDemandes: DemandeTransactionInternationale[] = [];
 
   pageSize = 10;
   currentPage = 1;
+
   sortColumn = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  searchText: string = '';
-  dateDebut: string = '';
-  dateFin: string = '';
-  filtreDerogation: string = '';
+  searchText = '';
+  dateDebut = '';
+  dateFin = '';
+  filtreDerogation = '';
 
   public utils = inject(UtilsService);
   public notification = inject(NotificationService);
 
-  constructor() {}
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadData();
   }
 
   private loadData(): void {
     this.isLoadingDemandes = true;
+
     setTimeout(() => {
       this.toutesLesDemandes = [...toutesLesDemandes];
       this.isLoadingDemandes = false;
     }, 500);
   }
 
-  // Transactions validées uniquement
-  // Ajoutez ces getters dans votre composant
+  // =========================
+  // FILTRES PAR STATUT
+  // =========================
 
   get toutesTransactions(): DemandeTransactionInternationale[] {
     return this.toutesLesDemandes.filter(
-      (d) => d.statutDemande === 'Valide' || d.statutDemande === 'Rejete',
+      (d) => d.statutDemande === 'VALIDE' || d.statutDemande === 'REJETE',
     );
   }
 
-  // Transactions validées
   get transactionsValidees(): DemandeTransactionInternationale[] {
-    return this.toutesLesDemandes.filter((d) => d.statutDemande === 'Valide');
+    return this.toutesLesDemandes.filter((d) => d.statutDemande === 'VALIDE');
   }
 
-  // Transactions rejetées
   get transactionsRejetees(): DemandeTransactionInternationale[] {
-    return this.toutesLesDemandes.filter((d) => d.statutDemande === 'Rejete');
+    return this.toutesLesDemandes.filter((d) => d.statutDemande === 'REJETE');
   }
 
+  // =========================
+  // DATA ACTIF
+  // =========================
 
-
-  // Données selon l'onglet actif
   get currentData(): DemandeTransactionInternationale[] {
     switch (this.activeTab) {
       case 'toutes':
@@ -82,66 +84,86 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
     }
   }
 
+  // =========================
+  // FILTRAGE GLOBAL
+  // =========================
+
   get filteredData(): DemandeTransactionInternationale[] {
     let data = [...this.currentData];
 
-    // Filtre recherche texte
-    if (this.searchText) {
-      const searchLower = this.searchText.toLowerCase();
+    // SEARCH
+    if (this.searchText.trim()) {
+      const search = this.searchText.toLowerCase();
+
       data = data.filter(
         (item) =>
-          item.raisonSocialeDO?.toLowerCase().includes(searchLower) ||
-          item.raisonSocialeB?.toLowerCase().includes(searchLower) ||
-          item.refDocument?.toLowerCase().includes(searchLower) ||
-          item.typeTransaction?.toLowerCase().includes(searchLower),
+          item.raisonSocialeDO?.toLowerCase().includes(search) ||
+          item.raisonSocialeB?.toLowerCase().includes(search) ||
+          item.refDocument?.toLowerCase().includes(search) ||
+          item.typeTransaction?.toLowerCase().includes(search),
       );
     }
 
-    // Filtre date début
+    // DATE DEBUT
     if (this.dateDebut) {
       const debut = new Date(this.dateDebut);
       data = data.filter((item) => new Date(item.dtCreated) >= debut);
     }
 
-    // Filtre date fin
+    // DATE FIN
     if (this.dateFin) {
       const fin = new Date(this.dateFin);
-      fin.setHours(23, 59, 59);
+      fin.setHours(23, 59, 59, 999);
+
       data = data.filter((item) => new Date(item.dtCreated) <= fin);
     }
 
-    // Filtre dérogation
+    // DÉROGATION (CORRIGÉ)
     if (this.filtreDerogation === 'avec') {
-      data = data.filter((item) => item.estDerogation === true);
-    } else if (this.filtreDerogation === 'sans') {
-      data = data.filter((item) => item.estDerogation !== true);
+      data = data.filter((item) => item.derogation === true);
     }
 
-    // Tri
+    if (this.filtreDerogation === 'sans') {
+      data = data.filter((item) => item.derogation === false);
+    }
+
+    // TRI SÉCURISÉ
     if (this.sortColumn) {
       data.sort((a, b) => {
-        let aVal = a[this.sortColumn as keyof DemandeTransactionInternationale];
-        let bVal = b[this.sortColumn as keyof DemandeTransactionInternationale];
+        const aVal = (a as any)[this.sortColumn];
+        const bVal = (b as any)[this.sortColumn];
 
-        if (aVal === undefined || aVal === null) return 1;
-        if (bVal === undefined || bVal === null) return -1;
+        if (aVal == null) return 1;
+        if (bVal == null) return -1;
 
-        if (this.sortColumn === 'dtCreated') {
-          aVal = new Date(aVal as Date).getTime();
-          bVal = new Date(bVal as Date).getTime();
-        } else if (typeof aVal === 'number' && typeof bVal === 'number') {
-          return this.sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
-        } else if (typeof aVal === 'string' && typeof bVal === 'string') {
-          const comparison = aVal
-            .toLowerCase()
-            .localeCompare(bVal.toLowerCase());
-          return this.sortDirection === 'asc' ? comparison : -comparison;
+        // DATE
+        if (
+          this.sortColumn === 'dtCreated' ||
+          this.sortColumn === 'dateValidation'
+        ) {
+          return this.sortDirection === 'asc'
+            ? new Date(aVal).getTime() - new Date(bVal).getTime()
+            : new Date(bVal).getTime() - new Date(aVal).getTime();
         }
-        return 0;
+
+        // NUMBER
+        if (typeof aVal === 'number' && typeof bVal === 'number') {
+          return this.sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
+        }
+
+        // STRING
+        return this.sortDirection === 'asc'
+          ? String(aVal).localeCompare(String(bVal))
+          : String(bVal).localeCompare(String(aVal));
       });
     }
+
     return data;
   }
+
+  // =========================
+  // PAGINATION
+  // =========================
 
   get paginatedData(): DemandeTransactionInternationale[] {
     const start = (this.currentPage - 1) * this.pageSize;
@@ -152,44 +174,51 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
     return Math.ceil(this.filteredData.length / this.pageSize);
   }
 
-  get paginationRange(): (number | string)[] {
-    const range: (number | string)[] = [];
-    const maxVisible = 5;
-    const halfVisible = Math.floor(maxVisible / 2);
-
-    if (this.totalPages <= maxVisible) {
-      for (let i = 1; i <= this.totalPages; i++) range.push(i);
-    } else {
-      let startPage = Math.max(1, this.currentPage - halfVisible);
-      let endPage = Math.min(this.totalPages, startPage + maxVisible - 1);
-
-      if (endPage - startPage + 1 < maxVisible) {
-        startPage = Math.max(1, endPage - maxVisible + 1);
-      }
-
-      if (startPage > 1) {
-        range.push(1);
-        if (startPage > 2) range.push('...');
-      }
-
-      for (let i = startPage; i <= endPage; i++) range.push(i);
-
-      if (endPage < this.totalPages) {
-        if (endPage < this.totalPages - 1) range.push('...');
-        range.push(this.totalPages);
-      }
-    }
-    return range;
-  }
-
   get startIndex(): number {
-    if (this.filteredData.length === 0) return 0;
-    return (this.currentPage - 1) * this.pageSize + 1;
+    return this.filteredData.length === 0
+      ? 0
+      : (this.currentPage - 1) * this.pageSize + 1;
   }
 
   get endIndex(): number {
     return Math.min(this.currentPage * this.pageSize, this.filteredData.length);
   }
+
+  get paginationRange(): (number | string)[] {
+    const range: (number | string)[] = [];
+    const max = 5;
+    const half = Math.floor(max / 2);
+
+    if (this.totalPages <= max) {
+      for (let i = 1; i <= this.totalPages; i++) range.push(i);
+      return range;
+    }
+
+    let start = Math.max(1, this.currentPage - half);
+    let end = Math.min(this.totalPages, start + max - 1);
+
+    if (end - start < max) {
+      start = Math.max(1, end - max + 1);
+    }
+
+    if (start > 1) {
+      range.push(1);
+      if (start > 2) range.push('...');
+    }
+
+    for (let i = start; i <= end; i++) range.push(i);
+
+    if (end < this.totalPages) {
+      if (end < this.totalPages - 1) range.push('...');
+      range.push(this.totalPages);
+    }
+
+    return range;
+  }
+
+  // =========================
+  // ACTIONS
+  // =========================
 
   onPageClick(page: number | string): void {
     if (typeof page === 'number') this.currentPage = page;
@@ -218,29 +247,30 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
     return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
   }
 
+  // =========================
+  // RESET
+  // =========================
+
   resetFilters(): void {
     this.searchText = '';
     this.dateDebut = '';
     this.dateFin = '';
     this.filtreDerogation = '';
-    this.currentPage = 1;
     this.sortColumn = '';
     this.sortDirection = 'asc';
+    this.currentPage = 1;
+
     this.notification.info('Filtres réinitialisés');
   }
 
-  setActiveTab(tabName: string) {
-    this.activeTab = tabName;
+  setActiveTab(tab: 'toutes' | 'validees' | 'rejetees'): void {
+    this.activeTab = tab;
     this.currentPage = 1;
-    this.sortColumn = '';
-    this.sortDirection = 'asc';
-    this.searchText = '';
-    this.dateDebut = '';
-    this.dateFin = '';
-    this.filtreDerogation = '';
+
+    this.resetFilters();
   }
 
-  isActive(tabName: string) {
-    return this.activeTab === tabName;
+  isActive(tab: string): boolean {
+    return this.activeTab === tab;
   }
 }

@@ -48,14 +48,14 @@ import { MobileOperatorComponent } from './pages/agent-conformite/mobile-operato
 import { HistoriqueTransactionComponent } from './pages/admin-integrateur/historique-transaction/historique-transaction.component';
 import { TransactionInternationalComponent } from './pages/admin-integrateur/transaction-international/transaction-international.component';
 import { SouscriptionClientComponent } from './pages/admin-integrateur/souscription-client/souscription-client.component';
-import { DemandesClientsComponent } from './pages/agent-trade/demandes-clients/demandes-clients.component';
-import { TransactionInternationaleProcurationComponent } from './pages/agent-trade/transaction-internationale-procuration/transaction-internationale-procuration.component';
 import { HistoriqueTransactionClientsComponent } from './pages/agent-trade/historique-transaction-clients/historique-transaction-clients.component';
 import { AgentTradeDashboardComponent } from './pages/agent-trade/agent-trade-dashboard/agent-trade-dashboard.component';
-import { DetailDemandeClientComponent } from './pages/agent-trade/detail-demande-client/detail-demande-client.component';
-import { ValidationTransactionProcurationComponent } from './pages/agent-trade/validation-transaction-procuration/validation-transaction-procuration.component';
 import { TransactionMultipleComponent } from './pages/admin-integrateur/transaction-multiple/transaction-multiple.component';
 import { DetailTransactionMultipleComponent } from './pages/admin-integrateur/detail-transaction-multiple/detail-transaction-multiple.component';
+
+import { TransactionParProcurationComponent } from './pages/agent-trade/transaction-par-procuration/transaction-par-procuration.component';
+import { TransactionSansProcurationComponent } from './pages/agent-trade/transaction-sans-procuration/transaction-sans-procuration.component';
+import { TransactionDetailComponent } from './pages/agent-trade/transaction-detail/transaction-detail.component';
 
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
@@ -432,25 +432,32 @@ export const routes: Routes = [
         data: { roles: ['Trade Agent'] },
       },
 
-      {
-        path: 'demandes-clients',
-        title: 'BCI - Online | Liste des demandes de souscriptions des clients',
-        component: DemandesClientsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Trade Agent'] },
-      },
+      // {
+      //   path: 'demandes-clients',
+      //   title: 'BCI - Online | Liste des demandes de souscriptions des clients',
+      //   component: DemandesClientsComponent,
+      //   canActivate: [AuthGuard],
+      //   data: { roles: ['Trade Agent'] },
+      // },
 
       {
-        path: 'detail-demande-client/:id',
+        path: 'transaction-detail/:id',
         title: 'BCI - Détail de la demande de transaction',
-        component: DetailDemandeClientComponent,
+        component: TransactionDetailComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Trade Agent'] },
       },
       {
-        path: 'transaction-internationale-procuration',
+        path: 'transaction-par-procuration',
         title: 'BCI - Online | Transactions internationales par procuration',
-        component: TransactionInternationaleProcurationComponent,
+        component: TransactionParProcurationComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['Trade Agent'] },
+      },
+      {
+        path: 'transaction-sans-procuration',
+        title: 'BCI - Online | Transactions internationales sans procuration',
+        component: TransactionSansProcurationComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Trade Agent'] },
       },
@@ -460,14 +467,8 @@ export const routes: Routes = [
         component: HistoriqueTransactionClientsComponent,
         canActivate: [AuthGuard],
         data: { roles: ['Trade Agent'] },
-      },
-      {
-        path: 'validation-transaction-procuration',
-        title: 'BCI - Online | Validation des transactions par procuration',
-        component: ValidationTransactionProcurationComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Trade Agent'] },
-      },
+      }
+
     ],
   },
 

@@ -23,26 +23,25 @@ export class AgentTradeDashboardComponent {
       chart: { type: 'donut', height: 350 },
       series: [28, 45, 67, 4.2],
       labels: [
-        'Demandes validées',
-        'Total de demandes',
-        'Demandes en attentes',
-        'Demandes annulées',
+        'Transactions validées',
+        'Total des transactions',
+        'Transactions en attente',
+        'Transactions rejetées',
       ],
       colors: ['#28a745', '#343473', '#ffc107', '#FF0B07'],
       dataLabels: {
         enabled: true,
         formatter: (val: number, opts: any) => {
-          // Math.floor(val) + '%'
           return opts.w.globals.series[opts.seriesIndex];
         },
         style: { colors: ['#fff'] },
       },
       title: {
-        text: 'Performances par categorie',
+        text: 'Statistiques des transactions',
         align: 'center',
       },
       subtitle: {
-        text: 'Categories par categorie',
+        text: 'Répartition des transactions',
         align: 'center',
         style: { color: 'white' },
       },
@@ -57,7 +56,7 @@ export class AgentTradeDashboardComponent {
         offsetY: -20,
       },
       series: [95],
-      labels: ['SLA Respecté'],
+      labels: ['Transactions réussies'],
       colors: ['#fff'],
 
       plotOptions: {
@@ -81,7 +80,6 @@ export class AgentTradeDashboardComponent {
         enabled: true,
         formatter: (val: any) => val + '%',
         style: { colors: ['#fff'] },
-        // style: { colors: ['#343473'], fontSize: '18px', fontWeight: 500 },
       },
 
       tooltip: {
@@ -92,7 +90,7 @@ export class AgentTradeDashboardComponent {
       },
 
       title: {
-        text: 'Respect des SLA',
+        text: 'Taux de réussite des transactions',
         align: 'center',
         style: { fontSize: '16px' },
       },
@@ -102,12 +100,7 @@ export class AgentTradeDashboardComponent {
     this.chart3 = {
       series: [
         {
-          name: [
-            'Incident Technique',
-            'Demance access',
-            'Question fonctionelle',
-            'Demande document',
-          ],
+          name: 'Transactions',
           data: [21, 22, 10, 28],
         },
       ],
@@ -136,30 +129,81 @@ export class AgentTradeDashboardComponent {
         show: false,
       },
       xaxis: {
-        categories: [
-          'Incident Technique',
-          'Demance access',
-          'Question fonctionelle',
-          'Demande document',
-        ],
+        categories: ['Dépôts', 'Retraits', 'Transferts', 'Paiements'],
       },
     };
 
     const rawData = [
-      { productName: 'iPhone', salesAmount: 120, region: 'North' },
-      { productName: 'Samsung', salesAmount: 100, region: 'South' },
+      { productName: 'Dépôts', salesAmount: 120, region: 'North' },
+      { productName: 'Retraits', salesAmount: 100, region: 'South' },
     ];
 
     this.chart4 = {
       series: [
         {
-          data: rawData,
-          parsing: {
-            x: 'productName',
-            y: 'salesAmount',
-          },
+          name: 'Transactions',
+          data: [120, 100, 80, 140],
         },
       ],
+
+      chart: {
+        type: 'line',
+        height: 350,
+        toolbar: {
+          show: false,
+        },
+      },
+
+      colors: ['#343473'],
+
+      stroke: {
+        curve: 'smooth',
+        width: 4,
+      },
+
+      dataLabels: {
+        enabled: false,
+      },
+
+      grid: {
+        borderColor: '#f1f1f1',
+        strokeDashArray: 4,
+      },
+
+      markers: {
+        size: 5,
+      },
+
+      xaxis: {
+        categories: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi'],
+        labels: {
+          style: {
+            colors: '#6c757d',
+          },
+        },
+      },
+
+      yaxis: {
+        labels: {
+          style: {
+            colors: '#6c757d',
+          },
+        },
+      },
+
+      tooltip: {
+        theme: 'light',
+      },
+
+      title: {
+        text: 'Évolution des transactions',
+        align: 'left',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: '#343473',
+        },
+      },
     };
   }
 }

@@ -1,0 +1,731 @@
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
+          <div>
+            <h4 class="fw-semibold text-primary mb-sm-0 h4">
+              Détail Transaction
+            </h4>
+          </div>
+          <div>
+            <button class="btn btn-outline-secondary btn-sm" (click)="goBack()">
+              <i class="fas fa-arrow-left me-1"></i> Retour
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="container-fluid mt-4">
+      <div class="text-center py-5">
+        <div
+          class="spinner-border text-primary"
+          role="status"
+          style="width: 3rem; height: 3rem"
+        >
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="text-muted mt-3 mb-0">Chargement des détails...</p>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading && demande) {
+    <div class="container-fluid mt-3">
+      <div class="row">
+        <div class="col-12">
+          <!-- Header Card -->
+          <div class="card shadow-sm mb-3 border-0 overflow-hidden">
+            <div
+              class="card-body p-2"
+              style="
+                background: linear-gradient(135deg, #3b3b7a 0%, #2a2a5a 100%);
+              "
+            >
+              <div class="d-flex align-items-center gap-2">
+                <div class="rounded-circle bg-white p-1">
+                  <i class="fas fa-exchange-alt text-primary fs-6"></i>
+                </div>
+                <div class="grow">
+                  <div class="d-flex flex-wrap align-items-center">
+                    <span class="text-white-50 small">Donneur:</span>
+                    <span
+                      class="text-white fw-semibold small font-monospace ms-1"
+                      >{{ demande.compteTransfert }}</span
+                    >
+                    <i class="fas fa-arrow-right text-white-50 fa-xs mx-1"></i>
+                    <span class="text-white-50 small">Bénéficiaire:</span>
+                    <span
+                      class="text-white fw-semibold small font-monospace ms-1"
+                      >{{ demande.ibanNCompte }}</span
+                    >
+                  </div>
+                  <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+                    <span class="text-white-50 small">
+                      <i class="fas fa-calendar-alt me-1 fa-xs"></i>
+                      {{ demande.dtCreated | date: "dd/MM/yyyy HH:mm" }}
+                    </span>
+                    <span
+                      class="badge rounded-pill px-3 py-1"
+                      [ngClass]="getStatutClass(demande.statutDemande)"
+                    >
+                      {{ getStatutLabel(demande.statutDemande) }}
+                    </span>
+                    <span
+                      class="badge rounded-pill px-3 py-1"
+                      [ngClass]="getEtapeClass(demande.etapeValidation)"
+                    >
+                      {{ getEtapeLabel(demande.etapeValidation) }}
+                    </span>
+                    @if (demande.derogation) {
+                      <span class="badge bg-warning text-dark">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        Avec dérogation / Procuration
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <!-- Colonne Gauche -->
+        <div class="col-lg-6">
+          <!-- Card Donneur d'ordre -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-user-circle me-1 fa-sm"></i> Donneur d'ordre
+              </h6>
+            </div>
+            <div class="card-body pt-2 pb-3">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Raison Sociale</label
+                    >
+                    <p class="fw-semibold mb-0 text-end">
+                      {{ demande.raisonSocialeDO }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold">Adresse</label>
+                    <p class="mb-0 text-end small">{{ demande.adresseDO }}</p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Compte Transfert</label
+                    >
+                    <span class="font-monospace small">{{
+                      demande.compteTransfert
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Solde du compte</label
+                    >
+                    <span
+                      [class.text-danger]="
+                        demande.soldeCompte < demande.montantTransaction
+                      "
+                      [class.text-success]="
+                        demande.soldeCompte >= demande.montantTransaction
+                      "
+                      class="fw-bold"
+                    >
+                      {{ demande.soldeCompte | number: "1.2-2" }}
+                      {{ demande.devise }}
+                    </span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Compte Commission</label
+                    >
+                    <span class="font-monospace small">{{
+                      demande.compteCommission
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Frais étranger</label
+                    >
+                    <span class="badge bg-secondary fw-normal">{{
+                      demande.fraisEtranger
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Détails Opération -->
+          <div class="card border-0 shadow-sm mt-3">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-chart-line me-1 fa-sm"></i> Détails Opération
+              </h6>
+            </div>
+            <div class="card-body pt-2 pb-3">
+              <div class="row g-2">
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Motif économique</label
+                    >
+                    <p class="mb-0 text-end small">
+                      {{ demande.motifEconomique }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Référence</label
+                    >
+                    <span class="badge bg-primary fw-normal">{{
+                      demande.refDocument
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold">Devise</label>
+                    <span class="badge bg-info text-dark fw-normal">{{
+                      demande.devise
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Type Transaction</label
+                    >
+                    <p class="mb-0 text-end small">
+                      {{ demande.typeTransaction }}
+                      @if (demande.autreTypeTransaction) {
+                        <span class="text-muted"
+                          >({{ demande.autreTypeTransaction }})</span
+                        >
+                      }
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12 mt-2">
+                  <div
+                    class="p-2 rounded"
+                    style="background: #f8f9ff; border-left: 3px solid #3b3b7a"
+                  >
+                    <div class="d-flex justify-content-between">
+                      <label class="text-muted small fw-semibold mb-0"
+                        >Montant à transférer</label
+                      >
+                      <span class="fw-bold fs-5" style="color: #3b3b7a">
+                        {{ demande.montantTransaction | number: "1.2-2" }}
+                        {{ demande.devise }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne Droite -->
+        <div class="col-lg-6">
+          <!-- Card Bénéficiaire -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-user-check me-1 fa-sm"></i> Bénéficiaire
+              </h6>
+            </div>
+            <div class="card-body pt-2 pb-3">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >Raison Sociale</label
+                    >
+                    <p class="fw-semibold mb-0 text-end">
+                      {{ demande.raisonSocialeB }}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold">Adresse</label>
+                    <p class="mb-0 text-end small">{{ demande.adresseB }}</p>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold"
+                      >IBAN / N° Compte</label
+                    >
+                    <span class="font-monospace small">{{
+                      demande.ibanNCompte
+                    }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold">Banque</label>
+                    <span class="small">{{ demande.bankBeneficiaire }}</span>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="d-flex justify-content-between">
+                    <label class="text-muted small fw-semibold">SWIFT</label>
+                    <span
+                      class="font-monospace fw-bold small"
+                      style="color: #3b3b7a"
+                    >
+                      {{ demande.swifiBankBeneficiaire }}
+                    </span>
+                  </div>
+                </div>
+
+                @if (demande.bankIntermediaire) {
+                  <div class="col-12 mt-3">
+                    <hr class="my-2" />
+                    <div class="row g-2 mt-1">
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between">
+                          <label class="text-muted small fw-semibold"
+                            >Banque Intermédiaire</label
+                          >
+                          <span class="small">{{
+                            demande.bankIntermediaire
+                          }}</span>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="d-flex justify-content-between">
+                          <label class="text-muted small fw-semibold"
+                            >SWIFT Intermédiaire</label
+                          >
+                          <span class="font-monospace small">{{
+                            demande.swifibankIntermediaire
+                          }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Documents pour transactions avec procuration -->
+          @if (!demande.derogation) {
+            <div class="card border-0 shadow-sm mt-3">
+              <div class="card-header bg-white border-0 pt-3 pb-0">
+                <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                  <i class="fas fa-file-alt me-1 fa-sm"></i> Les documents
+                </h6>
+              </div>
+              <div class="card-body pt-2 pb-3">
+                <div class="row g-2">
+                  <!-- Section DDI -->
+                  @if (demande.ddiFile) {
+                    <div class="col-12">
+                      <a
+                        href="javascript:void(0)"
+                        (click)="viewFile(demande.ddiFile)"
+                        class="text-decoration-none"
+                        style="cursor: pointer"
+                      >
+                        <i class="fas fa-file-pdf text-danger me-2"></i>
+                        Ddi
+                      </a>
+                    </div>
+                  }
+
+                  <!-- Section Assurance -->
+                  @if (demande.assuranceFile) {
+                    <div class="col-12">
+                      <a
+                        href="javascript:void(0)"
+                        (click)="viewFile(demande.assuranceFile)"
+                        class="text-decoration-none"
+                        style="cursor: pointer"
+                      >
+                        <i class="fas fa-file-pdf text-info me-2"></i>
+                        Assurance
+                      </a>
+                    </div>
+                  }
+
+                  <!-- Section Facture -->
+                  @if (demande.factureFile) {
+                    <div class="col-12">
+                      <a
+                        href="javascript:void(0)"
+                        (click)="viewFile(demande.factureFile)"
+                        class="text-decoration-none"
+                        style="cursor: pointer"
+                      >
+                        <i class="fas fa-file-pdf text-success me-2"></i>
+                        Facture
+                      </a>
+                    </div>
+                  }
+
+                  <!-- Cas vide -->
+                  @if (
+                    !demande.ddiFile &&
+                    !demande.assuranceFile &&
+                    !demande.factureFile
+                  ) {
+                    <div class="col-12 text-muted text-center">
+                      <i class="fas fa-folder-open me-1"></i> Aucun document
+                      joint
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Timeline Workflow corrigée -->
+          <div class="card border-0 shadow-sm mt-3">
+            <div class="card-header bg-white border-0 pt-3 pb-0">
+              <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                <i class="fas fa-project-diagram me-1 fa-sm"></i>Etapes de
+                validation
+              </h6>
+            </div>
+            <div class="card-body pt-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <!-- Étape 1 : Agent Trade -->
+                <div class="text-center grow">
+                  <div
+                    class="rounded-circle d-inline-flex align-items-center justify-content-center mb-1"
+                    [class.bg-success]="isEtapeCompleted('AGENT_TRADE')"
+                    [class.bg-secondary]="!isEtapeCompleted('AGENT_TRADE')"
+                    style="width: 32px; height: 32px"
+                  >
+                    <i class="fas fa-user-check fa-sm text-white"></i>
+                  </div>
+                  <div class="small fw-semibold">Agent Trade</div>
+                  <div class="small text-muted">
+                    @if (isEtapeCompleted("AGENT_TRADE")) {
+                      <i class="fas fa-check-circle text-success"></i> Validé
+                    } @else {
+                      <i class="fas fa-clock text-warning"></i> En cours
+                    }
+                  </div>
+                </div>
+
+                <i class="fas fa-arrow-right text-muted fa-sm"></i>
+
+                <!-- Étape 2 : Conformité -->
+                <div class="text-center grow">
+                  <div
+                    class="rounded-circle d-inline-flex align-items-center justify-content-center mb-1"
+                    [class.bg-success]="isEtapeCompleted('CONFORMITE')"
+                    [class.bg-secondary]="!isEtapeCompleted('CONFORMITE')"
+                    style="width: 32px; height: 32px"
+                  >
+                    <i class="fas fa-shield-alt fa-sm text-white"></i>
+                  </div>
+                  <div class="small fw-semibold">Conformité</div>
+                  <div class="small text-muted">
+                    @if (isEtapeCompleted("CONFORMITE")) {
+                      <i class="fas fa-check-circle text-success"></i> Validé
+                    } @else if (demande.etapeValidation === "CONFORMITE") {
+                      <i class="fas fa-hourglass-half text-warning"></i> En
+                      attente
+                    } @else {
+                      <i class="fas fa-clock text-muted"></i> À venir
+                    }
+                  </div>
+                </div>
+
+                <!-- Étape 3 : DG/DGA (Conditionnelle pour dérogation) -->
+                @if (demande.derogation) {
+                  <i class="fas fa-arrow-right text-muted fa-sm"></i>
+                  <div class="text-center grow">
+                    <div
+                      class="rounded-circle d-inline-flex align-items-center justify-content-center mb-1"
+                      [class.bg-success]="isEtapeCompleted('DG_DGA')"
+                      [class.bg-secondary]="!isEtapeCompleted('DG_DGA')"
+                      style="width: 32px; height: 32px"
+                    >
+                      <i class="fas fa-user-tie fa-sm text-white"></i>
+                    </div>
+                    <div class="small fw-semibold">DG/DGA</div>
+                    <div class="small text-muted">
+                      @if (isEtapeCompleted("DG_DGA")) {
+                        <i class="fas fa-check-circle text-success"></i>
+                        Approuvé
+                      } @else if (demande.etapeValidation === "DG_DGA") {
+                        <i class="fas fa-hourglass-half text-warning"></i> En
+                        attente
+                      } @else {
+                        <i class="fas fa-clock text-muted"></i> À venir
+                      }
+                    </div>
+                  </div>
+                }
+
+                <i class="fas fa-arrow-right text-muted fa-sm"></i>
+
+                <!-- Étape 4 : Finalisation -->
+                <div class="text-center grow">
+                  <div
+                    class="rounded-circle d-inline-flex align-items-center justify-content-center mb-1"
+                    [class.bg-success]="isEtapeCompleted('FINALISATION')"
+                    [class.bg-secondary]="!isEtapeCompleted('FINALISATION')"
+                    style="width: 32px; height: 32px"
+                  >
+                    <i class="fas fa-flag-checkered fa-sm text-white"></i>
+                  </div>
+                  <div class="small fw-semibold">Finalisation</div>
+                  <div class="small text-muted">
+                    @if (isEtapeCompleted("FINALISATION")) {
+                      <i class="fas fa-check-circle text-success"></i> Finalisé
+                    } @else if (demande.etapeValidation === "FINALISATION") {
+                      <i class="fas fa-hourglass-half text-warning"></i> En
+                      attente
+                    } @else {
+                      <i class="fas fa-clock text-muted"></i> À venir
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          @if (
+            demande.statutDemande !== "VALIDE" &&
+            demande.statutDemande !== "REJETE"
+          ) {
+            <div class="card border-0 shadow-sm mt-3">
+              <div class="card-header bg-white border-0 pt-3 pb-0">
+                <h6 class="fw-bold mb-0" style="color: #3b3b7a">
+                  <i class="fas fa-gavel me-1 fa-sm"></i> Actions
+                </h6>
+              </div>
+
+              <div class="card-body pt-3">
+                <div class="d-flex gap-3">
+                  @if (canValidate()) {
+                    <button
+                      class="btn btn-success flex-fill py-2"
+                      (click)="openValidateModal()"
+                    >
+                      <i class="fas {{ getValidationButton().icon }} me-2"></i>
+                      {{ getValidationButton().label }}
+                    </button>
+                  }
+
+                  @if (canReject()) {
+                    <button
+                      class="btn btn-outline-danger flex-fill py-2"
+                      (click)="openRejectModal()"
+                    >
+                      <i class="fas fa-times-circle me-2"></i>
+                      Rejeter
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (demande.statutDemande === "VALIDE") {
+            <div class="card border-0 shadow-sm mt-3 bg-success bg-opacity-10">
+              <div class="card-body text-center py-3">
+                <i class="fas fa-check-circle text-success fs-2 mb-2"></i>
+                <p class="mb-0 fw-semibold text-success">Transaction validée</p>
+                @if (demande.dateValidation) {
+                  <small class="text-muted"
+                    >le
+                    {{
+                      demande.dateValidation | date: "dd/MM/yyyy HH:mm"
+                    }}</small
+                  >
+                }
+              </div>
+            </div>
+          }
+
+          @if (demande.statutDemande === "REJETE") {
+            <div class="card border-0 shadow-sm mt-3 bg-danger bg-opacity-10">
+              <div class="card-body text-center py-3">
+                <i class="fas fa-times-circle text-danger fs-2 mb-2"></i>
+                <p class="mb-0 fw-semibold text-danger">Transaction rejetée</p>
+                @if (demande.motifRejet) {
+                  <p class="mb-0 small text-danger mt-1">
+                    Motif: {{ demande.motifRejet }}
+                  </p>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (!isLoading && !demande) {
+    <div class="container-fluid mt-4">
+      <div class="alert alert-warning text-center">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Transaction non trouvée
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Modal de validation -->
+<div class="modal fade" id="validateModal" tabindex="-1" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div
+        class="modal-header border-0 py-3"
+        style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%)"
+      >
+        <h5 class="modal-title text-white">
+          <i class="fas fa-check-circle me-2"></i>Validation de la transaction
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeValidateModal()"
+        ></button>
+      </div>
+      <form
+        [formGroup]="validationForm"
+        (ngSubmit)="
+          demande?.etapeValidation === 'FINALISATION'
+            ? onFinalValidation()
+            : onValidate()
+        "
+      >
+        <div class="modal-body p-4 text-center">
+          <i class="fas fa-question-circle text-primary fs-1 mb-3"></i>
+          <p class="mb-0 fw-semibold fs-5">
+            Voulez-vous vraiment
+            @if (demande?.etapeValidation === "FINALISATION") {
+              valider définitivement cette transaction ?
+            } @else {
+              valider et envoyer à {{ getNextRoleLabel() }} ?
+            }
+          </p>
+          @if (
+            demande?.derogation && demande?.etapeValidation === "AGENT_TRADE"
+          ) {
+            <div class="alert alert-warning mt-3 mb-0 small">
+              <i class="fas fa-exclamation-triangle me-1"></i>
+              Cette transaction est une dérogation. Elle devra passer par la
+              validation DG/DGA.
+            </div>
+          }
+          @if (demande?.etapeValidation === "FINALISATION") {
+            <div class="alert alert-success mt-3 mb-0 small">
+              <i class="fas fa-info-circle me-1"></i>
+              Cette transaction a déjà été validée par tous les acteurs.
+              Confirmez la validation finale.
+            </div>
+          }
+        </div>
+        <div class="modal-footer border-0 pt-0 pb-4 px-4">
+          <button
+            type="button"
+            class="btn btn-outline-secondary px-4"
+            (click)="closeValidateModal()"
+          >
+            Annuler
+          </button>
+          <button type="submit" class="btn btn-success px-4">
+            <i class="fas fa-check me-2"></i>Confirmer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de rejet -->
+<div class="modal fade" id="rejectModal" tabindex="-1" data-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div
+        class="modal-header border-0 py-3"
+        style="background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%)"
+      >
+        <h5 class="modal-title text-white">
+          <i class="fas fa-times-circle me-2"></i>Rejet de la transaction
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeRejectModal()"
+        ></button>
+      </div>
+      <form [formGroup]="rejetForm" (ngSubmit)="onReject()">
+        <div class="modal-body p-4">
+          <p class="mb-3">Veuillez indiquer le motif du rejet :</p>
+          <div class="mb-3">
+            <label class="form-label fw-semibold"
+              >Motif du rejet <span class="text-danger">*</span></label
+            >
+            <textarea
+              formControlName="motif"
+              class="form-control"
+              placeholder="Saisissez le motif du rejet..."
+              rows="3"
+            ></textarea>
+            @if (
+              rejetForm.get("motif")?.invalid && rejetForm.get("motif")?.touched
+            ) {
+              <div class="text-danger mt-1 small">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                Le motif est obligatoire
+              </div>
+            }
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0 pb-4 px-4">
+          <button
+            type="button"
+            class="btn btn-outline-secondary px-4"
+            (click)="closeRejectModal()"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="btn btn-danger px-4"
+            [disabled]="rejetForm.invalid"
+          >
+            <i class="fas fa-trash me-2"></i>Confirmer le rejet
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

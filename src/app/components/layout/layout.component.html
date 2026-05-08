@@ -1114,7 +1114,7 @@
               </li>
 
               <!-- Demandes des clients -->
-              <li
+              <!-- <li
                 class="nav-item"
                 [class.mm-active]="isSubMenuOpen('demandes-clients')"
               >
@@ -1143,7 +1143,7 @@
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> -->
               <!--
                       <li>
                         <a class="text-truncate align-self-center" href="#">
@@ -1196,7 +1196,7 @@
                   [class.collapsed]="!isSubMenuOpen('transactions')"
                 >
                   <i class="icon ion-cash"></i>
-                  <span>Transactions & opérations</span>
+                  <span>Transactions Internationnales</span>
                 </a>
                 <ul
                   class="sub-menu"
@@ -1206,21 +1206,21 @@
                   <li>
                     <a
                       class="nav-link-custom"
-                      routerLink="/transaction-internationale-procuration"
+                      routerLink="/transaction-sans-procuration"
                       routerLinkActive="active"
                       (click)="onMenuClick()"
                     >
-                      <span>Transactions par procuration</span>
+                      <span>Transactions sans procuration</span>
                     </a>
                   </li>
                   <li>
                     <a
                       class="nav-link-custom"
-                      routerLink="/validation-transaction-procuration"
+                      routerLink="/transaction-par-procuration"
                       routerLinkActive="active"
                       (click)="onMenuClick()"
                     >
-                      <span>Validation des transactions par procuration</span>
+                      <span>Transactions par procuration</span>
                     </a>
                   </li>
 
@@ -1237,7 +1237,7 @@
                 </ul>
               </li>
               <!-- utilisateurs -->
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="utilisateurs"
@@ -1247,10 +1247,16 @@
                   <i class="icon ion-person"></i>
                   <span>Liste des utilisateurs</span>
                 </a>
+              </li> -->
+              <li class="nav-item">
+                <a class="nav-link" (click)="onMenuClick()">
+                  <i class="icon ion-person"></i>
+                  <span>Liste des utilisateurs</span>
+                </a>
               </li>
 
               <!-- Alertes et Supervisions -->
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a
                   class="nav-link"
                   routerLink="alertes-supervisions"
@@ -1260,10 +1266,52 @@
                   <i class="icon ion-android-notifications"></i>
                   <span>Alertes & Supervisions</span>
                 </a>
+              </li> -->
+              <li class="nav-item">
+                <a class="nav-link" (click)="onMenuClick()">
+                  <i class="icon ion-android-notifications"></i>
+                  <span>Alertes & Supervisions</span>
+                </a>
               </li>
 
               <!-- Parametres -->
               <li class="nav-item" [class.mm-active]="isSubMenuOpen('params')">
+                <a
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('params', $event)"
+                  [class.collapsed]="!isSubMenuOpen('params')"
+                >
+                  <i class="icon ion-android-settings"></i>
+                  <span>Paramétrage</span>
+                </a>
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('params')"
+                  [class.mm-collapse]="!isSubMenuOpen('params')"
+                >
+                  <li>
+                    <a (click)="onMenuClick()">
+                      <span>Config. Alertes</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a (click)="onMenuClick()">
+                      <span>Config. Notifications</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a (click)="onMenuClick()">
+                      <span>Config. Notif Défaut User</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a (click)="onMenuClick()">
+                      <span>Mes Notifications</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <!-- <li class="nav-item" [class.mm-active]="isSubMenuOpen('params')">
                 <a
                   class="nav-link has-arrow"
                   (click)="toggleSubMenu('params', $event)"
@@ -1314,7 +1362,7 @@
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> -->
             }
           }
         </ul>

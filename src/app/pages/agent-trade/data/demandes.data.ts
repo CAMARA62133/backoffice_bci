@@ -1,45 +1,74 @@
 export interface DemandeTransactionInternationale {
   id: number;
-  // Infos Donneur d'ordre
+
+  // =========================
+  // DONNEUR D’ORDRE
+  // =========================
   raisonSocialeDO: string;
   adresseDO: string;
   compteTransfert: string;
-  soldeCompte: number; // Solde disponible du compte donneur
+  soldeCompte: number;
   compteCommission: string;
-  montantTransaction: number; // Montant de la transaction à effectuer
+
+  // =========================
+  // TRANSACTION
+  // =========================
+  montantTransaction: number;
   devise: string;
   fraisEtranger: string;
-  // Infos Opération
+
   motifEconomique: string;
   refDocument: string;
+
   typeTransaction: string;
-  autreTypeTransaction: string;
-  // Infos Bénéficiaire
+  autreTypeTransaction?: string;
+
+  // =========================
+  // BENEFICIAIRE
+  // =========================
   raisonSocialeB: string;
   adresseB: string;
+
   ibanNCompte: string;
+
   bankBeneficiaire: string;
   swifiBankBeneficiaire: string;
-  bankIntermediaire: string;
-  swifibankIntermediaire: string;
-  // Statut
-  statutDemande:
-    | 'En traitement'
-    | 'En attente validation'
-    | 'Valide'
-    | 'Rejete';
-  estDerogation: boolean;
-  valideParAdminBanque?: boolean;
-  dateValidation?: Date;
-  commentaireValidation?: string;
-  dtCreated: Date;
-  motifRejet?: string;
-}
 
+  bankIntermediaire?: string;
+  swifibankIntermediaire?: string;
+
+  // =========================
+  // WORKFLOW
+  // =========================
+  etapeValidation: 'AGENT_TRADE' | 'CONFORMITE' | 'DG_DGA' | 'FINALISATION';
+
+  statutDemande: 'EN_ATTENTE' | 'VALIDE' | 'REJETE';
+
+  // =========================
+  // DEROGATION / PROCURATION
+  // =========================
+  derogation: boolean;
+
+  ddiFile?: string | null;
+  assuranceFile?: string | null;
+  factureFile?: string | null;
+
+  // =========================
+  // VALIDATION
+  // =========================
+  dateValidation?: Date;
+
+  motifRejet?: string;
+
+  // =========================
+  // AUDIT
+  // =========================
+  dtCreated: Date;
+}
 // TOUTES LES DEMANDES DANS UN SEUL TABLEAU
 export const toutesLesDemandes: DemandeTransactionInternationale[] = [
   // =====================================================
-  // 1. TRANSACTIONS SANS DÉROGATION (En traitement)
+  // 1. TRANSACTIONS SANS DÉROGATION (EN_ATTENTE)
   // =====================================================
   {
     id: 1,
@@ -62,11 +91,13 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'SMSKKRSE',
     bankIntermediaire: 'Citibank N.A. (NEW YORK)',
     swifibankIntermediaire: 'CITIUS33',
-    statutDemande: 'En traitement',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
     dtCreated: new Date('2024-01-15T09:30:00'),
-    motifRejet: undefined,
   },
   {
     id: 2,
@@ -89,11 +120,13 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'BNPAFRPP',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'En traitement',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
     dtCreated: new Date('2024-01-16T10:15:00'),
-    motifRejet: undefined,
   },
   {
     id: 3,
@@ -116,11 +149,13 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'BOFAUS3N',
     bankIntermediaire: 'Wells Fargo Bank',
     swifibankIntermediaire: 'WFBIUS6S',
-    statutDemande: 'En traitement',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
     dtCreated: new Date('2024-01-17T14:20:00'),
-    motifRejet: undefined,
   },
   {
     id: 4,
@@ -143,11 +178,13 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'EBILAEAD',
     bankIntermediaire: 'Standard Chartered Bank',
     swifibankIntermediaire: 'SCBLUS33',
-    statutDemande: 'En traitement',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
     dtCreated: new Date('2024-01-18T11:45:00'),
-    motifRejet: undefined,
   },
   {
     id: 5,
@@ -170,15 +207,17 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'AGRIFRPP',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'En traitement',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
     dtCreated: new Date('2024-01-19T08:30:00'),
-    motifRejet: undefined,
   },
 
   // =====================================================
-  // 2. TRANSACTIONS AVEC DÉROGATION (En attente de validation Admin Banque)
+  // 2. TRANSACTIONS AVEC DÉROGATION
   // =====================================================
   {
     id: 6,
@@ -201,11 +240,10 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'DEUTDESS',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'En attente validation',
-    estDerogation: true,
-    valideParAdminBanque: false,
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    derogation: true,
     dtCreated: new Date('2024-01-20T09:00:00'),
-    motifRejet: undefined,
   },
   {
     id: 7,
@@ -228,16 +266,11 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'CATIUS44',
     bankIntermediaire: 'JPMorgan Chase',
     swifibankIntermediaire: 'CHASUS33',
-    statutDemande: 'En attente validation',
-    estDerogation: true,
-    valideParAdminBanque: false,
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    derogation: true,
     dtCreated: new Date('2024-01-21T10:15:00'),
-    motifRejet: undefined,
   },
-
-  // =====================================================
-  // 3. TRANSACTIONS AVEC DÉROGATION (Validées par Admin Banque - En traitement)
-  // =====================================================
   {
     id: 8,
     raisonSocialeDO: 'CAMARA CONSTRUCTION',
@@ -259,13 +292,10 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'UBSWCHZH',
     bankIntermediaire: 'Credit Suisse',
     swifibankIntermediaire: 'CRESCHZZ',
-    statutDemande: 'En traitement',
-    estDerogation: true,
-    valideParAdminBanque: true,
-    dateValidation: new Date('2024-01-22T14:30:00'),
-    commentaireValidation: 'Dérogation acceptée - documents conformes',
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    derogation: true,
     dtCreated: new Date('2024-01-20T11:00:00'),
-    motifRejet: undefined,
   },
   {
     id: 9,
@@ -288,13 +318,10 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'CITIUS33',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'En traitement',
-    estDerogation: true,
-    valideParAdminBanque: true,
-    dateValidation: new Date('2024-01-23T09:45:00'),
-    commentaireValidation: 'Dossier complet - dérogation accordée',
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'EN_ATTENTE',
+    derogation: true,
     dtCreated: new Date('2024-01-21T15:20:00'),
-    motifRejet: undefined,
   },
 
   // =====================================================
@@ -321,11 +348,14 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'APPLUS33',
     bankIntermediaire: 'Citibank',
     swifibankIntermediaire: 'CITIUS33',
-    statutDemande: 'Valide',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'FINALISATION',
+    statutDemande: 'VALIDE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
+    dateValidation: new Date('2024-01-12T14:00:00'),
     dtCreated: new Date('2024-01-10T08:00:00'),
-    motifRejet: undefined,
   },
   {
     id: 102,
@@ -348,11 +378,14 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'NESTSA55',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'Valide',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'FINALISATION',
+    statutDemande: 'VALIDE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
+    dateValidation: new Date('2024-01-14T09:00:00'),
     dtCreated: new Date('2024-01-12T11:30:00'),
-    motifRejet: undefined,
   },
   {
     id: 103,
@@ -375,13 +408,11 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'BNPAFRPP',
     bankIntermediaire: 'Credit Agricole',
     swifibankIntermediaire: 'AGRIFRPP',
-    statutDemande: 'Valide',
-    estDerogation: true,
-    valideParAdminBanque: true,
+    etapeValidation: 'DG_DGA',
+    statutDemande: 'VALIDE',
+    derogation: true,
     dateValidation: new Date('2024-01-14T16:20:00'),
-    commentaireValidation: 'Dérogation accordée suite à étude du dossier',
     dtCreated: new Date('2024-01-10T14:00:00'),
-    motifRejet: undefined,
   },
   {
     id: 104,
@@ -404,11 +435,14 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'BARCGB22',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'Valide',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'FINALISATION',
+    statutDemande: 'VALIDE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
+    dateValidation: new Date('2024-01-14T15:30:00'),
     dtCreated: new Date('2024-01-13T09:15:00'),
-    motifRejet: undefined,
   },
   {
     id: 105,
@@ -431,13 +465,11 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'MHCBJPJT',
     bankIntermediaire: 'JPMorgan Chase',
     swifibankIntermediaire: 'CHASUS33',
-    statutDemande: 'Valide',
-    estDerogation: true,
-    valideParAdminBanque: true,
+    etapeValidation: 'DG_DGA',
+    statutDemande: 'VALIDE',
+    derogation: true,
     dateValidation: new Date('2024-01-15T11:00:00'),
-    commentaireValidation: 'Dossier complet - dérogation validée',
     dtCreated: new Date('2024-01-09T10:30:00'),
-    motifRejet: undefined,
   },
 
   // =====================================================
@@ -453,7 +485,7 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     montantTransaction: 12000.0,
     devise: 'USD',
     fraisEtranger: 'Bénéficiaire',
-    motifEconomique: 'Documents incomplets',
+    motifEconomique: 'Importation de marchandises diverses',
     refDocument: 'REJ-2024-001',
     typeTransaction: 'Importation marchandises',
     autreTypeTransaction: '',
@@ -464,9 +496,12 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'IBKCCNBJ',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'Rejete',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'AGENT_TRADE',
+    statutDemande: 'REJETE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
     dtCreated: new Date('2024-01-05T08:00:00'),
     motifRejet: 'Solde insuffisant',
   },
@@ -480,7 +515,7 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     montantTransaction: 100000.0,
     devise: 'USD',
     fraisEtranger: 'Donneur',
-    motifEconomique: 'Dérogation non justifiée',
+    motifEconomique: 'Prestation de consulting international',
     refDocument: 'DER-2024-002',
     typeTransaction: 'Autre',
     autreTypeTransaction: 'Prestation consulting',
@@ -491,9 +526,9 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'GOLDUS33',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'Rejete',
-    estDerogation: true,
-    valideParAdminBanque: false,
+    etapeValidation: 'CONFORMITE',
+    statutDemande: 'REJETE',
+    derogation: true,
     dtCreated: new Date('2024-01-25T16:00:00'),
     motifRejet: 'Dérogation refusée - motif économique insuffisant',
   },
@@ -507,7 +542,7 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     montantTransaction: 15000.0,
     devise: 'USD',
     fraisEtranger: 'Partager',
-    motifEconomique: 'Fonds non justifiés',
+    motifEconomique: 'Assistance à la famille',
     refDocument: 'REJ-2024-003',
     typeTransaction: 'Assistance familiale',
     autreTypeTransaction: '',
@@ -518,11 +553,13 @@ export const toutesLesDemandes: DemandeTransactionInternationale[] = [
     swifiBankBeneficiaire: 'SOGEFRPP',
     bankIntermediaire: '',
     swifibankIntermediaire: '',
-    statutDemande: 'Rejete',
-    estDerogation: false,
-    valideParAdminBanque: false,
+    etapeValidation: 'CONFORMITE',
+    statutDemande: 'REJETE',
+    ddiFile: '/pdfs/ddi.pdf',
+    assuranceFile: '/pdfs/assurance.pdf',
+    factureFile: '/pdfs/facture.pdf',
+    derogation: false,
     dtCreated: new Date('2024-01-28T14:20:00'),
     motifRejet: 'Non conformité aux règles AML/CFT',
   },
 ];
-
