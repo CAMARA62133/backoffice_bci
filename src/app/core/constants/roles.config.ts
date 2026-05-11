@@ -1,0 +1,22 @@
+// src/app/core/constants/roles.config.ts
+export const ROLES = {
+  SUPPORT_N1: '1',
+  SUPPORT_N2_EXPERT: '2',
+  AGENT_CONFORMITE: '3',
+  RESPONSABLE_CONFORMITE: '4',
+  SUPERVISEUR_OPERATIONNEL: '5',
+  CHARGE_RELATION_CLIENTELE: '6',
+  ADMIN_SYSTEME_IT: '7',
+  AUDITEUR_INTERNE: '8',
+  DSI_ARCHITECTE: '9',
+  ADMIN_INTEGRATEUR: '10',
+  INITIATEUR: '11',
+  ASSISTANT_COMPTABLE: '12',
+  COMPTABLE: '13',
+  CHEF_COMPTABLE: '14',
+  DAF: '15',
+  ADMIN_INTEGRATEUR_BANQUE: '16', // <--- Maintenant compatible avec ton iRoleID: "16"
+  TRADE_AGENT: '17',
+  DG: '18',
+  DGA: '19',
+};

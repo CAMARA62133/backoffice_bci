@@ -6,43 +6,53 @@ import { AuthService } from '../../../services/auth/authService/auth.service';
   providedIn: 'root',
 })
 export class RoleGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    const user = this.authService.getUserInfo() || {};
+    const user = this.authService.getUserInfo();
 
-    const allowedRoles =
-      (route.data['roles'] as Array<number | string>) || null;
-    const excludedRoles =
-      (route.data['exclude'] as Array<number | string>) || null;
-
-    console.log('allowedRoles:', route.data['roles']);
-    console.log('exclude:', route.data['exclude']);
-    console.log('user.iRoleID:', user.iRoleID, typeof user.iRoleID);
-
+    // 1. Vérification de l'existence de l'utilisateur et de son iRoleID
     if (!user || user.iRoleID === undefined || user.iRoleID === null) {
       this.router.navigate(['/login']);
       return false;
     }
 
-    const userRoleStr = String(user.iRoleID);
+    // Conversion forcée en nombre pour garantir la comparaison
+    const userRoleID = Number(user.iRoleID);
 
-    if (excludedRoles) {
-      const excludedStr = excludedRoles.map((r) => String(r));
-      if (excludedStr.includes(userRoleStr)) {
+    // Récupération des données de la route avec un typage propre
+    const allowedRoles = route.data['roles'] as Array<number> | undefined;
+    const excludedRoles = route.data['exclude'] as Array<number> | undefined;
+
+    // LOGS pour le debug (à retirer en production)
+    console.log('User Role ID:', userRoleID);
+    console.log('Allowed:', allowedRoles);
+    console.log('Excluded:', excludedRoles);
+
+    // 2. Gestion des exclusions (Prioritaire)
+    // Si le rôle de l'utilisateur est dans la liste "exclude", on bloque.
+    if (excludedRoles && excludedRoles.length > 0) {
+      if (excludedRoles.map(Number).includes(userRoleID)) {
         this.router.navigate(['/unauthorized']);
         return false;
       }
     }
 
-    if (allowedRoles) {
-      const allowedStr = allowedRoles.map((r) => String(r));
-      if (!allowedStr.includes(userRoleStr)) {
+    // 3. Gestion des autorisations
+    // Si "roles" est défini, l'utilisateur DOIT en faire partie.
+    if (allowedRoles && allowedRoles.length > 0) {
+      const isAuthorized = allowedRoles.map(Number).includes(userRoleID);
+
+      if (!isAuthorized) {
         this.router.navigate(['/unauthorized']);
         return false;
       }
     }
 
+    // Si aucune restriction n'a bloqué, on autorise l'accès
     return true;
   }
 }

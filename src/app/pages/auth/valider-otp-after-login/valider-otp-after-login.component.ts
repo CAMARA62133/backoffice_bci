@@ -17,6 +17,7 @@ import { OtpLoginServiceService } from '../../../services/auth/otpLogin/otp-logi
 import { AuthService as NodeAuthService } from '../../../core/node/services/auth/auth.service';
 import { InactivityServiceTsService } from '../../../services/auth/inactivity/inactivity.service';
 import { NotificationService } from '../../../services/notification/notification.service';
+import { ROLES } from '../../../core/constants/roles.config';
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
@@ -30,7 +31,7 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
   otpValues: string[] = ['', '', '', ''];
   isLoading = false;
   errorMessage = '';
-
+  readonly ROLES = ROLES;
   // Contrôle des modals
   showModalSuccess: boolean = false;
   showModalError: boolean = false;
@@ -143,33 +144,42 @@ export class ValiderOtpAfterLoginComponent implements AfterViewInit, OnInit {
         console.log('all respnse : ', response);
         this.isLoading = false;
 
-        if (response?.status && response.status === 200) {
-          // Sauvegarde dans AuthService et localStorage
+        if (response?.status === 200) {
+          // Sauvegarde des infos
           this.authService.setUserInfo(response.data);
           this.authService.setUserInfoConfig(response.config);
-          // this.authService.saveToken(response.token);
-
-          console.log('res : ', response);
 
           this.notification.success(response?.message);
-          // this.toastr.success(response?.message, '', {
-          //   positionClass: 'toast-custom-center',
-          // });
           this.inactivityService.startWatching();
-          const role = response?.data?.vcRoleName?.trim();
-          // Redirection en fonction du role
-          if (role === 'Agent Conformité') {
-            this.router.navigate(['/agent-dashboard']);
-          } else if (role === 'Administrateur Système (IT)') {
-            this.router.navigate(['/org-dashboard']);
-          } else if (role === 'Trade Agent') {
-            this.router.navigate(['/agent-trade-dashboard']);
-          } else {
-            this.router.navigate(['/dashboard']);
+
+          // RÉCUPÉRATION DE L'ID (on s'assure que c'est une string pour matcher ton config)
+          const roleId = response?.data?.iRoleID?.toString();
+
+          // REDIRECTION BASÉE SUR L'ID
+          switch (roleId) {
+            case ROLES.AGENT_CONFORMITE:
+              this.router.navigate(['/agent-dashboard']);
+              break;
+
+            case ROLES.ADMIN_SYSTEME_IT:
+              this.router.navigate(['/org-dashboard']);
+              break;
+
+            case ROLES.TRADE_AGENT:
+              this.router.navigate(['/agent-trade-dashboard']);
+              break;
+            case ROLES.DG:
+            case ROLES.DGA:
+              this.router.navigate(['/dg-dga-dashboard']);
+              break;
+            default:
+              this.router.navigate(['/dashboard']);
+              break;
           }
         } else {
-          // Apres 3 tentatives on bloque l'utilisateur et on lui redirige sur la page de connexion
-          if (response?.status === 405 || response?.status === '405') {
+          // Gestion du blocage (405)
+          // Utilisation de == pour accepter "405" ou 405 sans se poser de questions
+          if (response?.status == 405) {
             this.router.navigate(['/login']);
           }
 

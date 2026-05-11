@@ -20,73 +20,31 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
-  ): Observable<boolean> | Promise<boolean> | boolean {
-    // const user = this.authService.getCurrentUser();
-    //
-    // if(!user || !this.authService.isAuthenticated()) {
-    //   this.authService.logout();
-    //   this.router.navigate(['/login']);
-    //   return false;
-    // }
-    //
-    // const exceptedRoles = route.data['roles'] as Array<string>;
-    // if(exceptedRoles && exceptedRoles.length > 0 && !exceptedRoles.includes(user?.vcRoleName)) {
-    //   // Si l'utilisateur n'a pas le rôle requis, redirection vers page par défaut
-    //   this.router.navigate(['/unauthorized']);
-    //   return false;
-    // }
-
-    // return true;
-
+  ): Observable<boolean> {
+    // On vérifie la session auprès du serveur (checkSession)
     return this.authService.checkSession().pipe(
       map((isLoggedIn: boolean) => {
-        // S'il n'est pas connecter on lui redirige sur la page login
         if (!isLoggedIn) {
+          // Si pas connecté, redirection vers login avec l'URL de retour
           this.router.navigate(['/login'], {
             queryParams: { returnUrl: state.url },
           });
           return false;
         }
 
-        // Sinon on recuperer l'utilisateur dans le localStorage
+        // On vérifie si les infos utilisateur sont présentes localement
         const user = this.authService.getCurrentUser();
-
-        // Si n'y pas d'utilisateur dans le locaStorage => deconnexion
         if (!user) {
-          this.router.navigate(['/login'], {
-            queryParams: { returnUrl: state.url },
-          });
+          this.router.navigate(['/login']);
           return false;
-          // this.authService.logout();
-          // this.router.navigate(['/login']);
-          // return false;
         }
 
-        // Variables qui contient la liste roles dans une array
-        const exceptedRoles = route.data['roles'] as string[];
-
-        // Sécurité : On récupère le rôle et on applique .trim() pour supprimer les espaces invisibles
-        const userRole = user.vcRoleName ? user.vcRoleName.trim() : '';
-
-        // S'il y a des rôles définis dans la route
-        if (exceptedRoles?.length) {
-          // On nettoie aussi les rôles attendus dans la route par précaution
-          const cleanedExceptedRoles = exceptedRoles.map((role) => role.trim());
-
-          if (!cleanedExceptedRoles.includes(userRole)) {
-            console.warn(
-              `Accès refusé : Rôle utilisateur '${userRole}' non présent dans`,
-              cleanedExceptedRoles,
-            );
-            this.router.navigate(['unauthorized']);
-            return false;
-          }
-        }
-        // Sinon on retour true
+        // NOTE : On ne vérifie plus les rôles par "vcRoleName" ici.
+        // C'est le RoleGuard qui s'en chargera via "iRoleID" de manière plus sûre.
         return true;
       }),
 
-      // En cas d'erreur
+      // En cas d'erreur serveur ou réseau
       catchError(() => {
         this.router.navigate(['/login'], {
           queryParams: { returnUrl: state.url },
@@ -94,53 +52,5 @@ export class AuthGuard implements CanActivate {
         return of(false);
       }),
     );
-
-    // Vérifie la session côté serveur via cookie
-    // return this.authService.checkSession().pipe(
-    //   map((isLoggedIn: boolean) => {
-    //     if (isLoggedIn) {
-    //       console.log('Logged in', isLoggedIn);
-    //       const user = this.authService.getCurrentUser();
-    //
-    //       // Si l'utilisateur existe
-    //       if (!user) {
-    //         this.authService.logout();
-    //         this.router.navigate(['/login']);
-    //         return false;
-    //       }
-    //
-    //       console.log('user', user);
-    //       // Verifier les roels
-    //       const exceptedRoles = route.data['roles'] as Array<string>;
-    //       if (exceptedRoles && exceptedRoles.length > 0 && !exceptedRoles.includes(user?.vcRoleName)) {
-    //         console.log('non autoriser')
-    //         // Si l'utilisateur n'a pas le rôle requis, redirection vers page par défaut
-    //         this.router.navigate(['/unauthorized']);
-    //         return false;
-    //       }
-    //
-    //       return true;
-    //     }
-    //
-    //     // Session invalide → redirection login
-    //     this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
-    //     return false;
-    //   }),
-    //
-    //   catchError(() => {
-    //     // En cas d’erreur serveur → redirection login
-    //     this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}});
-    //     return of(false);
-    //   })
-    // );
-
-    // Vérifier si l'utilisateur est authentifié et si le token n'est pas expiré
-    // if (this.authService.isAuthenticated()) {
-    //   return true;
-    // } else {
-    //   this.authService.logout();
-    //   this.router.navigate(['/login']);
-    //   return false;
-    // }
   }
 }

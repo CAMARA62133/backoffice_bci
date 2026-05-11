@@ -1,0 +1,332 @@
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
+          <div>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Dashboard {{ getUser()?.vcRoleName }}
+            </h4>
+            <p class="text-secondary mb-sm-0 font-size-13">
+              Suivi en temps réel des performances et activités
+            </p>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid mt-4">
+    <!-- Première Rangée : 3 Blocs -->
+    <div class="row mb-2">
+      <!-- Total Entreprises -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                  Total Entreprises
+                </p>
+                <h3 class="fw-bold text-dark mb-1">168</h3>
+              </div>
+              <div class="stat-icon bg-primary-subtle rounded-3 p-3">
+                <i class="fas fa-building fa-2x text-primary"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Transactions -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                  Total Transactions
+                </p>
+                <h3 class="fw-bold text-dark mb-1">12,845</h3>
+
+              </div>
+              <div class="stat-icon bg-success-subtle rounded-3 p-3">
+                <i class="fas fa-exchange-alt fa-2x text-success"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions/Jour -->
+      <div class="col-md-12 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                  Transactions/Jour
+                </p>
+                <h3 class="fw-bold text-dark mb-1">428</h3>
+  
+              </div>
+              <div class="stat-icon bg-warning-subtle rounded-3 p-3">
+                <i class="fas fa-calendar-day fa-2x text-warning"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deuxième Rangée : Status (3 Blocs) -->
+    <div class="row">
+      <!-- En Attente -->
+      <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                  En Attente
+                </p>
+                <h3 class="fw-bold text-warning mb-1">234</h3>
+               
+              </div>
+              <div class="stat-icon bg-warning-subtle rounded-3 p-3">
+                <i class="fas fa-hourglass-half fa-2x text-warning"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Validées -->
+      <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                  Validées
+                </p>
+                <h3 class="fw-bold text-success mb-1">11,892</h3>
+
+              </div>
+              <div class="stat-icon bg-success-subtle rounded-3 p-3">
+                <i class="fas fa-check-circle fa-2x text-success"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rejetées -->
+      <div class="col-md-4 mb-4">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                  Rejetées
+                </p>
+                <h3 class="fw-bold text-danger mb-1">719</h3>
+
+              </div>
+              <div class="stat-icon bg-danger-subtle rounded-3 p-3">
+                <i class="fas fa-times-circle fa-2x text-danger"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <!-- Graphique Transactions par période -->
+      <!-- Graphique Transactions par période -->
+      <div class="col-12 col-xl-8">
+        <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+          <!-- Header avec Titre et Boutons de Période -->
+          <div
+            class="card-header bg-white border-0 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center py-3 gap-3"
+          >
+            <div>
+              <h5 class="fw-bold text-dark mb-1">Évolution des transactions</h5>
+              <p class="text-muted mb-0 small">
+                Transactions par {{ getPeriodLabel() }}
+              </p>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+              <!-- Groupe de boutons intégré ici -->
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Sélection de période"
+              >
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  [class.active]="selectedPeriod === 'day'"
+                  (click)="changePeriod('day')"
+                >
+                  Jour
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  [class.active]="selectedPeriod === 'week'"
+                  (click)="changePeriod('week')"
+                >
+                  Semaine
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  [class.active]="selectedPeriod === 'month'"
+                  (click)="changePeriod('month')"
+                >
+                  Mois
+                </button>
+              </div>
+
+              <!-- Badge de rappel -->
+              <div
+                class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill d-none d-md-block"
+              >
+                {{ getPeriodLabel() | titlecase }}
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body pt-0">
+            <div class="chart-container" style="min-height: 350px">
+              <apx-chart
+                [series]="evolutionChart.series"
+                [chart]="evolutionChart.chart"
+                [xaxis]="evolutionChart.xaxis"
+                [stroke]="evolutionChart.stroke"
+                [colors]="evolutionChart.colors"
+                [dataLabels]="evolutionChart.dataLabels"
+                [grid]="evolutionChart.grid"
+                [markers]="evolutionChart.markers"
+                [tooltip]="evolutionChart.tooltip"
+                [title]="evolutionChart.title"
+                [yaxis]="evolutionChart.yaxis"
+              ></apx-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Graphique Statut Transactions -->
+      <div class="col-12 col-xl-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="fw-bold text-dark mb-1">Statut des transactions</h5>
+            <p class="text-muted mb-0 small">Répartition par statut</p>
+          </div>
+          <div
+            class="card-body d-flex justify-content-center align-items-center"
+          >
+            <div class="chart-container w-100">
+              <apx-chart
+                [title]="statusChart.title"
+                [series]="statusChart.series"
+                [labels]="statusChart.labels"
+                [chart]="statusChart.chart"
+                [colors]="statusChart.colors"
+                [dataLabels]="statusChart.dataLabels"
+                [plotOptions]="statusChart.plotOptions"
+                [fill]="statusChart.fill"
+                [tooltip]="statusChart.tooltip"
+                [legend]="statusChart.legend"
+              ></apx-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tendance mensuelle -->
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+          <div class="card-header bg-white border-0 py-3">
+            <h5 class="fw-bold text-dark mb-1">Tendance mensuelle</h5>
+            <p class="text-muted mb-0 small">Comparaison mois par mois</p>
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <apx-chart
+                [series]="monthlyTrend.series"
+                [chart]="monthlyTrend.chart"
+                [xaxis]="monthlyTrend.xaxis"
+                [colors]="monthlyTrend.colors"
+                [stroke]="monthlyTrend.stroke"
+                [dataLabels]="monthlyTrend.dataLabels"
+                [fill]="monthlyTrend.fill"
+                [tooltip]="monthlyTrend.tooltip"
+                [legend]="monthlyTrend.legend"
+              ></apx-chart>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dernières transactions -->
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+          <div
+            class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
+          >
+            <div>
+              <h5 class="fw-bold text-dark mb-1">Dernières transactions</h5>
+              <p class="text-muted mb-0 small">Activité récente</p>
+            </div>
+            <button class="btn btn-sm btn-link text-primary">Voir tout</button>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="bg-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Entreprise</th>
+                    <th>Montant</th>
+                    <th>Statut</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transaction of recentTransactions">
+                    <td class="small text-muted">#{{ transaction.id }}</td>
+                    <td class="small">{{ transaction.company }}</td>
+                    <td class="fw-semibold">
+                      {{ transaction.amount | currency: "EUR" }}
+                    </td>
+                    <td>
+                      <span
+                        class="badge"
+                        [class.bg-success]="transaction.status === 'validé'"
+                        [class.bg-warning]="transaction.status === 'en attente'"
+                        [class.bg-danger]="transaction.status === 'rejeté'"
+                      >
+                        {{ transaction.status }}
+                      </span>
+                    </td>
+                    <td class="small text-muted">
+                      {{ transaction.date | date: "dd/MM/yyyy HH:mm" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

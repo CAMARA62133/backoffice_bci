@@ -57,6 +57,10 @@ import { TransactionParProcurationComponent } from './pages/agent-trade/transact
 import { TransactionSansProcurationComponent } from './pages/agent-trade/transaction-sans-procuration/transaction-sans-procuration.component';
 import { TransactionDetailComponent } from './pages/agent-trade/transaction-detail/transaction-detail.component';
 
+import { ROLES } from './core/constants/roles.config';
+import { RoleGuard } from './core/guards/role/role.guard';
+import { DgDgaDashboardComponent } from './pages/dg-dga/dg-dga-dashboard/dg-dga-dashboard.component';
+
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
   {
@@ -64,89 +68,75 @@ export const routes: Routes = [
     title: 'BCI - Online | Connexion',
     component: LoginComponent,
   },
-
   {
     path: 'valider-otp-login',
     title: 'BCI - Online | Validation du code OTP',
     component: ValiderOtpAfterLoginComponent,
   },
-
   {
     path: 'validate-email',
     title: "BCI - Online | Validation de l'email",
     component: LoadingVerifyEmailPageComponent,
   },
-
   {
     path: 'validate-email2',
     title: "BCI - Online | Validation de l'email",
     component: VerifyemailAfterchangePageComponent,
   },
-
   {
     path: 'valider-otp-email',
     title: 'BCI - Online | Validation du code OTP',
     component: ValidateOtpAfterVerifiedEmailComponent,
   },
-
   {
     path: 'reinitialiser-mot-de-passe',
     title: 'BCI - Online | Mot de passe oublié',
     component: ReinitialiserPasswordComponent,
   },
-
   {
     path: 'reset',
     title: 'BCI - Online | Réinitialisation du mot de passe',
     component: LoadingPageComponent,
   },
-
   {
     path: 'nouveau-mot-de-passe',
     title: 'BCI - Online | Nouveau mot de passe',
     component: FormNouveauPasswordComponent,
   },
-
   {
     path: 'org-nouveau-mot-de-passe',
     title: 'BCI - Online | Nouveau mot de passe',
     component: ResetOrgPasswordComponent,
   },
-
   {
     path: 'not-found',
     title: 'BCI - Online | Page non trouvée',
     component: Page404NotFoundComponent,
   },
-
   {
     path: 'lien-expire',
     title: 'BCI - Online | Lien expiré',
     component: Page404Component,
   },
-
   {
     path: 'valider-otp',
     title: 'BCI - Online | Validation du code OTP de modification',
     component: OtpAfterChangeInfoComponent,
   },
-
   {
     path: 'test-diagram',
     title: 'BCI - Online | Test Diagram',
     component: MyDiagramComponentComponent,
   },
-
   {
     path: 'unauthorized',
     title: 'BCI - Online | Unauthorized',
     component: UnauthorizedComponent,
   },
 
-  // ==================== ADMIN section ====================
+  // ==================== SECTION PRIVÉE (LAYOUT) ====================
   {
     path: '',
-    // loadComponent: () => import('./components/layout/layout.component').then(m => m.LayoutComponent),
     component: LayoutComponent,
     children: [
       {
@@ -155,320 +145,384 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
 
+      // --- ADMIN INTEGRATEUR ---
       {
         path: 'dashboard',
         title: 'BCI - Online | Tableau de bord',
         component: DashboardComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
         data: {
-          roles: ['Admin integrateur', 'Admin integrateur banque'],
+          roles: [ROLES.ADMIN_INTEGRATEUR, ROLES.ADMIN_INTEGRATEUR_BANQUE],
         },
       },
-
+      {
+        path: 'dg-dga-dashboard',
+        title: 'BCI - Online | Tableau de bord',
+        component: DgDgaDashboardComponent,
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [ROLES.DG, ROLES.DGA],
+        },
+      },
       {
         path: 'organisations',
         title: 'BCI - Online | Listes des Organisations',
         component: OrganisationsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.ADMIN_INTEGRATEUR,
+            ROLES.ADMIN_INTEGRATEUR_BANQUE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'organisations/:id/liste-entreprise',
         title: "BCI - Online | Listes des entreprises de l'organisation",
         component: EntreprisesComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.ADMIN_INTEGRATEUR,
+            ROLES.ADMIN_INTEGRATEUR_BANQUE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'historique-transaction',
         title: 'BCI - Online | Historique des transactions',
         component: HistoriqueTransactionComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.ADMIN_INTEGRATEUR,
+            ROLES.ADMIN_INTEGRATEUR_BANQUE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'transaction-internationale',
         title: 'BCI - Online | Historique des transactions internationales',
         component: TransactionInternationalComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.ADMIN_INTEGRATEUR,
+            ROLES.ADMIN_INTEGRATEUR_BANQUE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'detail-transaction-multiple/:id',
         title: 'BCI - Détail transaction multiple',
         component: DetailTransactionMultipleComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.ADMIN_INTEGRATEUR,
+            ROLES.ADMIN_INTEGRATEUR_BANQUE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'transaction-multiple',
         title: 'BCI - Online | Transactions multiples',
         component: TransactionMultipleComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.ADMIN_INTEGRATEUR,
+            ROLES.ADMIN_INTEGRATEUR_BANQUE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'souscription-client',
         title: 'BCI - Online | Souscription des clients',
         component: SouscriptionClientComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [ROLES.ADMIN_INTEGRATEUR, ROLES.ADMIN_INTEGRATEUR_BANQUE],
+        },
       },
       {
         path: 'logs-utilisateurs',
         title: 'BCI - Online | Logs des Utilisateurs',
         component: LogUserComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [ROLES.ADMIN_INTEGRATEUR, ROLES.ADMIN_INTEGRATEUR_BANQUE],
+        },
       },
-
       {
         path: 'logs-organisations',
         title: 'BCI - Online | Logs des Organisations',
         component: LogOrgComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [ROLES.ADMIN_INTEGRATEUR, ROLES.ADMIN_INTEGRATEUR_BANQUE],
+        },
       },
-
       {
         path: 'utilisateurs',
         title: 'BCI - Online | Listes des Utilisateurs',
         component: UtilisteurComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
-      },
-
-      {
-        path: 'modifier-mon-profile',
-        title: 'BCI - Online | Modifier mon Profile',
-        component: ModifierMesInfosComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
         data: {
-          roles: [
-            'Admin integrateur',
-            'Admin integrateur banque',
-            'Agent Conformité',
-            'Administrateur Système (IT)',
-          ],
+          roles: [ROLES.ADMIN_INTEGRATEUR, ROLES.ADMIN_INTEGRATEUR_BANQUE],
         },
       },
-
       {
         path: 'configuration-notifications',
         title: 'BCI - Online | Configuration Notifications',
         component: NotificationsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', 'Admin integrateur banque'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [ROLES.ADMIN_INTEGRATEUR, ROLES.ADMIN_INTEGRATEUR_BANQUE],
+        },
       },
 
+      // --- PROFIL (MULTI-ROLES) ---
+      {
+        path: 'modifier-mon-profile',
+        title: 'BCI - Online | Modifier mon Profile',
+        component: ModifierMesInfosComponent,
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.ADMIN_INTEGRATEUR,
+            ROLES.ADMIN_INTEGRATEUR_BANQUE,
+            ROLES.AGENT_CONFORMITE,
+            ROLES.ADMIN_SYSTEME_IT,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
+      },
+
+      // --- CONFIGURATION SPECIFIQUE ---
       {
         path: 'configuration-alertes',
         title: 'BCI - Online | Configuration Alertes',
         component: AlertesComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', ''] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_INTEGRATEUR] },
       },
-
       {
         path: 'configuration-notif-user-defaut',
         title: 'BCI - Online | Configuration Notification par défaut',
         component: ConfigUserDefautNotifsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', ''] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_INTEGRATEUR] },
       },
-
       {
         path: 'mes-notifications',
         title: 'BCI - Online | Mes notifications',
         component: MesNotificationsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Admin integrateur', ''] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_INTEGRATEUR] },
       },
 
-      // =========== Organisations =================
+      // --- ORGANISATIONS (ADMIN IT) ---
       {
         path: 'org-dashboard',
         title: 'BCI - Online | Tableau de bord Organisation',
         component: OrgDashboardComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT] },
       },
-
       {
         path: 'org-utilisateur',
         title: 'BCI - Online | Liste des utilisateurs',
         component: UtilisteurComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT] },
       },
-
       {
         path: 'org-utilisateur/:id',
         title: 'BCI - Online | Liste des utilisateurs',
         component: OrgFicheUtilisateurComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT] },
       },
-
       {
         path: 'org-entreprise',
         title: 'BCI - Online | Liste des entreprises',
         component: OrgListEntrepriseComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT] },
       },
-
       {
         path: 'org-entreprise/:id',
         title: 'BCI - Online | Fiche des entreprises',
         component: OrgFicheEntrepriseComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT] },
       },
-
       {
         path: 'repporting-export',
         title: 'BCI - Online | Repportings et Exports',
         component: RepportingExportComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)', 'Admin integrateur'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT, ROLES.ADMIN_INTEGRATEUR] },
       },
-
       {
         path: 'transactions-operations',
         title: 'BCI - Online | Transactions et Operations',
         component: TransactionsOperationsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)', 'Admin integrateur'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT, ROLES.ADMIN_INTEGRATEUR] },
       },
-
       {
         path: 'alertes-supervisions',
         title: 'BCI - Online | Alertes et supervisions',
         component: AlertesSupervisionsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)', 'Admin integrateur'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT, ROLES.ADMIN_INTEGRATEUR] },
       },
-
       {
         path: 'beneficiaires',
         title: 'BCI - Online | Liste des beneficiaires',
         component: BeneficiaireComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Administrateur Système (IT)'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT] },
       },
 
-      // ========== Agent de conformite ==================
+      // --- AGENT DE CONFORMITÉ ---
       {
         path: 'agent-dashboard',
         title: 'BCI - Online | Tableau de bord Agent',
         component: AgentDashboardComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Agent Conformité'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.AGENT_CONFORMITE] },
       },
-
       {
         path: 'agent-demandes',
         title: 'BCI - Online | Liste des demandes de souscriptions',
         component: AgentListeDemandesComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Agent Conformité'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.AGENT_CONFORMITE] },
       },
-
       {
         path: 'agent-demandes/:id',
         title: 'BCI - Online | Fiche demandes de souscriptions',
         component: AgentFicheDemandesComponent,
-        canActivate: [AuthGuard, nodeSessionGuard],
-        data: { roles: ['Agent Conformité'] },
+        // Combinaison possible avec d'autres guards
+        canActivate: [AuthGuard, RoleGuard, nodeSessionGuard],
+        data: { roles: [ROLES.AGENT_CONFORMITE] },
       },
-
       {
         path: 'agent-entreprise',
         title: 'BCI - Online | Liste des entreprises',
         component: AgentListeEntrepriseComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Agent Conformité'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.AGENT_CONFORMITE] },
       },
-
       {
         path: 'entreprise/new',
         title: 'BCI - Online | Crée une entreprise',
         component: CreateEntrepriseComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Agent Conformité'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.AGENT_CONFORMITE] },
       },
-
       {
         path: 'agent-entreprise/:id',
         title: 'BCI - Online | Fiche entreprise',
         component: AgentFicheEntrepriseComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Agent Conformité'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.AGENT_CONFORMITE] },
       },
-
       {
         path: 'facturiers',
         title: 'BCI - Online | Liste des facturiés',
         component: FacturiesComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Agent Conformité'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.AGENT_CONFORMITE] },
       },
       {
         path: 'operateurs-mobiles',
         title: 'BCI - Online | Liste des opérateurs mobiles',
         component: MobileOperatorComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Agent Conformité'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.AGENT_CONFORMITE] },
       },
 
-      // ========== agent trade ==================
-
+      // --- AGENT TRADE ---
       {
         path: 'agent-trade-dashboard',
         title: 'BCI - Online | Tableau de bord Agent Trade',
         component: AgentTradeDashboardComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Trade Agent'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: { roles: [ROLES.TRADE_AGENT] },
       },
-
-      // {
-      //   path: 'demandes-clients',
-      //   title: 'BCI - Online | Liste des demandes de souscriptions des clients',
-      //   component: DemandesClientsComponent,
-      //   canActivate: [AuthGuard],
-      //   data: { roles: ['Trade Agent'] },
-      // },
-
       {
         path: 'transaction-detail/:id',
         title: 'BCI - Détail de la demande de transaction',
         component: TransactionDetailComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Trade Agent'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.TRADE_AGENT,
+            ROLES.AGENT_CONFORMITE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'transaction-par-procuration',
         title: 'BCI - Online | Transactions internationales par procuration',
         component: TransactionParProcurationComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Trade Agent'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.TRADE_AGENT,
+            ROLES.AGENT_CONFORMITE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'transaction-sans-procuration',
         title: 'BCI - Online | Transactions internationales sans procuration',
         component: TransactionSansProcurationComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Trade Agent'] },
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.TRADE_AGENT,
+            ROLES.AGENT_CONFORMITE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
       },
       {
         path: 'historique-transaction-clients',
         title: 'BCI - Online | Historique des transactions des clients',
         component: HistoriqueTransactionClientsComponent,
-        canActivate: [AuthGuard],
-        data: { roles: ['Trade Agent'] },
-      }
-
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: [
+            ROLES.TRADE_AGENT,
+            ROLES.AGENT_CONFORMITE,
+            ROLES.DG,
+            ROLES.DGA,
+          ],
+        },
+      },
     ],
   },
 

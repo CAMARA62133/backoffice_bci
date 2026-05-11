@@ -172,6 +172,7 @@ import { AuthService } from '../../services/auth/authService/auth.service';
 import { StatusBancaireService } from '../../services/status-bancaire/status-bancaire.service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { SidebarService } from '../../core/services/sidebar/sidebar.service';
+import { ROLES } from '../../core/constants/roles.config';
 
 @Component({
   selector: 'app-layout',
@@ -181,7 +182,7 @@ import { SidebarService } from '../../core/services/sidebar/sidebar.service';
 })
 export class LayoutComponent implements OnInit, AfterViewInit, OnDestroy {
   public notification = inject(NotificationService);
-
+  readonly ROLES = ROLES;
   currentUser!: UserModel;
   userCurrentTimeZone: string = '';
   statusCoreBanking: any;
