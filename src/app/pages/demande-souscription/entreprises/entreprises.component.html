@@ -1,37 +1,55 @@
 <!-- Start: Page -->
 <div class="page-content">
-  <!-- <div class="container-fluid border-bottom">
+  <div class="container-fluid border-bottom">
     <div class="row mt-3">
       <div class="col-12">
-        <div class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">Liste des Entreprises de l'organisations</h4>
-            <p class="text-secondary mb-sm-0 font-size-13">Gestion, consultation et supervision du portefeuille
-              entreprises</p>
+            <h4 class="fw-semibold text-primary mb-sm-0 h3">
+              Liste des Entreprises de l'organisations
+            </h4>
+            <p class="text-secondary mb-sm-0 font-size-13">
+              Gestion, consultation et supervision du portefeuille entreprises
+            </p>
+          </div>
+          <!-- <div class="page-title-right">
+            <ol class="breadcrumb m-0">
+              <li class="breadcrumb-item">
+                <a><span>Entreprises Clientes</span></a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="dashboard-entreprises-clientes.html"
+                  ><span>Tableau de Bord</span></a
+                >
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#"><span>Liste des Entreprises</span></a>
+              </li>
+            </ol>
+            <span class="badge bg-success ms-2"
+              >🟢 Tous les services opérationnels</span
+            >
           </div> -->
-          <!--          <div class="page-title-right">-->
-          <!--            <ol class="breadcrumb m-0">-->
-          <!--              <li class="breadcrumb-item"><a><span>Entreprises Clientes</span></a></li>-->
-          <!--              <li class="breadcrumb-item"><a href="dashboard-entreprises-clientes.html"><span>Tableau de Bord</span></a>-->
-          <!--              </li>-->
-          <!--              <li class="breadcrumb-item"><a href="#"><span>Liste des Entreprises</span></a></li>-->
-          <!--            </ol>-->
-          <!--            <span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>-->
-          <!--          </div>-->
-        <!-- </div>
+        </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <div class="container-fluid py-4">
-    <!-- <div class="row mb-4">
+    <div class="row mb-4">
       <div class="col-md-6 col-lg-3 mb-3">
         <div class="card text-white bg-primary border-0 stat-card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="fw-semibold text-light mb-1 card-title">Total Entreprises</h6>
-                <h3 class="text-white mb-0 metric-number" id="totalEntreprises">0</h3>
+                <h6 class="fw-semibold text-light mb-1 card-title">
+                  Total Entreprises
+                </h6>
+                <h3 class="text-white mb-0 metric-number" id="totalEntreprises">
+                  0
+                </h3>
               </div>
               <i class="fas fa-building text-white fa-3x opacity-50"></i>
             </div>
@@ -44,7 +62,12 @@
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="fw-semibold text-light mb-1 card-title">Actives</h6>
-                <h3 class="text-white mb-0 metric-number" id="entreprisesActives">0</h3>
+                <h3
+                  class="text-white mb-0 metric-number"
+                  id="entreprisesActives"
+                >
+                  0
+                </h3>
               </div>
               <i class="fas fa-check-circle text-white fa-3x opacity-50"></i>
             </div>
@@ -56,10 +79,19 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="fw-semibold text-white mb-1 card-title">KYC Incomplet</h6>
-                <h3 class="text-white mb-0 metric-number" id="entreprisesKYCIncomplete">0</h3>
+                <h6 class="fw-semibold text-white mb-1 card-title">
+                  KYC Incomplet
+                </h6>
+                <h3
+                  class="text-white mb-0 metric-number"
+                  id="entreprisesKYCIncomplete"
+                >
+                  0
+                </h3>
               </div>
-              <i class="fas fa-exclamation-triangle text-white fa-3x opacity-50"></i>
+              <i
+                class="fas fa-exclamation-triangle text-white fa-3x opacity-50"
+              ></i>
             </div>
           </div>
         </div>
@@ -70,20 +102,28 @@
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="fw-semibold text-white mb-1 card-title">Bloquées</h6>
-                <h3 class="text-white mb-0 metric-number" id="entreprisesBloquees">0</h3>
+                <h3
+                  class="text-white mb-0 metric-number"
+                  id="entreprisesBloquees"
+                >
+                  0
+                </h3>
               </div>
               <i class="fas fa-ban fa-3x opacity-50"></i>
             </div>
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
 
     <div class="card">
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
           <div>
-            <h1 class="text-primary mb-1 h4"><i class="fas fa-building me-2"></i> Liste des Entreprises Clientes</h1>
+            <h1 class="text-primary mb-1 h4">
+              <i class="fas fa-building me-2"></i> Liste des Entreprises
+              Clientes
+            </h1>
           </div>
           <!-- <div class="d-flex gap-2">
             <button class="btn btn-outline-primary" type="button" id="btnExport"><i class="fas fa-download me-1"></i>
@@ -100,57 +140,92 @@
     <div class="card border-0 shadow-sm">
       <div class="card-body p-4">
         <div class="table-responsive">
-          <table class="table table-hover mb-0 table-striped datatable" appDataTable>
+          <table
+            class="table table-hover mb-0 table-striped datatable"
+            appDataTable
+          >
             <thead class="table-primary">
-            <tr>
-              <th class="sortable" data-sort="raisonSociale" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Raison Sociale</div>
-              </th>
-              <th class="sortable" data-sort="nif" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> NIF</div>
-              </th>
-              <th class="sortable" data-sort="segment" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Segment</div>
-              </th>
-              <th class="sortable" data-sort="secteurActivite" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Secteur</div>
-              </th>
-              <th class="sortable" data-sort="statutKYC" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Statut KYC</div>
-              </th>
-              <th class="sortable" data-sort="statutActif" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Statut</div>
-              </th>
-              <th class="sortable" data-sort="dateCreation" scope="col">
-                <div class="d-flex align-items-center justify-content-between"> Date Création</div>
-              </th>
-              <th class="text-center" scope="col">Actions</th>
-            </tr>
+              <tr>
+                <th class="sortable" data-sort="raisonSociale" scope="col">
+                  <div
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    Raison Sociale
+                  </div>
+                </th>
+                <th class="sortable" data-sort="nif" scope="col">
+                  <div
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    NIF
+                  </div>
+                </th>
+                <th class="sortable" data-sort="segment" scope="col">
+                  <div
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    Segment
+                  </div>
+                </th>
+                <th class="sortable" data-sort="secteurActivite" scope="col">
+                  <div
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    Secteur
+                  </div>
+                </th>
+                <th class="sortable" data-sort="statutKYC" scope="col">
+                  <div
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    Statut KYC
+                  </div>
+                </th>
+                <th class="sortable" data-sort="statutActif" scope="col">
+                  <div
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    Statut
+                  </div>
+                </th>
+                <th class="sortable" data-sort="dateCreation" scope="col">
+                  <div
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    Date Création
+                  </div>
+                </th>
+                <th class="text-center" scope="col">Actions</th>
+              </tr>
             </thead>
             <tbody>
-            <tr>
-              <td>Ligne 1</td>
-              <td>Ligne 2</td>
-              <td>Ligne 3</td>
-              <td>Ligne 4</td>
-              <td>Ligne 5</td>
-              <td>Ligne 6</td>
-              <td>Ligne 7</td>
-              <td class="d-flex justify-content-center gap-2">
-                <a class="btn btn-sm btn-outline-primary" (click)="goToFicheEntreprise()">
-                  <i class="fa fa-eye"></i>
-                </a>
+              <tr>
+                <td>Ligne 1</td>
+                <td>Ligne 2</td>
+                <td>Ligne 3</td>
+                <td>Ligne 4</td>
+                <td>Ligne 5</td>
+                <td>Ligne 6</td>
+                <td>Ligne 7</td>
+                <td class="d-flex justify-content-center gap-2">
+                  <a
+                    routerLink="/agent-entreprise/1"
+                    class="btn btn-outline-info btn-action btn-sm"
+                    title="Consulter la fiche"
+                  >
+                    <i class="fas fa-eye"></i>
+                  </a>
 
-                <a class="btn btn-sm btn-outline-danger">
-                  <i class="fa fa-trash-alt"></i>
-                </a>
-              </td>
-            </tr>
+                  <a class="btn btn-sm btn-outline-danger">
+                    <i class="fa fa-trash-alt"></i>
+                  </a>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-
   </div>
-</div><!-- End: Page -->
+</div>
+<!-- End: Page -->

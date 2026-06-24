@@ -19,7 +19,6 @@ export class TransactionMultipleComponent implements OnInit {
   isLoadingDemandes: boolean = false;
   toutesTransactions: TransactionMultiple[] = TRANSACTIONS_MULTIPLES;
 
-  activeTab: 'attente' | 'validees' | 'rejetees' = 'attente';
 
   pageSize = 10;
   currentPage = 1;
@@ -44,61 +43,22 @@ export class TransactionMultipleComponent implements OnInit {
     }, 300);
   }
 
-  // Getters pour les transactions par statut
-  get transactionsEnAttente(): TransactionMultiple[] {
-    return this.toutesTransactions.filter(
-      (t) => t.statutDemande === 'En attente validation',
-    );
-  }
-
   get transactionsValidees(): TransactionMultiple[] {
-    return this.toutesTransactions.filter((t) => t.statutDemande === 'Valide');
+    return this.toutesTransactions;
   }
 
-  get transactionsRejetees(): TransactionMultiple[] {
-    return this.toutesTransactions.filter((t) => t.statutDemande === 'Rejete');
-  }
 
-  // Changer d'onglet
-  setActiveTab(tab: 'attente' | 'validees' | 'rejetees'): void {
-    this.activeTab = tab;
-    this.currentPage = 1;
-    this.sortColumn = '';
-    this.sortDirection = 'asc';
-  }
 
-  getStatusLabel(): string {
-    switch (this.activeTab) {
-      case 'attente':
-        return 'en attente';
-      case 'validees':
-        return 'validées';
-      case 'rejetees':
-        return 'rejetées';
-      default:
-        return '';
-    }
-  }
 
-  // Obtenir les données selon l'onglet actif
-  get currentTransactions(): TransactionMultiple[] {
-    switch (this.activeTab) {
-      case 'attente':
-        return this.transactionsEnAttente;
-      case 'validees':
-        return this.transactionsValidees;
-      case 'rejetees':
-        return this.transactionsRejetees;
-      default:
-        return [];
-    }
-  }
+
+
+
 
   // ==========================================
   // LOGIQUE DE TABLE
   // ==========================================
   get filteredData(): TransactionMultiple[] {
-    let data = [...this.currentTransactions];
+    let data = [...this.toutesTransactions];
 
     if (this.searchText) {
       const searchLower = this.searchText.toLowerCase();

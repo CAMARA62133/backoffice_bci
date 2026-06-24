@@ -1,32 +1,30 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-
-import {
-  DemandeTransactionInternationale,
-  toutesLesDemandes,
-} from '../../pages/agent-trade/data/demandes.data';
+import { TransactionInternationale, transactionsInternationales } from '../../pages/transaction-internationnales/data/transaction-internationnale.data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DemandeTransactionClientService {
-  private demandes: DemandeTransactionInternationale[] = [...toutesLesDemandes];
+  private demandes: TransactionInternationale[] = [
+    ...transactionsInternationales,
+  ];
   // 1. Ajoutez ces deux lignes ici :
   private transactionTraiteeSubject = new BehaviorSubject<number | null>(null);
   transactionTraitee$ = this.transactionTraiteeSubject.asObservable();
 
   private demandeSubject = new BehaviorSubject<
-    DemandeTransactionInternationale[]
+    TransactionInternationale[]
   >(this.demandes);
   demandes$ = this.demandeSubject.asObservable();
- 
+
   constructor() {}
 
   // ======================================================
   // GET ALL
   // ======================================================
 
-  getDemandes(): DemandeTransactionInternationale[] {
+  getDemandes(): TransactionInternationale[] {
     return this.demandes;
   }
 
@@ -209,7 +207,7 @@ export class DemandeTransactionClientService {
   // AJOUT
   // ======================================================
 
-  ajouterDemande(demande: DemandeTransactionInternationale): void {
+  ajouterDemande(demande: TransactionInternationale): void {
     this.demandes.push(demande);
 
     this.refresh();

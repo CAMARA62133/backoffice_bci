@@ -9,19 +9,25 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { DemandeTransactionInternationale } from '../data/demandes.data';
+import { TransactionInternationale } from '../data/transaction-internationnale.data';
 import { DemandeTransactionClientService } from '../../../services/agent-trade/demande-transaction-client.service';
+import { SkeletonLoaderComponent } from '../../../shared/skeleton/skeleton-loader.component';
 import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-transaction-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SkeletonLoaderComponent,
+  ],
   templateUrl: './transaction-detail.component.html',
   styleUrl: './transaction-detail.component.css',
 })
 export class TransactionDetailComponent implements OnInit {
-  demande?: DemandeTransactionInternationale;
+  demande?: TransactionInternationale;
   isLoading = false;
   demandeId!: number;
 
@@ -41,19 +47,18 @@ export class TransactionDetailComponent implements OnInit {
   ngOnInit(): void {
     this.initForms();
 
-    // On écoute à la fois les paramètres d'ID et les QueryParams pour le rôle
     this.route.params.subscribe((params) => {
       this.demandeId = +params['id'];
       this.loadDemande();
     });
 
-    // RÉCUPÉRATION DU RÔLE ICI
     this.route.queryParams.subscribe((queryParams) => {
       if (queryParams['role']) {
         this.currentRole = queryParams['role'];
       }
     });
   }
+
   private initForms(): void {
     this.rejetForm = this.fb.group({
       motif: ['', Validators.required],
@@ -72,67 +77,41 @@ export class TransactionDetailComponent implements OnInit {
     }, 300);
   }
 
-  // ==========================================
-  // LOGIQUE WORKFLOW PAR ROLE
-  // ==========================================
-
-  /**
-   * Vérifie si l'utilisateur actuel peut valider la demande
-   */
   canValidate(): boolean {
     if (!this.demande) return false;
     if (this.demande.statutDemande !== 'EN_ATTENTE') return false;
 
     switch (this.currentRole) {
       case 'AGENT_TRADE':
-        // Agent Trade peut valider à l'étape AGENT_TRADE (envoi initial)
-        // OU à l'étape FINALISATION (validation finale)
         return (
           this.demande.etapeValidation === 'AGENT_TRADE' ||
           this.demande.etapeValidation === 'FINALISATION'
         );
-
       case 'CONFORMITE':
-        // Conformité peut valider uniquement les demandes à l'étape CONFORMITE
         return this.demande.etapeValidation === 'CONFORMITE';
-
       case 'DG_DGA':
-        // DG/DGA peut valider uniquement les demandes à l'étape DG_DGA
         return this.demande.etapeValidation === 'DG_DGA';
-
       default:
         return false;
     }
   }
 
-  /**
-   * Vérifie si l'utilisateur actuel peut rejeter la demande
-   */
   canReject(): boolean {
     if (!this.demande) return false;
     if (this.demande.statutDemande !== 'EN_ATTENTE') return false;
 
     switch (this.currentRole) {
       case 'AGENT_TRADE':
-        // Agent Trade peut rejeter uniquement au début (AGENT_TRADE)
         return this.demande.etapeValidation === 'AGENT_TRADE';
-
       case 'CONFORMITE':
-        // Conformité peut rejeter à l'étape CONFORMITE
         return this.demande.etapeValidation === 'CONFORMITE';
-
       case 'DG_DGA':
-        // DG/DGA peut rejeter à l'étape DG_DGA
         return this.demande.etapeValidation === 'DG_DGA';
-
       default:
         return false;
     }
   }
 
-  /**
-   * Vérifie si c'est une validation finale (Agent Trade à l'étape FINALISATION)
-   */
   isFinalValidation(): boolean {
     return (
       this.currentRole === 'AGENT_TRADE' &&
@@ -140,14 +119,10 @@ export class TransactionDetailComponent implements OnInit {
     );
   }
 
-  /**
-   * Affiche le libellé du prochain rôle
-   */
   getNextRoleLabel(): string {
     if (!this.demande) return '';
 
     if (!this.demande.derogation) {
-      // Sans procuration: Agent Trade → Conformité → Finalisation (Agent Trade)
       switch (this.demande.etapeValidation) {
         case 'AGENT_TRADE':
           return 'Conformité';
@@ -157,7 +132,6 @@ export class TransactionDetailComponent implements OnInit {
           return '';
       }
     } else {
-      // Avec procuration: Agent Trade → Conformité → DG/DGA → Finalisation (Agent Trade)
       switch (this.demande.etapeValidation) {
         case 'AGENT_TRADE':
           return 'Conformité';
@@ -171,15 +145,7 @@ export class TransactionDetailComponent implements OnInit {
     }
   }
 
-  /**
-   * Libellé du bouton de validation
-   */
-  /**
-   * Libellé et icône du bouton de validation
-   * Gère les deux cas : Normal (vers Finalisation) et Dérogation (vers DG/DGA)
-   */
   getValidationButton(): { label: string; icon: string } {
-    // CAS 1 : Validation finale (Uniquement Agent Trade à l'étape FINALISATION)
     if (this.isFinalValidation()) {
       return { label: 'Validation finale', icon: 'fa-check-double' };
     }
@@ -188,33 +154,24 @@ export class TransactionDetailComponent implements OnInit {
 
     switch (this.currentRole) {
       case 'AGENT_TRADE':
-        // CAS 2 : Premier envoi (Agent Trade -> Conformité)
         return { label: 'Vérifier et transmettre', icon: 'fa-arrow-right' };
-
       case 'CONFORMITE':
-        // La conformité transmet soit vers le DG, soit vers l'Agent Trade pour clôture
         return this.demande.derogation
           ? { label: 'Vérifier et transmettre (DG)', icon: 'fa-share-square' }
           : { label: 'Vérifier et transmettre', icon: 'fa-share-square' };
-
       case 'DG_DGA':
-        // Le DG approuve et renvoie vers l'Agent Trade pour la validation finale
         return { label: 'Approuver et transmettre', icon: 'fa-user-check' };
-
       default:
         return { label: 'Valider', icon: 'fa-check' };
     }
   }
-  /**
-   * Valider la demande selon le rôle et l'étape
-   */
+
   onValidate(): void {
     if (!this.demande) return;
 
     switch (this.currentRole) {
       case 'AGENT_TRADE':
         if (this.demande.etapeValidation === 'AGENT_TRADE') {
-          // Envoi initial à la conformité
           const success = this.transactionService.envoyerConformite(
             this.demande.id,
           );
@@ -265,9 +222,6 @@ export class TransactionDetailComponent implements OnInit {
     }
   }
 
-  /**
-   * Validation finale par Agent Trade (étape FINALISATION)
-   */
   onFinalValidation(): void {
     if (!this.demande) return;
 
@@ -281,7 +235,6 @@ export class TransactionDetailComponent implements OnInit {
       if (success) {
         this.notification.success('Transaction validée avec succès !');
         this.closeValidateModal();
-        // Rediriger vers la liste appropriée
         if (this.demande.derogation) {
           this.router.navigate(['/transaction-par-procuration']);
         } else {
@@ -293,9 +246,6 @@ export class TransactionDetailComponent implements OnInit {
     }
   }
 
-  /**
-   * Rejeter la demande
-   */
   onReject(): void {
     if (this.rejetForm.invalid) {
       this.rejetForm.markAllAsTouched();
@@ -337,7 +287,6 @@ export class TransactionDetailComponent implements OnInit {
     if (success) {
       this.notification.error('❌ Demande rejetée', motif);
       this.closeRejectModal();
-      // Rediriger vers la liste appropriée
       if (this.demande.derogation) {
         this.router.navigate(['/transaction-par-procuration']);
       } else {
@@ -347,10 +296,6 @@ export class TransactionDetailComponent implements OnInit {
       this.notification.error('Erreur lors du rejet');
     }
   }
-
-  // ==========================================
-  // MODALS
-  // ==========================================
 
   openValidateModal(): void {
     const modal = document.getElementById('validateModal');
@@ -404,10 +349,6 @@ export class TransactionDetailComponent implements OnInit {
     }
   }
 
-  // ==========================================
-  // UTILS
-  // ==========================================
-
   goBack(): void {
     const targetRoute = this.demande?.derogation
       ? '/transaction-par-procuration'
@@ -456,9 +397,6 @@ export class TransactionDetailComponent implements OnInit {
     return classes[statut] || 'bg-secondary';
   }
 
-  /**
-   * Vérifier si l'étape est complétée (pour l'affichage de la timeline)
-   */
   isEtapeCompleted(etape: string): boolean {
     if (!this.demande) return false;
 
@@ -466,22 +404,15 @@ export class TransactionDetailComponent implements OnInit {
     const currentIndex = etapes.indexOf(this.demande.etapeValidation);
     const etapeIndex = etapes.indexOf(etape);
 
-    // Pour DG/DGA, n'est nécessaire que si dérogation
     if (etape === 'DG_DGA' && !this.demande.derogation) {
-      return true; // Skip cette étape
+      return true;
     }
 
     return etapeIndex < currentIndex;
   }
 
-  /**
-   * Ouvre un PDF stocké dans le dossier public/pdfs
-   * @param filePath Chemin relatif du fichier (ex: '/pdfs/ddi.pdf')
-   */
   viewFile(filePath: string | null | undefined): void {
     if (filePath) {
-      // window.open ouvre l'URL directe du fichier dans un nouvel onglet
-      // Le navigateur utilisera son lecteur PDF natif
       window.open(filePath, '_blank');
     } else {
       console.warn('Fichier non disponible');

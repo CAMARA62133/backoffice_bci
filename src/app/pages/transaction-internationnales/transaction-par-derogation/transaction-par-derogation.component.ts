@@ -4,19 +4,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { DemandeTransactionInternationale } from '../data/demandes.data';
+import { TransactionInternationale } from '../data/transaction-internationnale.data';
 import { DemandeTransactionClientService } from '../../../services/agent-trade/demande-transaction-client.service';
 import { NotificationService } from '../../../services/notification/notification.service';
+import { SkeletonLoaderComponent } from '../../../shared/skeleton/skeleton-loader.component';
 
 @Component({
-  selector: 'app-transaction-par-procuration',
+  selector: 'app-transaction-par-derogation',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './transaction-par-procuration.component.html',
-  styleUrl: './transaction-par-procuration.component.css',
+  imports: [CommonModule, FormsModule, RouterLink, SkeletonLoaderComponent],
+  templateUrl: './transaction-par-derogation.component.html',
+  styleUrl: './transaction-par-derogation.component.css',
 })
-export class TransactionParProcurationComponent implements OnInit, OnDestroy {
-  demandes: DemandeTransactionInternationale[] = [];
+export class TransactionParDerogationComponent implements OnInit, OnDestroy {
+  demandes: TransactionInternationale[] = [];
   isLoading = false;
 
   // Pagination
@@ -24,7 +25,7 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
   currentPage = 1;
 
   // Tri
-  sortColumn: keyof DemandeTransactionInternationale | '' = '';
+  sortColumn: keyof TransactionInternationale | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   // Filtres
@@ -56,11 +57,10 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
     }
   }
+
   calculerCompteurs() {
     const toutesLesDemandes = this.transactionService.getDemandes();
 
-    // Note : Ici on filtre selon votre besoin (avec ou sans procuration)
-    // Si cette page est dédiée AUX procurations, utilisez d.derogation === true
     const demandesCiblees = toutesLesDemandes.filter(
       (d) => d.derogation === true,
     );
@@ -81,13 +81,13 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
       (d) => d.etapeValidation === 'DG_DGA' && d.statutDemande === 'EN_ATTENTE',
     ).length;
   }
+
   private loadData(): void {
     this.isLoading = true;
     setTimeout(() => {
       const toutesLesDemandes = this.transactionService.getDemandes();
 
       this.demandes = toutesLesDemandes.filter((d) => {
-        // On ne prend que les dossiers AVEC procuration/dérogation
         if (d.derogation !== true) return false;
         if (d.statutDemande !== 'EN_ATTENTE') return false;
 
@@ -124,10 +124,7 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Libellé du bouton de validation selon le rôle et l'étape
-   */
-  getValidationLabel(demande: DemandeTransactionInternationale): string {
+  getValidationLabel(demande: TransactionInternationale): string {
     if (
       demande.etapeValidation === 'FINALISATION' &&
       this.currentRole === 'AGENT_TRADE'
@@ -147,9 +144,6 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Libellé du prochain destinataire
-   */
   getNextDestination(): string {
     switch (this.currentRole) {
       case 'AGENT_TRADE':
@@ -167,7 +161,7 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
   // FILTRAGE
   // ==========================================
 
-  get filteredData(): DemandeTransactionInternationale[] {
+  get filteredData(): TransactionInternationale[] {
     let data = [...this.demandes];
 
     if (this.searchText) {
@@ -195,9 +189,9 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
     if (this.sortColumn) {
       data.sort((a, b) => {
         const valA =
-          a[this.sortColumn as keyof DemandeTransactionInternationale];
+          a[this.sortColumn as keyof TransactionInternationale];
         const valB =
-          b[this.sortColumn as keyof DemandeTransactionInternationale];
+          b[this.sortColumn as keyof TransactionInternationale];
 
         if (valA === undefined || valA === null) return 1;
         if (valB === undefined || valB === null) return -1;
@@ -222,7 +216,7 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
   // PAGINATION
   // ==========================================
 
-  get paginatedData(): DemandeTransactionInternationale[] {
+  get paginatedData(): TransactionInternationale[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredData.slice(start, start + this.pageSize);
   }
@@ -287,7 +281,7 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
   // TRI
   // ==========================================
 
-  sort(column: keyof DemandeTransactionInternationale): void {
+  sort(column: keyof TransactionInternationale): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
@@ -335,9 +329,6 @@ export class TransactionParProcurationComponent implements OnInit, OnDestroy {
     return classes[etape] || 'bg-secondary';
   }
 
-  /**
-   * Changer le rôle (pour tester)
-   */
   changerRole(role: 'AGENT_TRADE' | 'CONFORMITE' | 'DG_DGA'): void {
     this.currentRole = role;
     this.currentPage = 1;

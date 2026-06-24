@@ -6,35 +6,60 @@
           class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
         >
           <div>
-            <h4 class="fw-semibold text-primary mb-sm-0 h3">
-              Dashboard {{ getUser()?.vcRoleName }}
-            </h4>
-            <p class="text-secondary mb-sm-0 font-size-13">
-              Suivi en temps réel des performances et activités
-            </p>
+            <div *ngIf="isLoading; else titleContent">
+              <app-skeleton-loader
+                type="title"
+                width="300px"
+                height="32px"
+              ></app-skeleton-loader>
+              <app-skeleton-loader
+                type="text-sm"
+                width="250px"
+                height="16px"
+                class="mt-2"
+              ></app-skeleton-loader>
+            </div>
+            <ng-template #titleContent>
+              <h4 class="fw-semibold text-primary mb-sm-0 h3">
+                Tableau de Bord {{ getUser()?.vcRoleName }}
+              </h4>
+              <p class="text-secondary mb-sm-0 font-size-13">
+                Suivi en temps réel des performances et activités
+              </p>
+            </ng-template>
           </div>
-         
         </div>
       </div>
     </div>
   </div>
 
   <div class="container-fluid mt-4">
-    <!-- Première Rangée : 3 Blocs -->
+    <!-- Première Rangée : 4 Blocs -->
     <div class="row mb-2">
       <!-- Total Entreprises -->
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div
+          class="card border-0 shadow-sm rounded-4 stat-card h-100 bg-primary bg-opacity-10"
+        >
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                <p class="text-light mb-1 small fw-bold text-uppercase">
                   Total Entreprises
                 </p>
-                <h3 class="fw-bold text-dark mb-1">168</h3>
+                <div *ngIf="isLoading; else totalEntreprisesContent">
+                  <app-skeleton-loader
+                    type="title"
+                    width="80px"
+                    height="32px"
+                  ></app-skeleton-loader>
+                </div>
+                <ng-template #totalEntreprisesContent>
+                  <h3 class="fw-bold text-light mb-0">168</h3>
+                </ng-template>
               </div>
-              <div class="stat-icon bg-primary-subtle rounded-3 p-3">
-                <i class="fas fa-building fa-2x text-primary"></i>
+              <div class="stat-icon bg-primary text-white rounded-3 p-3">
+                <i class="fas fa-building fa-lg"></i>
               </div>
             </div>
           </div>
@@ -42,19 +67,30 @@
       </div>
 
       <!-- Total Transactions -->
-      <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div
+          class="card border-0 shadow-sm rounded-4 stat-card h-100 bg-success bg-opacity-10"
+        >
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                <p class="text-success mb-1 small fw-bold text-uppercase">
                   Total Transactions
                 </p>
-                <h3 class="fw-bold text-dark mb-1">12,845</h3>
-
+                <div *ngIf="isLoading; else totalTransactionsContent">
+                  <app-skeleton-loader
+                    type="title"
+                    width="100px"
+                    height="32px"
+                  ></app-skeleton-loader>
+                </div>
+                <ng-template #totalTransactionsContent>
+                  <h3 class="fw-bold text-dark mb-0">12</h3>
+                  <small class="text-success fw-semibold">$1,250,000.00</small>
+                </ng-template>
               </div>
-              <div class="stat-icon bg-success-subtle rounded-3 p-3">
-                <i class="fas fa-exchange-alt fa-2x text-success"></i>
+              <div class="stat-icon bg-success text-white rounded-3 p-3">
+                <i class="fas fa-exchange-alt fa-lg"></i>
               </div>
             </div>
           </div>
@@ -62,19 +98,61 @@
       </div>
 
       <!-- Transactions/Jour -->
-      <div class="col-md-12 col-lg-4 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div
+          class="card border-0 shadow-sm rounded-4 stat-card h-100 bg-info bg-opacity-10"
+        >
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                <p class="text-info mb-1 small fw-bold text-uppercase">
                   Transactions/Jour
                 </p>
-                <h3 class="fw-bold text-dark mb-1">428</h3>
-  
+                <div *ngIf="isLoading; else transactionsJourContent">
+                  <app-skeleton-loader
+                    type="title"
+                    width="80px"
+                    height="32px"
+                  ></app-skeleton-loader>
+                </div>
+                <ng-template #transactionsJourContent>
+                  <h3 class="fw-bold text-dark mb-0">428</h3>
+                  <small class="text-info fw-semibold">$45,000.00</small>
+                </ng-template>
               </div>
-              <div class="stat-icon bg-warning-subtle rounded-3 p-3">
-                <i class="fas fa-calendar-day fa-2x text-warning"></i>
+              <div class="stat-icon bg-info text-white rounded-3 p-3">
+                <i class="fas fa-calendar-day fa-lg"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- En Attente Dérogation -->
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div
+          class="card border-0 shadow-sm rounded-4 stat-card h-100 bg-secondary bg-opacity-10"
+        >
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <p class="text-primary mb-1 small fw-bold text-uppercase">
+                  Attente Dérogation
+                </p>
+                <div *ngIf="isLoading; else derogationContent">
+                  <app-skeleton-loader
+                    type="title"
+                    width="80px"
+                    height="32px"
+                  ></app-skeleton-loader>
+                </div>
+                <ng-template #derogationContent>
+                  <h3 class="fw-bold text-dark mb-0">45</h3>
+                  <small class="text-primary fw-semibold">$120,500.00</small>
+                </ng-template>
+              </div>
+              <div class="stat-icon bg-primary text-white rounded-3 p-3">
+                <i class="fas fa-exclamation-circle fa-lg"></i>
               </div>
             </div>
           </div>
@@ -82,22 +160,37 @@
       </div>
     </div>
 
-    <!-- Deuxième Rangée : Status (3 Blocs) -->
+    <!-- Deuxième Rangée : Status -->
     <div class="row">
       <!-- En Attente -->
       <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+        <div
+          class="card border-0 shadow-sm rounded-4 stat-card h-100 bg-warning bg-opacity-10"
+        >
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                <p
+                  class="text-warning-emphasis mb-1 small fw-bold text-uppercase"
+                >
                   En Attente
                 </p>
-                <h3 class="fw-bold text-warning mb-1">234</h3>
-               
+                <div *ngIf="isLoading; else enAttenteContent">
+                  <app-skeleton-loader
+                    type="title"
+                    width="80px"
+                    height="32px"
+                  ></app-skeleton-loader>
+                </div>
+                <ng-template #enAttenteContent>
+                  <h3 class="fw-bold text-warning mb-0">234</h3>
+                  <small class="text-warning-emphasis fw-semibold"
+                    >$310,000.00</small
+                  >
+                </ng-template>
               </div>
-              <div class="stat-icon bg-warning-subtle rounded-3 p-3">
-                <i class="fas fa-hourglass-half fa-2x text-warning"></i>
+              <div class="stat-icon bg-warning text-white rounded-3 p-3">
+                <i class="fas fa-hourglass-half fa-lg"></i>
               </div>
             </div>
           </div>
@@ -106,18 +199,29 @@
 
       <!-- Validées -->
       <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+        <div
+          class="card border-0 shadow-sm rounded-4 stat-card h-100 bg-success bg-opacity-10"
+        >
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                <p class="text-success mb-1 small fw-bold text-uppercase">
                   Validées
                 </p>
-                <h3 class="fw-bold text-success mb-1">11,892</h3>
-
+                <div *ngIf="isLoading; else valideesContent">
+                  <app-skeleton-loader
+                    type="title"
+                    width="100px"
+                    height="32px"
+                  ></app-skeleton-loader>
+                </div>
+                <ng-template #valideesContent>
+                  <h3 class="fw-bold text-success mb-0">11,892</h3>
+                  <small class="text-success fw-semibold">$940,000.00</small>
+                </ng-template>
               </div>
-              <div class="stat-icon bg-success-subtle rounded-3 p-3">
-                <i class="fas fa-check-circle fa-2x text-success"></i>
+              <div class="stat-icon bg-success text-white rounded-3 p-3">
+                <i class="fas fa-check-circle fa-lg"></i>
               </div>
             </div>
           </div>
@@ -126,27 +230,36 @@
 
       <!-- Rejetées -->
       <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100">
+        <div
+          class="card border-0 shadow-sm rounded-4 stat-card h-100 bg-danger bg-opacity-10"
+        >
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <p class="text-muted mb-1 small fw-semibold text-uppercase">
+                <p class="text-light mb-1 small fw-bold text-uppercase">
                   Rejetées
                 </p>
-                <h3 class="fw-bold text-danger mb-1">719</h3>
-
+                <div *ngIf="isLoading; else rejeteesContent">
+                  <app-skeleton-loader
+                    type="title"
+                    width="80px"
+                    height="32px"
+                  ></app-skeleton-loader>
+                </div>
+                <ng-template #rejeteesContent>
+                  <h3 class="fw-bold text-light mb-0">719</h3>
+                  <small class="text-light fw-semibold">$12,400.00</small>
+                </ng-template>
               </div>
-              <div class="stat-icon bg-danger-subtle rounded-3 p-3">
-                <i class="fas fa-times-circle fa-2x text-danger"></i>
+              <div class="stat-icon bg-danger text-white rounded-3 p-3">
+                <i class="fas fa-times-circle fa-lg"></i>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
     <div class="row g-4 mt-1">
-      <!-- Graphique Transactions par période -->
       <!-- Graphique Transactions par période -->
       <div class="col-12 col-xl-8">
         <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
@@ -155,19 +268,31 @@
             class="card-header bg-white border-0 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center py-3 gap-3"
           >
             <div>
-              <h5 class="fw-bold text-dark mb-1">Évolution des transactions</h5>
-              <p class="text-muted mb-0 small">
-                Transactions par {{ getPeriodLabel() }}
-              </p>
+              <div *ngIf="isLoading; else chartTitle">
+                <app-skeleton-loader
+                  type="title"
+                  width="250px"
+                  height="24px"
+                ></app-skeleton-loader>
+                <app-skeleton-loader
+                  type="text-sm"
+                  width="150px"
+                  height="16px"
+                  class="mt-1"
+                ></app-skeleton-loader>
+              </div>
+              <ng-template #chartTitle>
+                <h5 class="fw-bold text-dark mb-1">
+                  Évolution des transactions
+                </h5>
+                <p class="text-muted mb-0 small">
+                  Transactions par {{ getPeriodLabel() }}
+                </p>
+              </ng-template>
             </div>
 
             <div class="d-flex align-items-center gap-3">
-              <!-- Groupe de boutons intégré ici -->
-              <div
-                class="btn-group"
-                role="group"
-                aria-label="Sélection de période"
-              >
+              <div class="btn-group" role="group">
                 <button
                   type="button"
                   class="btn btn-outline-primary btn-sm"
@@ -194,7 +319,6 @@
                 </button>
               </div>
 
-              <!-- Badge de rappel -->
               <div
                 class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill d-none d-md-block"
               >
@@ -205,19 +329,27 @@
 
           <div class="card-body pt-0">
             <div class="chart-container" style="min-height: 350px">
-              <apx-chart
-                [series]="evolutionChart.series"
-                [chart]="evolutionChart.chart"
-                [xaxis]="evolutionChart.xaxis"
-                [stroke]="evolutionChart.stroke"
-                [colors]="evolutionChart.colors"
-                [dataLabels]="evolutionChart.dataLabels"
-                [grid]="evolutionChart.grid"
-                [markers]="evolutionChart.markers"
-                [tooltip]="evolutionChart.tooltip"
-                [title]="evolutionChart.title"
-                [yaxis]="evolutionChart.yaxis"
-              ></apx-chart>
+              <div *ngIf="isLoading; else evolutionChartContent">
+                <app-skeleton-loader
+                  type="row"
+                  height="350px"
+                ></app-skeleton-loader>
+              </div>
+              <ng-template #evolutionChartContent>
+                <apx-chart
+                  [series]="evolutionChart.series"
+                  [chart]="evolutionChart.chart"
+                  [xaxis]="evolutionChart.xaxis"
+                  [stroke]="evolutionChart.stroke"
+                  [colors]="evolutionChart.colors"
+                  [dataLabels]="evolutionChart.dataLabels"
+                  [grid]="evolutionChart.grid"
+                  [markers]="evolutionChart.markers"
+                  [tooltip]="evolutionChart.tooltip"
+                  [title]="evolutionChart.title"
+                  [yaxis]="evolutionChart.yaxis"
+                ></apx-chart>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -227,25 +359,48 @@
       <div class="col-12 col-xl-4">
         <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
           <div class="card-header bg-white border-0 py-3">
-            <h5 class="fw-bold text-dark mb-1">Statut des transactions</h5>
-            <p class="text-muted mb-0 small">Répartition par statut</p>
+            <div *ngIf="isLoading; else statusChartTitle">
+              <app-skeleton-loader
+                type="title"
+                width="200px"
+                height="24px"
+              ></app-skeleton-loader>
+              <app-skeleton-loader
+                type="text-sm"
+                width="150px"
+                height="16px"
+                class="mt-1"
+              ></app-skeleton-loader>
+            </div>
+            <ng-template #statusChartTitle>
+              <h5 class="fw-bold text-dark mb-1">Statut des transactions</h5>
+              <p class="text-muted mb-0 small">Répartition par statut</p>
+            </ng-template>
           </div>
           <div
             class="card-body d-flex justify-content-center align-items-center"
           >
             <div class="chart-container w-100">
-              <apx-chart
-                [title]="statusChart.title"
-                [series]="statusChart.series"
-                [labels]="statusChart.labels"
-                [chart]="statusChart.chart"
-                [colors]="statusChart.colors"
-                [dataLabels]="statusChart.dataLabels"
-                [plotOptions]="statusChart.plotOptions"
-                [fill]="statusChart.fill"
-                [tooltip]="statusChart.tooltip"
-                [legend]="statusChart.legend"
-              ></apx-chart>
+              <div *ngIf="isLoading; else statusChartContent">
+                <app-skeleton-loader
+                  type="row"
+                  height="300px"
+                ></app-skeleton-loader>
+              </div>
+              <ng-template #statusChartContent>
+                <apx-chart
+                  [title]="statusChart.title"
+                  [series]="statusChart.series"
+                  [labels]="statusChart.labels"
+                  [chart]="statusChart.chart"
+                  [colors]="statusChart.colors"
+                  [dataLabels]="statusChart.dataLabels"
+                  [plotOptions]="statusChart.plotOptions"
+                  [fill]="statusChart.fill"
+                  [tooltip]="statusChart.tooltip"
+                  [legend]="statusChart.legend"
+                ></apx-chart>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -255,22 +410,45 @@
       <div class="col-12 col-lg-6">
         <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
           <div class="card-header bg-white border-0 py-3">
-            <h5 class="fw-bold text-dark mb-1">Tendance mensuelle</h5>
-            <p class="text-muted mb-0 small">Comparaison mois par mois</p>
+            <div *ngIf="isLoading; else monthlyTrendTitle">
+              <app-skeleton-loader
+                type="title"
+                width="180px"
+                height="24px"
+              ></app-skeleton-loader>
+              <app-skeleton-loader
+                type="text-sm"
+                width="140px"
+                height="16px"
+                class="mt-1"
+              ></app-skeleton-loader>
+            </div>
+            <ng-template #monthlyTrendTitle>
+              <h5 class="fw-bold text-dark mb-1">Tendance mensuelle</h5>
+              <p class="text-muted mb-0 small">Comparaison mois par mois</p>
+            </ng-template>
           </div>
           <div class="card-body">
             <div class="chart-container">
-              <apx-chart
-                [series]="monthlyTrend.series"
-                [chart]="monthlyTrend.chart"
-                [xaxis]="monthlyTrend.xaxis"
-                [colors]="monthlyTrend.colors"
-                [stroke]="monthlyTrend.stroke"
-                [dataLabels]="monthlyTrend.dataLabels"
-                [fill]="monthlyTrend.fill"
-                [tooltip]="monthlyTrend.tooltip"
-                [legend]="monthlyTrend.legend"
-              ></apx-chart>
+              <div *ngIf="isLoading; else monthlyTrendContent">
+                <app-skeleton-loader
+                  type="row"
+                  height="350px"
+                ></app-skeleton-loader>
+              </div>
+              <ng-template #monthlyTrendContent>
+                <apx-chart
+                  [series]="monthlyTrend.series"
+                  [chart]="monthlyTrend.chart"
+                  [xaxis]="monthlyTrend.xaxis"
+                  [colors]="monthlyTrend.colors"
+                  [stroke]="monthlyTrend.stroke"
+                  [dataLabels]="monthlyTrend.dataLabels"
+                  [fill]="monthlyTrend.fill"
+                  [tooltip]="monthlyTrend.tooltip"
+                  [legend]="monthlyTrend.legend"
+                ></apx-chart>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -283,46 +461,86 @@
             class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center"
           >
             <div>
-              <h5 class="fw-bold text-dark mb-1">Dernières transactions</h5>
-              <p class="text-muted mb-0 small">Activité récente</p>
+              <div *ngIf="isLoading; else recentTitle">
+                <app-skeleton-loader
+                  type="title"
+                  width="160px"
+                  height="24px"
+                ></app-skeleton-loader>
+                <app-skeleton-loader
+                  type="text-sm"
+                  width="120px"
+                  height="16px"
+                  class="mt-1"
+                ></app-skeleton-loader>
+              </div>
+              <ng-template #recentTitle>
+                <h5 class="fw-bold text-dark mb-1">Dernières transactions</h5>
+                <p class="text-muted mb-0 small">Activité récente</p>
+              </ng-template>
             </div>
-            <button class="btn btn-sm btn-link text-primary">Voir tout</button>
+            <div *ngIf="!isLoading">
+              <button class="btn btn-sm btn-link text-primary">
+                Voir tout
+              </button>
+            </div>
+            <div *ngIf="isLoading">
+              <app-skeleton-loader
+                type="btn"
+                width="80px"
+                height="30px"
+              ></app-skeleton-loader>
+            </div>
           </div>
           <div class="card-body p-0">
             <div class="table-responsive">
-              <table class="table table-hover mb-0">
-                <thead class="bg-light">
-                  <tr>
-                    <th>ID</th>
-                    <th>Entreprise</th>
-                    <th>Montant</th>
-                    <th>Statut</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let transaction of recentTransactions">
-                    <td class="small text-muted">#{{ transaction.id }}</td>
-                    <td class="small">{{ transaction.company }}</td>
-                    <td class="fw-semibold">
-                      {{ transaction.amount | currency: "EUR" }}
-                    </td>
-                    <td>
-                      <span
-                        class="badge"
-                        [class.bg-success]="transaction.status === 'validé'"
-                        [class.bg-warning]="transaction.status === 'en attente'"
-                        [class.bg-danger]="transaction.status === 'rejeté'"
-                      >
-                        {{ transaction.status }}
-                      </span>
-                    </td>
-                    <td class="small text-muted">
-                      {{ transaction.date | date: "dd/MM/yyyy HH:mm" }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div *ngIf="isLoading; else recentTable">
+                <div class="p-3">
+                  <app-skeleton-loader
+                    type="row"
+                    height="50px"
+                    *ngFor="let i of [1, 2, 3, 4, 5]"
+                    class="mb-2"
+                  ></app-skeleton-loader>
+                </div>
+              </div>
+              <ng-template #recentTable>
+                <table class="table table-hover mb-0">
+                  <thead class="bg-light">
+                    <tr>
+                      <th>ID</th>
+                      <th>Entreprise</th>
+                      <th>Montant</th>
+                      <th>Statut</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let transaction of recentTransactions">
+                      <td class="small text-muted">#{{ transaction.id }}</td>
+                      <td class="small">{{ transaction.company }}</td>
+                      <td class="fw-semibold">
+                        {{ transaction.amount | currency: "EUR" }}
+                      </td>
+                      <td>
+                        <span
+                          class="badge"
+                          [class.bg-success]="transaction.status === 'validé'"
+                          [class.bg-warning]="
+                            transaction.status === 'en attente'
+                          "
+                          [class.bg-danger]="transaction.status === 'rejeté'"
+                        >
+                          {{ transaction.status }}
+                        </span>
+                      </td>
+                      <td class="small text-muted">
+                        {{ transaction.date | date: "dd/MM/yyyy HH:mm" }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </ng-template>
             </div>
           </div>
         </div>

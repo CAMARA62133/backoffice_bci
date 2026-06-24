@@ -4,19 +4,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { DemandeTransactionInternationale } from '../data/demandes.data';
+import { TransactionInternationale } from '../data/transaction-internationnale.data';
 import { DemandeTransactionClientService } from '../../../services/agent-trade/demande-transaction-client.service';
 import { NotificationService } from '../../../services/notification/notification.service';
-
+import { SkeletonLoaderComponent } from '../../../shared/skeleton/skeleton-loader.component';
 @Component({
-  selector: 'app-transaction-sans-procuration',
+  selector: 'app-transaction-sans-derogation',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './transaction-sans-procuration.component.html',
-  styleUrl: './transaction-sans-procuration.component.css',
+  imports: [CommonModule, FormsModule, RouterLink, SkeletonLoaderComponent],
+  templateUrl: './transaction-sans-derogation.component.html',
+  styleUrl: './transaction-sans-derogation.component.css',
 })
-export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
-  demandes: DemandeTransactionInternationale[] = [];
+export class TransactionSansDerogationComponent implements OnInit, OnDestroy {
+  demandes: TransactionInternationale[] = [];
   isLoading = false;
 
   // Pagination
@@ -24,7 +24,7 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
   currentPage = 1;
 
   // Tri
-  sortColumn: keyof DemandeTransactionInternationale | '' = '';
+  sortColumn: keyof TransactionInternationale | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   // Filtres
@@ -39,34 +39,28 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
   private notification = inject(NotificationService);
   private subscription!: Subscription;
 
-  // 1. Initialisez vos compteurs à 0
   countAgentTrade: number = 0;
   countConformite: number = 0;
 
   ngOnInit(): void {
     this.loadData();
-    // Les compteurs sont calculés après le chargement des données
     this.calculerCompteurs();
 
     this.subscription = this.transactionService.transactionTraitee$.subscribe(
       (id) => {
         this.supprimerTransaction(id!);
-        // On recalcule après une suppression pour mettre à jour les badges
         this.calculerCompteurs();
       },
     );
   }
 
-  // 2. Correction de la logique de calcul
   calculerCompteurs() {
     const toutesLesDemandes = this.transactionService.getDemandes();
 
-    // Important : On applique le même filtre "Sans Dérogation" que dans loadData
     const demandesSansDerogation = toutesLesDemandes.filter(
       (d) => d.derogation === false,
     );
 
-    // Compteur Agent Trade
     this.countAgentTrade = demandesSansDerogation.filter(
       (d) =>
         (d.etapeValidation === 'AGENT_TRADE' ||
@@ -74,7 +68,6 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
         d.statutDemande === 'EN_ATTENTE',
     ).length;
 
-    // Compteur Conformité
     this.countConformite = demandesSansDerogation.filter(
       (d) =>
         d.etapeValidation === 'CONFORMITE' && d.statutDemande === 'EN_ATTENTE',
@@ -110,7 +103,6 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
         }
       });
 
-      // 3. On recalcule les compteurs ici aussi pour être sûr qu'ils sont à jour
       this.calculerCompteurs();
       this.isLoading = false;
     }, 300);
@@ -129,10 +121,7 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Libellé du bouton de validation selon le rôle et l'étape
-   */
-  getValidationLabel(demande: DemandeTransactionInternationale): string {
+  getValidationLabel(demande: TransactionInternationale): string {
     if (
       demande.etapeValidation === 'FINALISATION' &&
       this.currentRole === 'AGENT_TRADE'
@@ -154,10 +143,9 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
   // FILTRAGE
   // ==========================================
 
-  get filteredData(): DemandeTransactionInternationale[] {
+  get filteredData(): TransactionInternationale[] {
     let data = [...this.demandes];
 
-    // Recherche textuelle
     if (this.searchText) {
       const searchLower = this.searchText.toLowerCase();
       data = data.filter(
@@ -168,7 +156,6 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
       );
     }
 
-    // Filtre date
     if (this.dateDebut) {
       const debut = new Date(this.dateDebut);
       debut.setHours(0, 0, 0, 0);
@@ -181,13 +168,12 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
       data = data.filter((d) => new Date(d.dtCreated) <= fin);
     }
 
-    // Tri
     if (this.sortColumn) {
       data.sort((a, b) => {
         const valA =
-          a[this.sortColumn as keyof DemandeTransactionInternationale];
+          a[this.sortColumn as keyof TransactionInternationale];
         const valB =
-          b[this.sortColumn as keyof DemandeTransactionInternationale];
+          b[this.sortColumn as keyof TransactionInternationale];
 
         if (valA === undefined || valA === null) return 1;
         if (valB === undefined || valB === null) return -1;
@@ -212,7 +198,7 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
   // PAGINATION
   // ==========================================
 
-  get paginatedData(): DemandeTransactionInternationale[] {
+  get paginatedData(): TransactionInternationale[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredData.slice(start, start + this.pageSize);
   }
@@ -277,7 +263,7 @@ export class TransactionSansProcurationComponent implements OnInit, OnDestroy {
   // TRI
   // ==========================================
 
-  sort(column: keyof DemandeTransactionInternationale): void {
+  sort(column: keyof TransactionInternationale): void {
     if (this.sortColumn === column) {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {

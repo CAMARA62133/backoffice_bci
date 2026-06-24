@@ -1,4 +1,4 @@
-export interface DemandeTransactionInternationale {
+export interface TransactionInternationale {
   id: number;
 
   // =========================
@@ -66,7 +66,7 @@ export interface DemandeTransactionInternationale {
   dtCreated: Date;
 }
 // TOUTES LES DEMANDES DANS UN SEUL TABLEAU
-export const toutesLesDemandes: DemandeTransactionInternationale[] = [
+export const transactionsInternationales: TransactionInternationale[] = [
   // =====================================================
   // 1. TRANSACTIONS SANS DÉROGATION (EN_ATTENTE)
   // =====================================================

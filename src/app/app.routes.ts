@@ -48,18 +48,18 @@ import { MobileOperatorComponent } from './pages/agent-conformite/mobile-operato
 import { HistoriqueTransactionComponent } from './pages/admin-integrateur/historique-transaction/historique-transaction.component';
 import { TransactionInternationalComponent } from './pages/admin-integrateur/transaction-international/transaction-international.component';
 import { SouscriptionClientComponent } from './pages/admin-integrateur/souscription-client/souscription-client.component';
-import { HistoriqueTransactionClientsComponent } from './pages/agent-trade/historique-transaction-clients/historique-transaction-clients.component';
 import { AgentTradeDashboardComponent } from './pages/agent-trade/agent-trade-dashboard/agent-trade-dashboard.component';
-import { TransactionMultipleComponent } from './pages/admin-integrateur/transaction-multiple/transaction-multiple.component';
-import { DetailTransactionMultipleComponent } from './pages/admin-integrateur/detail-transaction-multiple/detail-transaction-multiple.component';
+import { TransactionMultipleComponent } from './pages/transaction-multiples/transaction-multiple/transaction-multiple.component';
+import { DetailTransactionMultipleComponent } from './pages/transaction-multiples/detail-transaction-multiple/detail-transaction-multiple.component';
 
-import { TransactionParProcurationComponent } from './pages/agent-trade/transaction-par-procuration/transaction-par-procuration.component';
-import { TransactionSansProcurationComponent } from './pages/agent-trade/transaction-sans-procuration/transaction-sans-procuration.component';
-import { TransactionDetailComponent } from './pages/agent-trade/transaction-detail/transaction-detail.component';
+import { TransactionSansDerogationComponent } from './pages/transaction-internationnales/transaction-sans-derogation/transaction-sans-derogation.component';
+import { TransactionDetailComponent } from './pages/transaction-internationnales/transaction-detail/transaction-detail.component';
 
 import { ROLES } from './core/constants/roles.config';
 import { RoleGuard } from './core/guards/role/role.guard';
 import { DgDgaDashboardComponent } from './pages/dg-dga/dg-dga-dashboard/dg-dga-dashboard.component';
+import { TransactionParDerogationComponent } from './pages/transaction-internationnales/transaction-par-derogation/transaction-par-derogation.component';
+import { HistoriqueTransactionInternationnComponent } from './pages/transaction-internationnales/historique-transaction-internationnale/historique-transaction-internationnale.component';
 
 export const routes: Routes = [
   // ============ AUTH ROUTES ================
@@ -362,14 +362,14 @@ export const routes: Routes = [
         title: 'BCI - Online | Liste des entreprises',
         component: OrgListEntrepriseComponent,
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: [ROLES.ADMIN_SYSTEME_IT] },
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT, ROLES.DG, ROLES.DGA] },
       },
       {
         path: 'org-entreprise/:id',
         title: 'BCI - Online | Fiche des entreprises',
         component: OrgFicheEntrepriseComponent,
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: [ROLES.ADMIN_SYSTEME_IT] },
+        data: { roles: [ROLES.ADMIN_SYSTEME_IT, ROLES.DG, ROLES.DGA] },
       },
       {
         path: 'repporting-export',
@@ -428,35 +428,35 @@ export const routes: Routes = [
         title: 'BCI - Online | Liste des entreprises',
         component: AgentListeEntrepriseComponent,
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: [ROLES.AGENT_CONFORMITE] },
+        data: { roles: [ROLES.AGENT_CONFORMITE, ROLES.DG, ROLES.DGA] },
       },
       {
         path: 'entreprise/new',
         title: 'BCI - Online | Crée une entreprise',
         component: CreateEntrepriseComponent,
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: [ROLES.AGENT_CONFORMITE] },
+        data: { roles: [ROLES.AGENT_CONFORMITE, ROLES.DG, ROLES.DGA] },
       },
       {
         path: 'agent-entreprise/:id',
         title: 'BCI - Online | Fiche entreprise',
         component: AgentFicheEntrepriseComponent,
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: [ROLES.AGENT_CONFORMITE] },
+        data: { roles: [ROLES.AGENT_CONFORMITE, ROLES.DG, ROLES.DGA] },
       },
       {
         path: 'facturiers',
         title: 'BCI - Online | Liste des facturiés',
         component: FacturiesComponent,
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: [ROLES.AGENT_CONFORMITE] },
+        data: { roles: [ROLES.DG, ROLES.DGA, ROLES.ADMIN_INTEGRATEUR_BANQUE] },
       },
       {
         path: 'operateurs-mobiles',
         title: 'BCI - Online | Liste des opérateurs mobiles',
         component: MobileOperatorComponent,
         canActivate: [AuthGuard, RoleGuard],
-        data: { roles: [ROLES.AGENT_CONFORMITE] },
+        data: { roles: [ROLES.DG, ROLES.DGA, ROLES.ADMIN_INTEGRATEUR_BANQUE] },
       },
 
       // --- AGENT TRADE ---
@@ -482,9 +482,9 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaction-par-procuration',
-        title: 'BCI - Online | Transactions internationales par procuration',
-        component: TransactionParProcurationComponent,
+        path: 'transaction-par-derogation',
+        title: 'BCI - Online | Transactions internationales par dérogation',
+        component: TransactionParDerogationComponent,
         canActivate: [AuthGuard, RoleGuard],
         data: {
           roles: [
@@ -496,9 +496,9 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaction-sans-procuration',
-        title: 'BCI - Online | Transactions internationales sans procuration',
-        component: TransactionSansProcurationComponent,
+        path: 'transaction-sans-derogation',
+        title: 'BCI - Online | Transactions internationales sans dérogation',
+        component: TransactionSansDerogationComponent,
         canActivate: [AuthGuard, RoleGuard],
         data: {
           roles: [
@@ -510,9 +510,9 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'historique-transaction-clients',
+        path: 'historique-transaction-internationnale',
         title: 'BCI - Online | Historique des transactions des clients',
-        component: HistoriqueTransactionClientsComponent,
+        component: HistoriqueTransactionInternationnComponent,
         canActivate: [AuthGuard, RoleGuard],
         data: {
           roles: [

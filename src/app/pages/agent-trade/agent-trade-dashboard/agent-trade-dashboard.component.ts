@@ -2,10 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { ChartOptions } from '../../../core/interfaces/apexChartOptions';
 import { ChartService } from '../../../services/charts/chart.service';
+import { SkeletonLoaderComponent } from "../../../shared/skeleton/skeleton-loader.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-agent-trade-dashboard',
-  imports: [NgApexchartsModule],
+  imports: [NgApexchartsModule, SkeletonLoaderComponent, CommonModule],
   templateUrl: './agent-trade-dashboard.component.html',
   styleUrl: './agent-trade-dashboard.component.css',
 })
@@ -15,10 +17,13 @@ export class AgentTradeDashboardComponent {
   public chart2: Partial<ChartOptions>;
   public chart3!: Partial<ChartOptions>;
   public chart4!: Partial<ChartOptions>;
-
+  isLoading = true;
   // chart!: Chart;
 
   constructor(private chartService: ChartService) {
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000); // Ajustez selon vos besoins
     this.chart1 = {
       chart: { type: 'donut', height: 350 },
       series: [28, 45, 67, 4.2],

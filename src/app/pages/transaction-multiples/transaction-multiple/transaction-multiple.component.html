@@ -23,54 +23,7 @@
     <div class="row">
       <div class="col-12">
         <div class="card bci-card">
-          <!-- Onglets -->
-          <ul class="nav nav-tabs card-header border-0 pt-3" role="tablist">
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link fw-semibold"
-                [ngClass]="{
-                  active: activeTab === 'attente',
-                  'bg-warning text-dark': activeTab === 'attente',
-                  'text-dark': activeTab !== 'attente'
-                }"
-                (click)="setActiveTab('attente')"
-                style="border-radius: 8px 8px 0 0; cursor: pointer"
-              >
-                <i class="fas fa-clock me-2"></i>En attente
-                <span class="badge bg-light text-dark ms-2">{{ transactionsEnAttente.length }}</span>
-              </a>
-            </li>
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link fw-semibold"
-                [ngClass]="{
-                  active: activeTab === 'validees',
-                  'bg-success text-white': activeTab === 'validees',
-                  'text-dark': activeTab !== 'validees'
-                }"
-                (click)="setActiveTab('validees')"
-                style="border-radius: 8px 8px 0 0; cursor: pointer"
-              >
-                <i class="fas fa-check-circle me-2"></i>Validées
-                <span class="badge bg-light text-dark ms-2">{{ transactionsValidees.length }}</span>
-              </a>
-            </li>
-            <li class="nav-item" role="presentation">
-              <a
-                class="nav-link fw-semibold"
-                [ngClass]="{
-                  active: activeTab === 'rejetees',
-                  'bg-danger text-white': activeTab === 'rejetees',
-                  'text-dark': activeTab !== 'rejetees'
-                }"
-                (click)="setActiveTab('rejetees')"
-                style="border-radius: 8px 8px 0 0; cursor: pointer"
-              >
-                <i class="fas fa-times-circle me-2"></i>Rejetées
-                <span class="badge bg-light text-dark ms-2">{{ transactionsRejetees.length }}</span>
-              </a>
-            </li>
-          </ul>
+
 
           <div class="card-body">
             <!-- Filtres -->
@@ -175,12 +128,11 @@
                     </td>
                     <td>
                       <span class="badge" [ngClass]="{
-                        'bg-warning text-dark': transaction.statutDemande === 'En attente validation',
                         'bg-success': transaction.statutDemande === 'Valide',
                         'bg-danger': transaction.statutDemande === 'Rejete'
                       }">
                         <i class="fas" [ngClass]="{
-                          'fa-clock': transaction.statutDemande === 'En attente validation',
+        
                           'fa-check-circle': transaction.statutDemande === 'Valide',
                           'fa-times-circle': transaction.statutDemande === 'Rejete'
                         }"></i>
@@ -201,9 +153,9 @@
                   <tr *ngIf="filteredData.length === 0">
                     <td colspan="10" class="text-center py-5 text-muted">
                       <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
-                      <h5>Aucune transaction {{ getStatusLabel() }}</h5>
+                      <h5>Aucune transaction trouvée</h5>
                       <p class="mb-0">
-                        Il n'y a pas de transactions {{ getStatusLabel() }} pour le moment.
+                        Il n'y a pas de transactions pour le moment.
                       </p>
                     </td>
                   </tr>

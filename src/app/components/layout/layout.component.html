@@ -714,12 +714,7 @@
 
               <!-- Alertes et Supervisions -->
               <li class="nav-item">
-                <a
-                  class="nav-link"
-                  routerLink="alertes-supervisions"
-                  routerLinkActive="active"
-                  (click)="onMenuClick()"
-                >
+                <a class="nav-link" (click)="onMenuClick()">
                   <i class="icon ion-android-notifications"></i>
                   <span>Alertes & Supervisions</span>
                 </a>
@@ -754,38 +749,22 @@
                   [class.mm-collapse]="!isSubMenuOpen('params')"
                 >
                   <li>
-                    <a
-                      routerLink="configuration-alertes"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Alertes</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="configuration-notifications"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Notifications</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="configuration-notif-user-defaut"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Notif Défaut User</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="mes-notifications"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Mes Notifications</span>
                     </a>
                   </li>
@@ -830,6 +809,31 @@
                       (click)="onMenuClick()"
                     >
                       <span>Liste des organisations</span>
+                    </a>
+                  </li>
+                  <!-- Gestions des facturies -->
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      routerLink="facturiers"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <i class="icon ion-document-text"></i>
+                      <span>Gestion des Facturiers</span>
+                    </a>
+                  </li>
+
+                  <!-- Gestions des operateurs mobiles -->
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      routerLink="operateurs-mobiles"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <i class="fas fa-mobile-alt me-2"></i>
+                      <span>Gestion des Opérateurs</span>
                     </a>
                   </li>
                   <li>
@@ -951,12 +955,7 @@
 
               <!-- Alertes et Supervisions -->
               <li class="nav-item">
-                <a
-                  class="nav-link"
-                  routerLink="alertes-supervisions"
-                  routerLinkActive="active"
-                  (click)="onMenuClick()"
-                >
+                <a class="nav-link" (click)="onMenuClick()">
                   <i class="icon ion-android-notifications"></i>
                   <span>Alertes & Supervisions</span>
                 </a>
@@ -978,38 +977,22 @@
                   [class.mm-collapse]="!isSubMenuOpen('params')"
                 >
                   <li>
-                    <a
-                      routerLink="configuration-alertes"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Alertes</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="configuration-notifications"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Notifications</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="configuration-notif-user-defaut"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Notif Défaut User</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="mes-notifications"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Mes Notifications</span>
                     </a>
                   </li>
@@ -1055,7 +1038,42 @@
                       <span>Liste des organisations</span>
                     </a>
                   </li>
+                  <li>
+                    <a
+                      class="text-truncate align-self-center"
+                      routerLink="/agent-entreprise"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Liste des entreprises</span>
+                    </a>
+                  </li>
                 </ul>
+              </li>
+              <!-- Gestions des facturies -->
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="facturiers"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
+                >
+                  <i class="icon ion-document-text"></i>
+                  <span>Gestion des Facturiers</span>
+                </a>
+              </li>
+
+              <!-- Gestions des operateurs mobiles -->
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="operateurs-mobiles"
+                  routerLinkActive="active"
+                  (click)="onMenuClick()"
+                >
+                  <i class="fas fa-mobile-alt me-2"></i>
+                  <span>Gestion des Opérateurs</span>
+                </a>
               </li>
               <!--
                       <li>
@@ -1099,49 +1117,98 @@
                         </a>
                       </li> -->
               <!-- Transactions et Operations -->
+              <!-- Transactions et Operations (Niveau 1) -->
               <li
                 class="nav-item"
                 [class.mm-active]="isSubMenuOpen('transactions')"
               >
                 <a
+                  href="javascript:void(0);"
                   class="nav-link has-arrow"
                   (click)="toggleSubMenu('transactions', $event)"
-                  [class.collapsed]="!isSubMenuOpen('transactions')"
+                  [attr.aria-expanded]="isSubMenuOpen('transactions')"
                 >
                   <i class="icon ion-cash"></i>
                   <span>Transactions & opérations</span>
                 </a>
+
                 <ul
                   class="sub-menu"
                   [class.mm-show]="isSubMenuOpen('transactions')"
                   [class.mm-collapse]="!isSubMenuOpen('transactions')"
                 >
+                  <!-- Item Simple -->
                   <li>
                     <a
-                      class="nav-link-custom"
                       routerLink="/historique-transaction"
                       routerLinkActive="active"
                       (click)="onMenuClick()"
+                      class="nav-link-custom"
                     >
                       <span>Historique des transactions</span>
                     </a>
                   </li>
-                  <li>
+
+                  <li
+                    class="nav-item"
+                    [class.mm-show]="isSubMenuOpen('transactions')"
+                  >
                     <a
-                      class="nav-link-custom"
-                      routerLink="/transaction-internationale"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
+                      href="javascript:void(0);"
+                      class="nav-link has-arrow inner-link d-flex align-items-center justify-content-between"
+                      (click)="toggleSubMenu('international', $event)"
+                      [attr.aria-expanded]="isSubMenuOpen('international')"
                     >
-                      <span>Transactions internationales</span>
+                      <span class="d-flex flex-column">
+                        <span>Transactions</span>
+                        <span>Internationales</span>
+                      </span>
+
+                      <i class="fa fa-chevron-down ms-auto"></i>
                     </a>
+
+                    <ul
+                      class="sub-menu nested"
+                      [class.mm-show]="isSubMenuOpen('international')"
+                      [class.mm-collapse]="!isSubMenuOpen('international')"
+                    >
+                      <li>
+                        <a
+                          routerLink="/transaction-sans-derogation"
+                          routerLinkActive="active"
+                          (click)="onMenuClick()"
+                        >
+                          <span>Sans dérogation</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          routerLink="/transaction-par-derogation"
+                          routerLinkActive="active"
+                          (click)="onMenuClick()"
+                        >
+                          <span>Par dérogation</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          routerLink="/historique-transaction-internationnale"
+                          routerLinkActive="active"
+                          (click)="onMenuClick()"
+                        >
+                          <span>Historique international</span>
+                        </a>
+                      </li>
+                    </ul>
                   </li>
+
+                  <!-- Item Simple -->
                   <li>
                     <a
-                      class="nav-link-custom"
                       routerLink="/transaction-multiple"
                       routerLinkActive="active"
                       (click)="onMenuClick()"
+                      class="nav-link-custom"
                     >
                       <span>Transactions multiples</span>
                     </a>
@@ -1164,38 +1231,22 @@
                   [class.mm-collapse]="!isSubMenuOpen('params')"
                 >
                   <li>
-                    <a
-                      routerLink="configuration-alertes"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Alertes</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="configuration-notifications"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Notifications</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="configuration-notif-user-defaut"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Config. Notif Défaut User</span>
                     </a>
                   </li>
                   <li>
-                    <a
-                      routerLink="mes-notifications"
-                      routerLinkActive="active"
-                      (click)="onMenuClick()"
-                    >
+                    <a (click)="onMenuClick()">
                       <span>Mes Notifications</span>
                     </a>
                   </li>
@@ -1257,31 +1308,55 @@
                   </li>
                 </ul>
               </li>
-
-              <!-- Gestions des facturies -->
-              <li class="nav-item">
+              <li
+                class="nav-item"
+                [class.mm-active]="isSubMenuOpen('transactions')"
+              >
                 <a
-                  class="nav-link"
-                  routerLink="facturiers"
-                  routerLinkActive="active"
-                  (click)="onMenuClick()"
+                  class="nav-link has-arrow"
+                  (click)="toggleSubMenu('transactions', $event)"
+                  [class.collapsed]="!isSubMenuOpen('transactions')"
                 >
-                  <i class="icon ion-document-text"></i>
-                  <span>Gestion des Facturiers</span>
+                  <i class="icon ion-cash"></i>
+                  <span>Transactions Internationnales</span>
                 </a>
-              </li>
+                <ul
+                  class="sub-menu"
+                  [class.mm-show]="isSubMenuOpen('transactions')"
+                  [class.mm-collapse]="!isSubMenuOpen('transactions')"
+                >
+                  <li>
+                    <a
+                      class="nav-link-custom"
+                      routerLink="/transaction-sans-derogation"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Transactions sans dérogation</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class="nav-link-custom"
+                      routerLink="/transaction-par-derogation"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Transactions par dérogation</span>
+                    </a>
+                  </li>
 
-              <!-- Gestions des operateurs mobiles -->
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  routerLink="operateurs-mobiles"
-                  routerLinkActive="active"
-                  (click)="onMenuClick()"
-                >
-                  <i class="fas fa-mobile-alt me-2"></i>
-                  <span>Gestion des Opérateurs</span>
-                </a>
+                  <li>
+                    <a
+                      class="nav-link-custom"
+                      routerLink="/historique-transaction-internationnale"
+                      routerLinkActive="active"
+                      (click)="onMenuClick()"
+                    >
+                      <span>Historique des transactions</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
             }
 
@@ -1392,28 +1467,28 @@
                   <li>
                     <a
                       class="nav-link-custom"
-                      routerLink="/transaction-sans-procuration"
+                      routerLink="/transaction-sans-derogation"
                       routerLinkActive="active"
                       (click)="onMenuClick()"
                     >
-                      <span>Transactions sans procuration</span>
+                      <span>Transactions sans dérogation</span>
                     </a>
                   </li>
                   <li>
                     <a
                       class="nav-link-custom"
-                      routerLink="/transaction-par-procuration"
+                      routerLink="/transaction-par-derogation"
                       routerLinkActive="active"
                       (click)="onMenuClick()"
                     >
-                      <span>Transactions par procuration</span>
+                      <span>Transactions par dérogation</span>
                     </a>
                   </li>
 
                   <li>
                     <a
                       class="nav-link-custom"
-                      routerLink="/historique-transaction-clients"
+                      routerLink="/historique-transaction-internationnale"
                       routerLinkActive="active"
                       (click)="onMenuClick()"
                     >

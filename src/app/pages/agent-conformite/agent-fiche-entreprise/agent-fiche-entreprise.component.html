@@ -215,7 +215,11 @@
               >
             </button>
           </li>
-          <li class="nav-item" role="presentation">
+          <li
+            *ngIf="canShowTabs()"
+            class="nav-item"
+            role="presentation"
+          >
             <button
               class="nav-link"
               id="workflows-tab"
@@ -237,7 +241,7 @@
               >
             </button>
           </li>
-          <li class="nav-item" role="presentation">
+          <li   *ngIf="canShowTabs()" class="nav-item" role="presentation">
             <button
               class="nav-link"
               id="modules-tab"

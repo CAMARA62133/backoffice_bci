@@ -4,17 +4,11 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-entreprises',
-  imports: [
-    DataTableDirective
-  ],
+  imports: [DataTableDirective, RouterLink],
   templateUrl: './entreprises.component.html',
-  styleUrl: './entreprises.component.css'
+  styleUrl: './entreprises.component.css',
 })
 export class EntreprisesComponent {
-  constructor(private router: Router) {
-  }
-
-  goToFicheEntreprise() {
-    this.router.navigate(['fiche-entreprise']);
-  }
+  constructor(private router: Router) {}
 }
+      

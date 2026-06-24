@@ -1,0 +1,365 @@
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
+          <div>
+            <!-- Badge et titre -->
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <div class="rounded-circle bg-primary bg-opacity-10 p-2">
+                <i class="fas fa-history text-primary fs-6"></i>
+              </div>
+              <span
+                class="badge bg-primary bg-opacity-10 text-primary px-2 py-1 rounded-pill small"
+              >
+                <i class="fas fa-chart-line me-1 fa-xs"></i>Historique
+              </span>
+            </div>
+            <div *ngIf="isLoadingDemandes; else titleContent">
+              <app-skeleton-loader type="title" width="300px" height="32px"></app-skeleton-loader>
+            </div>
+            <ng-template #titleContent>
+              <h4 class="fw-bold text-primary mb-0 h3">
+                Historique des Transactions
+              </h4>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card bci-card">
+
+        <!-- ===================== TABS ===================== -->
+        <ul class="nav nav-tabs card-header border-0 pt-3">
+
+          <li class="nav-item">
+            <a
+              class="nav-link fw-semibold"
+              [ngClass]="{
+                active: isActive('toutes'),
+                'bg-primary text-white': isActive('toutes')
+              }"
+              (click)="setActiveTab('toutes')"
+            >
+              <i class="fas fa-list me-2"></i>
+              Toutes
+              <span class="badge bg-light text-dark ms-2" *ngIf="!isLoadingDemandes">
+                {{ toutesTransactions.length }}
+              </span>
+              <span *ngIf="isLoadingDemandes">
+                <app-skeleton-loader type="badge" width="30px" height="20px"></app-skeleton-loader>
+              </span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link fw-semibold"
+              [ngClass]="{
+                active: isActive('validees'),
+                'bg-success text-white': isActive('validees')
+              }"
+              (click)="setActiveTab('validees')"
+            >
+              <i class="fas fa-check-circle me-2"></i>
+              Validées
+              <span class="badge bg-light text-dark ms-2" *ngIf="!isLoadingDemandes">
+                {{ transactionsValidees.length }}
+              </span>
+              <span *ngIf="isLoadingDemandes">
+                <app-skeleton-loader type="badge" width="30px" height="20px"></app-skeleton-loader>
+              </span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link fw-semibold"
+              [ngClass]="{
+                active: isActive('rejetees'),
+                'bg-danger text-white': isActive('rejetees')
+              }"
+              (click)="setActiveTab('rejetees')"
+            >
+              <i class="fas fa-times-circle me-2"></i>
+              Rejetées
+              <span class="badge bg-light text-dark ms-2" *ngIf="!isLoadingDemandes">
+                {{ transactionsRejetees.length }}
+              </span>
+              <span *ngIf="isLoadingDemandes">
+                <app-skeleton-loader type="badge" width="30px" height="20px"></app-skeleton-loader>
+              </span>
+            </a>
+          </li>
+
+        </ul>
+
+        <div class="card-body">
+
+          <!-- ===================== FILTRES ===================== -->
+          <div class="row mb-4 g-2 align-items-end">
+
+            <!-- SEARCH -->
+            <div class="col-lg-3">
+              <label class="form-label small fw-bold text-muted">Recherche</label>
+              <div *ngIf="isLoadingDemandes; else searchInput">
+                <app-skeleton-loader type="input" height="38px"></app-skeleton-loader>
+              </div>
+              <ng-template #searchInput>
+                <div class="input-group">
+                  <span class="input-group-text bg-white">
+                    <i class="fas fa-search text-primary"></i>
+                  </span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [(ngModel)]="searchText"
+                    (input)="currentPage = 1"
+                    placeholder="Donneur, référence..."
+                  />
+                </div>
+              </ng-template>
+            </div>
+
+            <!-- DATE -->
+            <div class="col-lg-4">
+              <label class="form-label small fw-bold text-muted">Période</label>
+              <div *ngIf="isLoadingDemandes; else dateInputs">
+                <div class="d-flex gap-2">
+                  <app-skeleton-loader type="input" width="100%" height="38px"></app-skeleton-loader>
+                  <app-skeleton-loader type="text" width="30px" height="38px"></app-skeleton-loader>
+                  <app-skeleton-loader type="input" width="100%" height="38px"></app-skeleton-loader>
+                </div>
+              </div>
+              <ng-template #dateInputs>
+                <div class="input-group">
+                  <input type="date" class="form-control"
+                         [(ngModel)]="dateDebut"
+                         (change)="currentPage = 1" />
+
+                  <span class="input-group-text">→</span>
+
+                  <input type="date" class="form-control"
+                         [(ngModel)]="dateFin"
+                         (change)="currentPage = 1" />
+                </div>
+              </ng-template>
+            </div>
+
+            <!-- DEROGATION -->
+            <div class="col-lg-3">
+              <label class="form-label small fw-bold text-muted">Dérogation</label>
+              <div *ngIf="isLoadingDemandes; else derogationSelect">
+                <app-skeleton-loader type="input" height="38px"></app-skeleton-loader>
+              </div>
+              <ng-template #derogationSelect>
+                <select class="form-select"
+                        [(ngModel)]="filtreDerogation"
+                        (change)="currentPage = 1">
+                  <option value="">Toutes</option>
+                  <option value="avec">Avec dérogation</option>
+                  <option value="sans">Sans dérogation</option>
+                </select>
+              </ng-template>
+            </div>
+
+            <!-- RESET -->
+            <div class="col-lg-2">
+              <div *ngIf="isLoadingDemandes; else resetButton">
+                <app-skeleton-loader type="btn" width="100%" height="38px"></app-skeleton-loader>
+              </div>
+              <ng-template #resetButton>
+                <button class="btn btn-light w-100"
+                        (click)="resetFilters()">
+                  <i class="fas fa-sync-alt me-2"></i> Reset
+                </button>
+              </ng-template>
+            </div>
+
+          </div>
+
+          <!-- ===================== TABLE ===================== -->
+          <div class="table-responsive">
+            <table class="table table-hover text-center align-middle">
+
+              <thead class="table-primary">
+                <tr>
+                  <th (click)="sort('id')"># <i [class]="getSortIcon('id')"></i></th>
+
+                  <th (click)="sort('raisonSocialeDO')">
+                    Donneur <i [class]="getSortIcon('raisonSocialeDO')"></i>
+                  </th>
+
+                  <th (click)="sort('raisonSocialeB')">
+                    Bénéficiaire <i [class]="getSortIcon('raisonSocialeB')"></i>
+                  </th>
+
+                  <th (click)="sort('montantTransaction')">
+                    Montant <i [class]="getSortIcon('montantTransaction')"></i>
+                  </th>
+
+                  <th>Devise</th>
+
+                  <th (click)="sort('typeTransaction')">
+                    Type <i [class]="getSortIcon('typeTransaction')"></i>
+                  </th>
+
+                  <th>Dérogation</th>
+
+                  <th (click)="sort('statutDemande')">
+                    Statut <i [class]="getSortIcon('statutDemande')"></i>
+                  </th>
+
+                  <th (click)="sort('dtCreated')">
+                    Date <i [class]="getSortIcon('dtCreated')"></i>
+                  </th>
+
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <!-- Skeleton rows -->
+                <tr *ngIf="isLoadingDemandes">
+                  <td colspan="10" class="p-0">
+                    <div class="p-3">
+                      <app-skeleton-loader type="row" height="50px" *ngFor="let i of [1,2,3,4,5]" class="mb-2"></app-skeleton-loader>
+                    </div>
+                   </td>
+                 </tr>
+
+                <!-- Real data rows -->
+                <ng-container *ngIf="!isLoadingDemandes">
+                  <tr *ngFor="let demande of paginatedData; let i = index">
+
+                    <td>{{ startIndex + i }}</td>
+
+                    <td class="text-start">
+                      <div class="fw-bold">{{ demande.raisonSocialeDO }}</div>
+                      <small class="text-muted">{{ demande.compteTransfert }}</small>
+                    </td>
+
+                    <td class="text-start">
+                      <div class="fw-bold">{{ demande.raisonSocialeB }}</div>
+                      <small class="text-muted">{{ demande.ibanNCompte }}</small>
+                    </td>
+
+                    <td class="fw-bold">
+                      {{ demande.montantTransaction | number:'1.2-2' }}
+                    </td>
+
+                    <td>{{ demande.devise }}</td>
+
+                    <td>
+                      <span class="badge bg-secondary">
+                        {{ demande.typeTransaction }}
+                      </span>
+                    </td>
+
+                    <!-- DEROGATION -->
+                    <td>
+                      <span *ngIf="demande.derogation" class="badge bg-warning text-dark">
+                        Avec dérogation
+                      </span>
+
+                      <span *ngIf="!demande.derogation" class="badge bg-success">
+                        Sans dérogation
+                      </span>
+                    </td>
+
+                    <!-- STATUT -->
+                    <td>
+                      <span class="badge"
+                            [ngClass]="{
+                              'bg-success': demande.statutDemande === 'VALIDE',
+                              'bg-danger': demande.statutDemande === 'REJETE'
+                            }">
+
+                        {{ demande.statutDemande === 'VALIDE' ? 'Validée' : 'Rejetée' }}
+                      </span>
+
+                      <div *ngIf="demande.statutDemande === 'REJETE' && demande.motifRejet"
+                           class="mt-1">
+                        <small class="text-danger">
+                          {{ demande.motifRejet | slice:0:30 }}
+                        </small>
+                      </div>
+                    </td>
+
+                    <td>
+                      {{ demande.dtCreated | date:'dd/MM/yyyy' }}
+                    </td>
+
+                    <td>
+                      <a class="btn btn-sm btn-outline-primary"
+                         [routerLink]="['/detail-demande-client', demande.id]">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                    </td>
+
+                  </tr>
+
+                  <tr *ngIf="filteredData.length === 0">
+                    <td colspan="10" class="text-center py-5 text-muted">
+                      <i class="fas fa-inbox fa-3x mb-2"></i>
+                      Aucune transaction trouvée
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+
+            </table>
+          </div>
+
+          <!-- ===================== PAGINATION ===================== -->
+          <div class="d-flex justify-content-between align-items-center mt-3"
+               *ngIf="!isLoadingDemandes && filteredData.length > 0">
+
+            <div class="text-muted small">
+              {{ startIndex }} - {{ endIndex }} / {{ filteredData.length }}
+            </div>
+
+            <nav>
+              <ul class="pagination mb-0">
+
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <a class="page-link" (click)="previousPage()">Prev</a>
+                </li>
+
+                <li class="page-item"
+                    *ngFor="let page of paginationRange"
+                    [class.active]="page === currentPage">
+
+                  <a class="page-link" (click)="onPageClick(page)">
+                    {{ page }}
+                  </a>
+                </li>
+
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <a class="page-link" (click)="nextPage()">Next</a>
+                </li>
+
+              </ul>
+            </nav>
+
+          </div>
+
+          <!-- Pagination skeleton -->
+          <div *ngIf="isLoadingDemandes" class="d-flex justify-content-between align-items-center mt-3">
+            <app-skeleton-loader type="text" width="150px" height="20px"></app-skeleton-loader>
+            <app-skeleton-loader type="row" width="300px" height="38px"></app-skeleton-loader>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

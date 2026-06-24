@@ -7,15 +7,7 @@
         >
           <div>
             <h4 class="fw-semibold text-primary mb-sm-0 h3">Tableau de bord</h4>
-            <!--            <p class="text-secondary mb-sm-0 font-size-13">Gérez et prenez en charge toutes les requêtes, tickets de-->
-            <!--              support, blocages ou demandes administratives émis par les entreprises clientes.</p>-->
           </div>
-          <!--          <div class="page-title-right">-->
-          <!--            <ol class="breadcrumb m-0">-->
-          <!--              <li class="breadcrumb-item"><a><span>Entreprises Clientes</span></a></li>-->
-          <!--              <li class="breadcrumb-item"><a href="#"><span>Workflows &amp; validations</span></a></li>-->
-          <!--            </ol><span class="badge bg-success ms-2">🟢 Tous les services opérationnels</span>-->
-          <!--          </div>-->
         </div>
       </div>
     </div>
@@ -23,15 +15,19 @@
 
   <div class="container-fluid mt-4">
     <div class="row mb-4">
+      <!-- Carte 1 -->
       <div class="col-md-6 col-lg-3 mb-3">
         <div class="card text-white bg-primary border-0 stat-card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <p class="fw-semibold mb-0 card-title">
-                  Total des transactions
-                </p>
-                <h3 class="text-white metric-number" id="ticketsOuverts">45</h3>
+                <p class="fw-semibold mb-0 card-title">Total des transactions</p>
+                <div *ngIf="isLoading; else totalTransactions">
+                  <app-skeleton-loader type="title" width="60px" height="32px"></app-skeleton-loader>
+                </div>
+                <ng-template #totalTransactions>
+                  <h3 class="text-white metric-number" id="ticketsOuverts">45</h3>
+                </ng-template>
               </div>
               <div class="stat-icon">
                 <i class="fas fa-exchange-alt fa-3x opacity-50"></i>
@@ -41,13 +37,19 @@
         </div>
       </div>
 
+      <!-- Carte 2 -->
       <div class="col-md-6 col-lg-3 mb-3">
         <div class="card text-white bg-success border-0 stat-card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <p class="fw-semibold mb-0 card-title">Transactions validées</p>
-                <h3 id="ticketsEnCours" class="metric-number text-white">28</h3>
+                <div *ngIf="isLoading; else transactionsValidees">
+                  <app-skeleton-loader type="title" width="60px" height="32px"></app-skeleton-loader>
+                </div>
+                <ng-template #transactionsValidees>
+                  <h3 id="ticketsEnCours" class="metric-number text-white">28</h3>
+                </ng-template>
               </div>
               <div class="stat-icon">
                 <i class="fas fa-check-circle fa-3x opacity-50"></i>
@@ -57,15 +59,19 @@
         </div>
       </div>
 
+      <!-- Carte 3 -->
       <div class="col-md-6 col-lg-3 mb-3">
         <div class="card text-white bg-warning border-0 stat-card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <p class="fw-semibold mb-0 card-title">
-                  Transactions en attente
-                </p>
-                <h3 class="metric-number" id="ticketsResolus24h2">67</h3>
+                <p class="fw-semibold mb-0 card-title">Transactions en attente</p>
+                <div *ngIf="isLoading; else transactionsEnAttente">
+                  <app-skeleton-loader type="title" width="60px" height="32px"></app-skeleton-loader>
+                </div>
+                <ng-template #transactionsEnAttente>
+                  <h3 class="metric-number" id="ticketsResolus24h2">67</h3>
+                </ng-template>
               </div>
               <div class="stat-icon">
                 <i class="fas fa-hourglass-half fa-3x opacity-50"></i>
@@ -75,15 +81,19 @@
         </div>
       </div>
 
+      <!-- Carte 4 -->
       <div class="col-md-6 col-lg-3 mb-3">
         <div class="card text-white bg-danger border-0 stat-card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <p class="fw-semibold mb-0 card-title">Transactions rejetées</p>
-                <h3 id="satisfactionMoyenne" class="metric-number text-white">
-                  4.2
-                </h3>
+                <div *ngIf="isLoading; else transactionsRejetees">
+                  <app-skeleton-loader type="title" width="60px" height="32px"></app-skeleton-loader>
+                </div>
+                <ng-template #transactionsRejetees>
+                  <h3 id="satisfactionMoyenne" class="metric-number text-white">4.2</h3>
+                </ng-template>
               </div>
               <div class="stat-icon">
                 <i class="fas fa-times-circle fa-3x opacity-50"></i>
@@ -98,38 +108,42 @@
       <!-- Graphique principal -->
       <div class="col-12 col-xl-8">
         <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
-          <div
-            class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3"
-          >
+          <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
             <div>
-              <h5 class="fw-bold text-dark mb-1">
-                Vue globale des transactions
-              </h5>
-              <p class="text-muted mb-0 small">
-                Analyse générale des activités financières
-              </p>
+              <div *ngIf="isLoading; else chart1Title">
+                <app-skeleton-loader type="title" width="200px" height="24px"></app-skeleton-loader>
+                <app-skeleton-loader type="text-sm" width="150px" height="16px" class="mt-1"></app-skeleton-loader>
+              </div>
+              <ng-template #chart1Title>
+                <h5 class="fw-bold text-dark mb-1">Vue globale des transactions</h5>
+                <p class="text-muted mb-0 small">Analyse générale des activités financières</p>
+              </ng-template>
             </div>
-
-            <div
-              class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill"
-            >
-              Aujourd'hui
+            <div *ngIf="!isLoading">
+              <div class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">Aujourd'hui</div>
+            </div>
+            <div *ngIf="isLoading">
+              <app-skeleton-loader type="badge" width="100px" height="32px"></app-skeleton-loader>
             </div>
           </div>
-
           <div class="card-body pt-0">
             <div class="chart-container">
-              <apx-chart
-                [title]="chart1.title"
-                [series]="chart1.series"
-                [labels]="chart1.labels"
-                [chart]="chart1.chart"
-                [xaxis]="chart1.xaxis"
-                [dataLabels]="chart1.dataLabels"
-                [plotOptions]="chart1.plotOptions"
-                [fill]="chart1.fill"
-                [tooltip]="chart1.tooltip"
-              ></apx-chart>
+              <div *ngIf="isLoading; else chart1Graph">
+                <app-skeleton-loader type="row" height="300px"></app-skeleton-loader>
+              </div>
+              <ng-template #chart1Graph>
+                <apx-chart
+                  [title]="chart1.title"
+                  [series]="chart1.series"
+                  [labels]="chart1.labels"
+                  [chart]="chart1.chart"
+                  [xaxis]="chart1.xaxis"
+                  [dataLabels]="chart1.dataLabels"
+                  [plotOptions]="chart1.plotOptions"
+                  [fill]="chart1.fill"
+                  [tooltip]="chart1.tooltip"
+                ></apx-chart>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -139,25 +153,33 @@
       <div class="col-12 col-xl-4">
         <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
           <div class="card-header bg-white border-0 py-3">
-            <h5 class="fw-bold text-dark mb-1">Taux de réussite</h5>
-            <p class="text-muted mb-0 small">Performance des transactions</p>
+            <div *ngIf="isLoading; else chart2Title">
+              <app-skeleton-loader type="title" width="150px" height="24px"></app-skeleton-loader>
+              <app-skeleton-loader type="text-sm" width="120px" height="16px" class="mt-1"></app-skeleton-loader>
+            </div>
+            <ng-template #chart2Title>
+              <h5 class="fw-bold text-dark mb-1">Taux de réussite</h5>
+              <p class="text-muted mb-0 small">Performance des transactions</p>
+            </ng-template>
           </div>
-
-          <div
-            class="card-body d-flex justify-content-center align-items-center"
-          >
+          <div class="card-body d-flex justify-content-center align-items-center">
             <div class="chart-container w-100">
-              <apx-chart
-                [title]="chart2.title"
-                [series]="chart2.series"
-                [labels]="chart2.labels"
-                [chart]="chart2.chart"
-                [xaxis]="chart2.xaxis"
-                [dataLabels]="chart2.dataLabels"
-                [plotOptions]="chart2.plotOptions"
-                [fill]="chart2.fill"
-                [tooltip]="chart2.tooltip"
-              ></apx-chart>
+              <div *ngIf="isLoading; else chart2Graph">
+                <app-skeleton-loader type="row" height="250px"></app-skeleton-loader>
+              </div>
+              <ng-template #chart2Graph>
+                <apx-chart
+                  [title]="chart2.title"
+                  [series]="chart2.series"
+                  [labels]="chart2.labels"
+                  [chart]="chart2.chart"
+                  [xaxis]="chart2.xaxis"
+                  [dataLabels]="chart2.dataLabels"
+                  [plotOptions]="chart2.plotOptions"
+                  [fill]="chart2.fill"
+                  [tooltip]="chart2.tooltip"
+                ></apx-chart>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -167,22 +189,32 @@
       <div class="col-12 col-lg-7">
         <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
           <div class="card-header bg-white border-0 py-3">
-            <h5 class="fw-bold text-dark mb-1">Types de transactions</h5>
-            <p class="text-muted mb-0 small">Répartition par catégorie</p>
+            <div *ngIf="isLoading; else chart3Title">
+              <app-skeleton-loader type="title" width="180px" height="24px"></app-skeleton-loader>
+              <app-skeleton-loader type="text-sm" width="140px" height="16px" class="mt-1"></app-skeleton-loader>
+            </div>
+            <ng-template #chart3Title>
+              <h5 class="fw-bold text-dark mb-1">Types de transactions</h5>
+              <p class="text-muted mb-0 small">Répartition par catégorie</p>
+            </ng-template>
           </div>
-
           <div class="card-body">
             <div class="chart-container">
-              <apx-chart
-                [title]="chart3.title"
-                [series]="chart3.series"
-                [chart]="chart3.chart"
-                [xaxis]="chart3.xaxis"
-                [dataLabels]="chart3.dataLabels"
-                [plotOptions]="chart3.plotOptions"
-                [fill]="chart3.fill"
-                [tooltip]="chart3.tooltip"
-              ></apx-chart>
+              <div *ngIf="isLoading; else chart3Graph">
+                <app-skeleton-loader type="row" height="300px"></app-skeleton-loader>
+              </div>
+              <ng-template #chart3Graph>
+                <apx-chart
+                  [title]="chart3.title"
+                  [series]="chart3.series"
+                  [chart]="chart3.chart"
+                  [xaxis]="chart3.xaxis"
+                  [dataLabels]="chart3.dataLabels"
+                  [plotOptions]="chart3.plotOptions"
+                  [fill]="chart3.fill"
+                  [tooltip]="chart3.tooltip"
+                ></apx-chart>
+              </ng-template>
             </div>
           </div>
         </div>
@@ -192,27 +224,35 @@
       <div class="col-12 col-lg-5">
         <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
           <div class="card-header bg-white border-0 py-3">
-            <h5 class="fw-bold text-dark mb-1">Activité récente</h5>
-            <p class="text-muted mb-0 small">Évolution des opérations</p>
+            <div *ngIf="isLoading; else chart4Title">
+              <app-skeleton-loader type="title" width="150px" height="24px"></app-skeleton-loader>
+              <app-skeleton-loader type="text-sm" width="130px" height="16px" class="mt-1"></app-skeleton-loader>
+            </div>
+            <ng-template #chart4Title>
+              <h5 class="fw-bold text-dark mb-1">Activité récente</h5>
+              <p class="text-muted mb-0 small">Évolution des opérations</p>
+            </ng-template>
           </div>
-
-          <div
-            class="card-body d-flex align-items-center justify-content-center"
-          >
+          <div class="card-body d-flex align-items-center justify-content-center">
             <div class="chart-container w-100">
-              <apx-chart
-                [series]="chart4.series"
-                [chart]="chart4.chart"
-                [xaxis]="chart4.xaxis"
-                [stroke]="chart4.stroke"
-                [colors]="chart4.colors"
-                [dataLabels]="chart4.dataLabels"
-                [grid]="chart4.grid"
-                [markers]="chart4.markers"
-                [tooltip]="chart4.tooltip"
-                [title]="chart4.title"
-                [yaxis]="chart4.yaxis"
-              ></apx-chart>
+              <div *ngIf="isLoading; else chart4Graph">
+                <app-skeleton-loader type="row" height="250px"></app-skeleton-loader>
+              </div>
+              <ng-template #chart4Graph>
+                <apx-chart
+                  [series]="chart4.series"
+                  [chart]="chart4.chart"
+                  [xaxis]="chart4.xaxis"
+                  [stroke]="chart4.stroke"
+                  [colors]="chart4.colors"
+                  [dataLabels]="chart4.dataLabels"
+                  [grid]="chart4.grid"
+                  [markers]="chart4.markers"
+                  [tooltip]="chart4.tooltip"
+                  [title]="chart4.title"
+                  [yaxis]="chart4.yaxis"
+                ></apx-chart>
+              </ng-template>
             </div>
           </div>
         </div>

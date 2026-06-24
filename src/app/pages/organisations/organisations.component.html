@@ -408,15 +408,13 @@
                     <td>
                       <div class="d-flex gap-1 justify-content-center">
                         <a
-                          [routerLink]="
-                            '/organisations/' + org.id + '/liste-entreprise'
-                          "
+                          [routerLink]="['/agent-entreprise']"
+                          [queryParams]="{ idOrg: org.id }"
                           class="btn btn-outline-info btn-action btn-sm"
                           title="Consulter"
                         >
                           <i class="fas fa-eye"></i>
                         </a>
-
                         <button
                           *ngIf="
                             currentUser?.vcRoleName ===

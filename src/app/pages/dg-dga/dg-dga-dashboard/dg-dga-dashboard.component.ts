@@ -2,10 +2,10 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth/authService/auth.service';
-
+import { SkeletonLoaderComponent } from '../../../shared/skeleton/skeleton-loader.component';
 @Component({
   selector: 'app-dg-dga-dashboard',
-  imports: [NgApexchartsModule, CommonModule],
+  imports: [NgApexchartsModule, CommonModule, SkeletonLoaderComponent],
   templateUrl: './dg-dga-dashboard.component.html',
   styleUrls: ['./dg-dga-dashboard.component.css'],
 })
@@ -13,6 +13,7 @@ export class DgDgaDashboardComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
 
   selectedPeriod: string = 'week';
+  isLoading = true;
 
   // Chart configurations
   evolutionChart: any;
@@ -63,13 +64,19 @@ export class DgDgaDashboardComponent implements OnInit {
     this.initStatusChart();
     this.initMonthlyTrend();
   }
+
   ngOnInit(): void {
     this.getUser();
+    // Simuler le chargement des données
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1000);
   }
 
   getUser() {
     return this.authService.userInfo();
   }
+
   initEvolutionChart() {
     this.evolutionChart = {
       series: [
@@ -254,10 +261,5 @@ export class DgDgaDashboardComponent implements OnInit {
         categories: categories[period as keyof typeof categories],
       },
     };
-  }
-
-  refreshData() {
-    // Simuler l'actualisation des données
-    console.log('Données actualisées');
   }
 }

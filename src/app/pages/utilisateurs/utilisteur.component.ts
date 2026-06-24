@@ -403,6 +403,7 @@ export class UtilisteurComponent implements OnInit {
     this.usersService.getAllUsers().subscribe({
       next: (res) => {
         const allUsers = res?.data;
+        
         this.dttrigger.next(null);
 
         console.log('allUser', { allUsers });

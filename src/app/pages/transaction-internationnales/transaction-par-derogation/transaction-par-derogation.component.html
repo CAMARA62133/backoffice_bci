@@ -1,0 +1,354 @@
+<div class="page-content">
+  <div class="container-fluid border-bottom">
+    <div class="row mt-3">
+      <div class="col-12">
+        <div
+          class="d-sm-flex justify-content-between align-items-center mt-4 page-title-box"
+        >
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <div class="rounded-circle bg-primary bg-opacity-10 p-2">
+                <i class="fas fa-exchange-alt text-primary fs-6"></i>
+              </div>
+              <span
+                class="badge bg-primary bg-opacity-10 text-primary px-2 py-1 rounded-pill small"
+              >
+                Transactions Par Dérogation
+              </span>
+            </div>
+            <div *ngIf="isLoading; else titleContent">
+              <app-skeleton-loader type="title" width="400px" height="32px"></app-skeleton-loader>
+            </div>
+            <ng-template #titleContent>
+              <h4 class="fw-bold text-primary mb-0 h3">
+                Transactions
+                <span class="text-muted fw-normal">(Par Dérogation)</span>
+              </h4>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid mt-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <!-- Sélecteur de rôle -->
+        <div class="row mb-5">
+          <div class="col-12">
+            <div class="d-flex gap-4 w-100">
+              <!-- Agent Trade -->
+              <button
+                type="button"
+                class="btn flex-fill position-relative"
+                [class.btn-primary]="currentRole === 'AGENT_TRADE'"
+                [class.btn-outline-secondary]="currentRole !== 'AGENT_TRADE'"
+                (click)="changerRole('AGENT_TRADE')"
+              >
+                <i class="fas fa-user me-2"></i>Agent Trade
+                <span
+                  *ngIf="!isLoading && countAgentTrade > 0"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white"
+                >
+                  {{ countAgentTrade }}
+                </span>
+                <span *ngIf="isLoading">
+                  <app-skeleton-loader type="badge" width="25px" height="20px" class="position-absolute top-0 start-100 translate-middle"></app-skeleton-loader>
+                </span>
+              </button>
+
+              <!-- Conformité -->
+              <button
+                type="button"
+                class="btn flex-fill position-relative"
+                [class.btn-primary]="currentRole === 'CONFORMITE'"
+                [class.btn-outline-secondary]="currentRole !== 'CONFORMITE'"
+                (click)="changerRole('CONFORMITE')"
+              >
+                <i class="fas fa-shield-alt me-2"></i>Conformité
+                <span
+                  *ngIf="!isLoading && countConformite > 0"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark border border-white"
+                >
+                  {{ countConformite }}
+                </span>
+                <span *ngIf="isLoading">
+                  <app-skeleton-loader type="badge" width="25px" height="20px" class="position-absolute top-0 start-100 translate-middle"></app-skeleton-loader>
+                </span>
+              </button>
+
+              <!-- DG / DGA -->
+              <button
+                type="button"
+                class="btn flex-fill position-relative"
+                [class.btn-primary]="currentRole === 'DG_DGA'"
+                [class.btn-outline-secondary]="currentRole !== 'DG_DGA'"
+                (click)="changerRole('DG_DGA')"
+              >
+                <i class="fas fa-user-tie me-2"></i>DG / DGA
+                <span
+                  *ngIf="!isLoading && countDG > 0"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info text-dark border border-white"
+                >
+                  {{ countDG }}
+                </span>
+                <span *ngIf="isLoading">
+                  <app-skeleton-loader type="badge" width="25px" height="20px" class="position-absolute top-0 start-100 translate-middle"></app-skeleton-loader>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtres -->
+        <div class="row mb-4 g-2 align-items-end">
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label small fw-bold text-muted">Recherche</label>
+            <div *ngIf="isLoading; else searchInput">
+              <app-skeleton-loader type="input" height="38px"></app-skeleton-loader>
+            </div>
+            <ng-template #searchInput>
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-white border-end-0">
+                  <i class="fas fa-search text-primary"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control border-start-0 ps-0"
+                  [(ngModel)]="searchText"
+                  placeholder="Donneur, bénéficiaire, référence..."
+                  (input)="currentPage = 1"
+                />
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label small fw-bold text-muted">Période</label>
+            <div *ngIf="isLoading; else dateInputs">
+              <div class="d-flex gap-2">
+                <app-skeleton-loader type="input" width="100%" height="38px"></app-skeleton-loader>
+                <app-skeleton-loader type="text" width="30px" height="38px"></app-skeleton-loader>
+                <app-skeleton-loader type="input" width="100%" height="38px"></app-skeleton-loader>
+              </div>
+            </div>
+            <ng-template #dateInputs>
+              <div class="input-group shadow-sm">
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="dateDebut"
+                  (change)="currentPage = 1"
+                />
+                <span
+                  class="input-group-text bg-light border-start-0 border-end-0"
+                >
+                  <i class="fas fa-arrow-right fa-xs text-muted"></i>
+                </span>
+                <input
+                  type="date"
+                  class="form-control"
+                  [(ngModel)]="dateFin"
+                  (change)="currentPage = 1"
+                />
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="col-lg-2 col-md-4">
+            <div *ngIf="isLoading; else resetButton">
+              <app-skeleton-loader type="btn" width="100%" height="38px"></app-skeleton-loader>
+            </div>
+            <ng-template #resetButton>
+              <button
+                class="btn btn-light border w-100 shadow-sm"
+                (click)="resetFilters()"
+                style="height: 38px"
+              >
+                <i class="fas fa-sync-alt me-2 text-secondary"></i>
+                Réinitialiser
+              </button>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Tableau -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th
+                  (click)="!isLoading && sort('id')"
+                  style="cursor: pointer"
+                  class="text-center"
+                >
+                  # <i [class]="getSortIcon('id')"></i>
+                </th>
+                <th (click)="!isLoading && sort('raisonSocialeDO')" style="cursor: pointer">
+                  Donneur d'ordre
+                  <i [class]="getSortIcon('raisonSocialeDO')"></i>
+                </th>
+                <th (click)="!isLoading && sort('raisonSocialeB')" style="cursor: pointer">
+                  Bénéficiaire <i [class]="getSortIcon('raisonSocialeB')"></i>
+                </th>
+                <th
+                  (click)="!isLoading && sort('montantTransaction')"
+                  style="cursor: pointer"
+                  class="text-end"
+                >
+                  Montant <i [class]="getSortIcon('montantTransaction')"></i>
+                </th>
+                <th
+                  (click)="!isLoading && sort('devise')"
+                  style="cursor: pointer"
+                  class="text-center"
+                >
+                  Devise <i [class]="getSortIcon('devise')"></i>
+                </th>
+                <th
+                  (click)="!isLoading && sort('etapeValidation')"
+                  style="cursor: pointer"
+                  class="text-center"
+                >
+                  Étape <i [class]="getSortIcon('etapeValidation')"></i>
+                </th>
+                <th
+                  (click)="!isLoading && sort('dtCreated')"
+                  style="cursor: pointer"
+                  class="text-center"
+                >
+                  Date <i [class]="getSortIcon('dtCreated')"></i>
+                </th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Skeleton rows -->
+              <tr *ngIf="isLoading">
+                <td colspan="8" class="p-0">
+                  <div class="p-3">
+                    <app-skeleton-loader type="row" height="60px" *ngFor="let i of [1,2,3,4,5]" class="mb-2"></app-skeleton-loader>
+                  </div>
+                 </td>
+               </tr>
+
+              <!-- Real data rows -->
+              <ng-container *ngIf="!isLoading">
+                <tr *ngFor="let demande of paginatedData; let i = index">
+                  <td class="text-center fw-bold">{{ startIndex + i }}</td>
+                  <td>
+                    <div class="fw-bold">{{ demande.raisonSocialeDO }}</div>
+                    <small class="text-muted font-monospace">{{
+                      demande.compteTransfert
+                    }}</small>
+                  </td>
+                  <td>
+                    <div class="fw-bold">{{ demande.raisonSocialeB }}</div>
+                    <small class="text-muted font-monospace">{{
+                      demande.ibanNCompte
+                    }}</small>
+                  </td>
+                  <td class="text-end fw-bold">
+                    {{ demande.montantTransaction | number: "1.2-2" }}
+                  </td>
+                  <td class="text-center">
+                    <span class="badge bg-info text-dark">{{
+                      demande.devise
+                    }}</span>
+                  </td>
+                  <td class="text-center">
+                    <div class="d-flex flex-column align-items-center gap-1">
+                      <span
+                        class="badge"
+                        [ngClass]="getEtapeClass(demande.etapeValidation)"
+                      >
+                        {{ getEtapeLabel(demande.etapeValidation) }}
+                      </span>
+                      <small
+                        *ngIf="demande.statutDemande === 'EN_ATTENTE'"
+                        class="text-warning fw-bold"
+                      >
+                        <i class="fas fa-clock fa-spin me-1"></i> À valider
+                      </small>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    {{ demande.dtCreated | date: "dd/MM/yyyy" }}
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <a
+                        [routerLink]="['/transaction-detail', demande.id]"
+                        [queryParams]="{ role: currentRole }"
+                        class="btn btn-outline-info"
+                        title="Voir détails"
+                      >
+                        <i class="fas fa-eye"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="filteredData.length === 0">
+                  <td colspan="8" class="text-center py-5 text-muted">
+                    <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                    <h5>Aucune demande avec Dérogation</h5>
+                    <p class="mb-0">
+                      @if (currentRole === "AGENT_TRADE") {
+                        Aucune demande de dérogation en attente de traitement.
+                      }
+                      @if (currentRole === "CONFORMITE") {
+                        Aucune demande en attente de validation par la conformité.
+                      }
+                      @if (currentRole === "DG_DGA") {
+                        Aucune demande en attente d'approbation par la DG/DGA.
+                      }
+                    </p>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div
+          *ngIf="!isLoading && filteredData.length > 0"
+          class="d-flex justify-content-between align-items-center mt-3"
+        >
+          <div class="text-muted small">
+            Affichage de {{ startIndex }} à {{ endIndex }} sur
+            {{ filteredData.length }} demandes
+          </div>
+          <nav>
+            <ul class="pagination mb-0">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="previousPage()">Précédent</a>
+              </li>
+              <li
+                class="page-item"
+                *ngFor="let page of paginationRange"
+                [class.active]="page === currentPage"
+              >
+                <a class="page-link" (click)="onPageClick(page)">{{ page }}</a>
+              </li>
+              <li
+                class="page-item"
+                [class.disabled]="currentPage === totalPages"
+              >
+                <a class="page-link" (click)="nextPage()">Suivant</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Pagination skeleton -->
+        <div *ngIf="isLoading" class="d-flex justify-content-between align-items-center mt-3">
+          <app-skeleton-loader type="text" width="200px" height="20px"></app-skeleton-loader>
+          <app-skeleton-loader type="row" width="300px" height="38px"></app-skeleton-loader>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

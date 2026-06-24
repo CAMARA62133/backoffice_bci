@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { TransactionMultiple, TRANSACTIONS_MULTIPLES } from '../../pages/admin-integrateur/data/transaction-multile.data';
+import {
+  TransactionMultiple,
+  TRANSACTIONS_MULTIPLES,
+} from '../../pages/transaction-multiples/data/transaction-multile.data';
 
 @Injectable({
   providedIn: 'root',

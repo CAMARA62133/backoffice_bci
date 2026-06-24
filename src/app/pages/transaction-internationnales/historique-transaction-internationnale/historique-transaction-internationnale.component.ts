@@ -4,23 +4,22 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UtilsService } from '../../../services/utils/table-utils.service';
 import { NotificationService } from '../../../services/notification/notification.service';
-import {
-  DemandeTransactionInternationale,
-  toutesLesDemandes,
-} from '../data/demandes.data';
+
+import { SkeletonLoaderComponent } from '../../../shared/skeleton/skeleton-loader.component';
+import { TransactionInternationale, transactionsInternationales } from '../data/transaction-internationnale.data';
 
 @Component({
-  selector: 'app-historique-transaction-clients',
+  selector: 'app-historique-transaction-internationnale',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './historique-transaction-clients.component.html',
-  styleUrl: './historique-transaction-clients.component.css',
+  imports: [CommonModule, FormsModule, RouterLink, SkeletonLoaderComponent],
+  templateUrl: './historique-transaction-internationnale.component.html',
+  styleUrl: './historique-transaction-internationnale.component.css',
 })
-export class HistoriqueTransactionClientsComponent implements OnInit {
+export class HistoriqueTransactionInternationnComponent implements OnInit {
   activeTab: 'toutes' | 'validees' | 'rejetees' = 'validees';
   isLoadingDemandes = false;
 
-  toutesLesDemandes: DemandeTransactionInternationale[] = [];
+  toutesLesDemandes: TransactionInternationale[] = [];
 
   pageSize = 10;
   currentPage = 1;
@@ -44,7 +43,7 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
     this.isLoadingDemandes = true;
 
     setTimeout(() => {
-      this.toutesLesDemandes = [...toutesLesDemandes];
+      this.toutesLesDemandes = [...transactionsInternationales];
       this.isLoadingDemandes = false;
     }, 500);
   }
@@ -53,17 +52,17 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
   // FILTRES PAR STATUT
   // =========================
 
-  get toutesTransactions(): DemandeTransactionInternationale[] {
+  get toutesTransactions(): TransactionInternationale[] {
     return this.toutesLesDemandes.filter(
       (d) => d.statutDemande === 'VALIDE' || d.statutDemande === 'REJETE',
     );
   }
 
-  get transactionsValidees(): DemandeTransactionInternationale[] {
+  get transactionsValidees(): TransactionInternationale[] {
     return this.toutesLesDemandes.filter((d) => d.statutDemande === 'VALIDE');
   }
 
-  get transactionsRejetees(): DemandeTransactionInternationale[] {
+  get transactionsRejetees(): TransactionInternationale[] {
     return this.toutesLesDemandes.filter((d) => d.statutDemande === 'REJETE');
   }
 
@@ -71,7 +70,7 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
   // DATA ACTIF
   // =========================
 
-  get currentData(): DemandeTransactionInternationale[] {
+  get currentData(): TransactionInternationale[] {
     switch (this.activeTab) {
       case 'toutes':
         return this.toutesTransactions;
@@ -88,7 +87,7 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
   // FILTRAGE GLOBAL
   // =========================
 
-  get filteredData(): DemandeTransactionInternationale[] {
+  get filteredData(): TransactionInternationale[] {
     let data = [...this.currentData];
 
     // SEARCH
@@ -165,7 +164,7 @@ export class HistoriqueTransactionClientsComponent implements OnInit {
   // PAGINATION
   // =========================
 
-  get paginatedData(): DemandeTransactionInternationale[] {
+  get paginatedData(): TransactionInternationale[] {
     const start = (this.currentPage - 1) * this.pageSize;
     return this.filteredData.slice(start, start + this.pageSize);
   }
